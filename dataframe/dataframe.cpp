@@ -4,21 +4,46 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <map>
 
 using std::find;
 using std::string;
 using std::vector;
+using std::map;
 
 // I think I don't need the default constructor, do I?  DataFrame();
 
-DataFrame::DataFrame(const vector<string>& idx) { index = idx; }
+void DataFrame::init_map(const vector<string> container,
+                         map<string, int>& dict) {
+    vector<string>::const_iterator iter = container.begin();
+    int val = 0;
+    for (; iter != container.end(); ++iter) {
+        dict[*iter] = val++;
+    }
+}
 
-DataFrame::DataFrame(const std::vector<std::string>& idx,
-                     const std::vector<std::string>& col_names,
-                     const std::vector<std::vector<double>>& cols) {
-    index = idx;
-    names = col_names;
-    columns = cols;
+DataFrame::DataFrame(const vector<string>& idx) {
+    init_map(idx, index);
+}
+    //vector<string>::const_iterator iter = idx.begin();
+    //int val = 0;
+    //for (; iter != idx.end(); ++iter) {
+        //index[*iter] = val++;
+    //}
+//}
+    //index = idx; }
+
+DataFrame::DataFrame(const vector<string>& idx, const vector<string>& cols,
+                     const vector<vector<double>>& datainp) {
+    init_map(idx, index);
+    init_map(cols, columns);
+    vector<data_col>::const_iterator iter = datainp.begin();
+    vector<data_col* > ttest;
+    for (;iter != datainp.end(); ++iter) {
+        ttest.push_back(iter);
+        data.push_back(iter);
+        data++;
+    }
 }
 
 const std::vector<double> DataFrame::operator()(const std::string& s) {
