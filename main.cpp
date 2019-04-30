@@ -15,15 +15,21 @@ int main() {
     data.push_back(dividends);
     std::cout << data.size() << std::endl;
 
-    DataFrame df1;
-    DataFrame df2(idx);
+    //DataFrame df1;
+    //DataFrame df4;
+    //DataFrame df2(idx);
     DataFrame df3(idx, names, data);
+    DataFrame newdf;
+    newdf = df3;
+    df3.print();
     
-    vector<double> res = df3("January 2019");
-    std::cout << res[0] << std::endl;
+    //newdf = df3("January 2019");
+    newdf.print();
+    //std::cout << res[0] << std::endl;
 
-    double t = df3("January 2019", "Dividends");
-    std::cout << t << std::endl;
+    //double t = df3("January 2019", "Dividends");
+    //std::cout << t << std::endl;
+    //df3.print();
     //return 0;
 }
     //vector<p> cont;
