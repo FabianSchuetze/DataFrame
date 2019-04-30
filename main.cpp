@@ -1,4 +1,4 @@
-//#include "dataframe.h"
+#include "dataframe/dataframe.h"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -6,36 +6,35 @@ using std::vector;
 using std::string;
 
 int main() {
-    vector<string> idx;
-    idx.push_back("January 2019");
-    idx.push_back("February 2019");
-    std::cout << "here" << std::endl;
+    vector<string> idx = {"January 2019", "February 2019"};
+    vector<string> names = {"Stock Price", "Dividends"};
     vector<vector<double>> data;
     vector<double> stock_price = {12., 10.};
     vector<double> dividends = {0.4, 0.8};
-    std::cout << "here" << std::endl;
+    data.push_back(stock_price);
+    data.push_back(dividends);
+    std::cout << data.size() << std::endl;
 
-    typedef vector<double>* p;
-    vector<p> cont;
-    p p2 = &stock_price; 
-    cont.push_back(p2);
-    cont.push_back(&dividends);
-    vector<double> abv = *cont[1];
-    std::cout << abv[1] << std::endl;
+    DataFrame df1;
+    DataFrame df2(idx);
+    DataFrame df3(idx, names, data);
     
-    
-    //vector<string> names;
-    //names.push_back("Stock Price");
-    //names.push_back("Dividends");
+    vector<double> res = df3("January 2019");
+    std::cout << res[0] << std::endl;
 
-    //DataFrame df1;
-    //DataFrame df2(idx);
-    //DataFrame df3(idx, names, data);
-    
-    //vector<double> res = df3("January 2019");
-    //std::cout << res[1] << std::endl;
-
-    //double t = df3("January 2019", "Stock Price");
-    //std::cout << t << std::endl;
+    double t = df3("January 2019", "Dividends");
+    std::cout << t << std::endl;
     //return 0;
 }
+    //vector<p> cont;
+    ////p p2 = &stock_price; 
+    //typedef vector<vector<double> >::const_iterator iter;
+    //iter abc = data.begin();
+    //typedef vector<double>::const_iterator iter2;
+    //iter2 res = abc->begin();
+    //std::cout << *res << std::endl;
+    ////cont.push_back(res);
+    //cont.push_back(&data[0]);
+    //cont.push_back(&data[1]);
+    //vector<double> abv = *cont[0];
+    //std::cout << abv[0] << std::endl;

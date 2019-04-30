@@ -1,15 +1,15 @@
 #include "dataframe.h"
 #include <algorithm>
 #include <iostream>
+#include <map>
 #include <stdexcept>
 #include <string>
 #include <vector>
-#include <map>
 
 using std::find;
+using std::map;
 using std::string;
 using std::vector;
-using std::map;
 
 // I think I don't need the default constructor, do I?  DataFrame();
 
@@ -22,52 +22,40 @@ void DataFrame::init_map(const vector<string> container,
     }
 }
 
-DataFrame::DataFrame(const vector<string>& idx) {
-    init_map(idx, index);
-}
-    //vector<string>::const_iterator iter = idx.begin();
-    //int val = 0;
-    //for (; iter != idx.end(); ++iter) {
-        //index[*iter] = val++;
-    //}
-//}
-    //index = idx; }
+DataFrame::DataFrame(const vector<string>& idx) { init_map(idx, index); }
 
 DataFrame::DataFrame(const vector<string>& idx, const vector<string>& cols,
-                     const vector<vector<double>>& datainp) {
+                     vector<vector<double> >& datainp) {
+    // const won't work?!? What is going on?
     init_map(idx, index);
     init_map(cols, columns);
-    vector<data_col>::const_iterator iter = datainp.begin();
-    vector<data_col* > ttest;
-    for (;iter != datainp.end(); ++iter) {
-        ttest.push_back(iter);
-        data.push_back(iter);
-        data++;
+    typedef vector<vector<double> >::size_type sz;
+    for (sz i = 0; i != datainp.size(); ++i) {
+        data.push_back(&datainp[i]);
     }
 }
 
 const std::vector<double> DataFrame::operator()(const std::string& s) {
-    string_iter pos = find_index(index.begin(), index.end(), s);
-    vector<string>::size_type row_number = pos - index.begin();
-    vector<vector<double>>::const_iterator it = columns.begin();
+    int pos = find_index(index, s);
+    vector<vector<double>*>::const_iterator it = data.begin();
     vector<double> results;
-    for (; it != columns.end(); ++it) results.push_back((*it)[row_number]);
+    for (; it != data.end(); ++it) {
+        results.push_back((*it)->at(pos));
+    }
     return results;
 }
 
-DataFrame::string_iter DataFrame::find_index(const string_iter b,
-                                             const string_iter e,
-                                             const std::string& s) {
-    string_iter pos = find(b, e, s);
-    if (pos == e) throw std::domain_error("Index s is not present");
-    return pos;
+int DataFrame::find_index(const map<string, int>& dict, const std::string& s) {
+    if (!(dict.count(s) > 0)) {
+        throw std::domain_error("Index s is not present");
+    }
+    return dict.at(s);
 }
 
-double DataFrame::operator()(const std::string& time, const std::string& col) {
-    string_iter pos_row = find_index(index.begin(), index.end(), time);
-    string_iter pos_col = find_index(names.begin(), names.end(), col);
-    vector<string>::size_type row_number = pos_row - index.begin();
-    vector<string>::size_type col_number = pos_col - names.begin();
-    vector<double> results;
-    return columns[row_number][col_number];
+ double DataFrame::operator()(const std::string& time, const std::string& col)
+{
+    int pos_row = find_index(index, time);
+    int pos_col = find_index(columns, col);
+    vector<double>* p = data[pos_col];
+    return p->at(pos_row);
 }
