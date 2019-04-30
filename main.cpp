@@ -19,12 +19,13 @@ int main() {
     //DataFrame df4;
     //DataFrame df2(idx);
     DataFrame df3(idx, names, data);
-    DataFrame newdf;
-    newdf = df3;
+    DataFrame df4 = df3 + df3;
+    //DataFrame newdf;
+    //newdf = df3;
     df3.print();
     
     //newdf = df3("January 2019");
-    newdf.print();
+    df4.print();
     //std::cout << res[0] << std::endl;
 
     //double t = df3("January 2019", "Dividends");

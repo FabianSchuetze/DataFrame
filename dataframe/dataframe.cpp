@@ -11,8 +11,6 @@ using std::map;
 using std::string;
 using std::vector;
 
-// I think I don't need the default constructor, do I?  DataFrame();
-
 void DataFrame::print() {
     for (auto const& x: rev_index) {
         std::cout << x.second << "\t";
@@ -22,6 +20,18 @@ void DataFrame::print() {
         }
         std::cout << "\n";
     }
+}
+
+DataFrame::DataFrame(const map<string, int>& rhs_index,
+                     const map<int, string>& rhs_rev_index,
+                     const map<string, int>& rhs_columns,
+                     const map<int, string>& rhs_rev_columns) {
+    index=rhs_index;
+    rev_index = rhs_rev_index;
+    columns = rhs_columns;
+    rev_columns = rhs_rev_columns;
+    data.push_back(new vector<double> (2,0.));
+    data.push_back(new vector<double> (2,0.));
 }
 
 void DataFrame::init_map(const vector<string> container,
@@ -54,11 +64,9 @@ DataFrame::DataFrame(const vector<string>& idx, const vector<string>& cols,
 DataFrame DataFrame::operator()(const std::string& s) const {
     // very intersting: I only look for index, but why not columns?
     int pos = 0;
-    //int pos = find_index(index, s);
     vector<string> new_columns;
     for (auto const& y: rev_columns) new_columns.push_back(y.second);
     vector<string>new_rows = {"abvc"};
-    //new_rows.push_back(s);
     vector<vector<double>*>::const_iterator it = data.begin();
     vector<vector<double>> results;
     vector<double> results_short;
@@ -67,15 +75,7 @@ DataFrame DataFrame::operator()(const std::string& s) const {
         results_short.push_back(tmp);
     }
     results.push_back(results_short);
-    //std::cout << "here " << std::endl;
-    //return *this;
     return DataFrame(new_rows, new_columns, results);
-    //DataFrame* res = new DataFrame(new_rows, new_columns, results);
-    //return *res;
-    //DataFrame res = this;
-    //return new this;
-    //res = DataFrame(new_rows, new_columns, results);
-    //return res;
 }
 
 int DataFrame::find_index(const map<string, int>& dict, const std::string& s) {
@@ -91,4 +91,14 @@ int DataFrame::find_index(const map<string, int>& dict, const std::string& s) {
     int pos_col = find_index(columns, col);
     vector<double>* p = data[pos_col];
     return p->at(pos_row);
+}
+
+DataFrame operator+(const DataFrame& df1, const DataFrame& df2) {
+    DataFrame new_df(df1.get_index(), df1.get_rev_index(),
+                     df1.get_columns(), df1.get_rev_columns());
+    std::transform(df1.data[0]->begin(), df1.data[0]->end(), 
+                   df2.data[0]->begin(), new_df.data[0]->begin(), std::plus<double>());
+    std::transform(df1.data[1]->begin(), df1.data[1]->end(), 
+                   df2.data[1]->begin(), new_df.data[1]->begin(), std::plus<double>());
+    return new_df;
 }

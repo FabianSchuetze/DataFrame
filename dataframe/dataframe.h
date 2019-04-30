@@ -7,11 +7,22 @@
 class DataFrame {
    public:
     typedef std::vector<double>* data_col;
-    DataFrame(){};
+    std::vector<data_col> data; //vector of pointers;
+    DataFrame() {};
     DataFrame(const std::vector<std::string>& index);
     DataFrame(const std::vector<std::string>& index,
               const std::vector<std::string>& columns,
               std::vector<std::vector<double> >& data);
+    DataFrame(const std::map<std::string, int>& index,
+              const std::map<int, std::string>&,
+              const std::map<std::string, int>&,
+              const std::map<int, std::string>&);
+
+    std::map<std::string, int> get_columns() const {return columns;}
+    std::map<std::string, int> get_index() const {return index;}
+    std::map<int, std::string> get_rev_columns() const {return rev_columns;}
+    std::map<int, std::string> get_rev_index() const {return rev_index;}
+    std::vector<data_col> get_data() const {return data;}
     // Do I need copy constcuttore, desctrctor etc?
  
     // should all return a (reference to?) DataFrame!!! How can I do this?!
@@ -24,7 +35,6 @@ class DataFrame {
     std::map<int, std::string> rev_index;
     std::map<std::string, int> columns;
     std::map<int, std::string> rev_columns;
-    std::vector<data_col> data; //vector of pointers;
 
     typedef std::vector<std::string>::const_iterator string_iter;
 
@@ -33,6 +43,6 @@ class DataFrame {
                   std::map<int, std::string>&);
 };
 // I want this to return a dataframe as well!!!
-double operator+(const DataFrame&, const DataFrame&);
+DataFrame operator+(const DataFrame&, const DataFrame&);
 
 #endif
