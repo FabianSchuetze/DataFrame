@@ -30,8 +30,22 @@ DataFrame::DataFrame(const map<string, int>& rhs_index,
     rev_index = rhs_rev_index;
     columns = rhs_columns;
     rev_columns = rhs_rev_columns;
+    // I think that's not a good decision, I should leave and define the data
+    // in a subfunction
     data.push_back(new vector<double> (2,0.));
     data.push_back(new vector<double> (2,0.));
+}
+
+DataFrame::DataFrame(const map<string, int>& rhs_index,
+                     const map<int, string>& rhs_rev_index,
+                     const map<string, int>& rhs_columns) {
+    index=rhs_index;
+    rev_index = rhs_rev_index;
+    columns = rhs_columns;
+    map<int, string> new_rev_col;
+    new_rev_col[0] = "first";
+    rev_columns = new_rev_col;
+    data.push_back(new vector<double> (2,12.));
 }
 
 void DataFrame::init_map(const vector<string> container,
@@ -63,19 +77,30 @@ DataFrame::DataFrame(const vector<string>& idx, const vector<string>& cols,
 // suppose first: I copy everything, not good but I do it
 DataFrame DataFrame::operator()(const std::string& s) const {
     // very intersting: I only look for index, but why not columns?
-    int pos = 0;
-    vector<string> new_columns;
-    for (auto const& y: rev_columns) new_columns.push_back(y.second);
-    vector<string>new_rows = {"abvc"};
-    vector<vector<double>*>::const_iterator it = data.begin();
-    vector<vector<double>> results;
-    vector<double> results_short;
-    for (; it != data.end(); ++it) {
-        double tmp = (*it)->at(pos);
-        results_short.push_back(tmp);
-    }
-    results.push_back(results_short);
-    return DataFrame(new_rows, new_columns, results);
+    int pos;
+    map<string, int> new_index, new_col;
+    map<int, string> new_rev_index;
+    vector<double>* new_data;
+    //try {
+    pos = columns.at(s);
+    std::cout << "abc";
+    new_col[s] = 0;
+    new_index = get_index();
+    new_rev_index = get_rev_index();
+    new_data = data[pos];
+    //} catch(const std::domain_error) {
+        //int pos = index.at(s);
+        //new_col[s];
+        //new_index = get_columns();
+        //new_rev_index = get_rev_columns();
+        //new_data->push_back(data[0]->at(pos));
+        //new_data->push_back(data[1]->at(pos));
+    //}
+    DataFrame new_df(new_index, new_rev_index, new_col);
+    //vector<double>* res = data[pos];
+    new_df.data[0] = new_data;
+    //new_df.data[0]  =res;
+    return new_df;
 }
 
 int DataFrame::find_index(const map<string, int>& dict, const std::string& s) {
@@ -85,7 +110,7 @@ int DataFrame::find_index(const map<string, int>& dict, const std::string& s) {
     return dict.at(s);
 }
 
- double DataFrame::operator()(const std::string& time, const std::string& col)
+double DataFrame::operator()(const std::string& time, const std::string& col)
 {
     int pos_row = find_index(index, time);
     int pos_col = find_index(columns, col);

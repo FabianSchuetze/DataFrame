@@ -17,6 +17,10 @@ class DataFrame {
               const std::map<int, std::string>&,
               const std::map<std::string, int>&,
               const std::map<int, std::string>&);
+    DataFrame(const std::map<std::string, int>& index,
+              const std::map<int, std::string>&,
+              const std::map<std::string, int>&);
+
 
     std::map<std::string, int> get_columns() const {return columns;}
     std::map<std::string, int> get_index() const {return index;}

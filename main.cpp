@@ -19,13 +19,18 @@ int main() {
     //DataFrame df4;
     //DataFrame df2(idx);
     DataFrame df3(idx, names, data);
-    DataFrame df4 = df3 + df3;
+    //DataFrame df4 = df3 + df3;
     //DataFrame newdf;
     //newdf = df3;
     df3.print();
+
+    DataFrame df5 = df3("Dividends");
+    std::cout << "the position of the data is at " << df5.data[0] << std::endl;
+    std::cout << "the position of the data is at " << df3.data[1] << std::endl;
+    df5.print();
     
     //newdf = df3("January 2019");
-    df4.print();
+    //df4.print();
     //std::cout << res[0] << std::endl;
 
     //double t = df3("January 2019", "Dividends");
