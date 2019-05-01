@@ -1,14 +1,15 @@
 #ifndef GUARD_dataframe_h
 #define GUARD_dataframe_h
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
 class DataFrame {
+    friend DataFrame operator+(const DataFrame&, const DataFrame&);
+
    public:
     typedef std::vector<double>* data_col;
-    std::vector<data_col> data; //vector of pointers;
-    DataFrame() {};
+    DataFrame(){};
     DataFrame(const std::vector<std::string>& index);
     DataFrame(const std::vector<std::string>& index,
               const std::vector<std::string>& columns,
@@ -21,20 +22,20 @@ class DataFrame {
               const std::map<int, std::string>&,
               const std::map<std::string, int>&);
 
-
-    std::map<std::string, int> get_columns() const {return columns;}
-    std::map<std::string, int> get_index() const {return index;}
-    std::map<int, std::string> get_rev_columns() const {return rev_columns;}
-    std::map<int, std::string> get_rev_index() const {return rev_index;}
-    std::vector<data_col> get_data() const {return data;}
+    std::map<std::string, int> get_columns() const { return columns; }
+    std::map<std::string, int> get_index() const { return index; }
+    std::map<int, std::string> get_rev_columns() const { return rev_columns; }
+    std::map<int, std::string> get_rev_index() const { return rev_index; }
+    std::vector<data_col> get_data() const { return data; }
     // Do I need copy constcuttore, desctrctor etc?
- 
+
     // should all return a (reference to?) DataFrame!!! How can I do this?!
     DataFrame operator()(const std::string&) const;
     double operator()(const std::string&, const std::string&);
     void print();
 
    private:
+    std::vector<data_col> data;  // vector of pointers;
     std::map<std::string, int> index;
     std::map<int, std::string> rev_index;
     std::map<std::string, int> columns;
