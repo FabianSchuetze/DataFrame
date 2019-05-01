@@ -8,12 +8,12 @@ class DataFrame {
     friend DataFrame operator+(const DataFrame&, const DataFrame&);
 
    public:
-    typedef std::vector<double>* data_col;
+    typedef std::vector<double*> data_col;
     DataFrame(){};
     DataFrame(const std::vector<std::string>& index);
     DataFrame(const std::vector<std::string>& index,
               const std::vector<std::string>& columns,
-              const std::vector<std::vector<double>* >& data);
+              const std::vector<std::vector<double*> >& data);
     DataFrame(const std::map<std::string, int>& index,
               const std::map<int, std::string>&,
               const std::map<std::string, int>&,
@@ -24,8 +24,8 @@ class DataFrame {
     std::map<int, std::string> get_rev_columns() const { return rev_columns; }
     std::map<int, std::string> get_rev_index() const { return rev_index; }
     std::vector<data_col> get_data() const { return data; }
+
     // Do I need copy constcuttore, desctrctor etc?
-    //
 
     // should all return a (reference to?) DataFrame!!! How can I do this?!
     DataFrame operator()(const std::string&);
@@ -44,6 +44,6 @@ class DataFrame {
                   std::map<int, std::string>&);
 };
 // non-member functions
-DataFrame operator+(const DataFrame&, const DataFrame&);
+//DataFrame operator+(const DataFrame&, const DataFrame&);
 
 #endif

@@ -63,8 +63,7 @@ DataFrame DataFrame::operator()(const std::string& s){
     int pos;
     map<string, int> new_index, new_col;
     map<int, string> new_rev_index, new_rev_col;
-    vector<double>* new_data;
-    vector<double> new_col_vec;
+    vector<double*> new_data;
     try {
         pos = find_index(columns, s);
         new_col[s] = 0;
@@ -81,17 +80,17 @@ DataFrame DataFrame::operator()(const std::string& s){
         std::cout << "abc\n";
         // I think this create a new object!!! Avoid copy!!!
         for (int i = 0; i < 2; ++i) {
-            new_col_vec.push_back(data[i]->at(pos));
+            new_data.push_back(data[i].at(pos));
         }
         std::cout << "abc2\n";
         // I think this create a new object!!! Avoid copy!!!
-        new_data = {&new_col_vec};
+        //new_data = {&new_col_vec};
     }
-    std::cout << new_data << '\n';
+    //std::cout << new_data << '\n';
     DataFrame new_df(new_index, new_rev_index, new_col, new_rev_col);
-    new_df.data = {&new_col_vec};
-    std::cout << &new_df.data[0]->at(0) << "\n";
-    std::cout << "end of function\n";
+    new_df.data = {new_data};
+    //std::cout << &new_df.data[0]->at(0) << "\n";
+    //std::cout << "end of function\n";
     return new_df;
 }
 
@@ -107,18 +106,18 @@ int DataFrame::find_index(const map<string, int>& dict, const std::string& s) co
 double DataFrame::operator()(const std::string& time, const std::string& col) {
     int pos_row = find_index(index, time);
     int pos_col = find_index(columns, col);
-    vector<double>* p = data[pos_col];
-    return p->at(pos_row);
+    double* p = data[pos_col][pos_row];
+    return *p;
 }
 
-DataFrame operator+(const DataFrame& df1, const DataFrame& df2) {
-    DataFrame new_df(df1.get_index(), df1.get_rev_index(), df1.get_columns(),
-                     df1.get_rev_columns());
-    std::transform(df1.data[0]->begin(), df1.data[0]->end(),
-                   df2.data[0]->begin(), new_df.data[0]->begin(),
-                   std::plus<double>());
-    std::transform(df1.data[1]->begin(), df1.data[1]->end(),
-                   df2.data[1]->begin(), new_df.data[1]->begin(),
-                   std::plus<double>());
-    return new_df;
-}
+//DataFrame operator+(const DataFrame& df1, const DataFrame& df2) {
+    //DataFrame new_df(df1.get_index(), df1.get_rev_index(), df1.get_columns(),
+                     //df1.get_rev_columns());
+    //std::transform(df1.data[0].begin(), df1.data[0].end(),
+                   //df2.data[0].begin(), new_df.data[0].begin(),
+                   //std::plus<double*>());
+    //std::transform(df1.data[1].begin(), df1.data[1].end(),
+                   //df2.data[1].begin(), new_df.data[1].begin(),
+                   //std::plus<double*>());
+    //return new_df;
+//}
