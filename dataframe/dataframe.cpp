@@ -15,8 +15,8 @@ void DataFrame::print() {
     for (auto const& x : rev_index) {
         std::cout << x.second << "\t";
         for (auto const& y : rev_columns) {
-            std::cout << x.second << std::endl;
-            std::cout << y.second << std::endl;
+            //std::cout << x.second << std::endl;
+            //std::cout << y.second << std::endl;
             double val = (*this)(x.second, y.second);
             std::cout << val << "\t";
         }
@@ -32,22 +32,6 @@ DataFrame::DataFrame(const map<string, int>& rhs_index,
     rev_index = rhs_rev_index;
     columns = rhs_columns;
     rev_columns = rhs_rev_columns;
-    // I think that's not a good decision, I should leave and define the data
-    // in a subfunction
-    data.push_back(new vector<double>(2, 0.));
-    data.push_back(new vector<double>(2, 0.));
-}
-
-DataFrame::DataFrame(const map<string, int>& rhs_index,
-                     const map<int, string>& rhs_rev_index,
-                     const map<string, int>& rhs_columns) {
-    index = rhs_index;
-    rev_index = rhs_rev_index;
-    columns = rhs_columns;
-    map<int, string> new_rev_col;
-    new_rev_col[0] = "first";
-    rev_columns = new_rev_col;
-    data.push_back(new vector<double>(2, 12.));
 }
 
 void DataFrame::init_map(const vector<string> container, map<string, int>& dict,
@@ -65,50 +49,58 @@ DataFrame::DataFrame(const vector<string>& idx) {
 }
 
 DataFrame::DataFrame(const vector<string>& idx, const vector<string>& cols,
-                     vector<vector<double> >& datainp) {
+                     const vector<data_col>& datainp) {
     // const won't work?!? What is going on?
     init_map(idx, index, rev_index);
     init_map(cols, columns, rev_columns);
     typedef vector<vector<double> >::size_type sz;
     for (sz i = 0; i != datainp.size(); ++i) {
-        data.push_back(&datainp[i]);
+        data.push_back(datainp[i]);
     }
 }
 
-// suppose first: I copy everything, not good but I do it
-DataFrame DataFrame::operator()(const std::string& s) const {
-    // very intersting: I only look for index, but why not columns?
+DataFrame DataFrame::operator()(const std::string& s){
     int pos;
     map<string, int> new_index, new_col;
-    map<int, string> new_rev_index;
+    map<int, string> new_rev_index, new_rev_col;
     vector<double>* new_data;
-    // try {
-    pos = columns.at(s);
-    std::cout << "abc";
-    new_col[s] = 0;
-    new_index = get_index();
-    new_rev_index = get_rev_index();
-    new_data = data[pos];
-    //} catch(const std::domain_error) {
-    // int pos = index.at(s);
-    // new_col[s];
-    // new_index = get_columns();
-    // new_rev_index = get_rev_columns();
-    // new_data->push_back(data[0]->at(pos));
-    // new_data->push_back(data[1]->at(pos));
-    //}
-    DataFrame new_df(new_index, new_rev_index, new_col);
-    // vector<double>* res = data[pos];
-    new_df.data[0] = new_data;
-    // new_df.data[0]  =res;
+    vector<double> new_col_vec;
+    try {
+        pos = find_index(columns, s);
+        new_col[s] = 0;
+        new_rev_col[0] = s;
+        new_index = get_index();
+        new_rev_index = get_rev_index();
+        new_data = data[pos]; 
+    } catch (std::domain_error) {
+        pos = find_index(index, s);
+        new_col[s] = 0;
+        new_rev_col[0] = s;
+        new_index = get_columns();
+        new_rev_index = get_rev_columns();
+        std::cout << "abc\n";
+        // I think this create a new object!!! Avoid copy!!!
+        for (int i = 0; i < 2; ++i) {
+            new_col_vec.push_back(data[i]->at(pos));
+        }
+        std::cout << "abc2\n";
+        // I think this create a new object!!! Avoid copy!!!
+        new_data = {&new_col_vec};
+    }
+    std::cout << new_data << '\n';
+    DataFrame new_df(new_index, new_rev_index, new_col, new_rev_col);
+    new_df.data = {&new_col_vec};
+    std::cout << &new_df.data[0]->at(0) << "\n";
+    std::cout << "end of function\n";
     return new_df;
 }
 
-int DataFrame::find_index(const map<string, int>& dict, const std::string& s) {
+int DataFrame::find_index(const map<string, int>& dict, const std::string& s) const {
     if (!(dict.count(s) > 0)) {
         throw std::domain_error("Cannot find " + s + " in index or columns");
     }
-    return dict.at(s);
+    //map<string, int>::const_iterator it = dict.find(s);
+    return dict.find(s)->second;
 }
 
 // what does pandas return in this case?
