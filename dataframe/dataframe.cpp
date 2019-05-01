@@ -17,8 +17,8 @@ void DataFrame::print() {
         for (auto const& y : rev_columns) {
             //std::cout << x.second << std::endl;
             //std::cout << y.second << std::endl;
-            double val = (*this)(x.second, y.second);
-            std::cout << val << "\t";
+            DataFrame tmp = (*this)(x.second, y.second);
+            std::cout << *tmp.data[0][0] << "\t";
         }
         std::cout << "\n";
     }
@@ -102,12 +102,18 @@ int DataFrame::find_index(const map<string, int>& dict, const std::string& s) co
     return dict.find(s)->second;
 }
 
-// what does pandas return in this case?
-double DataFrame::operator()(const std::string& time, const std::string& col) {
-    int pos_row = find_index(index, time);
+// can I combine this with the function above?
+DataFrame DataFrame::operator()(const std::string& time, const std::string& col) {
+    int pos_index = find_index(index, time);
     int pos_col = find_index(columns, col);
-    double* p = data[pos_col][pos_row];
-    return *p;
+    map<string, int> new_index, new_col;
+    map<int, string> new_rev_index, new_rev_col;
+    new_index[time] = 0, new_col[col] = 0;
+    new_rev_index[0] = time, new_rev_col[0] = col;
+    DataFrame new_df  = DataFrame(new_index, new_rev_index, new_col, new_rev_col);
+    vector<double*> new_data = {data[pos_col][pos_index]};
+    new_df.data = {new_data};
+    return new_df;
 }
 
 //DataFrame operator+(const DataFrame& df1, const DataFrame& df2) {

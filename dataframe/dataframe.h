@@ -29,7 +29,7 @@ class DataFrame {
 
     // should all return a (reference to?) DataFrame!!! How can I do this?!
     DataFrame operator()(const std::string&);
-    double operator()(const std::string&, const std::string&);
+    DataFrame operator()(const std::string&, const std::string&);
     void print();
 
    private:
