@@ -19,10 +19,12 @@ int main() {
     df3.print();
 
     //DataFrame df4 = df3 + df3;
-    DataFrame df5 = df3("February 2019");
+    DataFrame df5 = df3({"January 2019", "February 2019"});
+    //DataFrame df5 = df3({"Stock Price", "Dividends"});
+    //std::cout <<*test[0].at(1)<< std::endl;
     df5.print();
     
-    DataFrame df6 = df3("January 2019", "Dividends");
-    df6.print();
+    //DataFrame df6 = df3("January 2019", "Dividends");
+    //df6.print();
     return 0;
 }
