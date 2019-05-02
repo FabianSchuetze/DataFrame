@@ -15,7 +15,7 @@ void DataFrame::print() {
     for (auto const& x : rev_index) {
         std::cout << x.second << "\t";
         for (auto const& y : rev_columns) {
-            double* p = data[y.first][x.first];
+            double* p = (data[y.first] + x.first);
             std::cout << *p << "\t";
         }
         std::cout << "\n";
@@ -47,12 +47,12 @@ DataFrame::DataFrame(const vector<string>& idx) {
 }
 
 DataFrame::DataFrame(const vector<string>& idx, const vector<string>& cols,
-                     vector<data_col>& datainp) {
+                     vector<vector<double>>& datainp) {
     init_map(idx, index, rev_index);
     init_map(cols, columns, rev_columns);
-    typedef vector<vector<double*>>::size_type sz;
+    typedef vector<vector<double>>::size_type sz;
     for (sz i = 0; i != datainp.size(); ++i) {
-        data.push_back(datainp[i]);
+        data.push_back(datainp[i].data());
     }
 }
 
@@ -60,17 +60,15 @@ vector<int> DataFrame::find_subset(map<string, int>& new_idx,
                                    map<int, string>& new_rev_idx,
                                    const vector<string>& names,
                                    map<string, int>& idx) {
-    int i = 0;
     vector<int> positions;
-    while (i < names.size()) {
-        if (!(idx.count(names[i]) > 0)) {
-            throw std::domain_error("Cannot find " + names[i] + " in index or columns");
+    for (const string& name: names) {
+        if (!(idx.count(name) > 0)) {
+            throw std::domain_error("Cannot find " + name + " in index or columns");
         }
-        int pos = idx.find(names[i])->second;
+        int pos = idx.find(name)->second;
         positions.push_back(pos);
-        new_idx[names[i]] = i;
-        new_rev_idx[i] = names[i];
-        i++;
+        new_idx[name] = pos;
+        new_rev_idx[pos] = name;
     }
     return positions;
 }
@@ -78,33 +76,20 @@ vector<int> DataFrame::find_subset(map<string, int>& new_idx,
 DataFrame DataFrame::operator()(const vector<string>& s) {
     map<string, int> new_index, new_col;
     map<int, string> new_rev_index, new_rev_col;
-    vector<vector<double*>> new_data;
+    vector<double*> new_data;
     try {  // check wheter user enters columns in s
         find_index(columns, s[0]);
-        vector<int> pos = find_subset(new_col, new_rev_col, s, columns);
+        vector<int> positions = find_subset(new_col, new_rev_col, s, columns);
         new_index = get_index();
         new_rev_index = get_rev_index();
-        for (int i = 0; i < pos.size(); ++i) {
-            //std::cout << *data[pos[i]].at(0) << std::endl;
-            new_data.push_back({data[pos[i]]});
-        }
     } catch (std::domain_error) {  // check if user entered rows in s
         find_index(index, s[0]);
         vector<int> pos = find_subset(new_index, new_rev_index, s, index);
         new_col = get_columns();
         new_rev_col = get_rev_columns();
-        for (int i =0; i < pos.size(); ++i) {
-            vector<double*> subset;
-            for (int j = 0; j < new_col.size(); ++j) {
-                //std::cout << *data[j].at(i) << "\n";
-                subset.push_back(data[i].at(j));
-            }
-            new_data.push_back(subset);
-        }
     }
     DataFrame new_df(new_index, new_rev_index, new_col, new_rev_col);
-    new_df.data = new_data;
-    //std::cout << "completed\n";
+    new_df.data = data;
     return new_df;
 }
 
@@ -117,20 +102,20 @@ int DataFrame::find_index(const map<string, int>& dict,
 }
 
 // can I combine this with the function above?
-DataFrame DataFrame::operator()(const std::string& time,
-                                const std::string& col) {
-    int pos_index = find_index(index, time);
-    int pos_col = find_index(columns, col);
-    map<string, int> new_index, new_col;
-    map<int, string> new_rev_index, new_rev_col;
-    new_index[time] = 0, new_col[col] = 0;
-    new_rev_index[0] = time, new_rev_col[0] = col;
-    DataFrame new_df =
-        DataFrame(new_index, new_rev_index, new_col, new_rev_col);
-    vector<double*> new_data = {data[pos_col][pos_index]};
-    new_df.data = {new_data};
-    return new_df;
-}
+//DataFrame DataFrame::operator()(const std::string& time,
+                                //const std::string& col) {
+    //int pos_index = find_index(index, time);
+    //int pos_col = find_index(columns, col);
+    //map<string, int> new_index, new_col;
+    //map<int, string> new_rev_index, new_rev_col;
+    //new_index[time] = 0, new_col[col] = 0;
+    //new_rev_index[0] = time, new_rev_col[0] = col;
+    //DataFrame new_df =
+        //DataFrame(new_index, new_rev_index, new_col, new_rev_col);
+    //vector<double*> new_data = {data[pos_col][pos_index]};
+    //new_df.data = {new_data};
+    //return new_df;
+//}
 
 // DataFrame operator+(const DataFrame& df1, const DataFrame& df2) {
 // DataFrame new_df(df1.get_index(), df1.get_rev_index(), df1.get_columns(),
