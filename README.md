@@ -12,6 +12,9 @@ also like to the data same. How can this be done?
 Furthermore: When I select a column, is pandas returning a new object or a
 reference to the old oject? I want to return a reference, I guess.
 
+I need to create the data once and then only store a pointer to the first
+element!
+
 Questions
 ---------
 * Do we need a destructor? If so, the rule of three tells us that we should
@@ -22,4 +25,5 @@ Questions
     constructors, one for the opertors, etc?
 * So far, I return vectors<double> with the assignment operators. However, I
     should return another dataframe as well
+
 
