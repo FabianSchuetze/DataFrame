@@ -1,5 +1,4 @@
 #include "dataframe.h"
-#include <algorithm>
 #include <iostream>
 #include <stdexcept>
 
@@ -9,7 +8,6 @@ using std::string;
 using std::vector;
 
 void DataFrame::print(int i) {
-    //std::cout << i << std::endl;
     for (auto const& x : rev_index) {
         std::cout << x << "\t";
         for (auto const& y : rev_columns) {
@@ -48,7 +46,6 @@ void DataFrame::init_map(const vector<string>& container,
     int val = 0;
     for (; iter != container.end(); ++iter) {
         rev_dict.push_back(*iter);
-        //rev_dict[val] = *iter;
         dict[*iter] = val++;
     }
 }
@@ -139,17 +136,12 @@ int DataFrame::find_index(const map<string, int>& dict,
     return dict.find(s)->second;
 }
 DataFrame& DataFrame::operator=(const DataFrame& rhs) {
-    //DataFrame new_df new DataFrame();
     if (&rhs != this) {
         data = rhs.data;
-        //std::cout << data[0] << std::endl;
-        //std::cout << rhs.data[0] << std::endl;
         index = rhs.index;
         rev_index = rhs.rev_index;
         columns = rhs.columns;
         rev_columns = rhs.rev_columns;
-        //std::cout << columns.begin()->first << std::endl;
-        //std::cout << columns.size() << std::endl;
     }
     return *this;
 }

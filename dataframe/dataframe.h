@@ -40,7 +40,6 @@ class DataFrame {
     void sort_index() {std::sort(rev_index.begin(), rev_index.end());}
 
    private:
-    // double* data;
     std::vector<double*> data;  // vector of pointers;
     std::map<std::string, int> index;
     std::vector<std::string> rev_index;
