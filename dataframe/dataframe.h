@@ -18,17 +18,26 @@ class DataFrame {
               const std::map<std::string, int>&,
               const std::map<int, std::string>&);
 
-    std::map<std::string, int> get_columns() const { return columns; }
+    const std::map<std::string, int> get_columns() const { return columns; }
     std::map<std::string, int> get_index() const { return index; }
     std::map<int, std::string> get_rev_columns() const { return rev_columns; }
     std::map<int, std::string> get_rev_index() const { return rev_index; }
     // std::vector<data_col> get_data() const { return data; }
 
     // Do I need copy constcuttore, desctrctor etc?
+    
+    // I NEED AN ASSIGNMENT OPERATOR!!!
 
-    DataFrame operator()(const std::vector<std::string>&);
+    DataFrame& operator() (const std::vector<std::string>&) const;
+    DataFrame& operator() (const std::vector<std::string>&);
+    DataFrame& operator=(const DataFrame&);
     // DataFrame operator()(const std::string&, const std::string&);
     void print();
+    void print() const;
+
+    // insert a new column
+    void insert(const std::vector<std::string>&, 
+                const std::vector<double>&);
 
    private:
     // double* data;
