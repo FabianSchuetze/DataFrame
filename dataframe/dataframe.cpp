@@ -7,7 +7,7 @@ using std::map;
 using std::string;
 using std::vector;
 
-void DataFrame::print(int i) {
+void DataFrame::print() {
     for (auto const& x : rev_index) {
         std::cout << x << "\t";
         for (auto const& y : rev_columns) {
@@ -86,7 +86,7 @@ vector<int> DataFrame::find_subset(map<string, int>& new_idx,
 // https://stackoverflow.com/questions/251159/what-is-the-use-of-const-overloading-in-c
 // 
 // LOOK AT THE MAP OPERATOR!!!!!!!!!!! INSERT VS SLICE!!!!
-DataFrame& DataFrame::operator() (const vector<string>& s) const {
+DataFrame DataFrame::operator() (const vector<string>& s) const {
     map<string, int> new_index, new_col;
     vector<string> new_rev_index, new_rev_col;
     vector<double*> new_data;
@@ -101,9 +101,10 @@ DataFrame& DataFrame::operator() (const vector<string>& s) const {
         new_col = columns;
         new_rev_col = rev_columns;
     }
-    DataFrame* new_df = new DataFrame(new_index, new_rev_index, new_col, new_rev_col);
-    new_df->data = data;
-    return *new_df;
+    ////DataFrame new_df = DataFrame(new_index, new_rev_index, new_col, new_rev_col);
+    DataFrame new_df = DataFrame(new_index, new_rev_index, new_col, new_rev_col);
+    new_df.data = data;
+    return new_df;
 }
 
 DataFrame& DataFrame::operator() (const vector<string>& s){

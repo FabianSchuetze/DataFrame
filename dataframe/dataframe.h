@@ -26,11 +26,11 @@ class DataFrame {
     // std::vector<data_col> get_data() const { return data; }
 
     // Do I need copy constcuttore, desctrctor etc?
-    DataFrame& operator() (const std::vector<std::string>&) const;
+    DataFrame operator() (const std::vector<std::string>&) const;
     DataFrame& operator() (const std::vector<std::string>&);
     DataFrame& operator=(const DataFrame&);
 
-    void print(int);
+    void print();
     void print() const;
 
     // insert a new column
