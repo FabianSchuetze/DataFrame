@@ -11,13 +11,14 @@ class DataFrame {
    public:
     typedef double* data_col;
     DataFrame() = default;
-    DataFrame(std::vector<std::string>&);
-    DataFrame(std::vector<std::string>&, std::vector<std::string>&,
+    DataFrame(const std::vector<std::string>&);
+    DataFrame(const std::vector<std::string>&, const std::vector<std::string>&,
               std::vector<std::vector<double> >&);
     DataFrame(std::map<std::string, int>&, 
               std::vector<std::string>&,
               std::map<std::string, int>&,
               std::vector<std::string>&);
+    DataFrame(std::vector<std::vector<double>>&);
 
     std::map<std::string, int> get_columns() { return columns; }
     std::map<std::string, int> get_index() { return index; }
@@ -30,7 +31,7 @@ class DataFrame {
     DataFrame& operator() (const std::vector<std::string>&);
     DataFrame& operator=(const DataFrame&);
 
-    void print();
+    //void print();
     void print() const;
 
     // insert a new column
