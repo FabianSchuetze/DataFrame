@@ -4,58 +4,34 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
+class Column;
 class DataFrame {
-    friend DataFrame operator+(const DataFrame&, const DataFrame&);
 
    public:
-    typedef double* data_col;
-    DataFrame() = default;
+    DataFrame();
+    // I only have column names and double
     DataFrame(const std::vector<std::string>&);
-    DataFrame(const std::vector<std::string>&, const std::vector<std::string>&,
+    DataFrame(const std::vector<std::string>&,
               std::vector<std::vector<double> >&);
-    DataFrame(std::map<std::string, int>&, 
-              std::vector<std::string>&,
-              std::map<std::string, int>&,
-              std::vector<std::string>&);
-    DataFrame(std::vector<std::vector<double>>&);
+    DataFrame(const std::vector<std::string>&,
+              std::vector<std::vector<double> >&&);
 
-    std::map<std::string, int> get_columns() { return columns; }
-    std::map<std::string, int> get_index() { return index; }
-    std::vector<std::string> get_rev_columns() { return rev_columns; }
-    std::vector<std::string> get_rev_index() { return rev_index; }
-    // std::vector<data_col> get_data() const { return data; }
-
-    // Do I need copy constcuttore, desctrctor etc?
-    DataFrame operator() (const std::vector<std::string>&) const;
-    DataFrame& operator() (const std::vector<std::string>&);
+    //5 constructors
+    DataFrame(const DataFrame&);
     DataFrame& operator=(const DataFrame&);
+    ~DataFrame(); // how do I deal with this?;
+    DataFrame(DataFrame&&);
+    DataFrame& operator=(DataFrame&&);
 
-    //void print();
-    void print() const;
-
+    int count();
     // insert a new column
-    void insert(const std::vector<std::string>&, 
-                const std::vector<double>&);
-
-    void sort_index() {std::sort(rev_index.begin(), rev_index.end());}
+    void insert(const std::vector<std::string>&, const std::vector<double>&);
+    void insert(std::vector<std::string>&&, std::vector<double>&&);
 
    private:
-    std::vector<double*> data;  // vector of pointers;
-    std::map<std::string, int> index;
-    std::vector<std::string> rev_index;
-    std::map<std::string, int> columns;
-    std::vector<std::string> rev_columns;
-
-    std::vector<int> find_subset(std::map<std::string, int>&,
-                                 std::vector<std::string>&,
-                                 const std::vector<std::string>&,
-                                 const std::map<std::string, int>&) const;
-    int find_index(const std::map<std::string, int>&, const std::string&) const;
-    void init_map(const std::vector<std::string>&, std::map<std::string, int>&,
-                  std::vector<std::string>&);
+    std::vector<std::shared_ptr<Column>> columns;  // vector of pointers;
+    std::map<std::string, int> column_names;
 };
-// non-member functions
-// DataFrame operator+(const DataFrame&, const DataFrame&);
-
 #endif
