@@ -4,7 +4,7 @@
 using std::string;
 using std::vector;
 
-Column::Column() {};
+Column::Column(){};
 
 Column::Column(const string n, const vector<double>& dat) {
     name = n;

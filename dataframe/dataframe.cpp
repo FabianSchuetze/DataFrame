@@ -1,13 +1,13 @@
 #include "dataframe.h"
 #include <iostream>
 #include <memory>
-#include <utility>
 #include <stdexcept>
+#include <utility>
 #include "Column.h"
 
+using std::make_shared;
 using std::string;
 using std::vector;
-using std::make_shared;
 
 DataFrame::DataFrame(const vector<string>& names,
                      const vector<vector<double>>& cols) {
