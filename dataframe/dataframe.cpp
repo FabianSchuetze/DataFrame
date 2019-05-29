@@ -1,69 +1,44 @@
 #include "dataframe.h"
 #include <iostream>
-#include <memory>
+#include <ostream>
 #include <stdexcept>
-#include <utility>
-#include "Column.h"
-
 using std::make_shared;
 using std::string;
 using std::vector;
 
-DataFrame::DataFrame(const vector<string>& names,
-                     const vector<vector<double>>& cols) {
-    // check if both vectors have the same length;
-    for (size_t i = 0; i < names.size(); ++i) {
-        columns.push_back(make_shared<Column>(Column(names[i], cols[i])));
-        column_names[names[i]] = i;
-    }
-}
-DataFrame::DataFrame(const vector<string>& names,
-                     vector<vector<double>>&& cols) {
-    // check if both vectors have the same length;
-    for (size_t i = 0; i < names.size(); ++i) {
-        columns.push_back(
-            make_shared<Column>(Column(names[i], std::move(cols[i]))));
-        column_names[names[i]] = i;
+DataFrame::DataFrame(vector<string> n, vector<vector<double>> cols) {
+    if (n.size() != cols.size())
+        throw std::invalid_argument("Column name len does not equal col len");
+    for (size_t i = 0; i < n.size(); ++i) {
+        columns.push_back(make_shared<Column>(cols[i]));
+        column_names[n[i]] = i;
     }
 }
 
-// Move and Copy (Assignment) Constructor
-DataFrame::DataFrame(DataFrame& df)
-    : columns(df.columns), column_names(df.column_names) {}
-
-DataFrame& DataFrame::operator=(DataFrame& rhs) {
-    if (this != &rhs) {
-        columns = rhs.columns;
-        column_names = rhs.column_names;
+DataFrame::DataFrame(const DataFrame::DataFrameProxy df)
+{
+    int i = 0;
+    for (string name: df.colNames) {
+        int pos = df.theDataFrame.column_names[name];
+        columns.push_back(df.theDataFrame.columns[pos]);
+        column_names[name] = i;
+        i++;
     }
-    return *this;
 }
 
-DataFrame::DataFrame(DataFrame&& df) {
-    columns = std::move(df.columns);
-    column_names = std::move(df.column_names);
+DataFrame::DataFrameProxy::DataFrameProxy(DataFrame& df, string s)
+    : theDataFrame(df), colNames{s} {};
+
+DataFrame::DataFrameProxy::DataFrameProxy(DataFrame& df, vector<string> s)
+    : theDataFrame(df), colNames(s){};
+
+const std::pair<int, int> DataFrame::size() const {
+    std::pair<int, int> size;
+    size.first = columns[0]->size();
+    size.second = columns.size();
+    return size;
 }
 
-DataFrame& DataFrame::operator=(DataFrame&& rhs) {
-    if (this != &rhs) {
-        columns = std::move(rhs.columns);
-        column_names = std::move(rhs.column_names);
-    }
-    return *this;
-}
-
-int DataFrame::use_count(string col_name) {
-    return columns[column_names[col_name]].use_count();
-}
-
-void DataFrame::insert(const string& n, const vector<double>& vec) {
-    columns.push_back(make_shared<Column>(Column(n, vec)));
-    int previous_size = column_names.size();
-    column_names[n] = previous_size;
-}
-
-void DataFrame::insert(const string& n, vector<double>&& vec) {
-    columns.push_back(make_shared<Column>(Column(n, std::move(vec))));
-    int previous_size = column_names.size();
-    column_names[n] = previous_size;
+const int DataFrame::use_count(string col) {
+    return columns[column_names[col]].use_count();
 }

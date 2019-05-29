@@ -1,44 +1,57 @@
 #ifndef GUARD_dataframe_h
 #define GUARD_dataframe_h
-#include <algorithm>
 #include <map>
 #include <memory>
-#include <ostream>
 #include <string>
 #include <vector>
+#include <cmath>
+#include "column.h"
 
-class Column;
+
 class DataFrame {
-    friend std::ostream& operator<<(std::ostream&, const DataFrame&);
-
    public:
-    DataFrame() = default;
-    // I only have column names and double
-    // DataFrame(const std::vector<std::string>&);
-    DataFrame(const std::vector<std::string>&,
-              const std::vector<std::vector<double>>&);
-    DataFrame(const std::vector<std::string>&,
-              std::vector<std::vector<double>>&&);
+    class DataFrameProxy;
+    DataFrame();
+    DataFrame(std::vector<std::string>, std::vector<std::vector<double>>);
+    DataFrame(const DataFrameProxy);
 
-    // 5 constructors
-    DataFrame(DataFrame&);
-    DataFrame& operator=(DataFrame&);
-    //~DataFrame(); // how do I deal with this?;
-    DataFrame(DataFrame&&);
-    DataFrame& operator=(DataFrame&&);
+    friend class DataFrameProxy;
+    friend std::ostream& operator<<(std::ostream&, const DataFrame&);
+    friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
+    friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
 
-    // operators
-    // additional functions
-    int size() { return columns.size(); }
-    int size() const { return columns.size(); }
-    int use_count(std::string);
-    void insert(const std::string&, const std::vector<double>&);
-    void insert(const std::string&, std::vector<double>&&);
+    class DataFrameProxy {
+       public:
+        friend class DataFrame;
+        DataFrameProxy();
+        ~DataFrameProxy() = default;
+        DataFrameProxy(DataFrame&, std::string);
+        DataFrameProxy(DataFrame&, std::vector<std::string>);
+        DataFrameProxy& operator=(const DataFrameProxy&);
+        DataFrameProxy& operator=(std::vector<std::vector<double>>&);
+        DataFrameProxy& operator=(std::vector<double>&);
+        DataFrameProxy& operator=(std::vector<string>&);
+        friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
+
+       private:
+        void add_or_replace(bool, int, vector<double>&);
+        void add_or_replace(bool, int, vector<string>&);
+        void add_or_replace(bool, int, std::shared_ptr<Column>);
+        DataFrame& theDataFrame;
+        std::vector<std::string> colNames;
+    };
+    DataFrame& operator+=(const DataFrame& rhs); //need to think about copy on write!!!
+    DataFrameProxy operator[](std::string col_name);
+    DataFrameProxy operator[](std::vector<std::string> col_name);
+    const std::pair<int, int> size() const;
+    const int use_count(std::string);
 
    private:
-    std::vector<std::shared_ptr<Column>> columns;  // vector of pointers;
+    std::vector<std::shared_ptr<Column>> columns;
     std::map<std::string, int> column_names;
 };
 
+DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
+std::ostream& operator<<(std::ostream&, const DataFrame::DataFrameProxy&);
 #endif
