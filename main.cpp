@@ -1,46 +1,54 @@
-//#include "dataframe/Column.h"
 #include "dataframe/dataframe.h"
 #include <vector>
 #include <string>
 #include <iostream>
-#include <utility>
-#include <map>
-#include <memory>
+
+
 using std::vector;
 using std::string;
-using std::map;
-
 int main() {
-    vector<double> res = {2,3, 4};
-    //string name1 = "first_col";
-    vector<double> res2 = {20,30, 40};
-    vector<vector<double>> cols = {res, res2};
+    vector<vector<double>> first = {{10, 20}, {30, 40}};
+    vector<vector<double>> second = {{-10, -20}, {-30, -40}, {-100, 6}};
+    vector<string> string_col = {"new_test", "second"};
+    vector<double> tmp = {1120, 10};
     vector<string> names = {"first_col", "second_col"};
-    //string name2 = "second_col";
-    DataFrame df;
-    DataFrame df2 = DataFrame(names, cols);
-    std::cout << cols[0].size() << std::endl;
-    DataFrame df3 = DataFrame(names, std::move(cols));
-    std::cout << cols[0].size() << std::endl;
-
-    std::cout << "The use_count for first_col is: " << 
-        df3.use_count("first_col") << std::endl;
-    DataFrame df4 = df3;
-    std::cout << "The use_count for first_col is: " << 
-        df3.use_count("first_col") << std::endl;
-
-    DataFrame df5 = std::move(df3);
-    df5.insert("test", std::move(res));
-    std::cout << "The use_count for first_col is and test: " << 
-        df5.use_count("first_col") << ", " <<
-        df5.use_count("test") << std::endl;
-    std::cout << res.size() << std::endl;
-
-    //Column col1 = Column(name, res);
-    //std::cout << res[0] << std::endl;
-    //Column col2 = Column(name, std::move(res));
-    //std::cout << res.size() << std::endl;
-    //columns.push_back(std::make_shared<Column>(col1));
-    ////columns2(columns);
+    vector<string> long_names = {"first_col", "second_col", "third_col"};
+    vector<string> lhs_names = {"first_col", "second_col"};
+    vector<string> rhs_names = {"first_col", "third_col"};
+    DataFrame df1 = DataFrame(names, first);
+    DataFrame df2 = DataFrame(long_names, second); //must add an alerat about the same length
+    std::cout << df1 << std::endl;
+    df1["test"] = string_col;
+    std::cout << df1 << std::endl;
+    df2["first_col"];
+    df1["fabi"] = df2["first_col"];
+    std::cout << "for fabi: " << df1.use_count("fabi") << std::endl;
+    std::cout << "for first_col: " << df2.use_count("first_col") << std::endl;
+    std::cout << "for second_col: " << df2.use_count("second_col") << std::endl;
+    //std::cout << df2 << std::endl;
+    //df1["fabi"] = df2["second_col"];
+    std::cout << df2 << std::endl;
+    std::cout << df1 << std::endl;
+    df1["fabi"] = tmp;
+    std::cout << "for fabi: " << df1.use_count("fabi") << std::endl;
+    std::cout << "for first_col: " << df2.use_count("first_col") << std::endl;
+    std::cout << "for second_col: " << df2.use_count("second_col") << std::endl;
+    std::cout << df2 << std::endl;
+    std::cout << df1 << std::endl;
+    //df1["fist_col"] = tmp;
+    DataFrame test = df1["first_col"];
+    std::cout << "Before the addition\n";
+    std::cout << df1 << std::endl;
+    std::cout << df2 << std::endl;
+    std::cout << "for fabi: " << df1.use_count("fabi") << std::endl;
+    std::cout << "for first_col: " << df1.use_count("first_col") << std::endl;
+    std::cout << "for second_col: " << df1.use_count("second_col") << std::endl;
+    df1 += test;
+    std::cout << "After the addition\n";
+    std::cout << df1 << std::endl;
+    std::cout << df2 << std::endl;
+    std::cout << test << std::endl;
+    DataFrame summation = df1 + df2;
+    std::cout << summation << std::endl;
     return 0;
 }
