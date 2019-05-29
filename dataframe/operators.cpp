@@ -173,14 +173,24 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
         DataFrameProxy df_tmp = DataFrameProxy(*this, x.first);
         try {
             int rhsIdx = rhs.column_names.at(x.first);
-            vector<double> tmp(2);
-            std::transform(columns[x.second]->begin(), columns[x.second]->end(),
-                           rhs.columns[rhsIdx]->begin(), tmp.begin(),
-                           std::plus<double>( ));
-            df_tmp.add_or_replace(true, x.second, tmp);
+            if (columns[x.second]->get_type() == "double") {
+                vector<double> tmp;
+                add_elements<double>(tmp, rhs, x.second, rhsIdx);
+                df_tmp.add_or_replace(true, x.second, tmp);
+            } else if (columns[x.second]->get_type() == "string") {
+                vector<string> tmp;
+                add_elements<string>(tmp, rhs, x.second, rhsIdx);
+                df_tmp.add_or_replace(true, x.second, tmp);
+            }
         } catch (const std::out_of_range& e) {
-            vector<double> tmp = {nan::quiet_NaN(), nan::quiet_NaN()};
-            df_tmp.add_or_replace(true, x.second, tmp);
+            auto s = size().first;
+            if (columns[x.second]->get_type() == "double") {
+                vector<double> tmp = vector<double>(s, nan::quiet_NaN());
+                df_tmp.add_or_replace(true, x.second, tmp);
+            } else if (columns[x.second]->get_type() == "string") {
+                vector<string> tmp = vector<string>(s);
+                df_tmp.add_or_replace(true, x.second, tmp);
+            }
         } catch (const std::invalid_argument& e) {
             ;
         }

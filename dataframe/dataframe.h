@@ -6,6 +6,7 @@
 #include <vector>
 #include <cmath>
 #include "column.h"
+#include <algorithm>
 
 
 class DataFrame {
@@ -41,6 +42,8 @@ class DataFrame {
         std::vector<std::string> colNames;
     };
     DataFrame& operator+=(const DataFrame& rhs); //need to think about copy on write!!!
+    template <class T> typename std::vector<T>::iterator begin(std::string);
+    template <class T> typename std::vector<T>::iterator end(std::string);
     DataFrameProxy operator[](std::string col_name);
     DataFrameProxy operator[](std::vector<std::string> col_name);
     const std::pair<int, int> size() const;
@@ -49,6 +52,13 @@ class DataFrame {
    private:
     std::vector<std::shared_ptr<Column>> columns;
     std::map<std::string, int> column_names;
+    template <class T> void 
+    add_elements(std::vector<T>& inp, const DataFrame& other, 
+                 int pos, int otherPos) {
+        std::transform(columns[pos]->begin<T>(), columns[pos]->end<T>(),
+                       other.columns[otherPos]->begin<T>(), 
+                       std::back_inserter(inp), std::plus<T>());
+    }
 };
 
 DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);

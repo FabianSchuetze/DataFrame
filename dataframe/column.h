@@ -37,8 +37,18 @@ class Column {
         else
             throw std::invalid_argument("not in here");
     }
-    std::vector<double>::iterator begin();
-    std::vector<double>::iterator end();
+    template <typename V> typename std::vector<V>::iterator begin() {
+        if (std::holds_alternative<vector<V>>(col))
+            return std::get<vector<V>>(col).begin();
+        else
+            throw std::invalid_argument("not in here");
+    }
+    template <typename V> typename std::vector<V>::iterator end() {
+        if (std::holds_alternative<vector<V>>(col))
+            return std::get<vector<V>>(col).end();
+        else
+            throw std::invalid_argument("not in here");
+    }
 };
 
 std::ostream& operator<<(std::ostream&, const Column&);
