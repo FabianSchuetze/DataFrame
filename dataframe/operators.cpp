@@ -9,6 +9,7 @@ using std::make_shared;
 using std::string;
 using std::transform;
 using std::vector;
+
 DataFrame::DataFrameProxy DataFrame::operator[](string col_name) {
     return DataFrameProxy(*this, col_name);
 }
@@ -52,6 +53,15 @@ void DataFrame::DataFrameProxy::add_or_replace(bool replace, int idx,
         }
     } else
         theDataFrame.columns.push_back(make_shared<Column>(data));
+}
+
+void DataFrame::make_unique_if(const std::string& s) {
+    if (this->use_count(s) > 1) {
+        std::cout << "copy-on-write\n";
+        int idx = column_names[s];
+        std::shared_ptr<Column> data = std::make_shared<Column>(*columns.at(idx));
+        columns.at(idx) = data;
+    }
 }
 
 void DataFrame::DataFrameProxy::add_or_replace(
@@ -115,6 +125,11 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     return *this;
 }
 
+void append_string(Column& c, std::string&s, int pos) {
+    c.append_string(s, pos);
+    s += ' ';
+}
+
 std::ostream& operator<<(std::ostream& os,
                          const DataFrame::DataFrameProxy& df) {
     string output;
@@ -123,9 +138,7 @@ std::ostream& operator<<(std::ostream& os,
     for (int row = 0; row < df.theDataFrame.size().first; ++row) {
         for (string const& col : df.colNames) {
             int col_number = df.theDataFrame.column_names[col];
-            Column& c = (*df.theDataFrame.columns[col_number]);
-            c.append_string(output, row);
-            output += " ";
+            append_string(*df.theDataFrame.columns[col_number], output, row);
         }
         output += '\n';
     }
@@ -138,11 +151,8 @@ std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
     for (auto const& x : df.column_names) output += x.first + ' ';
     output += '\n';
     for (int row = 0; row < df.size().first; ++row) {
-        for (auto const& col : df.column_names) {
-            Column& c = (*df.columns[col.second]);
-            c.append_string(output, row);
-            output += " ";
-        }
+        for (auto const& col : df.column_names)
+            append_string(*df.columns[col.second], output, row);
         output += '\n';
     }
     os << output;
@@ -155,19 +165,10 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
         DataFrameProxy df_tmp = DataFrameProxy(*this, x.first);
         try {
             int rhsIdx = rhs.column_names.at(x.first);
-            // See the blog! I should have a non-memeber function of the variant!!!
-            // I can change a vistor with a variant!! Maybe I should use this?
-            if (columns[x.second]->get_type() == "double") {
-                vector<double> tmp;
-                add_elements(tmp, rhs, x.second, rhsIdx);
-                df_tmp.add_or_replace(true, x.second, tmp);
-            } else if (columns[x.second]->get_type() == "string") {
-                vector<string> tmp;
-                add_elements(tmp, rhs, x.second, rhsIdx);
-                df_tmp.add_or_replace(true, x.second, tmp);
-            }
-            //add_elements(tmp, rhs, x.second, rhsIdx);
-            //df_tmp.add_or_replace(true, x.second, tmp);
+            make_unique_if(x.first);
+            Column& lhs = *columns[x.second];
+            Column& other = *rhs.columns[rhsIdx];
+            lhs += other;
         } catch (const std::out_of_range& e) {
             auto s = size().first;
             if (columns[x.second]->get_type() == "double") {
@@ -181,6 +182,7 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
             ;
         }
     }
+    return *this;
     //throw std::invalid_argument("Cannot get here"); //correct ordering?!?
 }
 

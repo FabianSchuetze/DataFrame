@@ -35,6 +35,7 @@ class DataFrame {
         friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
 
        private:
+        // DO I REALLY HAVE TWO FUNCTIONS?!?!?
         void add_or_replace(bool, int, const vector<double>&);
         void add_or_replace(bool, int, const vector<string>&);
         void add_or_replace(bool, int, const std::shared_ptr<Column>);
@@ -56,6 +57,7 @@ class DataFrame {
    private:
     std::vector<std::shared_ptr<Column>> columns;
     std::map<std::string, int> column_names;
+    void make_unique_if(const std::string&);
     template <class T> void 
     add_elements(std::vector<T>& inp, const DataFrame& other, 
                  int pos, int otherPos) {

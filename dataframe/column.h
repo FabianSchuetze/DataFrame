@@ -19,6 +19,7 @@ class Column {
     typedef std::vector<double> dvec;
     friend std::ostream& operator<<(std::ostream&, const Column&);
     Column();
+    Column& operator+=(const Column& rhs);
     template <class T> Column(const std::vector<T>& t) {
         col = t;
         if (std::is_same<T, std::string>::value)
