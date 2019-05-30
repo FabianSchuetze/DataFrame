@@ -118,26 +118,14 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
 std::ostream& operator<<(std::ostream& os,
                          const DataFrame::DataFrameProxy& df) {
     string output;
-    //double num;
     for (string const& x : df.colNames) output += x + ' ';
     output += '\n';
-    int num_rows = df.theDataFrame.size().first;
-    for (int row = 0; row < num_rows; ++row) {
+    for (int row = 0; row < df.theDataFrame.size().first; ++row) {
         for (string const& col : df.colNames) {
             int col_number = df.theDataFrame.column_names[col];
-            string type = (*df.theDataFrame.columns[col_number]).get_type();
-            // can also use a vistor!
-            if (type == "string") {
-                string num =
-                    (*df.theDataFrame.columns[col_number]).operator[]<string>(row);
-                output += num + ' ';
-            } else if (type == "double") {
-                double num =
-                    (*df.theDataFrame.columns[col_number]).operator[]<double>(row);
-                output += std::to_string(num) + ' ';
-            }
-            else 
-                throw std::invalid_argument("Does not work");
+            Column& c = (*df.theDataFrame.columns[col_number]);
+            c.append_string(output, row);
+            output += " ";
         }
         output += '\n';
     }
@@ -149,20 +137,11 @@ std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
     string output;
     for (auto const& x : df.column_names) output += x.first + ' ';
     output += '\n';
-    std::pair<int, int> size = df.size();
-    for (int row = 0; row < size.first; ++row) {
+    for (int row = 0; row < df.size().first; ++row) {
         for (auto const& col : df.column_names) {
-            string type = (*df.columns[col.second]).get_type();
-            // here I can have a vistor and only retrain the same tpye, a
-            // string!
-            if (type == "string") {
-                string num = (*df.columns[col.second]).operator[]<string>(row);
-                output += num + ' ';
-            } else if (type == "double") {
-                double num = (*df.columns[col.second]).operator[]<double>(row);
-                output += std::to_string(num) + ' ';
-            } else 
-                throw std::invalid_argument("No matching type");
+            Column& c = (*df.columns[col.second]);
+            c.append_string(output, row);
+            output += " ";
         }
         output += '\n';
     }

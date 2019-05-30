@@ -49,6 +49,7 @@ class Column {
         else
             throw std::invalid_argument("not in here");
     }
+    void append_string(std::string&, int pos);
 };
 
 std::ostream& operator<<(std::ostream&, const Column&);

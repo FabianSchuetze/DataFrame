@@ -15,6 +15,13 @@ int Column::size(){
         return 0;
 }
 
+void Column::append_string(std::string& s, int pos) {
+    if (vector<double>* val = std::get_if<std::vector<double>>(&col))
+        s += std::to_string(val->at(pos));
+    if (vector<std::string>* val = std::get_if<std::vector<std::string>>(&col))
+        s += val->at(pos);
+}
+
 std::ostream& operator<<(std::ostream& os, const Column& df) {
     string output;
     if (std::holds_alternative<vector<double>>(df.col)) {
