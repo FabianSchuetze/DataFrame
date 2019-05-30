@@ -29,7 +29,7 @@ int find_or_add(string name, std::map<string, int>& columns) {
 }
 
 void DataFrame::DataFrameProxy::add_or_replace(bool replace, int idx,
-                                               vector<double>& data) {
+                                               const vector<double>& data) {
     if (replace) {
         if (theDataFrame.columns[idx].use_count() > 1) {
             std::cout << "copy-on-write\n";
@@ -42,7 +42,7 @@ void DataFrame::DataFrameProxy::add_or_replace(bool replace, int idx,
 }
 
 void DataFrame::DataFrameProxy::add_or_replace(bool replace, int idx,
-                                               vector<string>& data) {
+                                               const vector<string>& data) {
     if (replace) {
         if (theDataFrame.columns[idx].use_count() > 1) {
             std::cout << "copy-on-write\n";
@@ -55,7 +55,7 @@ void DataFrame::DataFrameProxy::add_or_replace(bool replace, int idx,
 }
 
 void DataFrame::DataFrameProxy::add_or_replace(
-    bool replace, int idx, std::shared_ptr<Column> data) {
+    bool replace, int idx, const std::shared_ptr<Column> data) {
     if (replace) {
         if (theDataFrame.columns[idx].use_count() > 1) {
             theDataFrame.columns.at(idx) = data;
@@ -81,7 +81,7 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
 }
 
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
-    vector<vector<double>>& other_col) {
+    const vector<vector<double>>& other_col) {
     if (colNames.size() != other_col.size())
         throw std::invalid_argument("different number of columns");
     for (size_t i = 0; i < colNames.size(); ++i) {
@@ -94,7 +94,7 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
 }
 
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
-    vector<double>& other_col) {
+    const vector<double>& other_col) {
     if (colNames.size() != 1)
         throw std::invalid_argument("different number of columns");
     int capacity_so_far = theDataFrame.column_names.size();
@@ -105,7 +105,7 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
 }
 
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
-    vector<string>& other_col) {
+    const vector<string>& other_col) {
     if (colNames.size() != 1)
         throw std::invalid_argument("different number of columns");
     int capacity_so_far = theDataFrame.column_names.size();
@@ -126,6 +126,7 @@ std::ostream& operator<<(std::ostream& os,
         for (string const& col : df.colNames) {
             int col_number = df.theDataFrame.column_names[col];
             string type = (*df.theDataFrame.columns[col_number]).get_type();
+            // can also use a vistor!
             if (type == "string") {
                 string num =
                     (*df.theDataFrame.columns[col_number]).operator[]<string>(row);
@@ -152,6 +153,8 @@ std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
     for (int row = 0; row < size.first; ++row) {
         for (auto const& col : df.column_names) {
             string type = (*df.columns[col.second]).get_type();
+            // here I can have a vistor and only retrain the same tpye, a
+            // string!
             if (type == "string") {
                 string num = (*df.columns[col.second]).operator[]<string>(row);
                 output += num + ' ';
@@ -173,15 +176,19 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
         DataFrameProxy df_tmp = DataFrameProxy(*this, x.first);
         try {
             int rhsIdx = rhs.column_names.at(x.first);
+            // See the blog! I should have a non-memeber function of the variant!!!
+            // I can change a vistor with a variant!! Maybe I should use this?
             if (columns[x.second]->get_type() == "double") {
                 vector<double> tmp;
-                add_elements<double>(tmp, rhs, x.second, rhsIdx);
+                add_elements(tmp, rhs, x.second, rhsIdx);
                 df_tmp.add_or_replace(true, x.second, tmp);
             } else if (columns[x.second]->get_type() == "string") {
                 vector<string> tmp;
-                add_elements<string>(tmp, rhs, x.second, rhsIdx);
+                add_elements(tmp, rhs, x.second, rhsIdx);
                 df_tmp.add_or_replace(true, x.second, tmp);
             }
+            //add_elements(tmp, rhs, x.second, rhsIdx);
+            //df_tmp.add_or_replace(true, x.second, tmp);
         } catch (const std::out_of_range& e) {
             auto s = size().first;
             if (columns[x.second]->get_type() == "double") {

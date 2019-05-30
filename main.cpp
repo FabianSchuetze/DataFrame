@@ -43,12 +43,15 @@ int main() {
     std::cout << "for fabi: " << df1.use_count("fabi") << std::endl;
     std::cout << "for first_col: " << df1.use_count("first_col") << std::endl;
     std::cout << "for second_col: " << df1.use_count("second_col") << std::endl;
-    df1 += test;
+    df1 += df1;
+    std::cout << df1 << std::endl;
     std::cout << "After the addition\n";
     std::cout << df1 << std::endl;
     std::cout << df2 << std::endl;
     std::cout << test << std::endl;
     DataFrame summation = df1 + df2;
     std::cout << summation << std::endl;
+    //std::vector<string>::iterator b = df1.begin<string>("test");
+    //std::cout << *b << std::endl;
     return 0;
 }

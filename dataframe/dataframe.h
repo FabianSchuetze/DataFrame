@@ -26,27 +26,31 @@ class DataFrame {
         friend class DataFrame;
         DataFrameProxy();
         ~DataFrameProxy() = default;
-        DataFrameProxy(DataFrame&, std::string);
-        DataFrameProxy(DataFrame&, std::vector<std::string>);
+        DataFrameProxy(DataFrame&, const std::string&);
+        DataFrameProxy(DataFrame&, const std::vector<std::string>&);
         DataFrameProxy& operator=(const DataFrameProxy&);
-        DataFrameProxy& operator=(std::vector<std::vector<double>>&);
-        DataFrameProxy& operator=(std::vector<double>&);
-        DataFrameProxy& operator=(std::vector<string>&);
+        DataFrameProxy& operator=(const std::vector<std::vector<double>>&);
+        DataFrameProxy& operator=(const std::vector<double>&);
+        DataFrameProxy& operator=(const std::vector<string>&);
         friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
 
        private:
-        void add_or_replace(bool, int, vector<double>&);
-        void add_or_replace(bool, int, vector<string>&);
-        void add_or_replace(bool, int, std::shared_ptr<Column>);
+        void add_or_replace(bool, int, const vector<double>&);
+        void add_or_replace(bool, int, const vector<string>&);
+        void add_or_replace(bool, int, const std::shared_ptr<Column>);
         DataFrame& theDataFrame;
         std::vector<std::string> colNames;
     };
     DataFrame& operator+=(const DataFrame& rhs); //need to think about copy on write!!!
     template <class T> typename std::vector<T>::iterator begin(std::string);
     template <class T> typename std::vector<T>::iterator end(std::string);
+    template <class T> typename std::vector<T>::const_iterator begin(std::string);
+    template <class T> typename std::vector<T>::const_iterator end(std::string);
+    //what shall I do with the constant operator?
     DataFrameProxy operator[](std::string col_name);
     DataFrameProxy operator[](std::vector<std::string> col_name);
     const std::pair<int, int> size() const;
+    // THis is a strange function, can I const qualify it?
     const int use_count(std::string);
 
    private:

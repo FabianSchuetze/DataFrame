@@ -26,10 +26,10 @@ DataFrame::DataFrame(const DataFrame::DataFrameProxy df)
     }
 }
 
-DataFrame::DataFrameProxy::DataFrameProxy(DataFrame& df, string s)
+DataFrame::DataFrameProxy::DataFrameProxy(DataFrame& df, const string& s)
     : theDataFrame(df), colNames{s} {};
 
-DataFrame::DataFrameProxy::DataFrameProxy(DataFrame& df, vector<string> s)
+DataFrame::DataFrameProxy::DataFrameProxy(DataFrame& df, const vector<string>& s)
     : theDataFrame(df), colNames(s){};
 
 const std::pair<int, int> DataFrame::size() const {
