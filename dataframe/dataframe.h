@@ -15,6 +15,8 @@ class DataFrame {
     DataFrame();
     DataFrame(const std::vector<std::string>&, 
               const std::vector<std::vector<double>>&);
+    DataFrame(const std::vector<std::string>&, 
+              const std::vector<std::vector<std::string>>&);
     DataFrame(const DataFrameProxy);
     DataFrame& operator=(DataFrame&);
 
@@ -22,6 +24,8 @@ class DataFrame {
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
     friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
     friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
+    friend DataFrame operator+(const DataFrame&, double);
+    friend DataFrame operator+(const DataFrame&, std::string);
 
     class DataFrameProxy {
        public:
@@ -69,7 +73,10 @@ class DataFrame {
     }
 };
 
-DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
+// SHOUD I RETURN REFERENCE TO CONST AS IN THE BOOK? DON'T UNDERSTAND WHY CONST
+DataFrame operator+(const DataFrame&, double);
+DataFrame operator+(const DataFrame&, string);
+DataFrame operator+(const DataFrame&, const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame::DataFrameProxy&);
 #endif

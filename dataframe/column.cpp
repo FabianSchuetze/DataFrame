@@ -48,3 +48,39 @@ Column& Column::operator+=(const Column& rhs) {
     }
     return *this;
 }
+
+Column operator+(const Column& c, double d) {
+    if (const vector<double>* dvec = std::get_if<vector<double>>(&c.col)) {
+        vector<double> lhs = std::vector<double>(dvec->size(), d);
+        std::transform(dvec->begin(), dvec->end(), lhs.begin(),
+                       lhs.begin(), std::plus<double>());
+        return Column(lhs);
+    }else {
+        throw std::invalid_argument("Cant combine a non-double with a double");
+    }
+}
+
+Column operator+(const Column& c, string d) {
+    if (const vector<string>* dvec = std::get_if<vector<string>>(&c.col)) {
+        vector<string> lhs = std::vector<string>(dvec->size(), d);
+        std::transform(dvec->begin(), dvec->end(), lhs.begin(),
+                       lhs.begin(), std::plus<string>());
+        return Column(lhs);
+    }else {
+        throw std::invalid_argument("Cant combine a non-double with a double");
+    }
+}
+
+//template <typename T>
+//Column operator+(const Column& c, T s) {
+    //Column new_col;
+    //if (const vector<T>* dvec = std::get_if<vector<T>>(&c.col)) {
+        //vector<T> lhs = std::vector<T>(dvec->size(), s);
+        //std::transform(dvec->begin(), dvec->end(), lhs.begin(),
+                       //lhs.begin(), std::plus<T>());
+        //new_col = Column(lhs);
+    //}else {
+        //throw std::invalid_argument("Cant combine a non-double with a double");
+    //}
+    //return new_col;
+//}

@@ -5,6 +5,7 @@
 #include <string>
 #include <variant>
 #include <vector>
+#include <algorithm>
 
 using std::string;
 using std::vector;
@@ -18,6 +19,8 @@ class Column {
     typedef std::vector<std::string> svec;
     typedef std::vector<double> dvec;
     friend std::ostream& operator<<(std::ostream&, const Column&);
+    friend Column operator+(const Column&, double);
+    friend Column operator+(const Column&, std::string);
     Column();
     Column& operator+=(const Column& rhs);
     template <class T> Column(const std::vector<T>& t) {
@@ -54,4 +57,20 @@ class Column {
 };
 
 std::ostream& operator<<(std::ostream&, const Column&);
+Column operator+(const Column&, double d);
+Column operator+(const Column&, std::string s);
+//template <typename T>
+//Column operator+(const Column& c, T s) {
+    ////Column new_col;
+    //if (const vector<T>* dvec = std::get_if<vector<T>>(&c.col)) {
+        //vector<T> lhs = std::vector<T>(dvec->size(), s);
+        //std::transform(dvec->begin(), dvec->end(), lhs.begin(),
+                       //lhs.begin(), std::plus<T>());
+        //return Column(lhs);
+        ////new_col = Column(lhs);
+    //}else {
+        //throw std::invalid_argument("Cant combine a non-double with a double");
+    //}
+    ////return new_col;
+//}
 #endif

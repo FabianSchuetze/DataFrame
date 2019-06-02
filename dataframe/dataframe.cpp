@@ -15,6 +15,15 @@ DataFrame::DataFrame(const vector<string>& n, const vector<vector<double>>& cols
     }
 }
 
+DataFrame::DataFrame(const vector<string>& n, const vector<vector<string>>& cols) {
+    if (n.size() != cols.size())
+        throw std::invalid_argument("Column name len does not equal col len");
+    for (size_t i = 0; i < n.size(); ++i) {
+        columns.push_back(make_shared<Column>(cols[i]));
+        column_names[n[i]] = i;
+    }
+}
+
 DataFrame::DataFrame(const DataFrame::DataFrameProxy df)
 {
     int i = 0;

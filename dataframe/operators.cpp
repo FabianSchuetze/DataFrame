@@ -167,9 +167,31 @@ std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
     return os;
 }
 
+DataFrame operator+(const DataFrame& lhs, double d) {
+    DataFrame new_df = lhs;
+    for (auto& x : lhs.column_names) {
+        int rhsIdx = lhs.column_names.at(x.first);
+        Column lhs = *new_df.columns[x.second];
+        Column new_col = lhs + d;
+        new_df.columns[x.second] = std::make_shared<Column>(new_col);
+    }
+    return new_df;
+}
+
+DataFrame operator+(const DataFrame& lhs, string s) {
+    DataFrame new_df = lhs;
+    for (auto& x : lhs.column_names) {
+        int rhsIdx = lhs.column_names.at(x.first);
+        Column lhs = *new_df.columns[x.second];
+        Column new_col = lhs + s;
+        new_df.columns[x.second] = std::make_shared<Column>(new_col);
+    }
+    return new_df;
+}
 DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
     typedef std::numeric_limits<double> nan;
     for (auto& x : column_names) {
+        // DO I HAVE TO USE THIS TMP?
         DataFrameProxy df_tmp = DataFrameProxy(*this, x.first);
         try {
             int rhsIdx = rhs.column_names.at(x.first);
