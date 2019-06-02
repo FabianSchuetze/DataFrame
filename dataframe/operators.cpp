@@ -18,6 +18,14 @@ DataFrame::DataFrameProxy DataFrame::operator[](vector<string> col_names) {
     return DataFrameProxy(*this, col_names);
 }
 
+DataFrame& DataFrame::operator=(DataFrame& rhs) {
+    if (this != &rhs) {
+        columns= rhs.columns;
+        column_names = rhs.column_names;
+    }
+    return *this;
+}
+
 int find_or_add(string name, std::map<string, int>& columns) {
     int idx;
     try {

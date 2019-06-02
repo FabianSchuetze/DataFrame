@@ -13,8 +13,10 @@ class DataFrame {
    public:
     class DataFrameProxy;
     DataFrame();
-    DataFrame(std::vector<std::string>, std::vector<std::vector<double>>);
+    DataFrame(const std::vector<std::string>&, 
+              const std::vector<std::vector<double>>&);
     DataFrame(const DataFrameProxy);
+    DataFrame& operator=(DataFrame&);
 
     friend class DataFrameProxy;
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
@@ -45,7 +47,7 @@ class DataFrame {
     DataFrame& operator+=(const DataFrame& rhs); //need to think about copy on write!!!
     template <class T> typename std::vector<T>::iterator begin(std::string);
     template <class T> typename std::vector<T>::iterator end(std::string);
-    template <class T> typename std::vector<T>::const_iterator begin(std::string);
+    //template <class T> typename std::vector<T>::const_iterator begin(std::string);
     template <class T> typename std::vector<T>::const_iterator end(std::string);
     //what shall I do with the constant operator?
     DataFrameProxy operator[](std::string col_name);

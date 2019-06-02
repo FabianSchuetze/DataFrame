@@ -6,7 +6,7 @@ using std::make_shared;
 using std::string;
 using std::vector;
 
-DataFrame::DataFrame(vector<string> n, vector<vector<double>> cols) {
+DataFrame::DataFrame(const vector<string>& n, const vector<vector<double>>& cols) {
     if (n.size() != cols.size())
         throw std::invalid_argument("Column name len does not equal col len");
     for (size_t i = 0; i < n.size(); ++i) {
