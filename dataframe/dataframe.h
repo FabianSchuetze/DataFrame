@@ -8,7 +8,6 @@
 #include "column.h"
 #include <algorithm>
 
-
 class DataFrame {
    public:
     class DataFrameProxy;
@@ -24,7 +23,8 @@ class DataFrame {
     friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
     friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
     // according to item 46, we need to define it here
-    template <typename T> friend DataFrame operator+(const DataFrame& lhs, T t) {
+    template <typename T> friend DataFrame operator+(const DataFrame& lhs, 
+                                                     const T& t) {
         DataFrame new_df = lhs;
         for (auto& x : lhs.column_names) {
             Column new_col = *new_df.columns[x.second] + t;
@@ -82,7 +82,7 @@ class DataFrame {
 };
 
 template <typename T>
-DataFrame operator+(const DataFrame&, T);
+DataFrame operator+(const DataFrame&, const T&);
 DataFrame operator+(const DataFrame&, const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame::DataFrameProxy&);

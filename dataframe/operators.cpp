@@ -26,7 +26,7 @@ DataFrame& DataFrame::operator=(const DataFrame& rhs) {
     return *this;
 }
 
-int find_or_add(const string& name, std::map<string, int>& columns) {
+bool find_or_add(const string& name, std::map<string, int>& columns) {
     try {
         columns.at(name);
     } catch (const std::out_of_range& e) {
@@ -53,8 +53,7 @@ void DataFrame::make_unique_if(const std::string& s) {
     if (this->use_count(s) > 1) {
         std::cout << "copy-on-write\n";
         int idx = column_names[s];
-        std::shared_ptr<Column> data =
-            std::make_shared<Column>(*columns.at(idx));
+        std::shared_ptr<Column> data = make_shared<Column>(*columns.at(idx));
         columns.at(idx) = data;
     }
 }
@@ -113,8 +112,6 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     insert_column(colNames[0], other_col);
     return *this;
 }
-
-/* Explicit Instantiation */
 template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<double>& other_col);
 template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
