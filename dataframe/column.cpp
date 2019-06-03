@@ -2,6 +2,19 @@
 #include <algorithm>
 using std::string;
 using std::vector;
+
+void Column::replace_nan() {
+    typedef std::numeric_limits<double> nan;
+    if (std::holds_alternative<dvec>(col)) {
+        vector<double> tmp = vector<double>(size(), nan::quiet_NaN());
+        col = tmp;
+    }
+    else if (std::holds_alternative<svec>(col)) {
+        vector<string> tmp = vector<string>(size(), "NOT_AVAILABLE");
+        col = tmp;
+    }
+}
+
 template <class T>
 void Column::push_back(const T t) {
     std::get<vector<T>>(col).push_back(t);
@@ -70,17 +83,3 @@ Column operator+(const Column& c, string d) {
         throw std::invalid_argument("Cant combine a non-double with a double");
     }
 }
-
-//template <typename T>
-//Column operator+(const Column& c, T s) {
-    //Column new_col;
-    //if (const vector<T>* dvec = std::get_if<vector<T>>(&c.col)) {
-        //vector<T> lhs = std::vector<T>(dvec->size(), s);
-        //std::transform(dvec->begin(), dvec->end(), lhs.begin(),
-                       //lhs.begin(), std::plus<T>());
-        //new_col = Column(lhs);
-    //}else {
-        //throw std::invalid_argument("Cant combine a non-double with a double");
-    //}
-    //return new_col;
-//}

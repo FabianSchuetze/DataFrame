@@ -117,7 +117,6 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
 /* Explicit Instantiation */
 template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<double>& other_col);
-
 template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<string>& other_col);
 
@@ -156,31 +155,18 @@ std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
 }
 
 DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
-    typedef std::numeric_limits<double> nan;
     for (auto& x : column_names) {
-        // DO I HAVE TO USE THIS TMP?
-        DataFrameProxy df_tmp = DataFrameProxy(*this, x.first);
+        make_unique_if(x.first);
         try {
             int rhsIdx = rhs.column_names.at(x.first);
-            make_unique_if(x.first);
             Column& lhs = *columns[x.second];
             Column& other = *rhs.columns[rhsIdx];
             lhs += other;
         } catch (const std::out_of_range& e) {
-            auto s = size().first;
-            if (columns[x.second]->get_type() == "double") {
-                vector<double> tmp = vector<double>(s, nan::quiet_NaN());
-                df_tmp.add_or_replace(true, x.second, tmp);
-            } else if (columns[x.second]->get_type() == "string") {
-                vector<string> tmp = vector<string>(s);
-                df_tmp.add_or_replace(true, x.second, tmp);
-            }
-        } catch (const std::invalid_argument& e) {
-            ;
+            columns[x.second]->replace_nan();
         }
     }
     return *this;
-    // throw std::invalid_argument("Cannot get here"); //correct ordering?!?
 }
 
 DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs) {
