@@ -2,9 +2,12 @@
 #include <algorithm>
 using std::string;
 using std::vector;
+using std::plus;
+using std::holds_alternative;
+using std::transform;
 
 template <typename V> V Column::operator[](int pos) {
-    if (std::holds_alternative<vector<V>>(col))
+    if (holds_alternative<vector<V>>(col))
         return std::get<vector<V>>(col)[pos];
     else
         throw std::invalid_argument("not in here");
@@ -14,9 +17,9 @@ template string Column::operator[](int);
 
 void Column::replace_nan() {
     typedef std::numeric_limits<double> nan;
-    if (std::holds_alternative<vector<double>>(col))
+    if (holds_alternative<vector<double>>(col))
         col = vector<double>(size(), nan::quiet_NaN()); 
-    else if (std::holds_alternative<vector<string>>(col))
+    else if (holds_alternative<vector<string>>(col))
         col = vector<string>(size(), "NOT_AVAILABLE");
 }
 
@@ -26,18 +29,18 @@ void Column::push_back(const T t) {
 }
 
 const int Column::size() {
-    if (std::holds_alternative<vector<double>>(col))
+    if (holds_alternative<vector<double>>(col))
         return std::get<vector<double>>(col).size();
-    else if (std::holds_alternative<vector<string>>(col))
+    else if (holds_alternative<vector<string>>(col))
         return std::get<vector<string>>(col).size();
     else
         return 0;
 }
 
-void Column::append_string(std::string& s, int pos) {
-    if (vector<double>* val = std::get_if<std::vector<double>>(&col))
+void Column::append_string(string& s, int pos) {
+    if (vector<double>* val = std::get_if<vector<double>>(&col))
         s += std::to_string(val->at(pos));
-    if (vector<std::string>* val = std::get_if<std::vector<std::string>>(&col))
+    if (vector<string>* val = std::get_if<vector<string>>(&col))
         s += val->at(pos);
 }
 
@@ -50,23 +53,22 @@ std::ostream& operator<<(std::ostream& os, const Column& df) {
 }
 
 Column& Column::operator+=(const Column& rhs) {
-    if (vector<double>* dvec = std::get_if<vector<double>>(&col)) {
+    if (vector<double>* vec = std::get_if<vector<double>>(&col)) {
         const vector<double>* other = std::get_if<vector<double>>(&rhs.col);
-        std::transform(other->begin(), other->end(), dvec->begin(),
-                       dvec->begin(), std::plus<double>());
-    } else if (vector<string>* svec = std::get_if<vector<string>>(&col)) {
+        transform(other->begin(), other->end(), vec->begin(),
+                  vec->begin(), plus<double>());
+    } else if (vector<string>* vec = std::get_if<vector<string>>(&col)) {
         const vector<string>* other = std::get_if<vector<string>>(&rhs.col);
-        std::transform(other->begin(), other->end(), svec->begin(),
-                       svec->begin(), std::plus<string>());
+        transform(other->begin(), other->end(), vec->begin(), vec->begin(), 
+                  plus<string>());
     }
     return *this;
 }
 
 template <typename T> 
-vector<T> transform_column(const vector<T>* rhs, const T& t) {
-    vector<T> res = vector<T>(rhs->size(), t);
-    std::transform(rhs->begin(), rhs->end(), res.begin(), res.begin(),
-                   std::plus<T>());
+vector<T> transform_column(const vector<T>* v, const T& t) {
+    vector<T> res = vector<T>(v->size(), t);
+    transform(v->begin(), v->end(), res.begin(), res.begin(), plus<T>());
     return res;
 }
 

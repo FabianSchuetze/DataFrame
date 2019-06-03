@@ -156,9 +156,7 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
         make_unique_if(x.first);
         try {
             int rhsIdx = rhs.column_names.at(x.first);
-            Column& lhs = *columns[x.second];
-            Column& other = *rhs.columns[rhsIdx];
-            lhs += other;
+            *columns[x.second] += *rhs.columns[rhsIdx];
         } catch (const std::out_of_range& e) {
             columns[x.second]->replace_nan();
         }

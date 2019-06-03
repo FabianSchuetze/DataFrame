@@ -46,12 +46,11 @@ class DataFrame {
         friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
 
        private:
-         //DO I REALLY HAVE TWO FUNCTIONS?!?!?
+        DataFrame& theDataFrame;
+        std::vector<std::string> colNames;
         template <typename T>
         void add_or_replace(bool, int, const std::vector<T>&);
         void add_or_replace(bool, int, const std::shared_ptr<Column>&);
-        DataFrame& theDataFrame;
-        std::vector<std::string> colNames;
         void check_column_size(size_t);
         template <typename T> 
         void insert_column(const std::string&, const std::vector<T>&);
