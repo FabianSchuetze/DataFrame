@@ -43,12 +43,15 @@ class DataFrame {
 
        private:
         // DO I REALLY HAVE TWO FUNCTIONS?!?!?
-        void add_or_replace(bool, int, const vector<double>&);
-        void add_or_replace(bool, int, const vector<string>&);
+        template <typename T>
+        void add_or_replace(bool, int, const vector<T>&);
+        //void add_or_replace(bool, int, const vector<string>&);
         void add_or_replace(bool, int, const std::shared_ptr<Column>);
         DataFrame& theDataFrame;
         std::vector<std::string> colNames;
         void check_column_size(size_t);
+        template <typename T> 
+        void insert_column(const std::string&, const std::vector<T>&);
     };
     DataFrame& operator+=(const DataFrame& rhs); //need to think about copy on write!!!
     template <class T> typename std::vector<T>::iterator begin(std::string);

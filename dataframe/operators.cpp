@@ -20,38 +20,24 @@ DataFrame::DataFrameProxy DataFrame::operator[](vector<string> col_names) {
 
 DataFrame& DataFrame::operator=(DataFrame& rhs) {
     if (this != &rhs) {
-        columns= rhs.columns;
+        columns = rhs.columns;
         column_names = rhs.column_names;
     }
     return *this;
 }
 
-int find_or_add(string name, std::map<string, int>& columns) {
-    int idx;
+int find_or_add(const string& name, std::map<string, int>& columns) {
     try {
-        idx = columns.at(name);
+        columns.at(name);
     } catch (const std::out_of_range& e) {
-        idx = columns.size();
-        columns[name] = idx;
+        columns[name] = columns.size();
     }
-    return idx;
+    return columns.at(name);
 }
 
+template <typename T>
 void DataFrame::DataFrameProxy::add_or_replace(bool replace, int idx,
-                                               const vector<double>& data) {
-    if (replace) {
-        if (theDataFrame.columns[idx].use_count() > 1) {
-            std::cout << "copy-on-write\n";
-            theDataFrame.columns.at(idx) = make_shared<Column>(data);
-        } else {
-            *theDataFrame.columns[idx] = data;
-        }
-    } else
-        theDataFrame.columns.push_back(make_shared<Column>(data));
-}
-
-void DataFrame::DataFrameProxy::add_or_replace(bool replace, int idx,
-                                               const vector<string>& data) {
+                                               const vector<T>& data) {
     if (replace) {
         if (theDataFrame.columns[idx].use_count() > 1) {
             std::cout << "copy-on-write\n";
@@ -67,7 +53,8 @@ void DataFrame::make_unique_if(const std::string& s) {
     if (this->use_count(s) > 1) {
         std::cout << "copy-on-write\n";
         int idx = column_names[s];
-        std::shared_ptr<Column> data = std::make_shared<Column>(*columns.at(idx));
+        std::shared_ptr<Column> data =
+            std::make_shared<Column>(*columns.at(idx));
         columns.at(idx) = data;
     }
 }
@@ -88,6 +75,7 @@ void DataFrame::DataFrameProxy::check_column_size(size_t check) {
     if (colNames.size() != check)
         throw std::invalid_argument("different number of columns");
 }
+
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const DataFrameProxy& rhs) {
     check_column_size(rhs.colNames.size());
@@ -101,41 +89,42 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     return *this;
 }
 
+template <typename T>
+void DataFrame::DataFrameProxy::insert_column(const string& name,
+                                              const vector<T>& inp) {
+    int capacity_so_far = theDataFrame.column_names.size();
+    int lhsIndex = find_or_add(name, theDataFrame.column_names);
+    bool replace = theDataFrame.column_names.size() == capacity_so_far;
+    add_or_replace(replace, lhsIndex, inp);
+}
+
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<vector<double>>& other_col) {
     check_column_size(other_col.size());
-    for (size_t i = 0; i < colNames.size(); ++i) {
-        int capacity_so_far = theDataFrame.column_names.size();
-        int lhsIndex = find_or_add(colNames[i], theDataFrame.column_names);
-        bool replace = theDataFrame.column_names.size() == capacity_so_far;
-        add_or_replace(replace, lhsIndex, other_col[i]);
-    }
+    for (size_t i = 0; i < colNames.size(); ++i)
+        insert_column(colNames[i], other_col[i]);
     return *this;
 }
 
 template <typename T>
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<T>& other_col) {
-    check_column_size(colNames.size());
-    int capacity_so_far = theDataFrame.column_names.size();
-    int lhsIdx = find_or_add(colNames[0], theDataFrame.column_names);
-    bool replace = theDataFrame.column_names.size() == capacity_so_far;
-    add_or_replace(replace, lhsIdx, other_col);
+    check_column_size(1);
+    insert_column(colNames[0], other_col);
     return *this;
 }
 
 /* Explicit Instantiation */
-template DataFrame::DataFrameProxy& 
-DataFrame::DataFrameProxy::operator=(const vector<double>& other_col);
+template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
+    const vector<double>& other_col);
 
-template DataFrame::DataFrameProxy& 
-DataFrame::DataFrameProxy::operator=(const vector<string>& other_col);
+template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
+    const vector<string>& other_col);
 
-void append_string(Column& c, std::string&s, int pos) {
+void append_string(Column& c, std::string& s, int pos) {
     c.append_string(s, pos);
     s += ' ';
 }
-
 
 std::ostream& operator<<(std::ostream& os,
                          const DataFrame::DataFrameProxy& df) {
@@ -212,7 +201,7 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
         }
     }
     return *this;
-    //throw std::invalid_argument("Cannot get here"); //correct ordering?!?
+    // throw std::invalid_argument("Cannot get here"); //correct ordering?!?
 }
 
 DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs) {
