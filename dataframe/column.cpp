@@ -5,14 +5,10 @@ using std::vector;
 
 void Column::replace_nan() {
     typedef std::numeric_limits<double> nan;
-    if (std::holds_alternative<dvec>(col)) {
-        vector<double> tmp = vector<double>(size(), nan::quiet_NaN());
-        col = tmp;
-    }
-    else if (std::holds_alternative<svec>(col)) {
-        vector<string> tmp = vector<string>(size(), "NOT_AVAILABLE");
-        col = tmp;
-    }
+    if (std::holds_alternative<dvec>(col))
+        col = vector<double>(size(), nan::quiet_NaN()); 
+    else if (std::holds_alternative<svec>(col))
+        col = vector<string>(size(), "NOT_AVAILABLE");
 }
 
 template <class T>
@@ -62,24 +58,23 @@ Column& Column::operator+=(const Column& rhs) {
     return *this;
 }
 
+template <typename T> vector<T> transform_column(const vector<T>* rhs, T t) {
+    vector<T> res = vector<T>(rhs->size(), t);
+    std::transform(rhs->begin(), rhs->end(), res.begin(), res.begin(),
+                   std::plus<T>());
+    return res;
+}
+
 Column operator+(const Column& c, double d) {
-    if (const vector<double>* dvec = std::get_if<vector<double>>(&c.col)) {
-        vector<double> lhs = std::vector<double>(dvec->size(), d);
-        std::transform(dvec->begin(), dvec->end(), lhs.begin(),
-                       lhs.begin(), std::plus<double>());
-        return Column(lhs);
-    }else {
+    if (const vector<double>* dvec = std::get_if<vector<double>>(&c.col))
+        return Column(transform_column(dvec, d));
+    else 
         throw std::invalid_argument("Cant combine a non-double with a double");
-    }
 }
 
 Column operator+(const Column& c, string d) {
-    if (const vector<string>* dvec = std::get_if<vector<string>>(&c.col)) {
-        vector<string> lhs = std::vector<string>(dvec->size(), d);
-        std::transform(dvec->begin(), dvec->end(), lhs.begin(),
-                       lhs.begin(), std::plus<string>());
-        return Column(lhs);
-    }else {
+    if (const vector<string>* dvec = std::get_if<vector<string>>(&c.col))
+        return Column(transform_column(dvec, d));
+    else 
         throw std::invalid_argument("Cant combine a non-double with a double");
-    }
 }
