@@ -6,7 +6,8 @@ using std::make_shared;
 using std::string;
 using std::vector;
 
-DataFrame::DataFrame(const vector<string>& n, const vector<vector<double>>& cols) {
+template <typename T>
+DataFrame::DataFrame(const vector<string>& n, const vector<vector<T>>& cols) {
     if (n.size() != cols.size())
         throw std::invalid_argument("Column name len does not equal col len");
     for (size_t i = 0; i < n.size(); ++i) {
@@ -14,20 +15,15 @@ DataFrame::DataFrame(const vector<string>& n, const vector<vector<double>>& cols
         column_names[n[i]] = i;
     }
 }
+/* Explicit Instantiation */
+template DataFrame::DataFrame(const vector<string>&,
+                              const vector<vector<double>>&);
+template DataFrame::DataFrame(const vector<string>&,
+                              const vector<vector<string>>&);
 
-DataFrame::DataFrame(const vector<string>& n, const vector<vector<string>>& cols) {
-    if (n.size() != cols.size())
-        throw std::invalid_argument("Column name len does not equal col len");
-    for (size_t i = 0; i < n.size(); ++i) {
-        columns.push_back(make_shared<Column>(cols[i]));
-        column_names[n[i]] = i;
-    }
-}
-
-DataFrame::DataFrame(const DataFrame::DataFrameProxy df)
-{
+DataFrame::DataFrame(const DataFrame::DataFrameProxy df) {
     int i = 0;
-    for (string name: df.colNames) {
+    for (string name : df.colNames) {
         int pos = df.theDataFrame.column_names[name];
         columns.push_back(df.theDataFrame.columns[pos]);
         column_names[name] = i;
@@ -38,7 +34,8 @@ DataFrame::DataFrame(const DataFrame::DataFrameProxy df)
 DataFrame::DataFrameProxy::DataFrameProxy(DataFrame& df, const string& s)
     : theDataFrame(df), colNames{s} {};
 
-DataFrame::DataFrameProxy::DataFrameProxy(DataFrame& df, const vector<string>& s)
+DataFrame::DataFrameProxy::DataFrameProxy(DataFrame& df,
+                                          const vector<string>& s)
     : theDataFrame(df), colNames(s){};
 
 const std::pair<int, int> DataFrame::size() const {

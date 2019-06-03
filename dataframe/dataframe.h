@@ -13,10 +13,9 @@ class DataFrame {
    public:
     class DataFrameProxy;
     DataFrame();
+    template <typename T>
     DataFrame(const std::vector<std::string>&, 
-              const std::vector<std::vector<double>>&);
-    DataFrame(const std::vector<std::string>&, 
-              const std::vector<std::vector<std::string>>&);
+              const std::vector<std::vector<T>>&);
     DataFrame(const DataFrameProxy);
     DataFrame& operator=(DataFrame&);
 
@@ -24,8 +23,15 @@ class DataFrame {
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
     friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
     friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
-    friend DataFrame operator+(const DataFrame&, double);
-    friend DataFrame operator+(const DataFrame&, std::string);
+    // according to item 46, we need to define it here
+    template <typename T> friend DataFrame operator+(const DataFrame& lhs, T t) {
+        DataFrame new_df = lhs;
+        for (auto& x : lhs.column_names) {
+            Column new_col = *new_df.columns[x.second] + t;
+            new_df.columns[x.second] = std::make_shared<Column>(new_col);
+        }
+        return new_df;
+    }
 
     class DataFrameProxy {
        public:
@@ -36,16 +42,13 @@ class DataFrame {
         DataFrameProxy(DataFrame&, const std::vector<std::string>&);
         DataFrameProxy& operator=(const DataFrameProxy&);
         DataFrameProxy& operator=(const std::vector<std::vector<double>>&);
-        //DataFrameProxy& operator=(const std::vector<double>&);
-        template <typename T>
-        DataFrameProxy& operator=(const std::vector<T>&);
+        template <typename T> DataFrameProxy& operator=(const std::vector<T>&);
         friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
 
        private:
-        // DO I REALLY HAVE TWO FUNCTIONS?!?!?
+         //DO I REALLY HAVE TWO FUNCTIONS?!?!?
         template <typename T>
         void add_or_replace(bool, int, const vector<T>&);
-        //void add_or_replace(bool, int, const vector<string>&);
         void add_or_replace(bool, int, const std::shared_ptr<Column>);
         DataFrame& theDataFrame;
         std::vector<std::string> colNames;
@@ -78,9 +81,8 @@ class DataFrame {
     }
 };
 
-// SHOUD I RETURN REFERENCE TO CONST AS IN THE BOOK? DON'T UNDERSTAND WHY CONST
-DataFrame operator+(const DataFrame&, double);
-DataFrame operator+(const DataFrame&, string);
+template <typename T>
+DataFrame operator+(const DataFrame&, T);
 DataFrame operator+(const DataFrame&, const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame::DataFrameProxy&);

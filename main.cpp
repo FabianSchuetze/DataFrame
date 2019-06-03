@@ -28,12 +28,13 @@ int main() {
     vector<string> long_names = {"first_col", "second_col", "third_col"};
     vector<string> lhs_names = {"first_col", "second_col"};
     vector<string> rhs_names = {"first_col", "third_col"};
-    //DataFrame df1 = DataFrame(names, strings);
     DataFrame df1 = DataFrame(names, first);
-    //std::cout << df1 << std::endl;
-    ////df1["test"] = names;
+    std::cout << df1 << std::endl;
+    df1["test"] = names;
     //DataFrame dfPlus = df1 + "fabi";
+    //DataFrame dfPlus2 = df2 + 2;
     //std::cout << dfPlus;
+    //std::cout << dfPlus2;
     //std::cout << dfPlus.use_count("first_col");
     DataFrame df2 = DataFrame(long_names, second); //must add an alerat about the same length
     std::cout << df1 << std::endl;
