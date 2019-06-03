@@ -10,15 +10,15 @@ using std::string;
 using std::transform;
 using std::vector;
 
-DataFrame::DataFrameProxy DataFrame::operator[](string col_name) {
+DataFrame::DataFrameProxy DataFrame::operator[](const string& col_name) {
     return DataFrameProxy(*this, col_name);
 }
 
-DataFrame::DataFrameProxy DataFrame::operator[](vector<string> col_names) {
+DataFrame::DataFrameProxy DataFrame::operator[](const vector<string>& col_names) {
     return DataFrameProxy(*this, col_names);
 }
 
-DataFrame& DataFrame::operator=(DataFrame& rhs) {
+DataFrame& DataFrame::operator=(const DataFrame& rhs) {
     if (this != &rhs) {
         columns = rhs.columns;
         column_names = rhs.column_names;
@@ -60,7 +60,7 @@ void DataFrame::make_unique_if(const std::string& s) {
 }
 
 void DataFrame::DataFrameProxy::add_or_replace(
-    bool replace, int idx, const std::shared_ptr<Column> data) {
+    bool replace, int idx, const std::shared_ptr<Column>& data) {
     if (replace) {
         if (theDataFrame.columns[idx].use_count() > 1) {
             theDataFrame.columns.at(idx) = data;
@@ -76,6 +76,15 @@ void DataFrame::DataFrameProxy::check_column_size(size_t check) {
         throw std::invalid_argument("different number of columns");
 }
 
+template <typename T>
+void DataFrame::DataFrameProxy::insert_column(const string& name,
+                                              const vector<T>& inp) {
+    int capacity_so_far = theDataFrame.column_names.size();
+    int lhsIndex = find_or_add(name, theDataFrame.column_names);
+    bool replace = theDataFrame.column_names.size() == capacity_so_far;
+    add_or_replace(replace, lhsIndex, inp);
+}
+
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const DataFrameProxy& rhs) {
     check_column_size(rhs.colNames.size());
@@ -87,15 +96,6 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
         add_or_replace(replace, lhsIndex, rhs.theDataFrame.columns[rhsIndex]);
     }
     return *this;
-}
-
-template <typename T>
-void DataFrame::DataFrameProxy::insert_column(const string& name,
-                                              const vector<T>& inp) {
-    int capacity_so_far = theDataFrame.column_names.size();
-    int lhsIndex = find_or_add(name, theDataFrame.column_names);
-    bool replace = theDataFrame.column_names.size() == capacity_so_far;
-    add_or_replace(replace, lhsIndex, inp);
 }
 
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(

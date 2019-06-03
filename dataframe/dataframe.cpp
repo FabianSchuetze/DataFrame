@@ -21,7 +21,7 @@ template DataFrame::DataFrame(const vector<string>&,
 template DataFrame::DataFrame(const vector<string>&,
                               const vector<vector<string>>&);
 
-DataFrame::DataFrame(const DataFrame::DataFrameProxy df) {
+DataFrame::DataFrame(const DataFrame::DataFrameProxy& df) {
     int i = 0;
     for (string name : df.colNames) {
         int pos = df.theDataFrame.column_names[name];

@@ -1,7 +1,5 @@
 #ifndef GUARD_Column_h
 #define GUARD_Column_h
-#include <exception>
-#include <iostream>
 #include <string>
 #include <variant>
 #include <vector>
@@ -15,13 +13,14 @@ class Column {
    public:
     friend std::ostream& operator<<(std::ostream&, const Column&);
     friend Column operator+(const Column&, double);
-    friend Column operator+(const Column&, std::string);
+    friend Column operator+(const Column&, const std::string&);
     friend class DataFrame;
+
     Column();
     Column& operator+=(const Column& rhs);
     template <class T> Column(const std::vector<T>& t) { col = t; }
     template <class T> void push_back(const T);
-    int size();
+    const int size();
     template <class V> V operator[](int);
     template <typename V> typename std::vector<V>::iterator begin() {
         if (std::holds_alternative<std::vector<V>>(col))
@@ -40,5 +39,5 @@ class Column {
 
 std::ostream& operator<<(std::ostream&, const Column&);
 Column operator+(const Column&, double d);
-Column operator+(const Column&, std::string s);
+Column operator+(const Column&, const std::string& s);
 #endif

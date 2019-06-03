@@ -25,7 +25,7 @@ void Column::push_back(const T t) {
     std::get<vector<T>>(col).push_back(t);
 }
 
-int Column::size() {
+const int Column::size() {
     if (std::holds_alternative<vector<double>>(col))
         return std::get<vector<double>>(col).size();
     else if (std::holds_alternative<vector<string>>(col))
@@ -62,7 +62,8 @@ Column& Column::operator+=(const Column& rhs) {
     return *this;
 }
 
-template <typename T> vector<T> transform_column(const vector<T>* rhs, T t) {
+template <typename T> 
+vector<T> transform_column(const vector<T>* rhs, const T& t) {
     vector<T> res = vector<T>(rhs->size(), t);
     std::transform(rhs->begin(), rhs->end(), res.begin(), res.begin(),
                    std::plus<T>());
@@ -70,15 +71,15 @@ template <typename T> vector<T> transform_column(const vector<T>* rhs, T t) {
 }
 
 Column operator+(const Column& c, double d) {
-    if (const vector<double>* dvec = std::get_if<vector<double>>(&c.col))
-        return Column(transform_column(dvec, d));
+    if (const vector<double>* vec = std::get_if<vector<double>>(&c.col))
+        return Column(transform_column(vec, d));
     else 
         throw std::invalid_argument("Cant combine a non-double with a double");
 }
 
-Column operator+(const Column& c, string d) {
-    if (const vector<string>* dvec = std::get_if<vector<string>>(&c.col))
-        return Column(transform_column(dvec, d));
+Column operator+(const Column& c, const string& d) {
+    if (const vector<string>* vec = std::get_if<vector<string>>(&c.col))
+        return Column(transform_column(vec, d));
     else 
         throw std::invalid_argument("Cant combine a non-double with a double");
 }

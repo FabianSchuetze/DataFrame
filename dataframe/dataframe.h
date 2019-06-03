@@ -16,8 +16,8 @@ class DataFrame {
     template <typename T>
     DataFrame(const std::vector<std::string>&, 
               const std::vector<std::vector<T>>&);
-    DataFrame(const DataFrameProxy);
-    DataFrame& operator=(DataFrame&);
+    DataFrame(const DataFrameProxy&);
+    DataFrame& operator=(const DataFrame&);
 
     friend class DataFrameProxy;
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
@@ -49,21 +49,21 @@ class DataFrame {
          //DO I REALLY HAVE TWO FUNCTIONS?!?!?
         template <typename T>
         void add_or_replace(bool, int, const std::vector<T>&);
-        void add_or_replace(bool, int, const std::shared_ptr<Column>);
+        void add_or_replace(bool, int, const std::shared_ptr<Column>&);
         DataFrame& theDataFrame;
         std::vector<std::string> colNames;
         void check_column_size(size_t);
         template <typename T> 
         void insert_column(const std::string&, const std::vector<T>&);
     };
-    DataFrame& operator+=(const DataFrame& rhs); //need to think about copy on write!!!
+    DataFrame& operator+=(const DataFrame& rhs);
     template <class T> typename std::vector<T>::iterator begin(std::string);
     template <class T> typename std::vector<T>::iterator end(std::string);
     //template <class T> typename std::vector<T>::const_iterator begin(std::string);
     template <class T> typename std::vector<T>::const_iterator end(std::string);
     //what shall I do with the constant operator?
-    DataFrameProxy operator[](std::string col_name);
-    DataFrameProxy operator[](std::vector<std::string> col_name);
+    DataFrameProxy operator[](const std::string& col_name);
+    DataFrameProxy operator[](const std::vector<std::string>& col_name);
     const std::pair<int, int> size() const;
     // THis is a strange function, can I const qualify it?
     const int use_count(std::string);
