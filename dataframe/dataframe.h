@@ -36,8 +36,9 @@ class DataFrame {
         DataFrameProxy(DataFrame&, const std::vector<std::string>&);
         DataFrameProxy& operator=(const DataFrameProxy&);
         DataFrameProxy& operator=(const std::vector<std::vector<double>>&);
-        DataFrameProxy& operator=(const std::vector<double>&);
-        DataFrameProxy& operator=(const std::vector<string>&);
+        //DataFrameProxy& operator=(const std::vector<double>&);
+        template <typename T>
+        DataFrameProxy& operator=(const std::vector<T>&);
         friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
 
        private:
@@ -47,6 +48,7 @@ class DataFrame {
         void add_or_replace(bool, int, const std::shared_ptr<Column>);
         DataFrame& theDataFrame;
         std::vector<std::string> colNames;
+        void check_column_size(size_t);
     };
     DataFrame& operator+=(const DataFrame& rhs); //need to think about copy on write!!!
     template <class T> typename std::vector<T>::iterator begin(std::string);

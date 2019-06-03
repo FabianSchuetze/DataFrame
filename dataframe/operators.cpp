@@ -84,10 +84,13 @@ void DataFrame::DataFrameProxy::add_or_replace(
         theDataFrame.columns.push_back(data);
 }
 
+void DataFrame::DataFrameProxy::check_column_size(size_t check) {
+    if (colNames.size() != check)
+        throw std::invalid_argument("different number of columns");
+}
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const DataFrameProxy& rhs) {
-    if (colNames.size() != rhs.colNames.size())
-        throw std::invalid_argument("different number of columns");
+    check_column_size(rhs.colNames.size());
     for (size_t i = 0; i < colNames.size(); ++i) {
         int capacity_so_far = theDataFrame.column_names.size();
         int lhsIndex = find_or_add(colNames[i], theDataFrame.column_names);
@@ -100,8 +103,7 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
 
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<vector<double>>& other_col) {
-    if (colNames.size() != other_col.size())
-        throw std::invalid_argument("different number of columns");
+    check_column_size(other_col.size());
     for (size_t i = 0; i < colNames.size(); ++i) {
         int capacity_so_far = theDataFrame.column_names.size();
         int lhsIndex = find_or_add(colNames[i], theDataFrame.column_names);
@@ -111,10 +113,10 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     return *this;
 }
 
+template <typename T>
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
-    const vector<double>& other_col) {
-    if (colNames.size() != 1)
-        throw std::invalid_argument("different number of columns");
+    const vector<T>& other_col) {
+    check_column_size(colNames.size());
     int capacity_so_far = theDataFrame.column_names.size();
     int lhsIdx = find_or_add(colNames[0], theDataFrame.column_names);
     bool replace = theDataFrame.column_names.size() == capacity_so_far;
@@ -122,21 +124,18 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     return *this;
 }
 
-DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
-    const vector<string>& other_col) {
-    if (colNames.size() != 1)
-        throw std::invalid_argument("different number of columns");
-    int capacity_so_far = theDataFrame.column_names.size();
-    int lhsIdx = find_or_add(colNames[0], theDataFrame.column_names);
-    bool replace = theDataFrame.column_names.size() == capacity_so_far;
-    add_or_replace(replace, lhsIdx, other_col);
-    return *this;
-}
+/* Explicit Instantiation */
+template DataFrame::DataFrameProxy& 
+DataFrame::DataFrameProxy::operator=(const vector<double>& other_col);
+
+template DataFrame::DataFrameProxy& 
+DataFrame::DataFrameProxy::operator=(const vector<string>& other_col);
 
 void append_string(Column& c, std::string&s, int pos) {
     c.append_string(s, pos);
     s += ' ';
 }
+
 
 std::ostream& operator<<(std::ostream& os,
                          const DataFrame::DataFrameProxy& df) {
