@@ -48,7 +48,7 @@ class DataFrame {
        private:
          //DO I REALLY HAVE TWO FUNCTIONS?!?!?
         template <typename T>
-        void add_or_replace(bool, int, const vector<T>&);
+        void add_or_replace(bool, int, const std::vector<T>&);
         void add_or_replace(bool, int, const std::shared_ptr<Column>);
         DataFrame& theDataFrame;
         std::vector<std::string> colNames;
