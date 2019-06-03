@@ -32,17 +32,28 @@ void Column::append_string(std::string& s, int pos) {
         s += val->at(pos);
 }
 
+//std::ostream& operator<<(std::ostream& os, const Column& df) {
+    //string output;
+    //if (std::holds_alternative<vector<double>>(df.col)) {
+        //vector<double> tmp = std::get<vector<double>>(df.col);
+        //for (double& j : tmp) output += (std::to_string(j) + " ");
+    //} else if (std::holds_alternative<vector<std::string>>(df.col)) {
+        //vector<string> tmp = std::get<vector<string>>(df.col);
+        //for (string& j : tmp) output += (j + " ");
+    //}
+    //os << output;
+    //return os;
+//}
+
 std::ostream& operator<<(std::ostream& os, const Column& df) {
-    string output;
-    if (std::holds_alternative<vector<double>>(df.col)) {
-        vector<double> tmp = std::get<vector<double>>(df.col);
-        for (double& j : tmp) output += (std::to_string(j) + " ");
-    } else if (std::holds_alternative<vector<std::string>>(df.col)) {
-        vector<string> tmp = std::get<vector<string>>(df.col);
-        for (string& j : tmp) output += (j + " ");
-    }
-    os << output;
+    //string output;
+    if (const vector<double>* v = std::get_if<vector<double>>(&df.col))
+        for (const double& j: *v) os << (std::to_string(j) + " " );
+    else if (const vector<string>* v = std::get_if<vector<string>>(&df.col))
+        for (const string& j: *v) os << (j + " " );
     return os;
+    //os << output;
+    //return os;
 }
 
 Column& Column::operator+=(const Column& rhs) {
