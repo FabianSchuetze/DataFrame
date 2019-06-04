@@ -23,6 +23,14 @@ DataFrame::DataFrameProxy DataFrame::operator[](const vector<string>& col_names)
     return DataFrameProxy(*this, idx, col_names);
 }
 
+DataFrame::DataFrameProxy DataFrame::loc(const string& s) {
+    vector<string> idx = {s};
+    vector<string> cols;
+    for (auto const& x: column_names)
+        cols.push_back(x.first);
+    return DataFrameProxy(*this, idx, cols);
+}
+
 DataFrame& DataFrame::operator=(const DataFrame& rhs) {
     if (this != &rhs) {
         columns = rhs.columns;
@@ -143,7 +151,6 @@ std::ostream& operator<<(std::ostream& os,
     string output = " ";
     for (string const& x : df.colNames) output += x + ' ';
     output += '\n';
-    // GO OVER INDEX!!! 
     for (string const&  row_name: df.idxNames) {
         int row = find_position(row_name, df.theDataFrame.index_names);
         if (row == -1) throw std::invalid_argument("Element not found");
@@ -173,11 +180,13 @@ std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
 }
 
 DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
+    vector<int> correspondence = correspondence_position(rhs);
     for (auto& x : column_names) {
         make_unique_if(x.first);
         try {
             int rhsIdx = rhs.column_names.at(x.first);
-            *columns[x.second] += *rhs.columns[rhsIdx];
+            columns[x.second]->add_other_column(*rhs.columns[rhsIdx],
+                                                correspondence);
         } catch (const std::out_of_range& e) {
             columns[x.second]->replace_nan();
         }
@@ -187,6 +196,7 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
 
 DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs) {
     DataFrame sum = lhs;
+    // if column or row not in rhs append it; first try += seems simpler
     sum += rhs;
     return sum;
 }

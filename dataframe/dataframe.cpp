@@ -6,6 +6,7 @@ using std::make_shared;
 using std::string;
 using std::vector;
 using std::make_pair;
+using std::pair;
 
 
 void DataFrame::get_index_names(vector<string>& inp) {
@@ -60,4 +61,36 @@ const std::pair<int, int> DataFrame::size() const {
 
 const int DataFrame::use_count(string col) {
     return columns[column_names[col]].use_count();
+}
+
+const int find_position(const string& name, 
+                        const vector<pair<string, int>>& vec) {
+    int tmp = -1;
+    for (const auto& x: vec) {
+        if (x.first == name) {
+            tmp = x.second;
+            break;
+        }
+    }
+    return tmp;
+}
+
+const string find_name(const int& i, const vector<pair<string, int>>& vec) {
+    string tmp = "NA";
+    for (const auto& x: vec) {
+        if (x.second == i) {
+            tmp = x.first;
+            break;
+        }
+    }
+    return tmp;
+}
+
+vector<int> DataFrame::correspondence_position(const DataFrame& other) {
+    vector<int> res;
+    for (size_t i = 0; i < index_names.size(); ++i) {
+        const string lhs_name = find_name(i, index_names);
+        res.push_back(find_position(lhs_name, other.index_names));
+    }
+    return res;
 }

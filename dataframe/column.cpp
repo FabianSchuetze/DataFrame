@@ -1,10 +1,12 @@
 #include "column.h"
 #include <algorithm>
+#include <iostream>
 using std::string;
 using std::vector;
 using std::plus;
 using std::holds_alternative;
 using std::transform;
+using std::pair;
 
 template <typename V> V Column::operator[](int pos) {
     if (holds_alternative<vector<V>>(col))
@@ -21,6 +23,14 @@ void Column::replace_nan() {
         col = vector<double>(size(), nan::quiet_NaN()); 
     else if (holds_alternative<vector<string>>(col))
         col = vector<string>(size(), "NOT_AVAILABLE");
+}
+
+void Column::replace_nan(int i) {
+    typedef std::numeric_limits<double> nan;
+    if (vector<double>* val = std::get_if<vector<double>>(&col))
+        val->at(i) = nan::quiet_NaN();
+    else if (vector<string>* val = std::get_if<vector<string>>(&col))
+        val->at(i) = "NOT_AVAILABLE";
 }
 
 template <class T>
@@ -52,6 +62,28 @@ std::ostream& operator<<(std::ostream& os, const Column& df) {
     return os;
 }
 
+template <typename T>
+void Column::add_elements(vector<T>* lhs, const vector<T>& rhs,
+                          const vector<int>& correspondence_rhs) {
+    for (size_t i = 0; i < lhs->size(); ++i) {
+        if (correspondence_rhs[i] > 0)
+            lhs->at(i) += rhs[correspondence_rhs[i]];
+        else 
+            replace_nan(i);
+    }
+}
+
+Column& Column::add_other_column(const Column& rhs, 
+                                 const vector<int>& correspondence) {
+    if (vector<double>* vec = std::get_if<vector<double>>(&col)) {
+        const vector<double>* other = std::get_if<vector<double>>(&rhs.col);
+        add_elements(vec, *other, correspondence);
+    } else if (vector<string>* vec = std::get_if<vector<string>>(&col)) {
+        const vector<string>* other = std::get_if<vector<string>>(&rhs.col);
+        add_elements(vec, *other, correspondence);
+    }
+    return *this;
+}
 Column& Column::operator+=(const Column& rhs) {
     if (vector<double>* vec = std::get_if<vector<double>>(&col)) {
         const vector<double>* other = std::get_if<vector<double>>(&rhs.col);

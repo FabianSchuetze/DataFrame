@@ -6,9 +6,6 @@
 #include <algorithm>
 
 class Column {
-   private:
-    std::variant<std::vector<double>, std::vector<std::string>> col;
-    void replace_nan();
 
    public:
     friend std::ostream& operator<<(std::ostream&, const Column&);
@@ -18,6 +15,10 @@ class Column {
 
     Column();
     Column& operator+=(const Column& rhs);
+    Column& add_other_column(const Column&, const std::vector<int>&);
+    template <typename T>
+    void add_elements(std::vector<T>*, const std::vector<T>&,
+                      const std::vector<int>&);
     template <class T> Column(const std::vector<T>& t) { col = t; }
     template <class T> void push_back(const T);
     const int size();
@@ -35,6 +36,10 @@ class Column {
             throw std::invalid_argument("not in here");
     }
     void append_string(std::string&, int pos);
+   private:
+    std::variant<std::vector<double>, std::vector<std::string>> col;
+    void replace_nan();
+    void replace_nan(int);
 };
 
 std::ostream& operator<<(std::ostream&, const Column&);

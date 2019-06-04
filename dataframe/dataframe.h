@@ -78,6 +78,7 @@ class DataFrame {
     std::map<std::string, int> column_names;
     void make_unique_if(const std::string&);
     void get_index_names(std::vector<std::string>&);
+    std::vector<int> correspondence_position(const DataFrame&);
     template <class T> void 
     add_elements(std::vector<T>& inp, const DataFrame& other, 
                  int pos, int otherPos) {
