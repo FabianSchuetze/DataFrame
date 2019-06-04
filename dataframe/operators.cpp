@@ -180,7 +180,7 @@ std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
 }
 
 DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
-    vector<int> correspondence = correspondence_position(rhs);
+    vector<int> correspondence = correspondence_position(*this, rhs);
     for (auto& x : column_names) {
         make_unique_if(x.first);
         try {
@@ -194,9 +194,38 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
     return *this;
 }
 
+
+void append_missing_rows(DataFrame& lhs, const DataFrame& rhs) {
+    vector<int> correspondence = correspondence_position(rhs, lhs);
+    for (int i = 0; i < correspondence.size(); ++i) {
+        if (correspondence[i] == -1) {
+            for (auto& x: lhs.column_names)
+                lhs.columns[x.second]->push_back_nan();
+            lhs.index_names.push_back(std::make_pair(rhs.index_names[i].first,
+                                      lhs.index_names.size()));
+        }
+    }
+}
+
+void append_missing_cols(DataFrame& lhs, const DataFrame& rhs) {
+    for (auto const& x: rhs.column_names) {
+        size_t capacity_so_far = lhs.column_names.size();
+        int lhsPos = find_or_add(x.first, lhs.column_names);
+        if (capacity_so_far < lhs.column_names.size()) {
+            std::shared_ptr<Column> data = 
+                make_shared<Column>(*rhs.columns.at(x.second));
+            lhs.columns.push_back(data);
+            lhs.columns.at(lhsPos)->replace_nan();
+        }
+    }
+}
+
+
 DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs) {
     DataFrame sum = lhs;
-    // if column or row not in rhs append it; first try += seems simpler
+    append_missing_cols(sum, rhs);
+    std::cout << "out" << std::endl;
+    append_missing_rows(sum, rhs);
     sum += rhs;
     return sum;
 }

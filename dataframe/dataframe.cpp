@@ -86,10 +86,11 @@ const string find_name(const int& i, const vector<pair<string, int>>& vec) {
     return tmp;
 }
 
-vector<int> DataFrame::correspondence_position(const DataFrame& other) {
+vector<int> correspondence_position(const DataFrame& lhs, 
+                                    const DataFrame& other) {
     vector<int> res;
-    for (size_t i = 0; i < index_names.size(); ++i) {
-        const string lhs_name = find_name(i, index_names);
+    for (size_t i = 0; i < lhs.index_names.size(); ++i) {
+        const string lhs_name = find_name(i, lhs.index_names);
         res.push_back(find_position(lhs_name, other.index_names));
     }
     return res;

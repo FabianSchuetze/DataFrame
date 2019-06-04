@@ -25,6 +25,14 @@ void Column::replace_nan() {
         col = vector<string>(size(), "NOT_AVAILABLE");
 }
 
+void Column::push_back_nan() {
+    typedef std::numeric_limits<double> nan;
+    if (vector<double>* val = std::get_if<vector<double>>(&col))
+        val->push_back(nan::quiet_NaN());
+    else if (vector<string>* val = std::get_if<vector<string>>(&col))
+        val->push_back("NOT_AVAILABLE");
+}
+
 void Column::replace_nan(int i) {
     typedef std::numeric_limits<double> nan;
     if (vector<double>* val = std::get_if<vector<double>>(&col))
@@ -84,6 +92,7 @@ Column& Column::add_other_column(const Column& rhs,
     }
     return *this;
 }
+
 Column& Column::operator+=(const Column& rhs) {
     if (vector<double>* vec = std::get_if<vector<double>>(&col)) {
         const vector<double>* other = std::get_if<vector<double>>(&rhs.col);

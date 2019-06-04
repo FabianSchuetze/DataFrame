@@ -24,6 +24,9 @@ class DataFrame {
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
     friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
     friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
+    friend std::vector<int> correspondence_position(const DataFrame&, const DataFrame&);
+    friend void append_missing_rows(DataFrame&, const DataFrame&);
+    friend void append_missing_cols(DataFrame&, const DataFrame&);
     // according to item 46, we need to define it here
     template <typename T> friend DataFrame operator+(const DataFrame& lhs, 
                                                      const T& t) {
@@ -78,7 +81,7 @@ class DataFrame {
     std::map<std::string, int> column_names;
     void make_unique_if(const std::string&);
     void get_index_names(std::vector<std::string>&);
-    std::vector<int> correspondence_position(const DataFrame&);
+    //std::vector<int> correspondence_position(const DataFrame&);
     template <class T> void 
     add_elements(std::vector<T>& inp, const DataFrame& other, 
                  int pos, int otherPos) {
@@ -93,4 +96,7 @@ DataFrame operator+(const DataFrame&, const T&);
 DataFrame operator+(const DataFrame&, const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame::DataFrameProxy&);
+std::vector<int> correspondence_position(const DataFrame&, const DataFrame&);
+void append_missing_rows(DataFrame&, const DataFrame&);
+void append_missing_cols(DataFrame&, const DataFrame&);
 #endif

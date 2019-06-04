@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 
+class DataFrame;
 class Column {
 
    public:
@@ -12,6 +13,7 @@ class Column {
     friend Column operator+(const Column&, double);
     friend Column operator+(const Column&, const std::string&);
     friend class DataFrame;
+    friend void append_missing_cols(DataFrame&, const DataFrame&);
 
     Column();
     Column& operator+=(const Column& rhs);
@@ -36,6 +38,7 @@ class Column {
             throw std::invalid_argument("not in here");
     }
     void append_string(std::string&, int pos);
+    void push_back_nan();
    private:
     std::variant<std::vector<double>, std::vector<std::string>> col;
     void replace_nan();
