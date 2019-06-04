@@ -9,24 +9,30 @@ using std::make_shared;
 using std::string;
 using std::transform;
 using std::vector;
+using std::pair;
 
 DataFrame::DataFrameProxy DataFrame::operator[](const string& col_name) {
-    return DataFrameProxy(*this, col_name);
+    vector<string> idx;
+    get_index_names(idx);
+    return DataFrameProxy(*this, idx, col_name);
 }
 
 DataFrame::DataFrameProxy DataFrame::operator[](const vector<string>& col_names) {
-    return DataFrameProxy(*this, col_names);
+    vector<string> idx;
+    get_index_names(idx);
+    return DataFrameProxy(*this, idx, col_names);
 }
 
 DataFrame& DataFrame::operator=(const DataFrame& rhs) {
     if (this != &rhs) {
         columns = rhs.columns;
+        index_names = rhs.index_names;
         column_names = rhs.column_names;
     }
     return *this;
 }
 
-bool find_or_add(const string& name, std::map<string, int>& columns) {
+int find_or_add(const string& name, std::map<string, int>& columns) {
     try {
         columns.at(name);
     } catch (const std::out_of_range& e) {
@@ -122,12 +128,26 @@ void append_string(Column& c, std::string& s, int pos) {
     s += ' ';
 }
 
+const int find_position(const string& name, vector<pair<string, int>>& vec) {
+    auto it = std::find_if(vec.begin(), vec.end(),
+                           [name] (pair<string, int>& ele)
+                           {return ele.first == name;});
+    if (it == vec.end())
+        return -1;
+    else 
+        return it->second;
+}
+
 std::ostream& operator<<(std::ostream& os,
                          const DataFrame::DataFrameProxy& df) {
-    string output;
+    string output = " ";
     for (string const& x : df.colNames) output += x + ' ';
     output += '\n';
-    for (int row = 0; row < df.theDataFrame.size().first; ++row) {
+    // GO OVER INDEX!!! 
+    for (string const&  row_name: df.idxNames) {
+        int row = find_position(row_name, df.theDataFrame.index_names);
+        if (row == -1) throw std::invalid_argument("Element not found");
+        output += row_name + " ";
         for (string const& col : df.colNames) {
             int col_number = df.theDataFrame.column_names[col];
             append_string(*df.theDataFrame.columns[col_number], output, row);
@@ -139,12 +159,13 @@ std::ostream& operator<<(std::ostream& os,
 }
 
 std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
-    string output;
+    string output = " ";
     for (auto const& x : df.column_names) output += x.first + ' ';
     output += '\n';
-    for (int row = 0; row < df.size().first; ++row) {
+    for (auto const& row: df.index_names) {
+        output += row.first + " ";
         for (auto const& col : df.column_names)
-            append_string(*df.columns[col.second], output, row);
+            append_string(*df.columns[col.second], output, row.second);
         output += '\n';
     }
     os << output;
