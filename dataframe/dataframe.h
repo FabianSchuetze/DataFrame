@@ -27,7 +27,8 @@ class DataFrame {
     friend std::vector<int> correspondence_position(const DataFrame&, const DataFrame&);
     friend void append_missing_rows(DataFrame&, const DataFrame&);
     friend void append_missing_cols(DataFrame&, const DataFrame&);
-    // according to item 46, we need to define it here
+    friend DataFrame operator+(const DataFrame::DataFrameProxy&, const DataFrame::DataFrameProxy&);
+    friend DataFrame operator+(const DataFrame&, const DataFrame::DataFrameProxy&);
     template <typename T> friend DataFrame operator+(const DataFrame& lhs, 
                                                      const T& t) {
         DataFrame new_df = lhs;
@@ -50,6 +51,8 @@ class DataFrame {
         DataFrameProxy& operator=(const std::vector<std::vector<double>>&);
         template <typename T> DataFrameProxy& operator=(const std::vector<T>&);
         friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
+        friend DataFrame operator+(const DataFrame::DataFrameProxy&, const DataFrame::DataFrameProxy&);
+        friend DataFrame operator+(const DataFrame&, const DataFrame::DataFrameProxy&);
 
        private:
         DataFrame& theDataFrame;
@@ -94,6 +97,8 @@ class DataFrame {
 template <typename T>
 DataFrame operator+(const DataFrame&, const T&);
 DataFrame operator+(const DataFrame&, const DataFrame&);
+DataFrame operator+(const DataFrame::DataFrameProxy&, const DataFrame::DataFrameProxy&);
+DataFrame operator+(const DataFrame&, const DataFrame::DataFrameProxy&);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame::DataFrameProxy&);
 std::vector<int> correspondence_position(const DataFrame&, const DataFrame&);

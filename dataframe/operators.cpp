@@ -199,6 +199,7 @@ void append_missing_rows(DataFrame& lhs, const DataFrame& rhs) {
     vector<int> correspondence = correspondence_position(rhs, lhs);
     for (int i = 0; i < correspondence.size(); ++i) {
         if (correspondence[i] == -1) {
+            std::cout << "appended row\n";
             for (auto& x: lhs.column_names)
                 lhs.columns[x.second]->push_back_nan();
             lhs.index_names.push_back(std::make_pair(rhs.index_names[i].first,
@@ -216,16 +217,25 @@ void append_missing_cols(DataFrame& lhs, const DataFrame& rhs) {
                 make_shared<Column>(*rhs.columns.at(x.second));
             lhs.columns.push_back(data);
             lhs.columns.at(lhsPos)->replace_nan();
+            std::cout << "added a column\n";
         }
     }
 }
 
-
-DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs) {
+DataFrame operator+(const DataFrame& lhs,const  DataFrame& rhs) {
     DataFrame sum = lhs;
     append_missing_cols(sum, rhs);
-    std::cout << "out" << std::endl;
     append_missing_rows(sum, rhs);
     sum += rhs;
     return sum;
+}
+
+DataFrame operator+(const DataFrame::DataFrameProxy& lhs,
+                    const  DataFrame::DataFrameProxy& rhs) {
+    return DataFrame(lhs) + DataFrame(rhs);
+}
+
+DataFrame operator+(const DataFrame& lhs,
+                    const  DataFrame::DataFrameProxy& rhs) {
+    return lhs + DataFrame(rhs);
 }

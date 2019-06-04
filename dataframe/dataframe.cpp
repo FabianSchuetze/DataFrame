@@ -33,13 +33,28 @@ template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
 template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
                               const vector<vector<string>>&);
 
+const int find_position(const string& name, 
+                        const vector<pair<string, int>>& vec) {
+    int tmp = -1;
+    for (const auto& x: vec) {
+        if (x.first == name) {
+            tmp = x.second;
+            break;
+        }
+    }
+    return tmp;
+}
 DataFrame::DataFrame(const DataFrame::DataFrameProxy& df) {
     int i = 0;
-    for (string name : df.colNames) {
+    for (const string& name : df.colNames) {
         int pos = df.theDataFrame.column_names[name];
         columns.push_back(df.theDataFrame.columns[pos]);
-        column_names[name] = i;
-        i++;
+        column_names[name] = i++;
+        //i++;
+    }
+    for (const string& name: df.idxNames) {
+        int pos = find_position(name, df.theDataFrame.index_names);
+        index_names.push_back(std::make_pair(name, pos));
     }
 }
 
@@ -63,17 +78,6 @@ const int DataFrame::use_count(string col) {
     return columns[column_names[col]].use_count();
 }
 
-const int find_position(const string& name, 
-                        const vector<pair<string, int>>& vec) {
-    int tmp = -1;
-    for (const auto& x: vec) {
-        if (x.first == name) {
-            tmp = x.second;
-            break;
-        }
-    }
-    return tmp;
-}
 
 const string find_name(const int& i, const vector<pair<string, int>>& vec) {
     string tmp = "NA";

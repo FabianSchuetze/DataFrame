@@ -1,6 +1,7 @@
 #include "column.h"
 #include <algorithm>
 #include <iostream>
+#include <cmath>
 using std::string;
 using std::vector;
 using std::plus;
@@ -22,7 +23,7 @@ void Column::replace_nan() {
     if (holds_alternative<vector<double>>(col))
         col = vector<double>(size(), nan::quiet_NaN()); 
     else if (holds_alternative<vector<string>>(col))
-        col = vector<string>(size(), "NOT_AVAILABLE");
+        col = vector<string>(size(), "NA");
 }
 
 void Column::push_back_nan() {
@@ -30,7 +31,7 @@ void Column::push_back_nan() {
     if (vector<double>* val = std::get_if<vector<double>>(&col))
         val->push_back(nan::quiet_NaN());
     else if (vector<string>* val = std::get_if<vector<string>>(&col))
-        val->push_back("NOT_AVAILABLE");
+        val->push_back("NA");
 }
 
 void Column::replace_nan(int i) {
@@ -38,7 +39,7 @@ void Column::replace_nan(int i) {
     if (vector<double>* val = std::get_if<vector<double>>(&col))
         val->at(i) = nan::quiet_NaN();
     else if (vector<string>* val = std::get_if<vector<string>>(&col))
-        val->at(i) = "NOT_AVAILABLE";
+        val->at(i) = "NA";
 }
 
 template <class T>
@@ -71,13 +72,27 @@ std::ostream& operator<<(std::ostream& os, const Column& df) {
 }
 
 template <typename T>
+bool is_null(const T& t) {
+    if constexpr (std::is_same<T, double>::value)
+        return std::isnan(t);
+    else if (std::is_same<T, string>::value)
+        return t == "NA";
+}
+
+template <typename T>
 void Column::add_elements(vector<T>* lhs, const vector<T>& rhs,
                           const vector<int>& correspondence_rhs) {
     for (size_t i = 0; i < lhs->size(); ++i) {
-        if (correspondence_rhs[i] > 0)
+        //std::cout << "pos: " << correspondence_rhs[i] << std::endl;
+        //std::cout << "lhs condition: " << !is_null(lhs->at(i)) << std::endl;
+        //std::cout << "rhs condition: " << !is_null(rhs[correspondence_rhs[i]]) << std::endl;
+        if (correspondence_rhs[i] > -1 && !is_null(lhs->at(i))
+             && !is_null(rhs[correspondence_rhs[i]]))
             lhs->at(i) += rhs[correspondence_rhs[i]];
-        else 
+        else  {
+            std::cout << "in nan\n";
             replace_nan(i);
+        }
     }
 }
 
