@@ -67,9 +67,10 @@ void DataFrame::DataFrameProxy::add_or_replace(bool replace, int idx,
 void DataFrame::make_unique_if(const std::string& s) {
     if (this->use_count(s) > 1) {
         std::cout << "copy-on-write\n";
-        int idx = column_names[s];
-        std::shared_ptr<Column> data = make_shared<Column>(*columns.at(idx));
-        columns.at(idx) = data;
+        std::shared_ptr<Column> data = get_unique(s);
+        //int idx = column_names[s];
+        //std::shared_ptr<Column> data = make_shared<Column>(*columns.at(idx));
+        columns.at(column_names[s]) = data;
     }
 }
 
@@ -143,7 +144,8 @@ std::ostream& operator<<(std::ostream& os,
     for (string const& x : df.colNames) output += x + ' ';
     output += '\n';
     for (string const& row_name : df.idxNames) {
-        int row = find_position(row_name, df.theDataFrame.index_names);
+        int row = df.theDataFrame.find_index_position(row_name);
+        //int row = find_position(row_name, df.theDataFrame.index_names);
         if (row == -1) throw std::invalid_argument("Element not found");
         output += row_name + " ";
         for (string const& col : df.colNames) {

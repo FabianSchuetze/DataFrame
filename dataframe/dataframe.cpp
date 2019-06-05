@@ -5,6 +5,7 @@
 #include <stdexcept>
 using std::make_pair;
 using std::make_shared;
+using std::shared_ptr;
 using std::pair;
 using std::string;
 using std::vector;
@@ -23,17 +24,34 @@ vector<string> DataFrame::get_index_names() {
 
 DataFrame::DataFrame(): columns(), index_names(), column_names() {};
 
+std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) {
+    int idx = column_names[s];
+    std::shared_ptr<Column> data = make_shared<Column>(*columns.at(idx));
+    return data;
+}
+
+shared_ptr<Column> DataFrame::get_unique(const string& s, const vector<int>& v) const {
+    int i = column_names.at(s);
+    Column new_col = Column(*columns[i], v);
+    return make_shared<Column>(new_col);
+}
+
+const int DataFrame::find_index_position(const std::string& s)  const {
+    for (const auto& x : index_names) {
+        if (x.first == s)
+            return x.second;
+    }
+    return -1;
+}
+
 DataFrame deep_copy(const DataFrame& lhs) {
     DataFrame new_df = DataFrame();
     vector<int> old_positions = get_index_positions(lhs.index_names);
-    int i = 0;
+    int i = 0, j = 0;
     for (auto const& x : lhs.column_names) {
-        new_df.column_names[x.first] = i;
-        Column new_col = Column(*lhs.columns[i], old_positions);
-        new_df.columns.push_back(make_shared<Column>(new_col));
-        i++;
+        new_df.column_names[x.first] = i++;
+        new_df.columns.push_back(lhs.get_unique(x.first, old_positions));
     }
-    int j = 0;
     for (auto const& x : lhs.index_names)
         new_df.index_names.push_back(make_pair(x.first, j++));
     return new_df;
@@ -58,61 +76,34 @@ template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
 template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
                               const vector<vector<string>>&);
 
-const int find_position(const string& name,
-                        const vector<pair<string, int>>& vec) {
-    int tmp = -1;
-    for (const auto& x : vec) {
-        if (x.first == name) {
-            tmp = x.second;
-            break;
-        }
-    }
-    return tmp;
-}
-
 DataFrame::DataFrame(const DataFrame::DataFrameProxy& df) {
     int i = 0;
     for (const string& name : df.colNames) {
         int pos = df.theDataFrame.column_names[name];
         columns.push_back(df.theDataFrame.columns[pos]);
         column_names[name] = i++;
-        // i++;
     }
     for (const string& name : df.idxNames) {
-        int pos = find_position(name, df.theDataFrame.index_names);
-        index_names.push_back(std::make_pair(name, pos));
+        int pos = df.theDataFrame.find_index_position(name);
+        index_names.push_back(make_pair(name, pos));
     }
 }
 
 const std::pair<int, int> DataFrame::size() const {
-    std::pair<int, int> size;
-    size.first = columns[0]->size();
-    size.second = columns.size();
-    return size;
+    return make_pair(index_names.size(), columns.size());
 }
 
 const int DataFrame::use_count(string col) {
     return columns[column_names[col]].use_count();
 }
 
-const string find_name(const int& i, const vector<pair<string, int>>& vec) {
-    string tmp = "NA";
-    for (const auto& x : vec) {
-        if (x.second == i) {
-            tmp = x.first;
-            break;
-        }
-    }
-    return tmp;
-}
-
 vector<pair<int, int>> correspondence_position(const DataFrame& lhs,
                                                const DataFrame& other) {
     vector<pair<int, int>> res;
-    for (size_t i = 0; i < lhs.index_names.size(); ++i) {
-        const string lhs_name = find_name(i, lhs.index_names);
-        int other_pos = find_position(lhs_name, other.index_names);
-        res.push_back(make_pair(i, other_pos));
+    int i = 0;
+    for (auto const& x : lhs.index_names) {
+        int other_pos = other.find_index_position(x.first);
+        res.push_back(make_pair(i++, other_pos));
     }
     return res;
 }

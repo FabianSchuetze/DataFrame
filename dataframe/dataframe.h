@@ -19,9 +19,6 @@ class DataFrame {
     template <typename T>
     DataFrame(const std::vector<std::string>&, const std::vector<std::string>&,
               const std::vector<std::vector<T>>&);
-    //DataFrame deep_copy();
-    //DataFrame(const std::vector<index_pair>&,const std::map<std::string, int>&,
-              //const std::vector<std::shared_ptr<Column>>&);
     DataFrame& operator=(const DataFrame&);
     //friend class DataFrameProxy; // DO I need this?
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
@@ -33,16 +30,14 @@ class DataFrame {
                                const DataFrame::DataFrameProxy&);
     template <typename T>
     friend DataFrame operator+(const DataFrame& lhs, const T& t) {
-        ////lhs.deep_copy();
-        //DataFrame sum = deep_copy(lhs);
         return deep_copy(lhs) += t;
-        //return DataFrame(lhs.index_names, lhs.column_names, lhs.columns) += t;
     }
     friend std::vector<std::pair<int, int>> correspondence_position(
         const DataFrame&, const DataFrame&);
     friend void append_missing_rows(DataFrame&, const DataFrame&);
     friend void append_missing_cols(DataFrame&, const DataFrame&);
-
+    std::shared_ptr<Column> get_unique(const std::string&);
+    std::shared_ptr<Column> get_unique(const std::string&, const std::vector<int>&) const;
     DataFrame& operator+=(const DataFrame& rhs);
     template <typename T>
     DataFrame& operator+=(const T&);
@@ -61,13 +56,13 @@ class DataFrame {
     const std::pair<int, int> size() const;
     const int use_count(std::string); //Can i const qualify it?
     std::vector<std::string> get_index_names();
+    const int find_index_position(const std::string&) const;
 
    private:
     std::vector<std::shared_ptr<Column>> columns;
     std::vector<index_pair> index_names;
     std::map<std::string, int> column_names;
     void make_unique_if(const std::string&);
-    //void get_index_names(std::vector<std::string>&);
 };
 
 template <typename T>
@@ -81,6 +76,4 @@ std::vector<std::pair<int, int>> correspondence_position(const DataFrame&,
 // const qualify?
 void append_missing_rows(DataFrame&, const DataFrame&);
 void append_missing_cols(DataFrame&, const DataFrame&);
-const int find_position(const std::string&,
-                        const std::vector<DataFrame::index_pair>& vec);
 #endif
