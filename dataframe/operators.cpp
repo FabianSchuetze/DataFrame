@@ -5,12 +5,12 @@
 #include <vector>
 #include "dataframe.h"
 
+using std::make_pair;
 using std::make_shared;
+using std::pair;
 using std::string;
 using std::transform;
 using std::vector;
-using std::pair;
-using std::make_pair;
 
 DataFrame::DataFrameProxy DataFrame::operator[](const string& col_name) {
     vector<string> idx;
@@ -18,7 +18,8 @@ DataFrame::DataFrameProxy DataFrame::operator[](const string& col_name) {
     return DataFrameProxy(*this, idx, col_name);
 }
 
-DataFrame::DataFrameProxy DataFrame::operator[](const vector<string>& col_names) {
+DataFrame::DataFrameProxy DataFrame::operator[](
+    const vector<string>& col_names) {
     vector<string> idx;
     get_index_names(idx);
     return DataFrameProxy(*this, idx, col_names);
@@ -27,8 +28,7 @@ DataFrame::DataFrameProxy DataFrame::operator[](const vector<string>& col_names)
 DataFrame::DataFrameProxy DataFrame::loc(const string& s) {
     vector<string> idx = {s};
     vector<string> cols;
-    for (auto const& x: column_names)
-        cols.push_back(x.first);
+    for (auto const& x : column_names) cols.push_back(x.first);
     return DataFrameProxy(*this, idx, cols);
 }
 
@@ -142,7 +142,7 @@ std::ostream& operator<<(std::ostream& os,
     string output = " ";
     for (string const& x : df.colNames) output += x + ' ';
     output += '\n';
-    for (string const&  row_name: df.idxNames) {
+    for (string const& row_name : df.idxNames) {
         int row = find_position(row_name, df.theDataFrame.index_names);
         if (row == -1) throw std::invalid_argument("Element not found");
         output += row_name + " ";
@@ -160,7 +160,7 @@ std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
     string output = " ";
     for (auto const& x : df.column_names) output += x.first + ' ';
     output += '\n';
-    for (auto const& row: df.index_names) {
+    for (auto const& row : df.index_names) {
         output += row.first + " ";
         for (auto const& col : df.column_names)
             append_string(*df.columns[col.second], output, row.second);
@@ -171,7 +171,7 @@ std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
 }
 
 DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
-    vector<pair<int,int>> indices = correspondence_position(*this, rhs);
+    vector<pair<int, int>> indices = correspondence_position(*this, rhs);
     for (auto& x : column_names) {
         make_unique_if(x.first);
         try {
@@ -188,21 +188,21 @@ void append_missing_rows(DataFrame& lhs, const DataFrame& rhs) {
     vector<pair<int, int>> index_pairs = correspondence_position(rhs, lhs);
     for (auto const& index_pair : index_pairs) {
         if (index_pair.second == -1) {
-            for (auto& x: lhs.column_names)
+            for (auto& x : lhs.column_names)
                 lhs.columns[x.second]->push_back_nan();
             lhs.index_names.push_back(
-                    make_pair(rhs.index_names[index_pair.first].first,
-                              lhs.index_names.size()));
+                make_pair(rhs.index_names[index_pair.first].first,
+                          lhs.index_names.size()));
         }
     }
 }
 
 void append_missing_cols(DataFrame& lhs, const DataFrame& rhs) {
-    for (auto const& x: rhs.column_names) {
+    for (auto const& x : rhs.column_names) {
         size_t capacity_so_far = lhs.column_names.size();
         int lhsPos = find_or_add(x.first, lhs.column_names);
         if (capacity_so_far < lhs.column_names.size()) {
-            std::shared_ptr<Column> data = 
+            std::shared_ptr<Column> data =
                 make_shared<Column>(*rhs.columns.at(x.second));
             lhs.columns.push_back(data);
             lhs.columns.at(lhsPos)->replace_nan();
@@ -210,7 +210,7 @@ void append_missing_cols(DataFrame& lhs, const DataFrame& rhs) {
     }
 }
 
-DataFrame operator+(const DataFrame& lhs,const  DataFrame& rhs) {
+DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs) {
     DataFrame sum = DataFrame(lhs.index_names, lhs.column_names, lhs.columns);
     append_missing_cols(sum, rhs);
     append_missing_rows(sum, rhs);
@@ -219,24 +219,23 @@ DataFrame operator+(const DataFrame& lhs,const  DataFrame& rhs) {
 }
 
 DataFrame operator+(const DataFrame::DataFrameProxy& lhs,
-                    const  DataFrame::DataFrameProxy& rhs) {
+                    const DataFrame::DataFrameProxy& rhs) {
     return DataFrame(lhs) + DataFrame(rhs);
 }
 
 DataFrame operator+(const DataFrame& lhs,
-                    const  DataFrame::DataFrameProxy& rhs) {
+                    const DataFrame::DataFrameProxy& rhs) {
     return lhs + DataFrame(rhs);
 }
-template <typename T> DataFrame& DataFrame::operator+=(const T& t) {
+
+template <typename T>
+DataFrame& DataFrame::operator+=(const T& t) {
     for (auto& x : column_names) {
         Column new_col = *columns[x.second] + t;
         columns[x.second] = std::make_shared<Column>(new_col);
     }
     return *this;
 }
-
 template DataFrame& DataFrame::operator+=(const double&);
 template DataFrame& DataFrame::operator+=(const int&);
 template DataFrame& DataFrame::operator+=(const string&);
-//template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
-    //const vector<string>& other_col);

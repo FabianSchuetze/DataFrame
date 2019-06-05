@@ -1,15 +1,16 @@
 #include "column.h"
 #include <algorithm>
-#include <iostream>
 #include <cmath>
-using std::string;
-using std::vector;
-using std::plus;
+#include <iostream>
 using std::holds_alternative;
-using std::transform;
 using std::pair;
+using std::plus;
+using std::string;
+using std::transform;
+using std::vector;
 
-template <typename V> V Column::operator[](int pos) {
+template <typename V>
+V Column::operator[](int pos) {
     if (holds_alternative<vector<V>>(col))
         return std::get<vector<V>>(col)[pos];
     else
@@ -20,21 +21,19 @@ template string Column::operator[](int);
 
 Column::Column(const Column& c, const vector<int>& subsets) {
     if (const vector<double>* val = std::get_if<vector<double>>(&c.col)) {
-        col = vector<double>(); 
-        for (int i : subsets)
-            push_back<double>(val->at(i));
-    }
-    else if (const vector<string>* val = std::get_if<vector<string>>(&c.col)) {
-        col = vector<string>(); 
-        for (int i : subsets)
-            push_back<string>(val->at(i));
+        col = vector<double>();
+        for (int i : subsets) push_back<double>(val->at(i));
+    } else if (const vector<string>* val =
+                   std::get_if<vector<string>>(&c.col)) {
+        col = vector<string>();
+        for (int i : subsets) push_back<string>(val->at(i));
     }
 }
 
 void Column::replace_nan() {
     typedef std::numeric_limits<double> nan;
     if (holds_alternative<vector<double>>(col))
-        col = vector<double>(size(), nan::quiet_NaN()); 
+        col = vector<double>(size(), nan::quiet_NaN());
     else if (holds_alternative<vector<string>>(col))
         col = vector<string>(size(), "NA");
 }
@@ -78,9 +77,9 @@ void Column::append_string(string& s, int pos) {
 
 std::ostream& operator<<(std::ostream& os, const Column& df) {
     if (const vector<double>* v = std::get_if<vector<double>>(&df.col))
-        for (const double& j: *v) os << (std::to_string(j) + " " );
+        for (const double& j : *v) os << (std::to_string(j) + " ");
     else if (const vector<string>* v = std::get_if<vector<string>>(&df.col))
-        for (const string& j: *v) os << (j + " " );
+        for (const string& j : *v) os << (j + " ");
     return os;
 }
 
@@ -95,16 +94,16 @@ bool is_null(const T& t) {
 template <typename T>
 void Column::add_elements(vector<T>* lhs, const vector<T>& rhs,
                           const vector<pair<int, int>>& indices) {
-    for (auto const& index_pair: indices) {
-        if (index_pair.second > -1 && !is_null(lhs->at(index_pair.first))
-             && !is_null(rhs[index_pair.second]))
+    for (auto const& index_pair : indices) {
+        if (index_pair.second > -1 && !is_null(lhs->at(index_pair.first)) &&
+            !is_null(rhs[index_pair.second]))
             lhs->at(index_pair.first) += rhs[index_pair.second];
         else
             replace_nan(index_pair.first);
     }
 }
 
-Column& Column::add_other_column(const Column& rhs, 
+Column& Column::add_other_column(const Column& rhs,
                                  const vector<pair<int, int>>& indices) {
     if (vector<double>* vec = std::get_if<vector<double>>(&col)) {
         const vector<double>* other = std::get_if<vector<double>>(&rhs.col);
@@ -119,17 +118,17 @@ Column& Column::add_other_column(const Column& rhs,
 Column& Column::operator+=(const Column& rhs) {
     if (vector<double>* vec = std::get_if<vector<double>>(&col)) {
         const vector<double>* other = std::get_if<vector<double>>(&rhs.col);
-        transform(other->begin(), other->end(), vec->begin(),
-                  vec->begin(), plus<double>());
+        transform(other->begin(), other->end(), vec->begin(), vec->begin(),
+                  plus<double>());
     } else if (vector<string>* vec = std::get_if<vector<string>>(&col)) {
         const vector<string>* other = std::get_if<vector<string>>(&rhs.col);
-        transform(other->begin(), other->end(), vec->begin(), vec->begin(), 
+        transform(other->begin(), other->end(), vec->begin(), vec->begin(),
                   plus<string>());
     }
     return *this;
 }
 
-template <typename T> 
+template <typename T>
 vector<T> transform_column(const vector<T>* v, const T& t) {
     vector<T> res = vector<T>(v->size(), t);
     transform(v->begin(), v->end(), res.begin(), res.begin(), plus<T>());
@@ -139,13 +138,13 @@ vector<T> transform_column(const vector<T>* v, const T& t) {
 Column operator+(const Column& c, double d) {
     if (const vector<double>* vec = std::get_if<vector<double>>(&c.col))
         return Column(transform_column(vec, d));
-    else 
+    else
         throw std::invalid_argument("Cant combine a non-double with a double");
 }
 
 Column operator+(const Column& c, const string& d) {
     if (const vector<string>* vec = std::get_if<vector<string>>(&c.col))
         return Column(transform_column(vec, d));
-    else 
+    else
         throw std::invalid_argument("Cant combine a non-double with a double");
 }

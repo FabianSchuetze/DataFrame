@@ -18,7 +18,7 @@ class DataFrame {
               const std::vector<std::vector<T>>&);
     DataFrame(const DataFrameProxy&);
     DataFrame& operator=(const DataFrame&);
-    DataFrame(const std::vector<std::pair<std::string, int>>&, 
+    DataFrame(const std::vector<std::pair<std::string, int>>&,
               const std::map<std::string, int>&,
               const std::vector<std::shared_ptr<Column>>&);
     friend class DataFrameProxy;
@@ -69,7 +69,8 @@ class DataFrame {
         void insert_column(const std::string&, const std::vector<T>&);
     };
     DataFrame& operator+=(const DataFrame& rhs);
-    template <typename T> DataFrame& operator+=(const T&);
+    template <typename T>
+    DataFrame& operator+=(const T&);
     template <class T>
     typename std::vector<T>::iterator begin(std::string);
     template <class T>
