@@ -9,30 +9,34 @@ using std::pair;
 using std::string;
 using std::vector;
 
-vector<int> index_position(const vector<pair<string, int>> vec) {
+vector<int> get_index_positions(const vector<pair<string, int>> vec) {
     vector<int> res;
     for (auto const& x : vec) res.push_back(x.second);
     return res;
 }
 
-DataFrame::DataFrame(const vector<DataFrame::index_pair>& indices,
-                     const std::map<string, int>& cols,
-                     const vector<std::shared_ptr<Column>>& data) {
+vector<string> DataFrame::get_index_names() {
+    vector<string> res;
+    for (auto const& idx_pair : index_names) res.push_back(idx_pair.first);
+    return res;
+}
+
+DataFrame::DataFrame(): columns(), index_names(), column_names() {};
+
+DataFrame deep_copy(const DataFrame& lhs) {
+    DataFrame new_df = DataFrame();
+    vector<int> old_positions = get_index_positions(lhs.index_names);
     int i = 0;
-    vector<int> old_positions = index_position(indices);
-    for (auto const& x : cols) {
-        column_names[x.first] = i;
-        Column new_col = Column(*data[i], old_positions);
-        columns.push_back(make_shared<Column>(new_col));
+    for (auto const& x : lhs.column_names) {
+        new_df.column_names[x.first] = i;
+        Column new_col = Column(*lhs.columns[i], old_positions);
+        new_df.columns.push_back(make_shared<Column>(new_col));
         i++;
     }
     int j = 0;
-    for (auto const& x : indices)
-        index_names.push_back(make_pair(x.first, j++));
-}
-
-void DataFrame::get_index_names(vector<string>& inp) {
-    for (auto const& idx_pair : index_names) inp.push_back(idx_pair.first);
+    for (auto const& x : lhs.index_names)
+        new_df.index_names.push_back(make_pair(x.first, j++));
+    return new_df;
 }
 
 template <typename T>

@@ -1,3 +1,5 @@
+#ifndef GUARD_DataFrameProxy_h
+#define GUARD_DataFrameProxy_h
 #include "dataframe.h"
 
 class DataFrame::DataFrameProxy {
@@ -34,3 +36,4 @@ class DataFrame::DataFrameProxy {
 DataFrame operator+(const DataFrame::DataFrameProxy&,
                     const DataFrame::DataFrameProxy&);
 std::ostream& operator<<(std::ostream&, const DataFrame::DataFrameProxy&);
+#endif

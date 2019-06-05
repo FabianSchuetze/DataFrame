@@ -7,19 +7,21 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include "column.h"
+#include "column.h" //need include!
 
 class DataFrame {
    public:
     typedef std::pair<std::string, int> index_pair;
     class DataFrameProxy;
+    friend DataFrame deep_copy(const DataFrame& lhs);
     DataFrame();
     DataFrame(const DataFrameProxy&);
     template <typename T>
     DataFrame(const std::vector<std::string>&, const std::vector<std::string>&,
               const std::vector<std::vector<T>>&);
-    DataFrame(const std::vector<index_pair>&,const std::map<std::string, int>&,
-              const std::vector<std::shared_ptr<Column>>&);
+    //DataFrame deep_copy();
+    //DataFrame(const std::vector<index_pair>&,const std::map<std::string, int>&,
+              //const std::vector<std::shared_ptr<Column>>&);
     DataFrame& operator=(const DataFrame&);
     //friend class DataFrameProxy; // DO I need this?
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
@@ -31,7 +33,10 @@ class DataFrame {
                                const DataFrame::DataFrameProxy&);
     template <typename T>
     friend DataFrame operator+(const DataFrame& lhs, const T& t) {
-        return DataFrame(lhs.index_names, lhs.column_names, lhs.columns) += t;
+        ////lhs.deep_copy();
+        //DataFrame sum = deep_copy(lhs);
+        return deep_copy(lhs) += t;
+        //return DataFrame(lhs.index_names, lhs.column_names, lhs.columns) += t;
     }
     friend std::vector<std::pair<int, int>> correspondence_position(
         const DataFrame&, const DataFrame&);
@@ -55,19 +60,21 @@ class DataFrame {
     DataFrameProxy loc(const std::string&);
     const std::pair<int, int> size() const;
     const int use_count(std::string); //Can i const qualify it?
+    std::vector<std::string> get_index_names();
 
    private:
     std::vector<std::shared_ptr<Column>> columns;
     std::vector<index_pair> index_names;
     std::map<std::string, int> column_names;
     void make_unique_if(const std::string&);
-    void get_index_names(std::vector<std::string>&);
+    //void get_index_names(std::vector<std::string>&);
 };
 
 template <typename T>
 DataFrame operator+(const DataFrame&, const T&);
 DataFrame operator+(const DataFrame&, const DataFrame&);
 DataFrame operator+(const DataFrame&, const DataFrame::DataFrameProxy&);
+DataFrame deep_copy(const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
 std::vector<std::pair<int, int>> correspondence_position(const DataFrame&,
                                                          const DataFrame&);

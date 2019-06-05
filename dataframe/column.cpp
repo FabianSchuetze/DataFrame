@@ -1,5 +1,4 @@
 #include "column.h"
-#include <algorithm>
 #include <cmath>
 #include <iostream>
 using std::holds_alternative;
