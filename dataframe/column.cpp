@@ -79,13 +79,15 @@ bool is_null(const T& t) {
         return t == "NA";
 }
 
+//CANNOT ITERATE OVER VECTOR!!!!!!!!!!!!!!!!!!!
 template <typename T>
 void Column::add_elements(vector<T>* lhs, const vector<T>& rhs,
                           const vector<int>& correspondence_rhs) {
+    std::cout << lhs->size() << std::endl;
     for (size_t i = 0; i < lhs->size(); ++i) {
-        //std::cout << "pos: " << correspondence_rhs[i] << std::endl;
-        //std::cout << "lhs condition: " << !is_null(lhs->at(i)) << std::endl;
-        //std::cout << "rhs condition: " << !is_null(rhs[correspondence_rhs[i]]) << std::endl;
+        std::cout << "pos: " << correspondence_rhs[i] << std::endl;
+        std::cout << "lhs condition: " << !is_null(lhs->at(i)) << std::endl;
+        std::cout << "rhs condition: " << !is_null(rhs[correspondence_rhs[i]]) << std::endl;
         if (correspondence_rhs[i] > -1 && !is_null(lhs->at(i))
              && !is_null(rhs[correspondence_rhs[i]]))
             lhs->at(i) += rhs[correspondence_rhs[i]];
@@ -100,9 +102,11 @@ Column& Column::add_other_column(const Column& rhs,
                                  const vector<int>& correspondence) {
     if (vector<double>* vec = std::get_if<vector<double>>(&col)) {
         const vector<double>* other = std::get_if<vector<double>>(&rhs.col);
+        std::cout << "finally\n";
         add_elements(vec, *other, correspondence);
     } else if (vector<string>* vec = std::get_if<vector<string>>(&col)) {
         const vector<string>* other = std::get_if<vector<string>>(&rhs.col);
+        std::cout << "finally string\n";
         add_elements(vec, *other, correspondence);
     }
     return *this;

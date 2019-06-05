@@ -84,7 +84,6 @@ class DataFrame {
     std::map<std::string, int> column_names;
     void make_unique_if(const std::string&);
     void get_index_names(std::vector<std::string>&);
-    //std::vector<int> correspondence_position(const DataFrame&);
     template <class T> void 
     add_elements(std::vector<T>& inp, const DataFrame& other, 
                  int pos, int otherPos) {
@@ -104,4 +103,6 @@ std::ostream& operator<<(std::ostream&, const DataFrame::DataFrameProxy&);
 std::vector<int> correspondence_position(const DataFrame&, const DataFrame&);
 void append_missing_rows(DataFrame&, const DataFrame&);
 void append_missing_cols(DataFrame&, const DataFrame&);
+const int find_position(const std::string&, 
+                        const std::vector<std::pair<std::string, int>>& vec);
 #endif

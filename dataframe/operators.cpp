@@ -25,6 +25,7 @@ DataFrame::DataFrameProxy DataFrame::operator[](const vector<string>& col_names)
 
 DataFrame::DataFrameProxy DataFrame::loc(const string& s) {
     vector<string> idx = {s};
+    std::cout << idx.size() << std::endl;
     vector<string> cols;
     for (auto const& x: column_names)
         cols.push_back(x.first);
@@ -92,7 +93,7 @@ void DataFrame::DataFrameProxy::check_column_size(size_t check) {
 template <typename T>
 void DataFrame::DataFrameProxy::insert_column(const string& name,
                                               const vector<T>& inp) {
-    int capacity_so_far = theDataFrame.column_names.size();
+    size_t capacity_so_far = theDataFrame.column_names.size();
     int lhsIndex = find_or_add(name, theDataFrame.column_names);
     bool replace = theDataFrame.column_names.size() == capacity_so_far;
     add_or_replace(replace, lhsIndex, inp);
@@ -102,7 +103,7 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const DataFrameProxy& rhs) {
     check_column_size(rhs.colNames.size());
     for (size_t i = 0; i < colNames.size(); ++i) {
-        int capacity_so_far = theDataFrame.column_names.size();
+        size_t capacity_so_far = theDataFrame.column_names.size();
         int lhsIndex = find_or_add(colNames[i], theDataFrame.column_names);
         int rhsIndex = rhs.theDataFrame.column_names.at(rhs.colNames[i]);
         bool replace = theDataFrame.column_names.size() == capacity_so_far;
@@ -136,15 +137,15 @@ void append_string(Column& c, std::string& s, int pos) {
     s += ' ';
 }
 
-const int find_position(const string& name, vector<pair<string, int>>& vec) {
-    auto it = std::find_if(vec.begin(), vec.end(),
-                           [name] (pair<string, int>& ele)
-                           {return ele.first == name;});
-    if (it == vec.end())
-        return -1;
-    else 
-        return it->second;
-}
+//const int find_position(const string& name, vector<pair<string, int>>& vec) {
+    //auto it = std::find_if(vec.begin(), vec.end(),
+                           //[name] (pair<string, int>& ele)
+                           //{return ele.first == name;});
+    //if (it == vec.end())
+        //return -1;
+    //else 
+        //return it->second;
+//}
 
 std::ostream& operator<<(std::ostream& os,
                          const DataFrame::DataFrameProxy& df) {
@@ -183,6 +184,8 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
     vector<int> correspondence = correspondence_position(*this, rhs);
     for (auto& x : column_names) {
         make_unique_if(x.first);
+        std::cout << "the length is lhs: " << index_names.size() << std::endl;
+        std::cout << "the length is rhs: " << rhs.index_names.size() << std::endl;
         try {
             int rhsIdx = rhs.column_names.at(x.first);
             columns[x.second]->add_other_column(*rhs.columns[rhsIdx],
@@ -197,9 +200,8 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
 
 void append_missing_rows(DataFrame& lhs, const DataFrame& rhs) {
     vector<int> correspondence = correspondence_position(rhs, lhs);
-    for (int i = 0; i < correspondence.size(); ++i) {
+    for (size_t i = 0; i < correspondence.size(); ++i) {
         if (correspondence[i] == -1) {
-            std::cout << "appended row\n";
             for (auto& x: lhs.column_names)
                 lhs.columns[x.second]->push_back_nan();
             lhs.index_names.push_back(std::make_pair(rhs.index_names[i].first,
@@ -217,15 +219,18 @@ void append_missing_cols(DataFrame& lhs, const DataFrame& rhs) {
                 make_shared<Column>(*rhs.columns.at(x.second));
             lhs.columns.push_back(data);
             lhs.columns.at(lhsPos)->replace_nan();
-            std::cout << "added a column\n";
         }
     }
 }
 
 DataFrame operator+(const DataFrame& lhs,const  DataFrame& rhs) {
     DataFrame sum = lhs;
+    std::cout << "inside\n";
     append_missing_cols(sum, rhs);
+    std::cout << "inside2\n";
     append_missing_rows(sum, rhs);
+    std::cout << "inside3\n";
+    std::cout << sum.index_names.size() << std::endl;
     sum += rhs;
     return sum;
 }
