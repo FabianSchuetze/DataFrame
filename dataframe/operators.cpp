@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "dataframe.h"
+#include "dataframeproxy.h"
 
 using std::make_pair;
 using std::make_shared;
@@ -214,8 +215,9 @@ DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs) {
     DataFrame sum = DataFrame(lhs.index_names, lhs.column_names, lhs.columns);
     append_missing_cols(sum, rhs);
     append_missing_rows(sum, rhs);
-    sum += rhs;
-    return sum;
+    return sum+= rhs;
+    //sum += rhs;
+    //return sum;
 }
 
 DataFrame operator+(const DataFrame::DataFrameProxy& lhs,

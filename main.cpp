@@ -1,4 +1,5 @@
 #include "dataframe/dataframe.h"
+#include "dataframe/dataframeproxy.h"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -40,6 +41,6 @@ int main() {
     std::cout << df2 << std::endl;
     df2 += 2;
     std::cout << df2 << std::endl;
-    std::cout << df2 + 2 << std::endl;
+    std::cout << df2["first_col"] + 2 << std::endl;
     return 0;
 }

@@ -1,4 +1,5 @@
 #include "dataframe.h"
+#include "dataframeproxy.h"
 #include <iostream>
 #include <ostream>
 #include <stdexcept>
@@ -14,9 +15,9 @@ vector<int> index_position(const vector<pair<string, int>> vec) {
     return res;
 }
 
-DataFrame::DataFrame(const std::vector<std::pair<std::string, int>>& indices,
-                     const std::map<std::string, int>& cols,
-                     const std::vector<std::shared_ptr<Column>>& data) {
+DataFrame::DataFrame(const vector<DataFrame::index_pair>& indices,
+                     const std::map<string, int>& cols,
+                     const vector<std::shared_ptr<Column>>& data) {
     int i = 0;
     vector<int> old_positions = index_position(indices);
     for (auto const& x : cols) {
@@ -78,16 +79,6 @@ DataFrame::DataFrame(const DataFrame::DataFrameProxy& df) {
         index_names.push_back(std::make_pair(name, pos));
     }
 }
-
-DataFrame::DataFrameProxy::DataFrameProxy(DataFrame& df,
-                                          const vector<string>& i,
-                                          const string& s)
-    : theDataFrame(df), idxNames{i}, colNames{s} {};
-
-DataFrame::DataFrameProxy::DataFrameProxy(DataFrame& df,
-                                          const vector<string>& i,
-                                          const vector<string>& s)
-    : theDataFrame(df), idxNames{i}, colNames(s){};
 
 const std::pair<int, int> DataFrame::size() const {
     std::pair<int, int> size;
