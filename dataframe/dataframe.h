@@ -35,12 +35,7 @@ class DataFrame {
                                const DataFrame::DataFrameProxy&);
     template <typename T>
     friend DataFrame operator+(const DataFrame& lhs, const T& t) {
-        DataFrame new_df = lhs;
-        for (auto& x : lhs.column_names) {
-            Column new_col = *new_df.columns[x.second] + t;
-            new_df.columns[x.second] = std::make_shared<Column>(new_col);
-        }
-        return new_df;
+        return DataFrame(lhs.index_names, lhs.column_names, lhs.columns) += t;
     }
 
     class DataFrameProxy {
@@ -74,6 +69,7 @@ class DataFrame {
         void insert_column(const std::string&, const std::vector<T>&);
     };
     DataFrame& operator+=(const DataFrame& rhs);
+    template <typename T> DataFrame& operator+=(const T&);
     template <class T>
     typename std::vector<T>::iterator begin(std::string);
     template <class T>

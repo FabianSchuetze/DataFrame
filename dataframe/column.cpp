@@ -92,23 +92,15 @@ bool is_null(const T& t) {
         return t == "NA";
 }
 
-//CANNOT ITERATE OVER VECTOR!!!!!!!!!!!!!!!!!!!
 template <typename T>
 void Column::add_elements(vector<T>* lhs, const vector<T>& rhs,
                           const vector<pair<int, int>>& indices) {
-    std::cout << lhs->size() << std::endl;
     for (auto const& index_pair: indices) {
-    //for (size_t i = 0; i < lhs->size(); ++i) {
-        //std::cout << "pos: " << correspondence_rhs[i] << std::endl;
-        //std::cout << "lhs condition: " << !is_null(lhs->at(i)) << std::endl;
-        //std::cout << "rhs condition: " << !is_null(rhs[correspondence_rhs[i]]) << std::endl;
         if (index_pair.second > -1 && !is_null(lhs->at(index_pair.first))
              && !is_null(rhs[index_pair.second]))
             lhs->at(index_pair.first) += rhs[index_pair.second];
-        else  {
-            std::cout << "in nan\n";
+        else
             replace_nan(index_pair.first);
-        }
     }
 }
 
@@ -116,11 +108,9 @@ Column& Column::add_other_column(const Column& rhs,
                                  const vector<pair<int, int>>& indices) {
     if (vector<double>* vec = std::get_if<vector<double>>(&col)) {
         const vector<double>* other = std::get_if<vector<double>>(&rhs.col);
-        std::cout << "finally\n";
         add_elements(vec, *other, indices);
     } else if (vector<string>* vec = std::get_if<vector<string>>(&col)) {
         const vector<string>* other = std::get_if<vector<string>>(&rhs.col);
-        std::cout << "finally string\n";
         add_elements(vec, *other, indices);
     }
     return *this;

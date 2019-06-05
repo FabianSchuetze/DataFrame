@@ -26,7 +26,6 @@ DataFrame::DataFrameProxy DataFrame::operator[](const vector<string>& col_names)
 
 DataFrame::DataFrameProxy DataFrame::loc(const string& s) {
     vector<string> idx = {s};
-    std::cout << idx.size() << std::endl;
     vector<string> cols;
     for (auto const& x: column_names)
         cols.push_back(x.first);
@@ -138,16 +137,6 @@ void append_string(Column& c, std::string& s, int pos) {
     s += ' ';
 }
 
-//const int find_position(const string& name, vector<pair<string, int>>& vec) {
-    //auto it = std::find_if(vec.begin(), vec.end(),
-                           //[name] (pair<string, int>& ele)
-                           //{return ele.first == name;});
-    //if (it == vec.end())
-        //return -1;
-    //else 
-        //return it->second;
-//}
-
 std::ostream& operator<<(std::ostream& os,
                          const DataFrame::DataFrameProxy& df) {
     string output = " ";
@@ -185,9 +174,6 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
     vector<pair<int,int>> indices = correspondence_position(*this, rhs);
     for (auto& x : column_names) {
         make_unique_if(x.first);
-        std::cout << "the length is lhs: " << index_names.size() << std::endl;
-        std::cout << "the length is rhs: " << rhs.index_names.size() << std::endl;
-        std::cout << "correspondence len: " <<indices.size() << std::endl;
         try {
             int rhsIdx = rhs.column_names.at(x.first);
             columns[x.second]->add_other_column(*rhs.columns[rhsIdx], indices);
@@ -201,7 +187,6 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
 void append_missing_rows(DataFrame& lhs, const DataFrame& rhs) {
     vector<pair<int, int>> index_pairs = correspondence_position(rhs, lhs);
     for (auto const& index_pair : index_pairs) {
-    //for (size_t i = 0; i < correspondence.size(); ++i) {
         if (index_pair.second == -1) {
             for (auto& x: lhs.column_names)
                 lhs.columns[x.second]->push_back_nan();
@@ -226,18 +211,10 @@ void append_missing_cols(DataFrame& lhs, const DataFrame& rhs) {
 }
 
 DataFrame operator+(const DataFrame& lhs,const  DataFrame& rhs) {
-    DataFrame test = lhs;
     DataFrame sum = DataFrame(lhs.index_names, lhs.column_names, lhs.columns);
-    std::cout << "inside\n";
     append_missing_cols(sum, rhs);
-    std::cout << "inside2\n";
     append_missing_rows(sum, rhs);
-    append_missing_rows(test, rhs);
-    std::cout << "inside3\n";
-    std::cout << sum.index_names.size() << std::endl;
     sum += rhs;
-    test += rhs;
-    std::cout << test;
     return sum;
 }
 
@@ -250,3 +227,16 @@ DataFrame operator+(const DataFrame& lhs,
                     const  DataFrame::DataFrameProxy& rhs) {
     return lhs + DataFrame(rhs);
 }
+template <typename T> DataFrame& DataFrame::operator+=(const T& t) {
+    for (auto& x : column_names) {
+        Column new_col = *columns[x.second] + t;
+        columns[x.second] = std::make_shared<Column>(new_col);
+    }
+    return *this;
+}
+
+template DataFrame& DataFrame::operator+=(const double&);
+template DataFrame& DataFrame::operator+=(const int&);
+template DataFrame& DataFrame::operator+=(const string&);
+//template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
+    //const vector<string>& other_col);
