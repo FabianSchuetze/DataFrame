@@ -32,14 +32,13 @@ int main() {
     vector<string> long_names = {"first_col", "second_col", "third_col"};
     vector<string> lhs_names = {"first_col", "second_col"};
     vector<string> rhs_names = {"first_col", "third_col"};
-    DataFrame df2 = DataFrame(idx_names2, col_names2, strings2);
-    DataFrame df1 = DataFrame(idx_names, col_names, strings);
-    DataFrame df3 = df1.loc("1");
-    DataFrame df4 = df1.loc("1");
-    std::cout << df3 << std::endl;
-    //std::cout << df2 << std::endl;
-    std::cout << df1.loc("1") + df1.loc("1") << std::endl;
-    //df1["first_col"] = tmp;
-    //std::cout << df1 << std::endl;
+    DataFrame df2 = DataFrame(idx_names2, col_names2, second);
+    DataFrame df1 = DataFrame(idx_names, col_names, first);
+    std::cout << df1 << std::endl;
+    std::cout << df2 << std::endl;
+    df2 += df1;
+    std::cout << df2 << std::endl;
+    //df2 += 2;
+    std::cout << df2 + 2 << std::endl;
     return 0;
 }

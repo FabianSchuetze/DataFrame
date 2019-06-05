@@ -10,6 +10,7 @@ using std::string;
 using std::transform;
 using std::vector;
 using std::pair;
+using std::make_pair;
 
 DataFrame::DataFrameProxy DataFrame::operator[](const string& col_name) {
     vector<string> idx;
@@ -181,15 +182,15 @@ std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
 }
 
 DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
-    vector<int> correspondence = correspondence_position(*this, rhs);
+    vector<pair<int,int>> indices = correspondence_position(*this, rhs);
     for (auto& x : column_names) {
         make_unique_if(x.first);
         std::cout << "the length is lhs: " << index_names.size() << std::endl;
         std::cout << "the length is rhs: " << rhs.index_names.size() << std::endl;
+        std::cout << "correspondence len: " <<indices.size() << std::endl;
         try {
             int rhsIdx = rhs.column_names.at(x.first);
-            columns[x.second]->add_other_column(*rhs.columns[rhsIdx],
-                                                correspondence);
+            columns[x.second]->add_other_column(*rhs.columns[rhsIdx], indices);
         } catch (const std::out_of_range& e) {
             columns[x.second]->replace_nan();
         }
@@ -197,15 +198,16 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
     return *this;
 }
 
-
 void append_missing_rows(DataFrame& lhs, const DataFrame& rhs) {
-    vector<int> correspondence = correspondence_position(rhs, lhs);
-    for (size_t i = 0; i < correspondence.size(); ++i) {
-        if (correspondence[i] == -1) {
+    vector<pair<int, int>> index_pairs = correspondence_position(rhs, lhs);
+    for (auto const& index_pair : index_pairs) {
+    //for (size_t i = 0; i < correspondence.size(); ++i) {
+        if (index_pair.second == -1) {
             for (auto& x: lhs.column_names)
                 lhs.columns[x.second]->push_back_nan();
-            lhs.index_names.push_back(std::make_pair(rhs.index_names[i].first,
-                                      lhs.index_names.size()));
+            lhs.index_names.push_back(
+                    make_pair(rhs.index_names[index_pair.first].first,
+                              lhs.index_names.size()));
         }
     }
 }
@@ -224,14 +226,18 @@ void append_missing_cols(DataFrame& lhs, const DataFrame& rhs) {
 }
 
 DataFrame operator+(const DataFrame& lhs,const  DataFrame& rhs) {
-    DataFrame sum = lhs;
+    DataFrame test = lhs;
+    DataFrame sum = DataFrame(lhs.index_names, lhs.column_names, lhs.columns);
     std::cout << "inside\n";
     append_missing_cols(sum, rhs);
     std::cout << "inside2\n";
     append_missing_rows(sum, rhs);
+    append_missing_rows(test, rhs);
     std::cout << "inside3\n";
     std::cout << sum.index_names.size() << std::endl;
     sum += rhs;
+    test += rhs;
+    std::cout << test;
     return sum;
 }
 

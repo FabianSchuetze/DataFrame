@@ -18,6 +18,19 @@ template <typename V> V Column::operator[](int pos) {
 template double Column::operator[](int);
 template string Column::operator[](int);
 
+Column::Column(const Column& c, const vector<int>& subsets) {
+    if (const vector<double>* val = std::get_if<vector<double>>(&c.col)) {
+        col = vector<double>(); 
+        for (int i : subsets)
+            push_back<double>(val->at(i));
+    }
+    else if (const vector<string>* val = std::get_if<vector<string>>(&c.col)) {
+        col = vector<string>(); 
+        for (int i : subsets)
+            push_back<string>(val->at(i));
+    }
+}
+
 void Column::replace_nan() {
     typedef std::numeric_limits<double> nan;
     if (holds_alternative<vector<double>>(col))
@@ -82,32 +95,33 @@ bool is_null(const T& t) {
 //CANNOT ITERATE OVER VECTOR!!!!!!!!!!!!!!!!!!!
 template <typename T>
 void Column::add_elements(vector<T>* lhs, const vector<T>& rhs,
-                          const vector<int>& correspondence_rhs) {
+                          const vector<pair<int, int>>& indices) {
     std::cout << lhs->size() << std::endl;
-    for (size_t i = 0; i < lhs->size(); ++i) {
-        std::cout << "pos: " << correspondence_rhs[i] << std::endl;
-        std::cout << "lhs condition: " << !is_null(lhs->at(i)) << std::endl;
-        std::cout << "rhs condition: " << !is_null(rhs[correspondence_rhs[i]]) << std::endl;
-        if (correspondence_rhs[i] > -1 && !is_null(lhs->at(i))
-             && !is_null(rhs[correspondence_rhs[i]]))
-            lhs->at(i) += rhs[correspondence_rhs[i]];
+    for (auto const& index_pair: indices) {
+    //for (size_t i = 0; i < lhs->size(); ++i) {
+        //std::cout << "pos: " << correspondence_rhs[i] << std::endl;
+        //std::cout << "lhs condition: " << !is_null(lhs->at(i)) << std::endl;
+        //std::cout << "rhs condition: " << !is_null(rhs[correspondence_rhs[i]]) << std::endl;
+        if (index_pair.second > -1 && !is_null(lhs->at(index_pair.first))
+             && !is_null(rhs[index_pair.second]))
+            lhs->at(index_pair.first) += rhs[index_pair.second];
         else  {
             std::cout << "in nan\n";
-            replace_nan(i);
+            replace_nan(index_pair.first);
         }
     }
 }
 
 Column& Column::add_other_column(const Column& rhs, 
-                                 const vector<int>& correspondence) {
+                                 const vector<pair<int, int>>& indices) {
     if (vector<double>* vec = std::get_if<vector<double>>(&col)) {
         const vector<double>* other = std::get_if<vector<double>>(&rhs.col);
         std::cout << "finally\n";
-        add_elements(vec, *other, correspondence);
+        add_elements(vec, *other, indices);
     } else if (vector<string>* vec = std::get_if<vector<string>>(&col)) {
         const vector<string>* other = std::get_if<vector<string>>(&rhs.col);
         std::cout << "finally string\n";
-        add_elements(vec, *other, correspondence);
+        add_elements(vec, *other, indices);
     }
     return *this;
 }
