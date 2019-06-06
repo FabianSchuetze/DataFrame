@@ -4,8 +4,8 @@
 
 using std::make_pair;
 using std::make_shared;
-using std::shared_ptr;
 using std::pair;
+using std::shared_ptr;
 using std::string;
 using std::transform;
 using std::vector;
@@ -43,27 +43,24 @@ int find_or_add(const string& name, std::map<string, int>& columns) {
 void DataFrame::make_unique_if(const std::string& s) {
     if (this->use_count(s) > 1) {
         std::cout << "copy-on-write\n";
-        //std::shared_ptr<Column> data = get_unique(s);
         columns.at(column_names[s]) = get_unique(s);
     }
 }
 
-void DataFrame::DataFrameProxy::replace_column(int idx, 
-        const shared_ptr<Column>&data) {
+void DataFrame::DataFrameProxy::replace_column(int idx,
+                                               const shared_ptr<Column>& data) {
     if (theDataFrame.columns[idx].use_count() > 1)
         theDataFrame.columns.at(idx) = data;
     else
         theDataFrame.columns[idx] = data;
 }
 
-void DataFrame::DataFrameProxy::add_column(const shared_ptr<Column>& data)
-{
+void DataFrame::DataFrameProxy::add_column(const shared_ptr<Column>& data) {
     theDataFrame.columns.push_back(data);
 }
 
 void DataFrame::DataFrameProxy::check_size(size_t check, string m) {
-    if (colNames.size() != check)
-        throw std::invalid_argument(m);
+    if (colNames.size() != check) throw std::invalid_argument(m);
 }
 
 void DataFrame::DataFrameProxy::insert_column(const string& name,
@@ -103,7 +100,7 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
 template <typename T>
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<T>& other_col) {
-    check_size(1, string{"must select one column"}); 
+    check_size(1, string{"must select one column"});
     insert_column(colNames[0], other_col);
     return *this;
 }
@@ -179,7 +176,6 @@ void append_missing_cols(DataFrame& lhs, const DataFrame& rhs) {
         size_t capacity_so_far = lhs.column_names.size();
         int lhsPos = find_or_add(x.first, lhs.column_names);
         if (capacity_so_far < lhs.column_names.size()) {
-            //std::shared_ptr<Column> data = rhs.get_unique(x.first);
             lhs.columns.push_back(rhs.get_unique(x.first));
             lhs.columns.at(lhsPos)->replace_nan();
         }
@@ -190,7 +186,7 @@ DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs) {
     DataFrame sum = deep_copy(lhs);
     append_missing_cols(sum, rhs);
     append_missing_rows(sum, rhs);
-    return sum+= rhs;
+    return sum += rhs;
 }
 
 DataFrame operator+(const DataFrame::DataFrameProxy& lhs,

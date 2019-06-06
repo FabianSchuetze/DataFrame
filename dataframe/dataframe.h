@@ -7,7 +7,7 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include "column.h" //need include!
+#include "column.h"  //need include!
 
 class DataFrame {
    public:
@@ -20,7 +20,6 @@ class DataFrame {
     DataFrame(const std::vector<std::string>&, const std::vector<std::string>&,
               const std::vector<std::vector<T>>&);
     DataFrame& operator=(const DataFrame&);
-    //friend class DataFrameProxy; // DO I need this?
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
     friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
     friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
@@ -38,7 +37,8 @@ class DataFrame {
     friend void append_missing_cols(DataFrame&, const DataFrame&);
     std::shared_ptr<Column> get_unique(const std::string&);
     std::shared_ptr<Column> get_unique(const std::string&) const;
-    std::shared_ptr<Column> get_unique(const std::string&, const std::vector<int>&) const;
+    std::shared_ptr<Column> get_unique(const std::string&,
+                                       const std::vector<int>&) const;
     std::shared_ptr<Column> get_shared_copy(const std::string&);
     std::shared_ptr<Column> get_shared_copy(const std::string&) const;
     DataFrame& operator+=(const DataFrame& rhs);
@@ -57,7 +57,7 @@ class DataFrame {
     DataFrameProxy operator[](const std::vector<std::string>& col_name);
     DataFrameProxy loc(const std::string&);
     const std::pair<int, int> size() const;
-    const int use_count(std::string); //Can i const qualify it?
+    const int use_count(std::string);  // Can i const qualify it?
     std::vector<std::string> get_index_names();
     std::vector<std::string> get_column_names();
     const int find_index_position(const std::string&) const;

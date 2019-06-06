@@ -25,9 +25,6 @@ class DataFrame::DataFrameProxy {
     DataFrame& theDataFrame;
     std::vector<std::string> idxNames;
     std::vector<std::string> colNames;
-    // DO I REALLY NEED THIS FUNCTION???
-    //template <typename T>
-    //void add_or_replace(bool, int, const std::vector<T>&);
     void add_column(const std::shared_ptr<Column>&);
     void replace_column(int, const std::shared_ptr<Column>&);
     void check_size(size_t, std::string);
