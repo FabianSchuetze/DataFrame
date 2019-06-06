@@ -13,22 +13,19 @@ class Column {
     friend Column operator+(const Column&, const std::string&);
     friend class DataFrame;
     friend void append_missing_cols(DataFrame&, const DataFrame&);
+    friend std::string::size_type width(const Column&, std::vector<std::string>&);
 
     Column();
     Column(const Column&, int);
     Column(const Column&, const std::vector<int>&);
+    template <class T>
+    Column(const std::vector<T>& t) { col = t; }
     Column& operator+=(const Column& rhs);
     Column& plus(const Column&, const std::vector<std::pair<int, int>>&);
-    template <typename T>
-    void add_elements(std::vector<T>*, const std::vector<T>&,
-                      const std::vector<std::pair<int, int>>&);
-    template <class T>
-    Column(const std::vector<T>& t) {
-        col = t;
-    }
     template <class T>
     void push_back(const T);
     const int size();
+    const int size() const;
     template <class V>
     V operator[](int);
     template <typename V>
@@ -47,8 +44,12 @@ class Column {
     }
     void append_string(std::string&, int pos);
     void push_back_nan();
+    std::string to_string(int) const;
 
    private:
+    template <typename T>
+    void add_elements(std::vector<T>*, const std::vector<T>&,
+                      const std::vector<std::pair<int, int>>&);
     std::variant<std::vector<double>, std::vector<std::string>> col;
     void replace_nan();
     void replace_nan(int);

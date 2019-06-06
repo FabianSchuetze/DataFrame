@@ -24,8 +24,10 @@ vector<string> get_names(T& cont) {
 }
 
 vector<string> DataFrame::get_index_names() { return get_names(index_names); }
+vector<string> DataFrame::get_index_names() const { return get_names(index_names); }
 
 vector<string> DataFrame::get_column_names() {return get_names(column_names);}
+vector<string> DataFrame::get_column_names() const {return get_names(column_names);}
 
 DataFrame::DataFrame() : columns(), index_names(), column_names(){};
 
@@ -73,8 +75,7 @@ const int DataFrame::find_index_position(const std::string& s) const {
 }
 
 const int DataFrame::find_index_position(const std::string& s) {
-    return static_cast<const DataFrame&>(*this).find_index_position(
-        s);  // Item 3
+    return static_cast<const DataFrame&>(*this).find_index_position( s);
 }
 
 DataFrame deep_copy(const DataFrame& lhs) {

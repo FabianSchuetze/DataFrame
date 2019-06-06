@@ -31,6 +31,7 @@ class DataFrame {
     friend DataFrame operator+(const DataFrame& lhs, const T& t) {
         return deep_copy(lhs) += t;
     }
+    //friend std::string::size_type width(const Column&, std::vector<std::string>&);
     friend std::vector<std::pair<int, int>> correspondence_position(
         const DataFrame&, const DataFrame&);
     friend void append_missing_rows(DataFrame&, const DataFrame&);
@@ -59,7 +60,9 @@ class DataFrame {
     const std::pair<int, int> size() const;
     const int use_count(std::string);  // Can i const qualify it?
     std::vector<std::string> get_index_names();
+    std::vector<std::string> get_index_names() const;
     std::vector<std::string> get_column_names();
+    std::vector<std::string> get_column_names() const;
     const int find_index_position(const std::string&) const;
     const int find_index_position(const std::string&);
 
@@ -70,6 +73,7 @@ class DataFrame {
     void make_unique_if(const std::string&);
     void append_nan_rows();
     void append_index(const std::string&);
+    std::vector<std::string> frame(Column & c);
 };
 
 template <typename T>

@@ -63,6 +63,24 @@ const int Column::size() {
         return 0;
 }
 
+const int Column::size() const{
+    if (holds_alternative<vector<double>>(col))
+        return std::get<vector<double>>(col).size();
+    else if (holds_alternative<vector<string>>(col))
+        return std::get<vector<string>>(col).size();
+    else
+        return 0;
+}
+
+std::string Column::to_string(int i) const {
+    if (const vector<double>* val = std::get_if<vector<double>>(&col))
+        return std::to_string(val->at(i));
+    else if (const vector<string>* val = std::get_if<vector<string>>(&col))
+        return val->at(i);
+    else
+        throw std::invalid_argument("Position i not in vector");
+} 
+
 void Column::append_string(string& s, int pos) {
     if (vector<double>* val = std::get_if<vector<double>>(&col))
         s += std::to_string(val->at(pos));

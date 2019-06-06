@@ -22,15 +22,6 @@ DataFrame::DataFrameProxy DataFrame::loc(const string& s) {
     return DataFrameProxy(*this, vector<string>{s}, get_column_names());
 }
 
-DataFrame& DataFrame::operator=(const DataFrame& rhs) {
-    if (this != &rhs) {
-        columns = rhs.columns;
-        index_names = rhs.index_names;
-        column_names = rhs.column_names;
-    }
-    return *this;
-}
-
 int find_or_add(const string& name, std::map<string, int>& columns) {
     try {
         columns.at(name);
@@ -78,13 +69,23 @@ void DataFrame::DataFrameProxy::insert_column(const string& name,
     insert_column(name, col);
 }
 
+DataFrame& DataFrame::operator=(const DataFrame& rhs) {
+    if (this != &rhs) {
+        columns = rhs.columns;
+        index_names = rhs.index_names;
+        column_names = rhs.column_names;
+    }
+    return *this;
+}
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const DataFrameProxy& rhs) {
-    check_size(rhs.colNames.size(), string{"rhs and lhs column number differ"});
-    for (size_t i = 0; i < colNames.size(); ++i) {
-        string rhsName = rhs.colNames[i];
-        shared_ptr<Column> col = rhs.theDataFrame.get_shared_copy(rhsName);
-        insert_column(colNames[i], col);
+    if (this != &rhs) {
+        check_size(rhs.colNames.size(), string{"rhs and lhs col num differ"});
+        for (size_t i = 0; i < colNames.size(); ++i) {
+            string rhsName = rhs.colNames[i];
+            shared_ptr<Column> col = rhs.theDataFrame.get_shared_copy(rhsName);
+            insert_column(colNames[i], col);
+        }
     }
     return *this;
 }
@@ -133,19 +134,19 @@ std::ostream& operator<<(std::ostream& os,
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
-    string output = " ";
-    for (auto const& x : df.column_names) output += x.first + ' ';
-    output += '\n';
-    for (auto const& row : df.index_names) {
-        output += row.first + " ";
-        for (auto const& col : df.column_names)
-            append_string(*df.columns[col.second], output, row.second);
-        output += '\n';
-    }
-    os << output;
-    return os;
-}
+//std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
+    //string output = " ";
+    //for (auto const& x : df.column_names) output += x.first + ' ';
+    //output += '\n';
+    //for (auto const& row : df.index_names) {
+        //output += row.first + " ";
+        //for (auto const& col : df.column_names)
+            //append_string(*df.columns[col.second], output, row.second);
+        //output += '\n';
+    //}
+    //os << output;
+    //return os;
+//}
 
 DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
     vector<pair<int, int>> indices = correspondence_position(*this, rhs);
