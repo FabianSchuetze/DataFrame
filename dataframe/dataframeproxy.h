@@ -28,8 +28,9 @@ class DataFrame::DataFrameProxy {
     // DO I REALLY NEED THIS FUNCTION???
     //template <typename T>
     //void add_or_replace(bool, int, const std::vector<T>&);
-    void add_or_replace(bool, int, const std::shared_ptr<Column>&);
-    void check_column_size(size_t);
+    void add_column(const std::shared_ptr<Column>&);
+    void replace_column(int, const std::shared_ptr<Column>&);
+    void check_size(size_t, std::string);
     void insert_column(const std::string&, std::shared_ptr<Column>&);
     template <typename T>
     void insert_column(const std::string&, const std::vector<T>&);

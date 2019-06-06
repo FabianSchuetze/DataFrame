@@ -22,12 +22,52 @@ vector<string> DataFrame::get_index_names() {
     return res;
 }
 
+vector<string> DataFrame::get_column_names() {
+    vector<string> res;
+    for (auto const& col_pair : column_names) res.push_back(col_pair.first);
+    return res;
+}
+
 DataFrame::DataFrame(): columns(), index_names(), column_names() {};
 
 std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) {
-    int idx = column_names[s];
-    std::shared_ptr<Column> data = make_shared<Column>(*columns.at(idx));
-    return data;
+    try {
+        int idx = column_names.at(s);
+        return make_shared<Column>(*columns.at(idx));
+    } catch (const std::out_of_range& e) {
+        string msg = "No column with name " + s;
+        throw std::out_of_range(msg);
+    }
+}
+
+std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) const{
+    try {
+        int idx = column_names.at(s);
+        return make_shared<Column>(*columns.at(idx));
+    } catch (const std::out_of_range& e) {
+        string msg = "No column with name " + s;
+        throw std::out_of_range(msg);
+    }
+}
+
+std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) {
+    try {
+        int idx = column_names.at(s);
+        return columns[idx];
+    } catch (const std::out_of_range& e) {
+        string msg = "No column with name " + s;
+        throw std::out_of_range(msg);
+    }
+}
+
+std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) const{
+    try {
+        int idx = column_names.at(s);
+        return columns[idx];
+    } catch (const std::out_of_range& e) {
+        string msg = "No column with name " + s;
+        throw std::out_of_range(msg);
+    }
 }
 
 shared_ptr<Column> DataFrame::get_unique(const string& s, const vector<int>& v) const {
@@ -106,4 +146,12 @@ vector<pair<int, int>> correspondence_position(const DataFrame& lhs,
         res.push_back(make_pair(i++, other_pos));
     }
     return res;
+}
+
+void DataFrame::append_nan_rows() {
+    for (auto& x : column_names) columns[x.second]->push_back_nan();
+}
+
+void DataFrame::append_index(const string& s) {
+    index_names.push_back(make_pair(s, index_names.size()));
 }

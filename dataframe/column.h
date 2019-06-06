@@ -18,8 +18,7 @@ class Column {
     Column(const Column&, int);
     Column(const Column&, const std::vector<int>&);
     Column& operator+=(const Column& rhs);
-    Column& add_other_column(const Column&,
-                             const std::vector<std::pair<int, int>>&);
+    Column& plus(const Column&, const std::vector<std::pair<int, int>>&);
     template <typename T>
     void add_elements(std::vector<T>*, const std::vector<T>&,
                       const std::vector<std::pair<int, int>>&);

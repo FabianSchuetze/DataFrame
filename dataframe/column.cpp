@@ -3,7 +3,6 @@
 #include <iostream>
 using std::holds_alternative;
 using std::pair;
-using std::plus;
 using std::string;
 using std::transform;
 using std::vector;
@@ -102,7 +101,7 @@ void Column::add_elements(vector<T>* lhs, const vector<T>& rhs,
     }
 }
 
-Column& Column::add_other_column(const Column& rhs,
+Column& Column::plus(const Column& rhs,
                                  const vector<pair<int, int>>& indices) {
     if (vector<double>* vec = std::get_if<vector<double>>(&col)) {
         const vector<double>* other = std::get_if<vector<double>>(&rhs.col);
@@ -118,11 +117,11 @@ Column& Column::operator+=(const Column& rhs) {
     if (vector<double>* vec = std::get_if<vector<double>>(&col)) {
         const vector<double>* other = std::get_if<vector<double>>(&rhs.col);
         transform(other->begin(), other->end(), vec->begin(), vec->begin(),
-                  plus<double>());
+                  std::plus<double>());
     } else if (vector<string>* vec = std::get_if<vector<string>>(&col)) {
         const vector<string>* other = std::get_if<vector<string>>(&rhs.col);
         transform(other->begin(), other->end(), vec->begin(), vec->begin(),
-                  plus<string>());
+                  std::plus<string>());
     }
     return *this;
 }
@@ -130,7 +129,7 @@ Column& Column::operator+=(const Column& rhs) {
 template <typename T>
 vector<T> transform_column(const vector<T>* v, const T& t) {
     vector<T> res = vector<T>(v->size(), t);
-    transform(v->begin(), v->end(), res.begin(), res.begin(), plus<T>());
+    transform(v->begin(), v->end(), res.begin(), res.begin(), std::plus<T>());
     return res;
 }
 

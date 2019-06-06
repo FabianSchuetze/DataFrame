@@ -37,7 +37,10 @@ class DataFrame {
     friend void append_missing_rows(DataFrame&, const DataFrame&);
     friend void append_missing_cols(DataFrame&, const DataFrame&);
     std::shared_ptr<Column> get_unique(const std::string&);
+    std::shared_ptr<Column> get_unique(const std::string&) const;
     std::shared_ptr<Column> get_unique(const std::string&, const std::vector<int>&) const;
+    std::shared_ptr<Column> get_shared_copy(const std::string&);
+    std::shared_ptr<Column> get_shared_copy(const std::string&) const;
     DataFrame& operator+=(const DataFrame& rhs);
     template <typename T>
     DataFrame& operator+=(const T&);
@@ -56,6 +59,7 @@ class DataFrame {
     const std::pair<int, int> size() const;
     const int use_count(std::string); //Can i const qualify it?
     std::vector<std::string> get_index_names();
+    std::vector<std::string> get_column_names();
     const int find_index_position(const std::string&) const;
 
    private:
@@ -63,6 +67,8 @@ class DataFrame {
     std::vector<index_pair> index_names;
     std::map<std::string, int> column_names;
     void make_unique_if(const std::string&);
+    void append_nan_rows();
+    void append_index(const std::string&);
 };
 
 template <typename T>
