@@ -1,4 +1,5 @@
 #include "dataframe.h"
+#include "dataframeproxy.h"
 #include <algorithm>
 #include <iostream>
 using std::string;
@@ -49,6 +50,22 @@ std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
     vector<string> output = frame(index);
     for (int i = 0; i < titles.size(); ++i) {
         vector<string> rhs = frame(conversion(titles[i], *df.columns[i]));
+        hcat(output, rhs);
+    }
+    os << output;
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os,
+                         const DataFrame::DataFrameProxy& df) {
+    vector<string> titles = df.colNames;
+    vector<string> index = df.idxNames;
+    index.insert(index.begin(), "index");
+    vector<string> output = frame(index);
+    vector<int> subset = df.theDataFrame.get_index_positions(df.idxNames);
+    for (auto const& title : titles) {
+        std::shared_ptr<Column> col = df.theDataFrame.get_unique(title, subset);
+        vector<string> rhs = frame(conversion(title, *col));
         hcat(output, rhs);
     }
     os << output;

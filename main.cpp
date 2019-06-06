@@ -37,6 +37,8 @@ int main() {
     DataFrame df1 = DataFrame(idx_names, col_names, first);
     df2 += df2;
     std::cout << df2 << std::endl;
+    std::cout << df2["first_col"] << std::endl;
+    std::cout << df2.loc("3") << std::endl;
     //df2["first_col"] = df2["first_col"];
     //df2["first_col"] += df2["first_col"];
     //fun2(df2);

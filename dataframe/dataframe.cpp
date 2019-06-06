@@ -10,9 +10,18 @@ using std::shared_ptr;
 using std::string;
 using std::vector;
 
-vector<int> get_index_positions(const vector<pair<string, int>> vec) {
+vector<int> DataFrame::get_index_positions(const vector<string>& inp) const {
     vector<int> res;
-    for (auto const& x : vec) res.push_back(x.second);
+    for (const string& n: inp) {
+        int idx = find_index_position(n);
+        res.push_back(idx);
+    }
+    return res;
+}
+
+vector<int> DataFrame::get_index_positions() const{
+    vector<int> res;
+    for (auto const& x : index_names) res.push_back(x.second);
     return res;
 }
 
@@ -80,7 +89,7 @@ const int DataFrame::find_index_position(const std::string& s) {
 
 DataFrame deep_copy(const DataFrame& lhs) {
     DataFrame new_df = DataFrame();
-    vector<int> old_positions = get_index_positions(lhs.index_names);
+    vector<int> old_positions = lhs.get_index_positions();
     int i = 0, j = 0;
     for (auto const& x : lhs.column_names) {
         new_df.column_names[x.first] = i++;
