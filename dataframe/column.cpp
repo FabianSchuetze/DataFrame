@@ -29,11 +29,8 @@ Column::Column(const Column& c, const vector<int>& subsets) {
 }
 
 void Column::replace_nan() {
-    typedef std::numeric_limits<double> nan;
-    if (holds_alternative<vector<double>>(col))
-        col = vector<double>(size(), nan::quiet_NaN());
-    else if (holds_alternative<vector<string>>(col))
-        col = vector<string>(size(), "NA");
+    for (int i = 0; i < size(); i++)
+        replace_nan(i);
 }
 
 void Column::push_back_nan() {
@@ -136,13 +133,18 @@ vector<T> transform_column(const vector<T>* v, const T& t) {
 Column operator+(const Column& c, double d) {
     if (const vector<double>* vec = std::get_if<vector<double>>(&c.col))
         return Column(transform_column(vec, d));
-    else
-        throw std::invalid_argument("Cant combine a non-double with a double");
+    else  {
+        string msg = ": Cant add double " + std::to_string(d) 
+            +": incompatible column types"; 
+        throw std::invalid_argument(msg);
+    }
 }
 
 Column operator+(const Column& c, const string& d) {
     if (const vector<string>* vec = std::get_if<vector<string>>(&c.col))
         return Column(transform_column(vec, d));
-    else
-        throw std::invalid_argument("Cant combine a non-double with a double");
+    else {
+        string msg = "Cant add string " + d +": incompatible column types"; 
+        throw std::invalid_argument(msg);
+    }
 }

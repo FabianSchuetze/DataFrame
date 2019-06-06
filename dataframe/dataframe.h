@@ -80,7 +80,6 @@ DataFrame deep_copy(const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
 std::vector<std::pair<int, int>> correspondence_position(const DataFrame&,
                                                          const DataFrame&);
-// const qualify?
 void append_missing_rows(DataFrame&, const DataFrame&);
 void append_missing_cols(DataFrame&, const DataFrame&);
 #endif
