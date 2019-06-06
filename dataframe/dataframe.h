@@ -61,6 +61,7 @@ class DataFrame {
     std::vector<std::string> get_index_names();
     std::vector<std::string> get_column_names();
     const int find_index_position(const std::string&) const;
+    const int find_index_position(const std::string&);
 
    private:
     std::vector<std::shared_ptr<Column>> columns;

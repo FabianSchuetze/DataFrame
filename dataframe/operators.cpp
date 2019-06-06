@@ -43,8 +43,8 @@ int find_or_add(const string& name, std::map<string, int>& columns) {
 void DataFrame::make_unique_if(const std::string& s) {
     if (this->use_count(s) > 1) {
         std::cout << "copy-on-write\n";
-        std::shared_ptr<Column> data = get_unique(s);
-        columns.at(column_names[s]) = data;
+        //std::shared_ptr<Column> data = get_unique(s);
+        columns.at(column_names[s]) = get_unique(s);
     }
 }
 
@@ -179,8 +179,8 @@ void append_missing_cols(DataFrame& lhs, const DataFrame& rhs) {
         size_t capacity_so_far = lhs.column_names.size();
         int lhsPos = find_or_add(x.first, lhs.column_names);
         if (capacity_so_far < lhs.column_names.size()) {
-            std::shared_ptr<Column> data = rhs.get_unique(x.first);
-            lhs.columns.push_back(data);
+            //std::shared_ptr<Column> data = rhs.get_unique(x.first);
+            lhs.columns.push_back(rhs.get_unique(x.first));
             lhs.columns.at(lhsPos)->replace_nan();
         }
     }

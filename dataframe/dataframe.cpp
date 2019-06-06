@@ -1,12 +1,12 @@
 #include "dataframe.h"
-#include "dataframeproxy.h"
 #include <iostream>
 #include <ostream>
 #include <stdexcept>
+#include "dataframeproxy.h"
 using std::make_pair;
 using std::make_shared;
-using std::shared_ptr;
 using std::pair;
+using std::shared_ptr;
 using std::string;
 using std::vector;
 
@@ -16,31 +16,24 @@ vector<int> get_index_positions(const vector<pair<string, int>> vec) {
     return res;
 }
 
-vector<string> DataFrame::get_index_names() {
+template <typename T>
+vector<string> get_names(T& cont) {
     vector<string> res;
-    for (auto const& idx_pair : index_names) res.push_back(idx_pair.first);
+    for (auto const& p : cont) res.push_back(p.first);
     return res;
 }
 
-vector<string> DataFrame::get_column_names() {
-    vector<string> res;
-    for (auto const& col_pair : column_names) res.push_back(col_pair.first);
-    return res;
-}
+vector<string> DataFrame::get_index_names() { return get_names(index_names); }
 
-DataFrame::DataFrame(): columns(), index_names(), column_names() {};
+vector<string> DataFrame::get_column_names() {return get_names(column_names);}
+
+DataFrame::DataFrame() : columns(), index_names(), column_names(){};
 
 std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) {
-    try {
-        int idx = column_names.at(s);
-        return make_shared<Column>(*columns.at(idx));
-    } catch (const std::out_of_range& e) {
-        string msg = "No column with name " + s;
-        throw std::out_of_range(msg);
-    }
+    return static_cast<const DataFrame&>(*this).get_unique(s);  // Item 3
 }
 
-std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) const{
+std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) const {
     try {
         int idx = column_names.at(s);
         return make_shared<Column>(*columns.at(idx));
@@ -51,6 +44,11 @@ std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) const{
 }
 
 std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) {
+    return static_cast<const DataFrame&>(*this).get_shared_copy(s);  // Item 3
+}
+
+std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) const
+{
     try {
         int idx = column_names.at(s);
         return columns[idx];
@@ -60,28 +58,23 @@ std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) {
     }
 }
 
-std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) const{
-    try {
-        int idx = column_names.at(s);
-        return columns[idx];
-    } catch (const std::out_of_range& e) {
-        string msg = "No column with name " + s;
-        throw std::out_of_range(msg);
-    }
-}
-
-shared_ptr<Column> DataFrame::get_unique(const string& s, const vector<int>& v) const {
+shared_ptr<Column> DataFrame::get_unique(const string& s,
+                                         const vector<int>& v) const {
     int i = column_names.at(s);
     Column new_col = Column(*columns[i], v);
     return make_shared<Column>(new_col);
 }
 
-const int DataFrame::find_index_position(const std::string& s)  const {
+const int DataFrame::find_index_position(const std::string& s) const {
     for (const auto& x : index_names) {
-        if (x.first == s)
-            return x.second;
+        if (x.first == s) return x.second;
     }
     return -1;
+}
+
+const int DataFrame::find_index_position(const std::string& s) {
+    return static_cast<const DataFrame&>(*this).find_index_position(
+        s);  // Item 3
 }
 
 DataFrame deep_copy(const DataFrame& lhs) {
