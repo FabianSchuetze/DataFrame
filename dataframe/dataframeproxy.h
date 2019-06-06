@@ -25,10 +25,12 @@ class DataFrame::DataFrameProxy {
     DataFrame& theDataFrame;
     std::vector<std::string> idxNames;
     std::vector<std::string> colNames;
-    template <typename T>
-    void add_or_replace(bool, int, const std::vector<T>&);
+    // DO I REALLY NEED THIS FUNCTION???
+    //template <typename T>
+    //void add_or_replace(bool, int, const std::vector<T>&);
     void add_or_replace(bool, int, const std::shared_ptr<Column>&);
     void check_column_size(size_t);
+    void insert_column(const std::string&, std::shared_ptr<Column>&);
     template <typename T>
     void insert_column(const std::string&, const std::vector<T>&);
 };

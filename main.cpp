@@ -35,12 +35,19 @@ int main() {
     vector<string> rhs_names = {"first_col", "third_col"};
     DataFrame df2 = DataFrame(idx_names2, col_names2, second);
     DataFrame df1 = DataFrame(idx_names, col_names, first);
-    std::cout << df1 << std::endl;
+    DataFrame df3 = df2;
     std::cout << df2 << std::endl;
-    df2 += df1;
+    fun2(df2);
     std::cout << df2 << std::endl;
-    df2 += 2;
+    fun(df2);
     std::cout << df2 << std::endl;
-    std::cout << df2["first_col"] + 2 << std::endl;
+    std::cout << df3 << std::endl;
+    //std::cout << df1 << std::endl;
+    //df2 += df1;
+    //std::cout << df2 << std::endl;
+    //df2 += 2;
+    //std::cout << df2 << std::endl;
+    //std::cout << df2["first_col"];
+    //std::cout << df2["first_col"] + 2 << std::endl;
     return 0;
 }

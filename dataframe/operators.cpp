@@ -9,20 +9,13 @@ using std::string;
 using std::transform;
 using std::vector;
 
-DataFrame::DataFrameProxy DataFrame::operator[](const string& col_name) {
+DataFrame::DataFrameProxy DataFrame::operator[](const vector<string>& names) {
     vector<string> idx = get_index_names();
-    //vector<string> idx;
-    //get_index_names(idx);
-    return DataFrameProxy(*this, idx, col_name);
+    return DataFrameProxy(*this, idx, names);
 }
 
-DataFrame::DataFrameProxy DataFrame::operator[](
-    const vector<string>& col_names) {
-    vector<string> idx = get_index_names();
-    //vector<string> idx;
-    //vector<string> idx;
-    //get_index_names(idx);
-    return DataFrameProxy(*this, idx, col_names);
+DataFrame::DataFrameProxy DataFrame::operator[](const string& name) {
+    return operator[](vector<string>{name});
 }
 
 DataFrame::DataFrameProxy DataFrame::loc(const string& s) {
@@ -50,26 +43,26 @@ int find_or_add(const string& name, std::map<string, int>& columns) {
     return columns.at(name);
 }
 
-template <typename T>
-void DataFrame::DataFrameProxy::add_or_replace(bool replace, int idx,
-                                               const vector<T>& data) {
-    if (replace) {
-        if (theDataFrame.columns[idx].use_count() > 1) {
-            std::cout << "copy-on-write\n";
-            theDataFrame.columns.at(idx) = make_shared<Column>(data);
-        } else {
-            *theDataFrame.columns[idx] = data;
-        }
-    } else
-        theDataFrame.columns.push_back(make_shared<Column>(data));
-}
+// DO I REALLY NEED THIS FUNCTION?!?
+//template <typename T>
+//void DataFrame::DataFrameProxy::add_or_replace(bool replace, int idx,
+                                               //const vector<T>& data) {
+    //if (replace) {
+        //if (theDataFrame.columns[idx].use_count() > 1) {
+            //std::cout << "copy-on-write\n";
+            //theDataFrame.columns.at(idx) = make_shared<Column>(data);
+        //} else {
+            ////theDataFrame.columns[idx].reset(make_shared<Column>(data));
+            //*theDataFrame.columns[idx] = data;
+        //}
+    //} else
+        //theDataFrame.columns.push_back(make_shared<Column>(data));
+//}
 
 void DataFrame::make_unique_if(const std::string& s) {
     if (this->use_count(s) > 1) {
         std::cout << "copy-on-write\n";
         std::shared_ptr<Column> data = get_unique(s);
-        //int idx = column_names[s];
-        //std::shared_ptr<Column> data = make_shared<Column>(*columns.at(idx));
         columns.at(column_names[s]) = data;
     }
 }
@@ -91,24 +84,31 @@ void DataFrame::DataFrameProxy::check_column_size(size_t check) {
         throw std::invalid_argument("different number of columns");
 }
 
+void DataFrame::DataFrameProxy::insert_column(const string& name,
+                                              std::shared_ptr<Column>& inp) {
+    std::cout << "calling this function2\n";
+    size_t current_cap = theDataFrame.size().second;
+    int lhsIndex = find_or_add(name, theDataFrame.column_names);
+    bool replace = theDataFrame.size().second == current_cap;
+    add_or_replace(replace , lhsIndex, inp);
+}
+
 template <typename T>
 void DataFrame::DataFrameProxy::insert_column(const string& name,
                                               const vector<T>& inp) {
-    size_t capacity_so_far = theDataFrame.column_names.size();
-    int lhsIndex = find_or_add(name, theDataFrame.column_names);
-    bool replace = theDataFrame.column_names.size() == capacity_so_far;
-    add_or_replace(replace, lhsIndex, inp);
+    std::cout << "calling this function\n";
+    Column col = Column(inp);
+    std::shared_ptr<Column> a = make_shared<Column>(col);
+    insert_column(name, a);
 }
+
 
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const DataFrameProxy& rhs) {
     check_column_size(rhs.colNames.size());
     for (size_t i = 0; i < colNames.size(); ++i) {
-        size_t capacity_so_far = theDataFrame.column_names.size();
-        int lhsIndex = find_or_add(colNames[i], theDataFrame.column_names);
         int rhsIndex = rhs.theDataFrame.column_names.at(rhs.colNames[i]);
-        bool replace = theDataFrame.column_names.size() == capacity_so_far;
-        add_or_replace(replace, lhsIndex, rhs.theDataFrame.columns[rhsIndex]);
+        insert_column(colNames[i], rhs.theDataFrame.columns[rhsIndex]);
     }
     return *this;
 }
@@ -145,7 +145,6 @@ std::ostream& operator<<(std::ostream& os,
     output += '\n';
     for (string const& row_name : df.idxNames) {
         int row = df.theDataFrame.find_index_position(row_name);
-        //int row = find_position(row_name, df.theDataFrame.index_names);
         if (row == -1) throw std::invalid_argument("Element not found");
         output += row_name + " ";
         for (string const& col : df.colNames) {
@@ -214,12 +213,9 @@ void append_missing_cols(DataFrame& lhs, const DataFrame& rhs) {
 
 DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs) {
     DataFrame sum = deep_copy(lhs);
-    //DataFrame sum = DataFrame(lhs.index_names, lhs.column_names, lhs.columns);
     append_missing_cols(sum, rhs);
     append_missing_rows(sum, rhs);
     return sum+= rhs;
-    //sum += rhs;
-    //return sum;
 }
 
 DataFrame operator+(const DataFrame::DataFrameProxy& lhs,
