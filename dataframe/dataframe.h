@@ -12,6 +12,7 @@
 class DataFrame {
    public:
     typedef std::pair<std::string, int> index_pair;
+    class ColumnIterator;
     class DataFrameProxy;
     friend DataFrame deep_copy(const DataFrame& lhs);
     DataFrame();
@@ -45,16 +46,42 @@ class DataFrame {
     DataFrame& operator+=(const DataFrame& rhs);
     template <typename T>
     DataFrame& operator+=(const T&);
+    // I CANNOT CREATE A NEW COLUMN LIKE THIS!!! MAYE THE CATCH SHOULD CREATE A
+    // NEW ONE?? AT LEAST THE NON-CONSTANT VERSION???
     template <class T>
     typename std::vector<T>::iterator begin(const std::string& s)  {
-        return (*columns[column_names.at(s)]).begin<T>();
+        try {
+            make_unique_if(s);
+            return (*columns[column_names.at(s)]).begin<T>();
+        } catch (const std::out_of_range& e) {
+             missing_col_error(e.what(), s);
+        }
+    }
+    template <class T>
+    typename std::vector<T>::const_iterator cbegin(const std::string& s)  {
+        try {
+            return (*columns[column_names.at(s)]).begin<T>();
+        } catch (const std::out_of_range& e) {
+             missing_col_error(e.what(), s);
+        }
     }
     template <class T>
     typename std::vector<T>::iterator end(const std::string& s) {
-        return (*columns[column_names.at(s)]).end<T>();
+        try {
+            make_unique_if(s);
+            return (*columns[column_names.at(s)]).end<T>();
+        } catch (const std::out_of_range& e) {
+            missing_col_error(e.what(), s);
+        }
     }
-    // template <class T> typename std::vector<T>::const_iterator
-    // begin(std::string);
+    template <class T>
+    typename std::vector<T>::const_iterator cend(const std::string& s) {
+        try {
+            return (*columns[column_names.at(s)]).end<T>();
+        } catch (const std::out_of_range& e) {
+            missing_col_error(e.what(), s);
+        }
+    }
     DataFrameProxy operator[](const std::string&);
     DataFrameProxy operator[](const std::vector<std::string>& col_name);
     DataFrameProxy loc(const std::string&);
@@ -77,6 +104,7 @@ class DataFrame {
     void append_nan_rows();
     void append_index(const std::string&);
     std::vector<std::string> frame(Column & c);
+    void missing_col_error(const char*, const std::string&);
 };
 
 template <typename T>

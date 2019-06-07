@@ -10,6 +10,12 @@ using std::shared_ptr;
 using std::string;
 using std::vector;
 
+
+void DataFrame::missing_col_error(const char* what, const string& s)
+{
+    std::string msg = " Column " + s + " not found";
+    throw std::out_of_range(what + msg);
+}
 vector<int> DataFrame::get_index_positions(const vector<string>& inp) const {
     vector<int> res;
     std::transform(inp.begin(), inp.end(), std::back_inserter(res),
