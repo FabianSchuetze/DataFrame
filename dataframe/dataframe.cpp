@@ -3,13 +3,13 @@
 #include <ostream>
 #include <stdexcept>
 #include "dataframeproxy.h"
+class ColumnIterator;
 using std::make_pair;
 using std::make_shared;
 using std::pair;
 using std::shared_ptr;
 using std::string;
 using std::vector;
-
 
 void DataFrame::missing_col_error(const char* what, const string& s)
 {
@@ -35,7 +35,6 @@ vector<string> get_names(T& cont) {
     vector<string> res;
     std::transform(cont.begin(), cont.end(), std::back_inserter(res),
             [](const pair<string, int>& ele) {return ele.first;});
-    //for (auto const& p : cont) res.push_back(p.first);
     return res;
 }
 

@@ -1,5 +1,6 @@
 #include "dataframe/dataframe.h"
 #include "dataframe/dataframeproxy.h"
+#include "dataframe/ColumnIterator.h"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -20,10 +21,19 @@ void fun2(DataFrame& df) {
 }
 
 void fill_df(DataFrame& df) {
-    std::vector<double>::iterator it = df.begin<double>("third_col");
-    std::vector<double>::iterator end = df.end<double>("third_col");
+    DataFrame::ColumnIterator<double> it = df.begin<double>("third_col");
+    DataFrame::ColumnIterator<double> e = df.end<double>("third_col");
+    //std::cout << *it << std::endl;
+    if (it != e) {
+        while (it != e)
+            std::cout << *it++ << std::endl;
+    } else {
+        std::cout << "considered identical\n";
+    }
+    //std::vector<double>::iterator it = df.begin<double>("third_col");
+    //std::vector<double>::iterator end = df.end<double>("third_col");
     //vector<double> res;
-    std::fill(it, end, 10);
+    //std::fill(it, end, 10);
 }
 
 int main() {
@@ -44,8 +54,10 @@ int main() {
     DataFrame df1 = df2;
     vector<double> res = {49, 29};
     std::cout << df2 << std::endl;
+    df2.reorder_index();
+    fill_df(df2);
     // THIS CANNOT BE DONE YET!!!!
-    df2.loc("2") = res;
+    //df2.loc("2") = res;
     std::cout << df2 << std::endl;
     return 0;
 }

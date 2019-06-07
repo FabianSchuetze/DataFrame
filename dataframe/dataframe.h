@@ -1,5 +1,6 @@
 #ifndef GUARD_dataframe_h
 #define GUARD_dataframe_h
+#include "column.h"  //need include!
 #include <algorithm>
 #include <cmath>
 #include <map>
@@ -7,13 +8,16 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include "column.h"  //need include!
+#include <random>
 
 class DataFrame {
    public:
     typedef std::pair<std::string, int> index_pair;
+    template <class T>
     class ColumnIterator;
     class DataFrameProxy;
+    template <class T>
+    friend class ColumnIterator;
     friend DataFrame deep_copy(const DataFrame& lhs);
     DataFrame();
     DataFrame(const DataFrameProxy&);
@@ -49,38 +53,12 @@ class DataFrame {
     // I CANNOT CREATE A NEW COLUMN LIKE THIS!!! MAYE THE CATCH SHOULD CREATE A
     // NEW ONE?? AT LEAST THE NON-CONSTANT VERSION???
     template <class T>
-    typename std::vector<T>::iterator begin(const std::string& s)  {
-        try {
-            make_unique_if(s);
-            return (*columns[column_names.at(s)]).begin<T>();
-        } catch (const std::out_of_range& e) {
-             missing_col_error(e.what(), s);
-        }
-    }
+    ColumnIterator<T> begin(const std::string& s);
     template <class T>
-    typename std::vector<T>::const_iterator cbegin(const std::string& s)  {
-        try {
-            return (*columns[column_names.at(s)]).begin<T>();
-        } catch (const std::out_of_range& e) {
-             missing_col_error(e.what(), s);
-        }
-    }
-    template <class T>
-    typename std::vector<T>::iterator end(const std::string& s) {
-        try {
-            make_unique_if(s);
-            return (*columns[column_names.at(s)]).end<T>();
-        } catch (const std::out_of_range& e) {
-            missing_col_error(e.what(), s);
-        }
-    }
-    template <class T>
-    typename std::vector<T>::const_iterator cend(const std::string& s) {
-        try {
-            return (*columns[column_names.at(s)]).end<T>();
-        } catch (const std::out_of_range& e) {
-            missing_col_error(e.what(), s);
-        }
+    ColumnIterator<T> end(const std::string&);
+    void reorder_index() {
+        auto rng = std::default_random_engine{0};
+        std::shuffle(index_names.begin(), index_names.end(), rng);
     }
     DataFrameProxy operator[](const std::string&);
     DataFrameProxy operator[](const std::vector<std::string>& col_name);

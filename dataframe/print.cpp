@@ -61,7 +61,6 @@ std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
 std::ostream& operator<<(std::ostream& os,
                          const DataFrame::DataFrameProxy& df) {
     vector<string> output = frame_index(df.idxNames);
-    //vector<string> titles = df.colNames;
     vector<int> subset = df.theDataFrame.get_index_positions(df.idxNames);
     for (string const& colName : df.colNames) {
         std::shared_ptr<Column> c = df.theDataFrame.get_unique(colName, subset);

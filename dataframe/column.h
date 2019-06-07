@@ -26,6 +26,12 @@ class Column {
     void push_back(const T);
     const int size();
     const int size() const;
+    template <class T> T get_value(int i) {
+        if (std::holds_alternative<std::vector<T>>(col))
+            return std::get<std::vector<T>>(col)[i];
+        else
+            throw std::invalid_argument("not in here");
+    }
     template <class V>
     V operator[](int);
     template <typename V>
