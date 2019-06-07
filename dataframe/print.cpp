@@ -43,13 +43,15 @@ void hcat(vector<string>& lhs, const vector<string> rhs) {
     }
 }
 
+vector<string> frame_index(vector<string> inp) {
+    inp.insert(inp.begin(), string(""));
+    vector<string> output = frame(inp);
+    return output;
+}
 std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
-    vector<string> titles = df.get_column_names();
-    vector<string> index = df.get_index_names();
-    index.insert(index.begin(), "index");
-    vector<string> output = frame(index);
-    for (int i = 0; i < titles.size(); ++i) {
-        vector<string> rhs = frame(conversion(titles[i], *df.columns[i]));
+    vector<string> output = frame_index(df.get_index_names());
+    for (const std::pair<string, int>& x : df.column_names) {
+        vector<string> rhs = frame(conversion(x.first, *df.columns[x.second]));
         hcat(output, rhs);
     }
     os << output;
@@ -58,14 +60,12 @@ std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
 
 std::ostream& operator<<(std::ostream& os,
                          const DataFrame::DataFrameProxy& df) {
-    vector<string> titles = df.colNames;
-    vector<string> index = df.idxNames;
-    index.insert(index.begin(), "index");
-    vector<string> output = frame(index);
+    vector<string> output = frame_index(df.idxNames);
+    //vector<string> titles = df.colNames;
     vector<int> subset = df.theDataFrame.get_index_positions(df.idxNames);
-    for (auto const& title : titles) {
-        std::shared_ptr<Column> col = df.theDataFrame.get_unique(title, subset);
-        vector<string> rhs = frame(conversion(title, *col));
+    for (string const& colName : df.colNames) {
+        std::shared_ptr<Column> c = df.theDataFrame.get_unique(colName, subset);
+        vector<string> rhs = frame(conversion(colName, *c));
         hcat(output, rhs);
     }
     os << output;

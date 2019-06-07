@@ -12,23 +12,24 @@ using std::vector;
 
 vector<int> DataFrame::get_index_positions(const vector<string>& inp) const {
     vector<int> res;
-    for (const string& n: inp) {
-        int idx = find_index_position(n);
-        res.push_back(idx);
-    }
+    std::transform(inp.begin(), inp.end(), std::back_inserter(res),
+            [this](const string& s) {return find_index_position(s);});
     return res;
 }
 
 vector<int> DataFrame::get_index_positions() const{
     vector<int> res;
-    for (auto const& x : index_names) res.push_back(x.second);
+    std::transform(index_names.begin(), index_names.end(), back_inserter(res),
+                   [](const pair<string, int>& ele) {return ele.second;});
     return res;
 }
 
 template <typename T>
 vector<string> get_names(T& cont) {
     vector<string> res;
-    for (auto const& p : cont) res.push_back(p.first);
+    std::transform(cont.begin(), cont.end(), std::back_inserter(res),
+            [](const pair<string, int>& ele) {return ele.first;});
+    //for (auto const& p : cont) res.push_back(p.first);
     return res;
 }
 

@@ -46,14 +46,15 @@ class DataFrame {
     template <typename T>
     DataFrame& operator+=(const T&);
     template <class T>
-    typename std::vector<T>::iterator begin(std::string);
+    typename std::vector<T>::iterator begin(const std::string& s)  {
+        return (*columns[column_names.at(s)]).begin<T>();
+    }
     template <class T>
-    typename std::vector<T>::iterator end(std::string);
+    typename std::vector<T>::iterator end(const std::string& s) {
+        return (*columns[column_names.at(s)]).end<T>();
+    }
     // template <class T> typename std::vector<T>::const_iterator
     // begin(std::string);
-    template <class T>
-    typename std::vector<T>::const_iterator end(std::string);
-    // what shall I do with the constant operator?
     DataFrameProxy operator[](const std::string&);
     DataFrameProxy operator[](const std::vector<std::string>& col_name);
     DataFrameProxy loc(const std::string&);
