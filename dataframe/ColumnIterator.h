@@ -6,11 +6,9 @@ template <class T>
 class DataFrame::ColumnIterator {
     public:
         template <class V>
-        friend bool operator==(const ColumnIterator<V>&, 
-                          const ColumnIterator<V>&);
+        friend bool operator==(const iter<V>&, const iter<V>&);
         template <class V>
-        friend bool operator!=(const ColumnIterator<V>&, 
-                          const ColumnIterator<V>&);
+        friend bool operator!=(const iter<V>&, const iter<V>&);
         ColumnIterator();
         ColumnIterator(DataFrame& a, int n, size_t sz=0):
             theDataFrame(a), wptr(a.columns[n]), curr(sz) {}

@@ -16,10 +16,8 @@ class DataFrame::DataFrameProxy {
     DataFrameProxy& operator=(const std::vector<T>&);
     ~DataFrameProxy() = default;
     friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
-    friend DataFrame operator+(const DataFrame::DataFrameProxy&,
-                               const DataFrame::DataFrameProxy&);
-    friend DataFrame operator+(const DataFrame&,
-                               const DataFrame::DataFrameProxy&);
+    friend DataFrame operator+(const DataFrameProxy&, const DataFrameProxy&);
+    friend DataFrame operator+(const DataFrame&, const DataFrameProxy&);
 
    private:
     DataFrame& theDataFrame;
