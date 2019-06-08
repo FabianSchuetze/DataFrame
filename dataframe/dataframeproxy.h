@@ -25,7 +25,8 @@ class DataFrame::DataFrameProxy {
     std::vector<std::string> colNames;
     void add_column(const std::shared_ptr<Column>&);
     void replace_column(int, const std::shared_ptr<Column>&);
-    void check_size(size_t, std::string);
+    void check_col_width(size_t, std::string);
+    void check_col_len(size_t, std::string);
     void insert_column(const std::string&, std::shared_ptr<Column>&);
     template <typename T>
     void insert_column(const std::string&, const std::vector<T>&);

@@ -26,6 +26,7 @@ class Column {
     void push_back(const T);
     const size_t size();
     const size_t size() const;
+    std::string type_name();
     template <class T> T& get_value(int i) {
         if (std::holds_alternative<std::vector<T>>(col))
             return std::get<std::vector<T>>(col)[i];

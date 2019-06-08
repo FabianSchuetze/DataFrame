@@ -23,6 +23,15 @@ void Column::replace_nan() {
         replace_nan(i);
 }
 
+string Column::type_name() {
+    if (std::get_if<vector<double>>(&col))
+        return "double";
+    else if (std::get_if<vector<string>>(&col))
+        return "string";
+    else
+        throw std::invalid_argument("Column has no elements");
+}
+
 void Column::push_back_nan() {
     typedef std::numeric_limits<double> nan;
     if (vector<double>* val = std::get_if<vector<double>>(&col))

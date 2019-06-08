@@ -96,7 +96,7 @@ int DataFrame::find_index_pair(const pair<string, int>& ele) {
             return pos;
         pos++;
     }
-    return -1;
+    throw std::out_of_range("Could not find the index argument");
 }
 
 const int DataFrame::find_index_position(const std::string& s) {
@@ -202,12 +202,8 @@ void DataFrame::drop_row(const string& s) {
     vector<string> c = get_column_names();
     auto fun = [&](int a, const string& s){return a + use_count(s); };
     if (std::accumulate(c.begin(), c.end(), 0, fun) > size().second) 
-    //if (total > size().second)
         make_unique(c);
     int pos = find_index_pair(make_pair(s, find_index_position(s)));
-    if (pos < 0)
-        throw std::out_of_range("Could not find the index argument");
-    //int pos = find_index_position(s);
     index_names.erase(index_names.begin() + pos);
 }
 
@@ -215,8 +211,25 @@ void DataFrame::drop_row(const string& s) {
 void DataFrame::dropna() {
     vector<pair<string, int>> index_copy = index_names;
     for (auto index_pair : index_copy) {
-        bool is_null = contains_null(index_pair.first);
-        if (is_null)
+        if (contains_null(index_pair.first))
             drop_row(index_pair.first);
     }
 }
+
+template <typename T>
+vector<string> DataFrame::get_column_names() {
+    string target;
+    vector<pair<string, int>> res;
+    if (std::is_same<T, double>::value)
+        target = "double";
+    if (std::is_same<T, string>::value)
+        target = "string";
+    auto fun = [&](const pair<string, int>& x) {
+        return columns[x.second]->type_name() == target ? true : false;};
+    std::copy_if(column_names.begin(), column_names.end(),
+            std::back_inserter(res), fun);
+    return get_names(res);
+}
+
+template vector<string> DataFrame::get_column_names<double>();
+template vector<string> DataFrame::get_column_names<string>();

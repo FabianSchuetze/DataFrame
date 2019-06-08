@@ -39,6 +39,7 @@ bool operator!=(const DataFrame::ColumnIterator<T>& lhs,
 template <class T>
 DataFrame::ColumnIterator<T> DataFrame::begin(const std::string& s) {
     try {
+        make_unique_if(s);
         return ColumnIterator<T>(*this, column_names.at(s));
     } catch (std::out_of_range& e) {
         throw std::out_of_range("Column: " + s + " not found");
@@ -48,6 +49,7 @@ DataFrame::ColumnIterator<T> DataFrame::begin(const std::string& s) {
 template <class T>
 DataFrame::ColumnIterator<T> DataFrame::end(const std::string& s) {
     try {
+        make_unique_if(s);
         return ColumnIterator<T>(*this, column_names.at(s), index_names.size());
     } catch (std::out_of_range& e) {
         throw std::out_of_range("Column: " + s + " not found");
