@@ -1,14 +1,14 @@
 #ifndef GUARD_dataframe_h
 #define GUARD_dataframe_h
-#include "column.h"  //need include!
 #include <algorithm>
 #include <cmath>
 #include <map>
 #include <memory>
+#include <random>
 #include <string>
 #include <utility>
 #include <vector>
-#include <random>
+#include "column.h"  //need include!
 
 class DataFrame {
    public:
@@ -27,6 +27,8 @@ class DataFrame {
     using const_iter = typename DataFrame::ConstColumnIterator<T>;
     template <typename T>
     using iter = typename DataFrame::ColumnIterator<T>;
+    typedef std::shared_ptr<Column> SharedCol;
+
     DataFrame();
     DataFrame(const DataFrameProxy&);
     template <typename T>
@@ -36,10 +38,8 @@ class DataFrame {
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
     friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
     friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
-    friend DataFrame operator+(const DataFrame::DataFrameProxy&,
-                               const DataFrame::DataFrameProxy&);
-    friend DataFrame operator+(const DataFrame&,
-                               const DataFrame::DataFrameProxy&);
+    friend DataFrame operator+(const DataFrameProxy&, const DataFrameProxy&);
+    friend DataFrame operator+(const DataFrame&, const DataFrameProxy&);
     template <typename T>
     friend DataFrame operator+(const DataFrame& lhs, const T& t) {
         return deep_copy(lhs) += t;
@@ -48,25 +48,24 @@ class DataFrame {
         const DataFrame&, const DataFrame&);
     friend void append_missing_rows(DataFrame&, const DataFrame&);
     friend void append_missing_cols(DataFrame&, const DataFrame&);
-    std::shared_ptr<Column> get_unique(const std::string&);
-    std::shared_ptr<Column> get_unique(const std::string&) const;
-    std::shared_ptr<Column> get_unique(const std::string&,
-                                       const std::vector<int>&) const;
-    std::shared_ptr<Column> get_shared_copy(const std::string&);
-    std::shared_ptr<Column> get_shared_copy(const std::string&) const;
+    SharedCol get_unique(const std::string&);
+    SharedCol get_unique(const std::string&) const;
+    SharedCol get_unique(const std::string&, const std::vector<int>&) const;
+    SharedCol get_shared_copy(const std::string&);
+    SharedCol get_shared_copy(const std::string&) const;
     DataFrame& operator+=(const DataFrame& rhs);
     template <typename T>
     DataFrame& operator+=(const T&);
     // I CANNOT CREATE A NEW COLUMN LIKE THIS!!! MAYE THE CATCH SHOULD CREATE A
     // NEW ONE?? AT LEAST THE NON-CONSTANT VERSION???
     template <class T>
-    ColumnIterator<T> begin(const std::string& s);
+    iter<T> begin(const std::string&);
     template <class T>
-    ConstColumnIterator<T> cbegin(const std::string& s);
+    const_iter<T> cbegin(const std::string&);
     template <class T>
-    ColumnIterator<T> end(const std::string&);
+    iter<T> end(const std::string&);
     template <class T>
-    ConstColumnIterator<T> cend(const std::string&);
+    const_iter<T> cend(const std::string&);
     void reorder_index() {
         auto rng = std::default_random_engine{0};
         std::shuffle(index_names.begin(), index_names.end(), rng);
@@ -92,7 +91,7 @@ class DataFrame {
     void make_unique_if(const std::string&);
     void append_nan_rows();
     void append_index(const std::string&);
-    std::vector<std::string> frame(Column & c);
+    std::vector<std::string> frame(Column& c);
     void missing_col_error(const char*, const std::string&);
 };
 
