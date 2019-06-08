@@ -70,6 +70,9 @@ class DataFrame {
         auto rng = std::default_random_engine{0};
         std::shuffle(index_names.begin(), index_names.end(), rng);
     }
+    //void dropna(const std::string&);
+    //void dropna(const std::vector<std::string>&);
+    void dropna();
     DataFrameProxy operator[](const std::string&);
     DataFrameProxy operator[](const std::vector<std::string>& col_name);
     DataFrameProxy loc(const std::string&);
@@ -79,6 +82,7 @@ class DataFrame {
     std::vector<std::string> get_index_names() const;
     std::vector<std::string> get_column_names();
     std::vector<std::string> get_column_names() const;
+    int get_column_position(const std::string&);
     const int find_index_position(const std::string&) const;
     const int find_index_position(const std::string&);
     std::vector<int> get_index_positions() const;
@@ -93,6 +97,10 @@ class DataFrame {
     void append_index(const std::string&);
     std::vector<std::string> frame(Column& c);
     void missing_col_error(const char*, const std::string&);
+    void drop_row(const std::string&);
+    bool contains_null(const std::string&);
+    void make_unique(const std::vector<std::string>&);
+    int find_index_pair(const std::pair<std::string, int>&);
 };
 
 template <typename T>

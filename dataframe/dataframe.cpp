@@ -82,9 +82,19 @@ shared_ptr<Column> DataFrame::get_unique(const string& s,
     return make_shared<Column>(new_col);
 }
 
-const int DataFrame::find_index_position(const std::string& s) const {
+const int DataFrame::find_index_position(const string& s) const {
     for (const auto& x : index_names) {
         if (x.first == s) return x.second;
+    }
+    return -1;
+}
+
+int DataFrame::find_index_pair(const pair<string, int>& ele) {
+    int pos = 0;
+    for (const auto& x: index_names) {
+        if (x.first == ele.first && x.second == ele.second)
+            return pos;
+        pos++;
     }
     return -1;
 }
@@ -163,4 +173,50 @@ void DataFrame::append_nan_rows() {
 
 void DataFrame::append_index(const string& s) {
     index_names.push_back(make_pair(s, index_names.size()));
+}
+
+int DataFrame::get_column_position(const std::string& s) {
+    try {
+        return column_names.at(s);
+    } catch (std::out_of_range& e) {
+        throw std::out_of_range("Column " + s + " not found");
+    }
+}
+
+bool DataFrame::contains_null(const string& s) {
+    int pos = find_index_position(s);
+    for (auto const& cols : column_names) {
+        bool is_null = columns[cols.second]->is_null(pos);
+        if (is_null)
+            return true;
+    }
+    return false;
+}
+
+void DataFrame::make_unique(const std::vector<string>& vec) {
+    for (const string& s: vec)
+        columns.at(column_names[s]) = get_unique(s);
+}
+
+void DataFrame::drop_row(const string& s) {
+    vector<string> c = get_column_names();
+    auto fun = [&](int a, const string& s){return a + use_count(s); };
+    if (std::accumulate(c.begin(), c.end(), 0, fun) > size().second) 
+    //if (total > size().second)
+        make_unique(c);
+    int pos = find_index_pair(make_pair(s, find_index_position(s)));
+    if (pos < 0)
+        throw std::out_of_range("Could not find the index argument");
+    //int pos = find_index_position(s);
+    index_names.erase(index_names.begin() + pos);
+}
+
+// I THINK THIS IS NOT EXCEPTION SAFE!!!
+void DataFrame::dropna() {
+    vector<pair<string, int>> index_copy = index_names;
+    for (auto index_pair : index_copy) {
+        bool is_null = contains_null(index_pair.first);
+        if (is_null)
+            drop_row(index_pair.first);
+    }
 }

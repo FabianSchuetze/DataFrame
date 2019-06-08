@@ -38,12 +38,20 @@ bool operator!=(const DataFrame::ColumnIterator<T>& lhs,
 
 template <class T>
 DataFrame::ColumnIterator<T> DataFrame::begin(const std::string& s) {
-    return ColumnIterator<T>(*this, column_names.at(s));
+    try {
+        return ColumnIterator<T>(*this, column_names.at(s));
+    } catch (std::out_of_range& e) {
+        throw std::out_of_range("Column: " + s + " not found");
+    }
 }
 
 template <class T>
 DataFrame::ColumnIterator<T> DataFrame::end(const std::string& s) {
-    return ColumnIterator<T>(*this, column_names.at(s), index_names.size());
+    try {
+        return ColumnIterator<T>(*this, column_names.at(s), index_names.size());
+    } catch (std::out_of_range& e) {
+        throw std::out_of_range("Column: " + s + " not found");
+    }
 }
 
 template <class T>

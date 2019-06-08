@@ -38,12 +38,20 @@ bool operator!=(const DataFrame::ConstColumnIterator<T>& lhs,
 
 template <class T>
 DataFrame::ConstColumnIterator<T> DataFrame::cbegin(const std::string& s) {
-    return ConstColumnIterator<T>(*this, column_names.at(s));
+    try {
+        return ConstColumnIterator<T>(*this, column_names.at(s));
+    } catch (std::out_of_range& e) {
+        throw std::out_of_range("Column: " + s + " not found");
+    }
 }
 
 template <class T>
 DataFrame::ConstColumnIterator<T> DataFrame::cend(const std::string& s) {
-    return ConstColumnIterator<T>(*this, column_names.at(s), index_names.size());
+    try {
+        return ConstColumnIterator<T>(*this, column_names.at(s), index_names.size());
+    } catch (std::out_of_range& e) {
+        throw std::out_of_range("Column: " + s + " not found");
+    }
 }
 
 template <class T>

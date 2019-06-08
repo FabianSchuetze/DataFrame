@@ -24,32 +24,14 @@ class Column {
     Column& plus(const Column&, const std::vector<std::pair<int, int>>&);
     template <class T>
     void push_back(const T);
-    const int size();
-    const int size() const;
+    const size_t size();
+    const size_t size() const;
     template <class T> T& get_value(int i) {
         if (std::holds_alternative<std::vector<T>>(col))
             return std::get<std::vector<T>>(col)[i];
         else
             throw std::invalid_argument("not in here");
     }
-    //template <class V>
-    //V operator[](int);
-    /* I DONT THINK I NEED THE ITERATOR FROM THE COLUMN AS I HAVE THE ITERATOR
-     * CLASS - DO I ? */
-    //template <typename V>
-    //typename std::vector<V>::iterator begin() {
-        //if (std::holds_alternative<std::vector<V>>(col))
-            //return std::get<std::vector<V>>(col).begin();
-        //else
-            //throw std::invalid_argument("not in here");
-    //}
-    //template <typename V>
-    //typename std::vector<V>::iterator end() {
-        //if (std::holds_alternative<std::vector<V>>(col))
-            //return std::get<std::vector<V>>(col).end();
-        //else
-            //throw std::invalid_argument("not in here");
-    //}
     void append_string(std::string&, int pos);
     void push_back_nan();
     std::string to_string(int) const;
@@ -61,6 +43,7 @@ class Column {
     std::variant<std::vector<double>, std::vector<std::string>> col;
     void replace_nan();
     void replace_nan(int);
+    bool is_null(size_t);
 };
 
 std::ostream& operator<<(std::ostream&, const Column&);

@@ -115,39 +115,6 @@ void append_string(Column& c, std::string& s, int pos) {
     s += ' ';
 }
 
-//std::ostream& operator<<(std::ostream& os,
-                         //const DataFrame::DataFrameProxy& df) {
-    //string output = " ";
-    //for (string const& x : df.colNames) output += x + ' ';
-    //output += '\n';
-    //for (string const& row_name : df.idxNames) {
-        //int row = df.theDataFrame.find_index_position(row_name);
-        //if (row == -1) throw std::invalid_argument("Element not found");
-        //output += row_name + " ";
-        //for (string const& col : df.colNames) {
-            //int col_number = df.theDataFrame.column_names[col];
-            //append_string(*df.theDataFrame.columns[col_number], output, row);
-        //}
-        //output += '\n';
-    //}
-    //os << output;
-    //return os;
-//}
-
-//std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
-    //string output = " ";
-    //for (auto const& x : df.column_names) output += x.first + ' ';
-    //output += '\n';
-    //for (auto const& row : df.index_names) {
-        //output += row.first + " ";
-        //for (auto const& col : df.column_names)
-            //append_string(*df.columns[col.second], output, row.second);
-        //output += '\n';
-    //}
-    //os << output;
-    //return os;
-//}
-
 DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
     vector<pair<int, int>> indices = correspondence_position(*this, rhs);
     for (auto& x : column_names) {

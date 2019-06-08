@@ -30,27 +30,27 @@ void fill_df(DataFrame& df) {
 }
 
 int main() {
-    vector<vector<double>> first = {{10, 20}, {30, 40}};
+    typedef std::numeric_limits<double> nan;
+    double d = nan::quiet_NaN();
+    vector<vector<double>> first = {{10, d, 20, d}, {30, d, 40, d}};
     vector<vector<double>> second = {{-10, -20}, {-30, -40}, {-100, 6}};
-    vector<vector<string>> strings = {{"f", "l"}, {"m", "a"}};
     vector<vector<string>> strings2 = {{"f", "l"}, {"m", "a"}, {"as", "ssd"}};
     vector<string> string_col = {"new_test", "second"};
-    vector<double> tmp = {1120};
     vector<string> col_names = {"first_col", "second_col"};
     vector<string> col_names2 = {"first_col", "second_col", "third_col"};
-    vector<string> idx_names = {"1", "2"};
+    vector<string> idx_names = {"1", "2", "4", "5"};
     vector<string> idx_names2 = {"3", "1"};
-    vector<string> long_names = {"first_col", "second_col", "third_col"};
-    vector<string> lhs_names = {"first_col", "second_col"};
-    vector<string> rhs_names = {"first_col", "third_col"};
-    DataFrame df2 = DataFrame(idx_names2, col_names2, second);
+    DataFrame df2 = DataFrame(idx_names, col_names, first);
     DataFrame df1 = df2;
-    vector<double> res = {49, 29};
+    //std::cout << df1["first_col"] + df1["first_col"];
+    //vector<double> res = {49, 29};
     std::cout << df2 << std::endl;
     df2.reorder_index();
-    fill_df(df2);
-    // THIS CANNOT BE DONE YET!!!!
-    //df2.loc("2") = res;
+    df2.dropna();
     std::cout << df2 << std::endl;
+    //fill_df(df2);
+    //// THIS CANNOT BE DONE YET!!!!
+    ////df2.loc("2") = res;
+    //std::cout << df2 << std::endl;
     return 0;
 }

@@ -7,16 +7,6 @@ using std::string;
 using std::transform;
 using std::vector;
 
-//template <typename V>
-//V Column::operator[](int pos) {
-    //if (holds_alternative<vector<V>>(col))
-        //return std::get<vector<V>>(col)[pos];
-    //else
-        //throw std::invalid_argument("not in here");
-//}
-//template double Column::operator[](int);
-//template string Column::operator[](int);
-
 Column::Column(const Column& c, const vector<int>& subsets) {
     if (const vector<double>* val = std::get_if<vector<double>>(&c.col)) {
         col = vector<double>();
@@ -29,7 +19,7 @@ Column::Column(const Column& c, const vector<int>& subsets) {
 }
 
 void Column::replace_nan() {
-    for (int i = 0; i < size(); i++)
+    for (size_t i = 0; i < size(); i++)
         replace_nan(i);
 }
 
@@ -54,16 +44,11 @@ void Column::push_back(const T t) {
     std::get<vector<T>>(col).push_back(t);
 }
 
-const int Column::size() {
-    if (holds_alternative<vector<double>>(col))
-        return std::get<vector<double>>(col).size();
-    else if (holds_alternative<vector<string>>(col))
-        return std::get<vector<string>>(col).size();
-    else
-        return 0;
+const size_t Column::size() {
+    return static_cast<const Column&>(*this).size();
 }
 
-const int Column::size() const{
+const size_t Column::size() const{
     if (holds_alternative<vector<double>>(col))
         return std::get<vector<double>>(col).size();
     else if (holds_alternative<vector<string>>(col))
@@ -97,7 +82,7 @@ std::ostream& operator<<(std::ostream& os, const Column& df) {
 }
 
 template <typename T>
-bool is_null(const T& t) {
+bool val_is_null(const T& t) {
     if constexpr (std::is_same<T, double>::value)
         return std::isnan(t);
     else if (std::is_same<T, string>::value)
@@ -108,12 +93,23 @@ template <typename T>
 void Column::add_elements(vector<T>* lhs, const vector<T>& rhs,
                           const vector<pair<int, int>>& indices) {
     for (auto const& index_pair : indices) {
-        if (index_pair.second > -1 && !is_null(lhs->at(index_pair.first)) &&
-            !is_null(rhs[index_pair.second]))
+        if (index_pair.second > -1 && !val_is_null(lhs->at(index_pair.first)) &&
+            !val_is_null(rhs[index_pair.second]))
             lhs->at(index_pair.first) += rhs[index_pair.second];
         else
             replace_nan(index_pair.first);
     }
+}
+
+
+bool Column::is_null(size_t pos) {
+    if (pos >= size())
+        throw std::out_of_range("indexing Column past its size");
+    if (const vector<double>* v = std::get_if<vector<double>>(&col))
+        return std::isnan(v->at(pos));
+    else if (const vector<string>* v = std::get_if<vector<string>>(&col))
+        return v->at(pos) == "NA";
+    return true; //avoid compiler warning
 }
 
 Column& Column::plus(const Column& rhs,
