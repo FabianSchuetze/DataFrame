@@ -31,13 +31,6 @@ int find_or_add(const string& name, std::map<string, int>& columns) {
     return columns.at(name);
 }
 
-void DataFrame::make_unique_if(const std::string& s) {
-    if (this->use_count(s) > 1) {
-        std::cout << "copy-on-write\n";
-        columns.at(column_names[s]) = get_unique(s);
-    }
-}
-
 void DataFrame::DataFrameProxy::replace_column(int idx,
                                                const shared_ptr<Column>& data) {
     if (theDataFrame.columns[idx].use_count() > 1)
@@ -50,8 +43,12 @@ void DataFrame::DataFrameProxy::add_column(const shared_ptr<Column>& data) {
     theDataFrame.columns.push_back(data);
 }
 
-void DataFrame::DataFrameProxy::check_size(size_t check, string m) {
+void DataFrame::DataFrameProxy::check_col_width(size_t check, string m) {
     if (colNames.size() != check) throw std::invalid_argument(m);
+}
+
+void DataFrame::DataFrameProxy::check_col_len(size_t check, string m) {
+    if (theDataFrame.size().first != check) throw std::invalid_argument(m);
 }
 
 void DataFrame::DataFrameProxy::insert_column(const string& name,
@@ -80,10 +77,11 @@ DataFrame& DataFrame::operator=(const DataFrame& rhs) {
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const DataFrameProxy& rhs) {
     if (this != &rhs) {
-        check_size(rhs.colNames.size(), string{"rhs and lhs col num differ"});
+        check_col_width(rhs.colNames.size(), string{"rhs and lhs col num differ"});
         for (size_t i = 0; i < colNames.size(); ++i) {
             string rhsName = rhs.colNames[i];
             shared_ptr<Column> col = rhs.theDataFrame.get_shared_copy(rhsName);
+            check_col_len(col->size(), "column lenght of DataFrames differ");
             insert_column(colNames[i], col);
         }
     }
@@ -92,7 +90,9 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
 
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<vector<double>>& others) {
-    check_size(others.size(), string{"passed number of vectors != columns"});
+    check_col_width(others.size(), string{"passed number of vectors != columns"});
+    for (size_t i = 0; i < others.size(); ++i)
+        check_col_len(others[i].size(), string{"len of vector num != colum"});
     for (size_t i = 0; i < colNames.size(); ++i)
         insert_column(colNames[i], others[i]);
     return *this;
@@ -101,7 +101,9 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
 template <typename T>
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<T>& other_col) {
-    check_size(1, string{"must select one column"});
+    std::cout << "in here\n";
+    check_col_width(1, string{"must select one column"});
+    check_col_len(other_col.size(), string{"len of vector num != colum"});
     insert_column(colNames[0], other_col);
     return *this;
 }

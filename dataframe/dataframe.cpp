@@ -89,6 +89,17 @@ const int DataFrame::find_index_position(const string& s) const {
     return -1;
 }
 
+template <typename T>
+int get_pair(const T& cont, const pair<string, int>& ele) {
+    int pos = -1;
+    for (const auto& x: cont) {
+        if (x.first == ele.first && x.second == ele.second)
+            return pos;
+        pos++;
+    }
+    return pos;
+}
+
 int DataFrame::find_index_pair(const pair<string, int>& ele) {
     int pos = 0;
     for (const auto& x: index_names) {
@@ -193,16 +204,29 @@ bool DataFrame::contains_null(const string& s) {
     return false;
 }
 
-void DataFrame::make_unique(const std::vector<string>& vec) {
-    for (const string& s: vec)
-        columns.at(column_names[s]) = get_unique(s);
+void DataFrame::make_unique(const std::string& s) {
+    columns.at(column_names[s]) = get_unique(s);
 }
 
-void DataFrame::drop_row(const string& s) {
-    vector<string> c = get_column_names();
+void DataFrame::make_unique(const std::vector<string>& vec) {
+    for (const string& s: vec)
+        make_unique(s);
+}
+
+void DataFrame::make_unique_if(const std::string& s) {
+    if (this->use_count(s) > 1) {
+        std::cout << "copy-on-write\n";
+        make_unique(s);
+    }
+}
+
+void DataFrame::make_unique_if(const vector<string>& c) {
     auto fun = [&](int a, const string& s){return a + use_count(s); };
     if (std::accumulate(c.begin(), c.end(), 0, fun) > size().second) 
         make_unique(c);
+}
+
+void DataFrame::drop_row(const string& s) {
     int pos = find_index_pair(make_pair(s, find_index_position(s)));
     index_names.erase(index_names.begin() + pos);
 }
@@ -211,8 +235,10 @@ void DataFrame::drop_row(const string& s) {
 void DataFrame::dropna() {
     vector<pair<string, int>> index_copy = index_names;
     for (auto index_pair : index_copy) {
-        if (contains_null(index_pair.first))
+        if (contains_null(index_pair.first)) {
+            make_unique_if(get_column_names());
             drop_row(index_pair.first);
+        }
     }
 }
 
@@ -233,3 +259,7 @@ vector<string> DataFrame::get_column_names() {
 
 template vector<string> DataFrame::get_column_names<double>();
 template vector<string> DataFrame::get_column_names<string>();
+
+void DataFrame::drop_column(const string& s) {
+    column_names.erase(s);
+}
