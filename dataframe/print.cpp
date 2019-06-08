@@ -5,10 +5,15 @@
 using std::string;
 using std::vector;
 
-vector<string> conversion(const string& title, const Column& c) {
+vector<string> conversion(const string& title,
+                          const vector<int>& idx,
+                          const Column& c) {
     vector<string> res = {title};
-    for (int i = 0; i < c.size() && i < 5; ++i) {
-        res.push_back(c.to_string(i));
+    int i =0;
+    for (auto const& x: idx) {
+        if (i == 5) break;
+        res.push_back(c.to_string(x));
+        i++;
     }
     return res;
 }
@@ -50,8 +55,10 @@ vector<string> frame_index(vector<string> inp) {
 }
 std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
     vector<string> output = frame_index(df.get_index_names());
+    vector<int> positions = df.get_index_positions();
     for (const std::pair<string, int>& x : df.column_names) {
-        vector<string> rhs = frame(conversion(x.first, *df.columns[x.second]));
+        vector<string> rhs = frame(conversion(x.first, positions,
+                                              *df.columns[x.second]));
         hcat(output, rhs);
     }
     os << output;
@@ -64,8 +71,10 @@ std::ostream& operator<<(std::ostream& os,
     vector<int> subset = df.theDataFrame.get_index_positions(df.idxNames);
     for (string const& colName : df.colNames) {
         std::shared_ptr<Column> c = df.theDataFrame.get_unique(colName, subset);
-        vector<string> rhs = frame(conversion(colName, *c));
-        hcat(output, rhs);
+        //vector<string> rhs = frame(conversion(colName,
+                                               
+                                              //df.theDataFrame.index_names, *c));
+        //hcat(output, rhs);
     }
     os << output;
     return os;

@@ -7,15 +7,15 @@ using std::string;
 using std::transform;
 using std::vector;
 
-template <typename V>
-V Column::operator[](int pos) {
-    if (holds_alternative<vector<V>>(col))
-        return std::get<vector<V>>(col)[pos];
-    else
-        throw std::invalid_argument("not in here");
-}
-template double Column::operator[](int);
-template string Column::operator[](int);
+//template <typename V>
+//V Column::operator[](int pos) {
+    //if (holds_alternative<vector<V>>(col))
+        //return std::get<vector<V>>(col)[pos];
+    //else
+        //throw std::invalid_argument("not in here");
+//}
+//template double Column::operator[](int);
+//template string Column::operator[](int);
 
 Column::Column(const Column& c, const vector<int>& subsets) {
     if (const vector<double>* val = std::get_if<vector<double>>(&c.col)) {

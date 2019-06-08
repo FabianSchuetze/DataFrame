@@ -14,11 +14,19 @@ class DataFrame {
    public:
     typedef std::pair<std::string, int> index_pair;
     template <class T>
+    class ConstColumnIterator;
+    template <class T>
     class ColumnIterator;
     class DataFrameProxy;
     template <class T>
+    friend class ConstColumnIterator;
+    template <class T>
     friend class ColumnIterator;
     friend DataFrame deep_copy(const DataFrame& lhs);
+    template <typename T>
+    using const_iter = typename DataFrame::ConstColumnIterator<T>;
+    template <typename T>
+    using iter = typename DataFrame::ColumnIterator<T>;
     DataFrame();
     DataFrame(const DataFrameProxy&);
     template <typename T>
@@ -36,7 +44,6 @@ class DataFrame {
     friend DataFrame operator+(const DataFrame& lhs, const T& t) {
         return deep_copy(lhs) += t;
     }
-    //friend std::string::size_type width(const Column&, std::vector<std::string>&);
     friend std::vector<std::pair<int, int>> correspondence_position(
         const DataFrame&, const DataFrame&);
     friend void append_missing_rows(DataFrame&, const DataFrame&);
@@ -55,7 +62,11 @@ class DataFrame {
     template <class T>
     ColumnIterator<T> begin(const std::string& s);
     template <class T>
+    ConstColumnIterator<T> cbegin(const std::string& s);
+    template <class T>
     ColumnIterator<T> end(const std::string&);
+    template <class T>
+    ConstColumnIterator<T> cend(const std::string&);
     void reorder_index() {
         auto rng = std::default_random_engine{0};
         std::shuffle(index_names.begin(), index_names.end(), rng);

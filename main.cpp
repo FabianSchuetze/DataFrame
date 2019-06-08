@@ -1,6 +1,7 @@
 #include "dataframe/dataframe.h"
 #include "dataframe/dataframeproxy.h"
 #include "dataframe/ColumnIterator.h"
+#include "dataframe/ConstColumnIterator.h"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -21,19 +22,11 @@ void fun2(DataFrame& df) {
 }
 
 void fill_df(DataFrame& df) {
-    DataFrame::ColumnIterator<double> it = df.begin<double>("third_col");
-    DataFrame::ColumnIterator<double> e = df.end<double>("third_col");
-    //std::cout << *it << std::endl;
-    if (it != e) {
-        while (it != e)
-            std::cout << *it++ << std::endl;
-    } else {
-        std::cout << "considered identical\n";
-    }
-    //std::vector<double>::iterator it = df.begin<double>("third_col");
-    //std::vector<double>::iterator end = df.end<double>("third_col");
-    //vector<double> res;
-    //std::fill(it, end, 10);
+    DataFrame::iter<double> it = df.begin<double>("third_col");
+    DataFrame::iter<double>  e = df.end<double>("third_col");
+    DataFrame::const_iter<double> it2 = df.cbegin<double>("third_col");
+    DataFrame::const_iter<double>  e2 = df.cend<double>("third_col");
+    std::fill(it, e, 10);
 }
 
 int main() {

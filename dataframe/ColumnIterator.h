@@ -14,7 +14,7 @@ class DataFrame::ColumnIterator {
         ColumnIterator();
         ColumnIterator(DataFrame& a, int n, size_t sz=0):
             theDataFrame(a), wptr(a.columns[n]), curr(sz) {}
-        T operator*() const;
+        T& operator*() const;
         ColumnIterator& operator++();
         ColumnIterator operator++(int);
         ColumnIterator& operator--();
@@ -58,11 +58,10 @@ std::shared_ptr<Column> DataFrame::ColumnIterator<T>::check(
 }
 
 template <class T>
-T DataFrame::ColumnIterator<T>::operator*() const {
+T& DataFrame::ColumnIterator<T>::operator*() const {
     auto p = check(curr, "dereferencing past end");
     int pos = theDataFrame.index_names[curr].second;
     return (*p).template get_value<T>(pos);
-    //return t;
 }
 
 template <class T>
