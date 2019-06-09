@@ -31,13 +31,22 @@ void fill_df(DataFrame& df) {
     }
 }
 
+vector<int> permutation_index(DataFrame& df) {
+    vector<int> res(df.size().first, 0);
+    for (size_t i = 0; i < res.size(); ++i) res[i] = i;
+    DataFrame::const_iter<double> it = df.cbegin<double>("second_col");
+    auto fun = [&](int&a, int&b) {return it[a] < it[b];};
+    std::sort(res.begin(), res.end(), fun);
+    return res;
+}
+
 int main() {
     typedef std::numeric_limits<double> nan;
     double d = nan::quiet_NaN();
-    vector<vector<double>> first = {{10, d, 20, d}, {30, d, 40, d}};
+    vector<vector<double>> first = {{10, d, 20, d}, {30, -100, 40, d}};
     vector<vector<double>> second = {{-10, -20}, {-30, -40}, {-100, 6}};
     vector<vector<string>> strings2 = {{"f", "l"}, {"m", "a"}, {"as", "ssd"}};
-    vector<string> string_col = {"NA", "new_test", "second","u"};
+    vector<string> string_col = {"u ", "NA", "new_test", "second"};
     vector<string> col_names = {"first_col", "second_col"};
     vector<string> col_names2 = {"first_col", "second_col", "third_col"};
     vector<string> idx_names = {"1", "2", "4", "5"};
@@ -46,11 +55,23 @@ int main() {
     DataFrame df1 = df2;
     df2["test_col"] = string_col;
     std::cout << df2 << std::endl;
-    df2.reorder_index();
+    vector<int> argsort = permutation_index(df2);
+    //for (const int& i : argsort)
+        //std::cout << i << std::endl;
+
+    ////df2.reorder_index();
+    //df2.drop_row("2");
+    //std::cout << df2 << std::endl;
+    //vector<int> argsort = permutation_index(df2);
+    //std::cout << "afterwards\n";
+    //for (const int& i : permutation_index(df2))
+        //std::cout << i << std::endl;
+    df2.sort<double>("first_col");
+    //df2.drop_column("test_col");
     //df2.dropna();
-    fill_df(df2);
+    ////fill_df(df2);
     std::cout << df2 << std::endl;
-    std::cout << df1 << std::endl;
+    //std::cout << df1 << std::endl;
     //// THIS CANNOT BE DONE YET!!!!
     ////df2.loc("2") = res;
     //std::cout << df2 << std::endl;

@@ -3,6 +3,7 @@
 #include <ostream>
 #include <stdexcept>
 #include "dataframeproxy.h"
+#include "ConstColumnIterator.h"
 class ColumnIterator;
 using std::make_pair;
 using std::make_shared;
@@ -11,22 +12,21 @@ using std::shared_ptr;
 using std::string;
 using std::vector;
 
-void DataFrame::missing_col_error(const char* what, const string& s)
-{
+void DataFrame::missing_col_error(const char* what, const string& s) {
     std::string msg = " Column " + s + " not found";
     throw std::out_of_range(what + msg);
 }
 vector<int> DataFrame::get_index_positions(const vector<string>& inp) const {
     vector<int> res;
     std::transform(inp.begin(), inp.end(), std::back_inserter(res),
-            [this](const string& s) {return find_index_position(s);});
+                   [this](const string& s) { return find_index_position(s); });
     return res;
 }
 
-vector<int> DataFrame::get_index_positions() const{
+vector<int> DataFrame::get_index_positions() const {
     vector<int> res;
     std::transform(index_names.begin(), index_names.end(), back_inserter(res),
-                   [](const pair<string, int>& ele) {return ele.second;});
+                   [](const pair<string, int>& ele) { return ele.second; });
     return res;
 }
 
@@ -34,15 +34,19 @@ template <typename T>
 vector<string> get_names(T& cont) {
     vector<string> res;
     std::transform(cont.begin(), cont.end(), std::back_inserter(res),
-            [](const pair<string, int>& ele) {return ele.first;});
+                   [](const pair<string, int>& ele) { return ele.first; });
     return res;
 }
 
 vector<string> DataFrame::get_index_names() { return get_names(index_names); }
-vector<string> DataFrame::get_index_names() const { return get_names(index_names); }
+vector<string> DataFrame::get_index_names() const {
+    return get_names(index_names);
+}
 
-vector<string> DataFrame::get_column_names() {return get_names(column_names);}
-vector<string> DataFrame::get_column_names() const {return get_names(column_names);}
+vector<string> DataFrame::get_column_names() { return get_names(column_names); }
+vector<string> DataFrame::get_column_names() const {
+    return get_names(column_names);
+}
 
 DataFrame::DataFrame() : columns(), index_names(), column_names(){};
 
@@ -64,8 +68,7 @@ std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) {
     return static_cast<const DataFrame&>(*this).get_shared_copy(s);  // Item 3
 }
 
-std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) const
-{
+std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) const {
     try {
         int idx = column_names.at(s);
         return columns[idx];
@@ -92,9 +95,8 @@ const int DataFrame::find_index_position(const string& s) const {
 template <typename T>
 int get_pair(const T& cont, const pair<string, int>& ele) {
     int pos = -1;
-    for (const auto& x: cont) {
-        if (x.first == ele.first && x.second == ele.second)
-            return pos;
+    for (const auto& x : cont) {
+        if (x.first == ele.first && x.second == ele.second) return pos;
         pos++;
     }
     return pos;
@@ -102,16 +104,15 @@ int get_pair(const T& cont, const pair<string, int>& ele) {
 
 int DataFrame::find_index_pair(const pair<string, int>& ele) {
     int pos = 0;
-    for (const auto& x: index_names) {
-        if (x.first == ele.first && x.second == ele.second)
-            return pos;
+    for (const auto& x : index_names) {
+        if (x.first == ele.first && x.second == ele.second) return pos;
         pos++;
     }
     throw std::out_of_range("Could not find the index argument");
 }
 
 const int DataFrame::find_index_position(const std::string& s) {
-    return static_cast<const DataFrame&>(*this).find_index_position( s);
+    return static_cast<const DataFrame&>(*this).find_index_position(s);
 }
 
 DataFrame deep_copy(const DataFrame& lhs) {
@@ -197,8 +198,7 @@ int DataFrame::get_column_position(const std::string& s) {
 bool DataFrame::contains_null(const string& s) {
     int pos = find_index_position(s);
     for (auto const& cols : column_names) {
-        bool is_null = columns[cols.second]->is_null(pos);
-        if (is_null)
+        if (columns[cols.second]->is_null(pos))
             return true;
     }
     return false;
@@ -209,8 +209,7 @@ void DataFrame::make_unique(const std::string& s) {
 }
 
 void DataFrame::make_unique(const std::vector<string>& vec) {
-    for (const string& s: vec)
-        make_unique(s);
+    for (const string& s : vec) make_unique(s);
 }
 
 void DataFrame::make_unique_if(const std::string& s) {
@@ -221,8 +220,8 @@ void DataFrame::make_unique_if(const std::string& s) {
 }
 
 void DataFrame::make_unique_if(const vector<string>& c) {
-    auto fun = [&](int a, const string& s){return a + use_count(s); };
-    if (std::accumulate(c.begin(), c.end(), 0, fun) > size().second) 
+    auto fun = [&](int a, const string& s) { return a + use_count(s); };
+    if (std::accumulate(c.begin(), c.end(), 0, fun) > size().second)
         make_unique(c);
 }
 
@@ -245,21 +244,38 @@ void DataFrame::dropna() {
 template <typename T>
 vector<string> DataFrame::get_column_names() {
     string target;
-    vector<pair<string, int>> res;
-    if (std::is_same<T, double>::value)
-        target = "double";
-    if (std::is_same<T, string>::value)
-        target = "string";
+    if (std::is_same<T, double>::value) target = "double";
+    if (std::is_same<T, string>::value) target = "string";
     auto fun = [&](const pair<string, int>& x) {
-        return columns[x.second]->type_name() == target ? true : false;};
+        return columns[x.second]->type_name() == target ? true : false;
+    };
+    vector<pair<string, int>> res;
     std::copy_if(column_names.begin(), column_names.end(),
-            std::back_inserter(res), fun);
+                 std::back_inserter(res), fun);
     return get_names(res);
 }
 
 template vector<string> DataFrame::get_column_names<double>();
 template vector<string> DataFrame::get_column_names<string>();
 
-void DataFrame::drop_column(const string& s) {
-    column_names.erase(s);
+void DataFrame::drop_column(const string& s) { column_names.erase(s); }
+
+void DataFrame::sort() {
+    std::sort(index_names.begin(), index_names.end(), 
+            [](auto&a, auto&b) { return a.first < b.first;});
 }
+
+template <typename T>
+void DataFrame::sort(const string& s) {
+    vector<pair<string, int>> new_index(index_names.size());
+    string target = columns[get_column_position(s)]->type_name();
+    vector<int> argsort = permutation_index<T>(s);
+    for (size_t i = 0; i < argsort.size(); ++i) {
+        pair<string, int> tmp = index_names[argsort[i]];
+        new_index[i] = tmp;
+    }
+    index_names = new_index;
+}
+
+template void DataFrame::sort<double>(const std::string&);
+template void DataFrame::sort<std::string>(const std::string&);

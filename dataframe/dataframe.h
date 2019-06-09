@@ -73,6 +73,9 @@ class DataFrame {
     void dropna();
     void drop_row(const std::string&);
     void drop_column(const std::string&);
+    void sort();
+    template <typename T>
+    void sort(const std::string&);
     DataFrameProxy operator[](const std::string&);
     DataFrameProxy operator[](const std::vector<std::string>& col_name);
     DataFrameProxy loc(const std::string&);
@@ -104,6 +107,8 @@ class DataFrame {
     void make_unique(const std::string&);
     void make_unique(const std::vector<std::string>&);
     int find_index_pair(const std::pair<std::string, int>&);
+    template <class T>
+    std::vector<int> permutation_index(const std::string& s);
     //int find_column_pair(const std::pair<std::string, int>&);
 
 };

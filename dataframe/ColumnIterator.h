@@ -13,6 +13,7 @@ class DataFrame::ColumnIterator {
         ColumnIterator(DataFrame& a, int n, size_t sz=0):
             theDataFrame(a), wptr(a.columns[n]), curr(sz) {}
         T& operator*() const;
+        T& operator[](int);
         ColumnIterator& operator++();
         ColumnIterator operator++(int);
         ColumnIterator& operator--();
@@ -69,6 +70,13 @@ template <class T>
 T& DataFrame::ColumnIterator<T>::operator*() const {
     auto p = check(curr, "dereferencing past end");
     int pos = theDataFrame.index_names[curr].second;
+    return (*p).template get_value<T>(pos);
+}
+
+template <class T>
+T& DataFrame::ColumnIterator<T>::operator[](int i) {
+    auto p = check(i, "dereferencing past end");
+    int pos = theDataFrame.index_names[i].second;
     return (*p).template get_value<T>(pos);
 }
 

@@ -30,8 +30,10 @@ class Column {
     template <class T> T& get_value(int i) {
         if (std::holds_alternative<std::vector<T>>(col))
             return std::get<std::vector<T>>(col)[i];
-        else
-            throw std::invalid_argument("not in here");
+        else {
+            std::string s = "template func `get_value` instanted w wrong type";
+            throw std::invalid_argument(s);
+        }
     }
     void append_string(std::string&, int pos);
     void push_back_nan();
@@ -45,6 +47,7 @@ class Column {
     void replace_nan();
     void replace_nan(int);
     bool is_null(size_t);
+    //std::vector<int> permutation_index();
 };
 
 std::ostream& operator<<(std::ostream&, const Column&);

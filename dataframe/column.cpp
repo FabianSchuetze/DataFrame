@@ -19,8 +19,7 @@ Column::Column(const Column& c, const vector<int>& subsets) {
 }
 
 void Column::replace_nan() {
-    for (size_t i = 0; i < size(); i++)
-        replace_nan(i);
+    for (size_t i = 0; i < size(); i++) replace_nan(i);
 }
 
 string Column::type_name() {
@@ -53,11 +52,9 @@ void Column::push_back(const T t) {
     std::get<vector<T>>(col).push_back(t);
 }
 
-const size_t Column::size() {
-    return static_cast<const Column&>(*this).size();
-}
+const size_t Column::size() { return static_cast<const Column&>(*this).size(); }
 
-const size_t Column::size() const{
+const size_t Column::size() const {
     if (holds_alternative<vector<double>>(col))
         return std::get<vector<double>>(col).size();
     else if (holds_alternative<vector<string>>(col))
@@ -73,7 +70,7 @@ std::string Column::to_string(int i) const {
         return val->at(i);
     else
         throw std::invalid_argument("Position i not in vector");
-} 
+}
 
 void Column::append_string(string& s, int pos) {
     if (vector<double>* val = std::get_if<vector<double>>(&col))
@@ -110,19 +107,16 @@ void Column::add_elements(vector<T>* lhs, const vector<T>& rhs,
     }
 }
 
-
 bool Column::is_null(size_t pos) {
-    if (pos >= size())
-        throw std::out_of_range("indexing Column past its size");
+    if (pos >= size()) throw std::out_of_range("indexing Column past its size");
     if (const vector<double>* v = std::get_if<vector<double>>(&col))
         return std::isnan(v->at(pos));
     else if (const vector<string>* v = std::get_if<vector<string>>(&col))
         return v->at(pos) == "NA";
-    return true; //avoid compiler warning
+    return true;  // avoid compiler warning
 }
 
-Column& Column::plus(const Column& rhs,
-                                 const vector<pair<int, int>>& indices) {
+Column& Column::plus(const Column& rhs, const vector<pair<int, int>>& indices) {
     if (vector<double>* vec = std::get_if<vector<double>>(&col)) {
         const vector<double>* other = std::get_if<vector<double>>(&rhs.col);
         add_elements(vec, *other, indices);
@@ -156,9 +150,9 @@ vector<T> transform_column(const vector<T>* v, const T& t) {
 Column operator+(const Column& c, double d) {
     if (const vector<double>* vec = std::get_if<vector<double>>(&c.col))
         return Column(transform_column(vec, d));
-    else  {
-        string msg = ": Cant add double " + std::to_string(d) 
-            +": incompatible column types"; 
+    else {
+        string msg = ": Cant add double " + std::to_string(d) +
+                     ": incompatible column types";
         throw std::invalid_argument(msg);
     }
 }
@@ -167,7 +161,11 @@ Column operator+(const Column& c, const string& d) {
     if (const vector<string>* vec = std::get_if<vector<string>>(&c.col))
         return Column(transform_column(vec, d));
     else {
-        string msg = "Cant add string " + d +": incompatible column types"; 
+        string msg = "Cant add string " + d + ": incompatible column types";
         throw std::invalid_argument(msg);
     }
 }
+
+// vector<int> Column::permutation_index() {
+//// FIrst I need to figure out what values are acutally legal!!!
+//}

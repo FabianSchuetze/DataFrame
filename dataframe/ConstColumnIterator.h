@@ -1,28 +1,29 @@
-#include "dataframe.h"
 #include <iostream>
+#include "dataframe.h"
 
 class Column;
 template <class T>
 class DataFrame::ConstColumnIterator {
-    public:
-        template <class V>
-        friend bool operator==(const const_iter<V>&, const const_iter<V>&);
-        template <class V>
-        friend bool operator!=(const const_iter<V>&, const const_iter<V>&);
-        ConstColumnIterator();
-        ConstColumnIterator(const DataFrame& a, int n, size_t sz=0):
-            theDataFrame(a), wptr(a.columns[n]), curr(sz) {}
-        const T& operator*() const;
-        ConstColumnIterator& operator++();
-        ConstColumnIterator operator++(int);
-        ConstColumnIterator& operator--();
-        ConstColumnIterator operator--(int);
-    private:
-        std::shared_ptr<Column> check(std::size_t, const std::string&) const;
-        const DataFrame& theDataFrame;
-        std::weak_ptr<Column> wptr;
-        std::size_t curr;
+   public:
+    template <class V>
+    friend bool operator==(const const_iter<V>&, const const_iter<V>&);
+    template <class V>
+    friend bool operator!=(const const_iter<V>&, const const_iter<V>&);
+    ConstColumnIterator();
+    ConstColumnIterator(const DataFrame& a, int n, size_t sz = 0)
+        : theDataFrame(a), wptr(a.columns[n]), curr(sz) {}
+    const T& operator*() const;
+    const T& operator[](int) const;
+    ConstColumnIterator& operator++();
+    ConstColumnIterator operator++(int);
+    ConstColumnIterator& operator--();
+    ConstColumnIterator operator--(int);
 
+   private:
+    std::shared_ptr<Column> check(std::size_t, const std::string&) const;
+    const DataFrame& theDataFrame;
+    std::weak_ptr<Column> wptr;
+    std::size_t curr;
 };
 template <class T>
 bool operator==(const DataFrame::ConstColumnIterator<T>& lhs,
@@ -48,7 +49,8 @@ DataFrame::ConstColumnIterator<T> DataFrame::cbegin(const std::string& s) {
 template <class T>
 DataFrame::ConstColumnIterator<T> DataFrame::cend(const std::string& s) {
     try {
-        return ConstColumnIterator<T>(*this, column_names.at(s), index_names.size());
+        return ConstColumnIterator<T>(*this, column_names.at(s),
+                                      index_names.size());
     } catch (std::out_of_range& e) {
         throw std::out_of_range("Column: " + s + " not found");
     }
@@ -56,10 +58,10 @@ DataFrame::ConstColumnIterator<T> DataFrame::cend(const std::string& s) {
 
 template <class T>
 std::shared_ptr<Column> DataFrame::ConstColumnIterator<T>::check(
-        size_t i, const std::string& msg) const {
+    size_t i, const std::string& msg) const {
     auto ret = wptr.lock();
     if (!ret) throw std::runtime_error("Unbound ConstColumnIterator");
-    if (i >- ret->size()) throw std::out_of_range(msg);
+    if (i > -ret->size()) throw std::out_of_range(msg);
     return ret;
 }
 
@@ -71,29 +73,50 @@ const T& DataFrame::ConstColumnIterator<T>::operator*() const {
 }
 
 template <class T>
-DataFrame::ConstColumnIterator<T>& DataFrame::ConstColumnIterator<T>::operator++() {
+const T& DataFrame::ConstColumnIterator<T>::operator[](int i) const {
+    auto p = check(i, "dereferencing past end");
+    int pos = theDataFrame.index_names[i].second;
+    return (*p).template get_value<T>(pos);
+}
+
+template <class T>
+DataFrame::ConstColumnIterator<T>& DataFrame::ConstColumnIterator<T>::
+operator++() {
     check(curr, "increment past the end of ConstColumnIterator");
     ++curr;
     return *this;
 }
 
 template <class T>
-DataFrame::ConstColumnIterator<T> DataFrame::ConstColumnIterator<T>::operator++(int) {
+DataFrame::ConstColumnIterator<T> DataFrame::ConstColumnIterator<T>::operator++(
+    int) {
     DataFrame::ConstColumnIterator ret = *this;
     ++*this;
     return ret;
 }
 
 template <class T>
-DataFrame::ConstColumnIterator<T>& DataFrame::ConstColumnIterator<T>::operator--() {
+DataFrame::ConstColumnIterator<T>& DataFrame::ConstColumnIterator<T>::
+operator--() {
     --curr;
     check(curr, "decreement past the beginning of ConstColumnIterator");
     return *this;
 }
 
 template <class T>
-DataFrame::ConstColumnIterator<T> DataFrame::ConstColumnIterator<T>::operator--(int) {
+DataFrame::ConstColumnIterator<T> DataFrame::ConstColumnIterator<T>::operator--(
+    int) {
     DataFrame::ConstColumnIterator ret = *this;
     --*this;
     return ret;
+}
+
+template <class T>
+std::vector<int> DataFrame::permutation_index(const std::string& s) {
+    std::vector<int> res(size().first, 0);
+    for (size_t i = 0; i < res.size(); ++i) res[i] = i;
+    ConstColumnIterator<T> it = cbegin<T>(s);
+    auto fun = [&](int& a, int& b) { return it[a] < it[b]; };
+    std::sort(res.begin(), res.end(), fun);
+    return res;
 }
