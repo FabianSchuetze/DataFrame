@@ -7,7 +7,7 @@ before_install:
   - sudo apt-get update -qq
 
 install:
-  - sudo apt-get install -qq g++-6
-  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90
+  - sudo apt-get install -qq g++-9
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 100
 
 script: make
