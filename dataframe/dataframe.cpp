@@ -268,7 +268,6 @@ void DataFrame::sort() {
 template <typename T>
 void DataFrame::sort(const string& s) {
     vector<pair<string, int>> new_index(index_names.size());
-    string target = columns[get_column_position(s)]->type_name();
     vector<int> argsort = permutation_index<T>(s);
     for (size_t i = 0; i < argsort.size(); ++i) {
         pair<string, int> tmp = index_names[argsort[i]];

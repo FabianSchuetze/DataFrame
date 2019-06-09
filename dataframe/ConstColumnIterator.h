@@ -25,6 +25,7 @@ class DataFrame::ConstColumnIterator {
     std::weak_ptr<Column> wptr;
     std::size_t curr;
 };
+
 template <class T>
 bool operator==(const DataFrame::ConstColumnIterator<T>& lhs,
                 const DataFrame::ConstColumnIterator<T>& rhs) {
@@ -80,43 +81,67 @@ const T& DataFrame::ConstColumnIterator<T>::operator[](int i) const {
 }
 
 template <class T>
-DataFrame::ConstColumnIterator<T>& DataFrame::ConstColumnIterator<T>::
-operator++() {
+DataFrame::const_iter<T>& DataFrame::ConstColumnIterator<T>::operator++() {
     check(curr, "increment past the end of ConstColumnIterator");
     ++curr;
     return *this;
 }
 
 template <class T>
-DataFrame::ConstColumnIterator<T> DataFrame::ConstColumnIterator<T>::operator++(
-    int) {
+DataFrame::const_iter<T> DataFrame::ConstColumnIterator<T>::operator++(int) {
     DataFrame::ConstColumnIterator ret = *this;
     ++*this;
     return ret;
 }
 
 template <class T>
-DataFrame::ConstColumnIterator<T>& DataFrame::ConstColumnIterator<T>::
-operator--() {
+DataFrame::const_iter<T>& DataFrame::ConstColumnIterator<T>::operator--() {
     --curr;
     check(curr, "decreement past the beginning of ConstColumnIterator");
     return *this;
 }
 
 template <class T>
-DataFrame::ConstColumnIterator<T> DataFrame::ConstColumnIterator<T>::operator--(
-    int) {
+DataFrame::const_iter<T> DataFrame::ConstColumnIterator<T>::operator--(int) {
     DataFrame::ConstColumnIterator ret = *this;
     --*this;
     return ret;
 }
 
 template <class T>
-std::vector<int> DataFrame::permutation_index(const std::string& s) {
-    std::vector<int> res(size().first, 0);
-    for (size_t i = 0; i < res.size(); ++i) res[i] = i;
-    ConstColumnIterator<T> it = cbegin<T>(s);
-    auto fun = [&](int& a, int& b) { return it[a] < it[b]; };
-    std::sort(res.begin(), res.end(), fun);
+typename std::vector<std::pair<int, T>>::iterator partition_pairs(
+    std::vector<std::pair<int, T>>& inp) {
+    if constexpr (std::is_same<T, double>::value) {
+        auto fun = [&](std::pair<int, T>& a) { return !std::isnan(a.second); };
+        return std::stable_partition(inp.begin(), inp.end(), fun);
+    } else if constexpr (std::is_same<T, std::string>::value) {
+        auto fun = [&](std::pair<int, T>& a) { return !(a.second == "NA"); };
+        return std::stable_partition(inp.begin(), inp.end(), fun);
+    }
+}
+
+template <class T>
+void sort_pairs(typename std::vector<std::pair<int, T>>::iterator end,
+                std::vector<std::pair<int, T>>& inp) {
+    auto fun = [&](auto& a, auto& b) { return a.second < b.second; };
+    std::sort(inp.begin(), end, fun);
+}
+
+template <class T>
+std::vector<int> get_arguments(const std::vector<std::pair<int, T>>& inp) {
+    std::vector<int> res(inp.size(), 0);
+    std::transform(inp.begin(), inp.end(), res.begin(),
+                   [](const std::pair<int, T>& ele) { return ele.first; });
     return res;
+}
+
+template <class T>
+std::vector<int> DataFrame::permutation_index(const std::string& s) {
+    ConstColumnIterator<T> it = cbegin<T>(s);
+    std::vector<std::pair<int, T>> res(size().first);
+    for (size_t i = 0; i < res.size(); ++i) res[i] = std::make_pair(i, *it++);
+    typename std::vector<std::pair<int, T>>::iterator boundary;
+    boundary = partition_pairs<T>(res);
+    sort_pairs<T>(boundary, res);
+    return get_arguments<T>(res);
 }

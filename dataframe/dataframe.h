@@ -109,8 +109,6 @@ class DataFrame {
     int find_index_pair(const std::pair<std::string, int>&);
     template <class T>
     std::vector<int> permutation_index(const std::string& s);
-    //int find_column_pair(const std::pair<std::string, int>&);
-
 };
 
 template <typename T>
