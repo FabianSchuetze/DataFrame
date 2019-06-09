@@ -10,4 +10,6 @@ install:
   - sudo apt-get install -qq g++-9
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 100
 
-script: make
+script:
+    - make
+    - ./out 
