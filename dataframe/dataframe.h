@@ -1,15 +1,15 @@
 #ifndef GUARD_dataframe_h
 #define GUARD_dataframe_h
-#include <algorithm>
-#include <cmath>
 #include <map>
 #include <memory>
-#include <random>
 #include <string>
 #include <utility>
 #include <vector>
-#include "column.h"  //need include!
+#include "column.h"
 
+/**
+ *  A test class. A more elaborate class description.
+ */
 class DataFrame {
    public:
     typedef std::pair<std::string, int> index_pair;
@@ -18,23 +18,17 @@ class DataFrame {
     template <class T>
     class ColumnIterator;
     class DataFrameProxy;
-    template <class T>
-    friend class ConstColumnIterator;
-    template <class T>
-    friend class ColumnIterator;
-    friend DataFrame deep_copy(const DataFrame& lhs);
     template <typename T>
     using const_iter = typename DataFrame::ConstColumnIterator<T>;
     template <typename T>
     using iter = typename DataFrame::ColumnIterator<T>;
     typedef std::shared_ptr<Column> SharedCol;
 
-    DataFrame();
-    DataFrame(const DataFrameProxy&);
-    template <typename T>
-    DataFrame(const std::vector<std::string>&, const std::vector<std::string>&,
-              const std::vector<std::vector<T>>&);
-    DataFrame& operator=(const DataFrame&);
+    template <class T>
+    friend class ConstColumnIterator;
+    template <class T>
+    friend class ColumnIterator;
+    friend DataFrame deep_copy(const DataFrame& lhs);
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
     friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
     friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
@@ -48,8 +42,29 @@ class DataFrame {
         const DataFrame&, const DataFrame&);
     friend void append_missing_rows(DataFrame&, const DataFrame&);
     friend void append_missing_cols(DataFrame&, const DataFrame&);
+
+    // Functions
+    DataFrame();
+    DataFrame(const DataFrameProxy&);
+    template <typename T>
+    DataFrame(const std::vector<std::string>&, const std::vector<std::string>&,
+              const std::vector<std::vector<T>>&);
+    DataFrame& operator=(const DataFrame&);
+    /**
+     * @brief Returns a shared pointer to a new version of an Column named s
+     *
+     * The newed unique column has a use_count() of 1. The function is, for
+     * example used to deep_copy a dataframe.
+     */
     SharedCol get_unique(const std::string&);
+    /**
+     * @brief for constant members
+     */
     SharedCol get_unique(const std::string&) const;
+    /**
+     * @brief Returns the new column for the subset of indices marked by the
+     * vector<int>
+     */
     SharedCol get_unique(const std::string&, const std::vector<int>&) const;
     SharedCol get_shared_copy(const std::string&);
     SharedCol get_shared_copy(const std::string&) const;
@@ -66,10 +81,6 @@ class DataFrame {
     iter<T> end(const std::string&);
     template <class T>
     const_iter<T> cend(const std::string&);
-    void reorder_index() {
-        auto rng = std::default_random_engine{0};
-        std::shuffle(index_names.begin(), index_names.end(), rng);
-    }
     void dropna();
     void drop_row(const std::string&);
     void drop_column(const std::string&);
@@ -87,11 +98,20 @@ class DataFrame {
     std::vector<std::string> get_column_names() const;
     template <typename T>
     std::vector<std::string> get_column_names();
-    int get_column_position(const std::string&);
-    const int find_index_position(const std::string&) const;
-    const int find_index_position(const std::string&);
-    std::vector<int> get_index_positions() const;
-    std::vector<int> get_index_positions(const std::vector<std::string>&) const;
+    /**
+     * @brief checks if the ordering of underlying data align with the index
+     *
+     * When the dataframe has been sorted or column have been dropped, the
+     * underlying still exist at its old position, it can however not be
+     * accessed anymore (through the dataframe) as the index vanished. The
+     * function checks whether the data order equals the index ordering. If
+     * false, the ordering can be aligned with the function `make_contigious`. 
+     */
+    bool is_contigious();
+    /**
+     * @brief aligns the index and the column positions
+     */
+    void make_contigious();
 
    private:
     std::vector<std::shared_ptr<Column>> columns;
@@ -109,12 +129,42 @@ class DataFrame {
     int find_index_pair(const std::pair<std::string, int>&);
     template <class T>
     std::vector<int> permutation_index(const std::string& s);
+    /**
+     * @brief Returns an index number for the column named s
+     * @throws std::out_of_range If the column name does not exist
+     */
+    int get_column_position(const std::string&);
+    int get_column_position(const std::string&) const;
+    /** 
+     * @brief Returns the vector with the column indices corresponding to the
+     * index values
+     *
+     * The index of a dataframe is a vector of pairs<string, int> which relates
+     * the name of the index to the position in the underlying storage vector.
+     * The index names might not be in the same ordering as the underlying data
+     * because the dataframe has been sorted or because rows have been droped.
+     */
+    std::vector<int> get_index_positions() const;
+    /**
+     * @bried returns the vector with index position as well, but instead of
+     * travering the entire index of the dataframe, the function looks up all
+     * index values in the input
+     */
+    std::vector<int> get_index_positions(const std::vector<std::string>&) const;
+    const int find_index_position(const std::string&) const;
+    const int find_index_position(const std::string&);
 };
 
 template <typename T>
 DataFrame operator+(const DataFrame&, const T&);
 DataFrame operator+(const DataFrame&, const DataFrame&);
 DataFrame operator+(const DataFrame&, const DataFrame::DataFrameProxy&);
+/** 
+ * @brief deep copy of a DataFrame
+ *
+ * Create new instances of all the member columns. The functions is, for
+ * example, used in the overloaed + operator.
+ */
 DataFrame deep_copy(const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
 std::vector<std::pair<int, int>> correspondence_position(const DataFrame&,

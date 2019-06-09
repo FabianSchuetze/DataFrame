@@ -53,5 +53,16 @@ int main() {
     std::cout << df2 << std::endl;
     sort_df<double>(df2, "second_col");
     std::cout << df2 << std::endl;
+    vector<int> pos = df2.get_index_positions();
+    for (const auto& i : pos)
+        std::cout << i << std::endl;
+    std::cout << std::endl;
+    std::cout << "is contigious: " << df2.is_contigious() << std::endl;
+    df2.make_contigious();
+    //DataFrame df3 = deep_copy(df2);
+    //for (const auto& i : df3.get_index_positions())
+        //std::cout << i << std::endl;
+    std::cout << df2 << std::endl;
+    std::cout << "is contigious: " << df2.is_contigious() << std::endl;
     return 0;
 }

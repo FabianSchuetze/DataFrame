@@ -4,6 +4,8 @@
 #include <stdexcept>
 #include "dataframeproxy.h"
 #include "ConstColumnIterator.h"
+#include <algorithm>
+#include <numeric>
 class ColumnIterator;
 using std::make_pair;
 using std::make_shared;
@@ -17,8 +19,8 @@ void DataFrame::missing_col_error(const char* what, const string& s) {
     throw std::out_of_range(what + msg);
 }
 vector<int> DataFrame::get_index_positions(const vector<string>& inp) const {
-    vector<int> res;
-    std::transform(inp.begin(), inp.end(), std::back_inserter(res),
+    vector<int> res(inp.size(), 0);
+    std::transform(inp.begin(), inp.end(), res.begin(),
                    [this](const string& s) { return find_index_position(s); });
     return res;
 }
@@ -64,8 +66,14 @@ std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) const {
     }
 }
 
+shared_ptr<Column> DataFrame::get_unique(const string& s,
+                                         const vector<int>& v) const {
+    Column new_col = Column(*columns[get_column_position(s)], v);
+    return make_shared<Column>(new_col);
+}
+
 std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) {
-    return static_cast<const DataFrame&>(*this).get_shared_copy(s);  // Item 3
+    return static_cast<const DataFrame&>(*this).get_shared_copy(s);
 }
 
 std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) const {
@@ -78,12 +86,6 @@ std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) const {
     }
 }
 
-shared_ptr<Column> DataFrame::get_unique(const string& s,
-                                         const vector<int>& v) const {
-    int i = column_names.at(s);
-    Column new_col = Column(*columns[i], v);
-    return make_shared<Column>(new_col);
-}
 
 const int DataFrame::find_index_position(const string& s) const {
     for (const auto& x : index_names) {
@@ -113,6 +115,11 @@ int DataFrame::find_index_pair(const pair<string, int>& ele) {
 
 const int DataFrame::find_index_position(const std::string& s) {
     return static_cast<const DataFrame&>(*this).find_index_position(s);
+}
+
+void DataFrame::make_contigious() {
+    DataFrame new_df = deep_copy(*this);
+    *this = new_df;
 }
 
 DataFrame deep_copy(const DataFrame& lhs) {
@@ -188,6 +195,10 @@ void DataFrame::append_index(const string& s) {
 }
 
 int DataFrame::get_column_position(const std::string& s) {
+    return static_cast<const DataFrame&>(*this).get_column_position(s);  // Item 3
+}
+
+int DataFrame::get_column_position(const std::string& s) const {
     try {
         return column_names.at(s);
     } catch (std::out_of_range& e) {
@@ -278,3 +289,10 @@ void DataFrame::sort(const string& s) {
 
 template void DataFrame::sort<double>(const std::string&);
 template void DataFrame::sort<std::string>(const std::string&);
+
+bool DataFrame::is_contigious() {
+    vector<int> existing_order = get_index_positions();
+    for (size_t i = 1; i < existing_order.size(); ++i)
+        if ((existing_order[i] - existing_order[i-1]) != 1) return false;
+    return true;
+}

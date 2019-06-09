@@ -1,0 +1,73 @@
+first_col second_col 
+10.000000 30.000000 
+20.000000 40.000000 
+
+first_col second_col test 
+10.000000 30.000000 new_test 
+20.000000 40.000000 second 
+
+for fabi: 2
+for first_col: 2
+for second_col: 1
+first_col second_col third_col 
+-10.000000 -30.000000 -100.000000 
+-20.000000 -40.000000 6.000000 
+
+first_col second_col third_col 
+-10.000000 -30.000000 -100.000000 
+-20.000000 -40.000000 6.000000 
+
+fabi first_col second_col test 
+-30.000000 10.000000 30.000000 new_test 
+-40.000000 20.000000 40.000000 second 
+
+copy-on-write
+for fabi: 1
+for first_col: 1
+for second_col: 1
+first_col second_col third_col 
+-10.000000 -30.000000 -100.000000 
+-20.000000 -40.000000 6.000000 
+
+fabi first_col second_col test 
+1120.000000 10.000000 30.000000 new_test 
+10.000000 20.000000 40.000000 second 
+
+Before the addition
+fabi first_col second_col test 
+1120.000000 10.000000 30.000000 new_test 
+10.000000 20.000000 40.000000 second 
+
+first_col second_col third_col 
+-10.000000 -30.000000 -100.000000 
+-20.000000 -40.000000 6.000000 
+
+for fabi: 1
+for first_col: 2
+for second_col: 1
+copy-on-write
+fabi first_col second_col test 
+2240.000000 20.000000 60.000000 new_testnew_test 
+20.000000 40.000000 80.000000 secondsecond 
+
+After the addition
+fabi first_col second_col test 
+2240.000000 20.000000 60.000000 new_testnew_test 
+20.000000 40.000000 80.000000 secondsecond 
+
+first_col second_col third_col 
+-10.000000 -30.000000 -100.000000 
+-20.000000 -40.000000 6.000000 
+
+first_col 
+10.000000 
+20.000000 
+
+copy-on-write
+copy-on-write
+copy-on-write
+copy-on-write
+fabi first_col second_col test 
+nan 10.000000 30.000000  
+nan 20.000000 40.000000  
+

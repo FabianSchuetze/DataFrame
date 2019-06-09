@@ -1,5 +1,8 @@
+#ifndef GUARD_ConstColumnIterator_h
+#define GUARD_ConstColumnIterator_h
 #include <iostream>
 #include "dataframe.h"
+#include <cmath>
 
 class Column;
 template <class T>
@@ -145,3 +148,5 @@ std::vector<int> DataFrame::permutation_index(const std::string& s) {
     sort_pairs<T>(boundary, res);
     return get_arguments<T>(res);
 }
+
+#endif
