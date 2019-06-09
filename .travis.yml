@@ -1,8 +1,7 @@
 language: cpp
 compiler: gcc
 
-script:
-- make
+script: make
 #- g++ main.cpp -o travis_gcc_cpp98
 ./out
 #- ./travis_gcc_cpp98
