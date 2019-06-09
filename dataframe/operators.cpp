@@ -53,7 +53,7 @@ void DataFrame::DataFrameProxy::check_col_len(size_t check, string m) {
 
 void DataFrame::DataFrameProxy::insert_column(const string& name,
                                               shared_ptr<Column>& inp) {
-    int current_cap = theDataFrame.column_names.size();
+    size_t current_cap = theDataFrame.column_names.size();
     int lhsIdx = find_or_add(name, theDataFrame.column_names);
     bool replace = theDataFrame.column_names.size() == current_cap;
     replace ? replace_column(lhsIdx, inp) : add_column(inp);
@@ -74,13 +74,15 @@ DataFrame& DataFrame::operator=(const DataFrame& rhs) {
     }
     return *this;
 }
+
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const DataFrameProxy& rhs) {
     if (this != &rhs) {
         check_col_width(rhs.colNames.size(), string{"rhs and lhs col num differ"});
         for (size_t i = 0; i < colNames.size(); ++i) {
-            string rhsName = rhs.colNames[i];
-            shared_ptr<Column> col = rhs.theDataFrame.get_shared_copy(rhsName);
+            //string rhsName = rhs.colNames[i];
+            SharedCol col = rhs.theDataFrame.get_shared_copy(rhs.colNames[i]);
+            //shared_ptr<Column> col = rhs.theDataFrame.get_shared_copy(rhsName);
             check_col_len(col->size(), "column lenght of DataFrames differ");
             insert_column(colNames[i], col);
         }
@@ -111,11 +113,6 @@ template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<double>& other_col);
 template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<string>& other_col);
-
-void append_string(Column& c, std::string& s, int pos) {
-    c.append_string(s, pos);
-    s += ' ';
-}
 
 DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
     vector<pair<int, int>> indices = correspondence_position(*this, rhs);

@@ -8,7 +8,6 @@
 class DataFrame;
 class Column {
    public:
-    friend std::ostream& operator<<(std::ostream&, const Column&);
     friend Column operator+(const Column&, double);
     friend Column operator+(const Column&, const std::string&);
     friend class DataFrame;
@@ -17,15 +16,28 @@ class Column {
 
     Column();
     Column(const Column&, int);
+    /**
+     * @brief Copy constructor for a new column, given an existing colum and a
+     * vecotr<int> indicating which position shall be copied
+     */
     Column(const Column&, const std::vector<int>&);
     template <class T>
     Column(const std::vector<T>& t) { col = t; }
-    Column& operator+=(const Column& rhs);
+    /**
+     * @brief similar to the overloaded assigment operator but it checks
+     * equivalence
+     */
     Column& plus(const Column&, const std::vector<std::pair<int, int>>&);
     template <class T>
     void push_back(const T);
+    /**
+     * @brief Returns the length of the column
+     */
     const size_t size();
     const size_t size() const;
+    /**
+     * @breif Returns the type of the stored data as a string
+     */
     std::string type_name();
     template <class T> T& get_value(int i) {
         if (std::holds_alternative<std::vector<T>>(col))
@@ -35,7 +47,6 @@ class Column {
             throw std::invalid_argument(s);
         }
     }
-    void append_string(std::string&, int pos);
     void push_back_nan();
     std::string to_string(int) const;
 
@@ -47,10 +58,8 @@ class Column {
     void replace_nan();
     void replace_nan(int);
     bool is_null(size_t);
-    //std::vector<int> permutation_index();
 };
 
-std::ostream& operator<<(std::ostream&, const Column&);
 Column operator+(const Column&, double d);
 Column operator+(const Column&, const std::string& s);
 #endif

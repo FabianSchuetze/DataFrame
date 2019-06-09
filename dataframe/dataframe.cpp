@@ -167,11 +167,11 @@ DataFrame::DataFrame(const DataFrame::DataFrameProxy& df) {
     }
 }
 
-const std::pair<int, int> DataFrame::size() const {
+std::pair<size_t, size_t> DataFrame::size() const {
     return make_pair(index_names.size(), columns.size());
 }
 
-const int DataFrame::use_count(string col) {
+int DataFrame::use_count(string col) {
     return columns[column_names[col]].use_count();
 }
 
@@ -230,11 +230,21 @@ void DataFrame::make_unique_if(const std::string& s) {
     }
 }
 
+// == I choose to make only non-unqiue column unique and not the entire df ==
+//void DataFrame::make_unique_if(const vector<string>& c) {
+    //auto fun = [&](int a, const string& s) { return a + use_count(s); };
+    //if (std::accumulate(c.begin(), c.end(), 0, fun) > size().second)
+        //make_unique(c);
+//}
+
 void DataFrame::make_unique_if(const vector<string>& c) {
-    auto fun = [&](int a, const string& s) { return a + use_count(s); };
-    if (std::accumulate(c.begin(), c.end(), 0, fun) > size().second)
-        make_unique(c);
+    for (const string& s : c)
+        make_unique_if(s);
 }
+    //auto fun = [&](int a, const string& s) { return a + use_count(s); };
+    //if (std::accumulate(c.begin(), c.end(), 0, fun) > size().second)
+        //make_unique(c);
+//}
 
 void DataFrame::drop_row(const string& s) {
     int pos = find_index_pair(make_pair(s, find_index_position(s)));
@@ -271,13 +281,13 @@ template vector<string> DataFrame::get_column_names<string>();
 
 void DataFrame::drop_column(const string& s) { column_names.erase(s); }
 
-void DataFrame::sort() {
+void DataFrame::sort_by_index() {
     std::sort(index_names.begin(), index_names.end(), 
             [](auto&a, auto&b) { return a.first < b.first;});
 }
 
 template <typename T>
-void DataFrame::sort(const string& s) {
+void DataFrame::sort_by_column(const string& s) {
     vector<pair<string, int>> new_index(index_names.size());
     vector<int> argsort = permutation_index<T>(s);
     for (size_t i = 0; i < argsort.size(); ++i) {
@@ -287,8 +297,8 @@ void DataFrame::sort(const string& s) {
     index_names = new_index;
 }
 
-template void DataFrame::sort<double>(const std::string&);
-template void DataFrame::sort<std::string>(const std::string&);
+template void DataFrame::sort_by_column<double>(const std::string&);
+template void DataFrame::sort_by_column<std::string>(const std::string&);
 
 bool DataFrame::is_contigious() {
     vector<int> existing_order = get_index_positions();

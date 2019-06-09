@@ -66,32 +66,64 @@ class DataFrame {
      * vector<int>
      */
     SharedCol get_unique(const std::string&, const std::vector<int>&) const;
-    SharedCol get_shared_copy(const std::string&);
-    SharedCol get_shared_copy(const std::string&) const;
+    /**
+     * @brief The overloaded compound-assignment operator
+     *
+     * If a colum or row or the rhs is not present in the lhs, a new column or
+     * row is created in the lhs dataframe contains nas.
+     */
     DataFrame& operator+=(const DataFrame& rhs);
     template <typename T>
     DataFrame& operator+=(const T&);
-    // I CANNOT CREATE A NEW COLUMN LIKE THIS!!! MAYE THE CATCH SHOULD CREATE A
-    // NEW ONE?? AT LEAST THE NON-CONSTANT VERSION???
     template <class T>
     iter<T> begin(const std::string&);
+    /**
+     * @brief A constant iterator over the columns achored to the beginning of
+     * the column
+     *
+     * THe template arguments needs to equal the datatype of the column
+     */
     template <class T>
     const_iter<T> cbegin(const std::string&);
     template <class T>
     iter<T> end(const std::string&);
+    /**
+     * @brief A constant iterator over the columns achored to the end of the
+     * column
+     *
+     * THe template arguments needs to equal the datatype of the column
+     */
     template <class T>
     const_iter<T> cend(const std::string&);
+    /**
+     * @brief drops rows which contain na from the dataframe
+     */
     void dropna();
+    /**
+     * @brief drops a row from the dataframe
+     */
     void drop_row(const std::string&);
+    /**
+     * @brief drops a column from the dataframe
+     */
     void drop_column(const std::string&);
-    void sort();
+    /**
+     * @brief Sort the dataframe by its index
+     */
+    void sort_by_index();
+    /**
+     * @brief Sorts the dataframe by column named s
+     *
+     * The function is a template function as one needs to specify the type of
+     * the column according to which to sort the dataframe
+     */
     template <typename T>
-    void sort(const std::string&);
+    void sort_by_column(const std::string&);
     DataFrameProxy operator[](const std::string&);
     DataFrameProxy operator[](const std::vector<std::string>& col_name);
     DataFrameProxy loc(const std::string&);
-    const std::pair<int, int> size() const;
-    const int use_count(std::string);  // Can i const qualify it?
+    std::pair<size_t, size_t> size() const;
+    int use_count(std::string);  // Can i const qualify it?
     std::vector<std::string> get_index_names();
     std::vector<std::string> get_index_names() const;
     std::vector<std::string> get_column_names();
@@ -105,7 +137,7 @@ class DataFrame {
      * underlying still exist at its old position, it can however not be
      * accessed anymore (through the dataframe) as the index vanished. The
      * function checks whether the data order equals the index ordering. If
-     * false, the ordering can be aligned with the function `make_contigious`. 
+     * false, the ordering can be aligned with the function `make_contigious`.
      */
     bool is_contigious();
     /**
@@ -135,7 +167,7 @@ class DataFrame {
      */
     int get_column_position(const std::string&);
     int get_column_position(const std::string&) const;
-    /** 
+    /**
      * @brief Returns the vector with the column indices corresponding to the
      * index values
      *
@@ -153,13 +185,21 @@ class DataFrame {
     std::vector<int> get_index_positions(const std::vector<std::string>&) const;
     const int find_index_position(const std::string&) const;
     const int find_index_position(const std::string&);
+    /**
+     * @Return a shared_ptr to the column named s
+     */
+    SharedCol get_shared_copy(const std::string&);
+    /**
+     * @Return a shared_ptr to the column named s for a const-dataframe
+     */
+    SharedCol get_shared_copy(const std::string&) const;
 };
 
 template <typename T>
 DataFrame operator+(const DataFrame&, const T&);
 DataFrame operator+(const DataFrame&, const DataFrame&);
 DataFrame operator+(const DataFrame&, const DataFrame::DataFrameProxy&);
-/** 
+/**
  * @brief deep copy of a DataFrame
  *
  * Create new instances of all the member columns. The functions is, for
@@ -169,6 +209,18 @@ DataFrame deep_copy(const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
 std::vector<std::pair<int, int>> correspondence_position(const DataFrame&,
                                                          const DataFrame&);
+/**
+ * @brief creates nan rows in the lhs if rhs cols are not present in the lhs
+ *
+ * When adding two dataframes rows that are not present in both dataframes
+ * generate a new row in the to be created dataframe with missing rows
+ */
 void append_missing_rows(DataFrame&, const DataFrame&);
+/**
+ * @brief creates nan cols in the lhs if rhs cols are not present in the lhs
+ *
+ * When adding two dataframes columns that are not present in both dataframes
+ * generate a new column in the to be created dataframe with missing cols
+ */
 void append_missing_cols(DataFrame&, const DataFrame&);
 #endif

@@ -33,7 +33,7 @@ void fill_df(DataFrame& df) {
 
 template <typename T>
 void sort_df(DataFrame& df, const std::string& s) {
-    df.sort<T>(s);
+    df.sort_by_column<T>(s);
 }
 
 int main() {
@@ -49,13 +49,11 @@ int main() {
     vector<string> idx_names2 = {"3", "1"};
     DataFrame df2 = DataFrame(idx_names, col_names, first);
     DataFrame df1 = df2;
-    df2["test_col"] = string_col;
-    std::cout << df2 << std::endl;
+    //df2["test_col"] = string_col;
+    std::cout << df2["second_col"] << std::endl;
     sort_df<double>(df2, "second_col");
+    df2 += 2;
     std::cout << df2 << std::endl;
-    vector<int> pos = df2.get_index_positions();
-    for (const auto& i : pos)
-        std::cout << i << std::endl;
     std::cout << std::endl;
     std::cout << "is contigious: " << df2.is_contigious() << std::endl;
     df2.make_contigious();
@@ -63,6 +61,7 @@ int main() {
     //for (const auto& i : df3.get_index_positions())
         //std::cout << i << std::endl;
     std::cout << df2 << std::endl;
+    std::cout << df1 << std::endl;
     std::cout << "is contigious: " << df2.is_contigious() << std::endl;
     return 0;
 }

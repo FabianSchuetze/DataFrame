@@ -2,6 +2,7 @@
 #include "dataframeproxy.h"
 #include <algorithm>
 #include <iostream>
+#include <iterator>
 using std::string;
 using std::vector;
 
@@ -42,7 +43,7 @@ vector<string> frame(vector<string> vec) {
 }
 
 void hcat(vector<string>& lhs, const vector<string> rhs) {
-    for (int i = 0; i < lhs.size(); ++i) {
+    for (size_t i = 0; i < lhs.size(); ++i) {
         string tmp = lhs[i];
         lhs[i] = tmp.substr(0, tmp.size() -1) + rhs[i].substr(1);
     }
@@ -61,7 +62,8 @@ std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
                                               *df.columns[x.second]));
         hcat(output, rhs);
     }
-    os << output;
+    std::copy(output.begin(), output.end(), 
+              std::ostream_iterator<string>(os, " "));
     return os;
 }
 
@@ -71,11 +73,10 @@ std::ostream& operator<<(std::ostream& os,
     vector<int> subset = df.theDataFrame.get_index_positions(df.idxNames);
     for (string const& colName : df.colNames) {
         std::shared_ptr<Column> c = df.theDataFrame.get_unique(colName, subset);
-        //vector<string> rhs = frame(conversion(colName,
-                                               
-                                              //df.theDataFrame.index_names, *c));
-        //hcat(output, rhs);
+        vector<string> rhs = frame(conversion(colName, subset, *c));
+        hcat(output, rhs);
     }
-    os << output;
+    std::copy(output.begin(), output.end(), 
+              std::ostream_iterator<string>(os, " "));
     return os;
 }

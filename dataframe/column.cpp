@@ -72,21 +72,6 @@ std::string Column::to_string(int i) const {
         throw std::invalid_argument("Position i not in vector");
 }
 
-void Column::append_string(string& s, int pos) {
-    if (vector<double>* val = std::get_if<vector<double>>(&col))
-        s += std::to_string(val->at(pos));
-    if (vector<string>* val = std::get_if<vector<string>>(&col))
-        s += val->at(pos);
-}
-
-std::ostream& operator<<(std::ostream& os, const Column& df) {
-    if (const vector<double>* v = std::get_if<vector<double>>(&df.col))
-        for (const double& j : *v) os << (std::to_string(j) + " ");
-    else if (const vector<string>* v = std::get_if<vector<string>>(&df.col))
-        for (const string& j : *v) os << (j + " ");
-    return os;
-}
-
 template <typename T>
 bool val_is_null(const T& t) {
     if constexpr (std::is_same<T, double>::value)
@@ -96,14 +81,22 @@ bool val_is_null(const T& t) {
 }
 
 template <typename T>
+bool is_valid_pair(const vector<T>& lhs, const vector<T>& rhs,
+                   const pair<int,int>& pair) {
+    bool exists = pair.second > -1;
+    bool lhs_is_not_nan = !val_is_null(lhs.at(pair.first));
+    bool rhs_is_not_nan = !val_is_null(rhs.at(pair.first));
+    return exists && lhs_is_not_nan && rhs_is_not_nan;
+}
+
+template <typename T>
 void Column::add_elements(vector<T>* lhs, const vector<T>& rhs,
                           const vector<pair<int, int>>& indices) {
-    for (auto const& index_pair : indices) {
-        if (index_pair.second > -1 && !val_is_null(lhs->at(index_pair.first)) &&
-            !val_is_null(rhs[index_pair.second]))
-            lhs->at(index_pair.first) += rhs[index_pair.second];
+    for (auto const& x : indices) {
+        if (is_valid_pair<T>(*lhs, rhs, x))
+            lhs->at(x.first) += rhs[x.second];
         else
-            replace_nan(index_pair.first);
+            replace_nan(x.first);
     }
 }
 
@@ -123,19 +116,6 @@ Column& Column::plus(const Column& rhs, const vector<pair<int, int>>& indices) {
     } else if (vector<string>* vec = std::get_if<vector<string>>(&col)) {
         const vector<string>* other = std::get_if<vector<string>>(&rhs.col);
         add_elements(vec, *other, indices);
-    }
-    return *this;
-}
-
-Column& Column::operator+=(const Column& rhs) {
-    if (vector<double>* vec = std::get_if<vector<double>>(&col)) {
-        const vector<double>* other = std::get_if<vector<double>>(&rhs.col);
-        transform(other->begin(), other->end(), vec->begin(), vec->begin(),
-                  std::plus<double>());
-    } else if (vector<string>* vec = std::get_if<vector<string>>(&col)) {
-        const vector<string>* other = std::get_if<vector<string>>(&rhs.col);
-        transform(other->begin(), other->end(), vec->begin(), vec->begin(),
-                  std::plus<string>());
     }
     return *this;
 }
@@ -165,7 +145,3 @@ Column operator+(const Column& c, const string& d) {
         throw std::invalid_argument(msg);
     }
 }
-
-// vector<int> Column::permutation_index() {
-//// FIrst I need to figure out what values are acutally legal!!!
-//}
