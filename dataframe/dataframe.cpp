@@ -153,6 +153,8 @@ template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
                               const vector<vector<double>>&);
 template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
                               const vector<vector<string>>&);
+template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
+                              const vector<vector<bool>>&);
 
 DataFrame::DataFrame(const DataFrame::DataFrameProxy& df) {
     int i = 0;

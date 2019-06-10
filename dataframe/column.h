@@ -22,7 +22,7 @@ class Column {
      */
     Column(const Column&, const std::vector<int>&);
     template <class T>
-    Column(const std::vector<T>& t) { col = t; }
+    explicit Column(const std::vector<T>& t): col(t) {}
     /**
      * @brief similar to the overloaded assigment operator but it checks
      * equivalence
@@ -49,12 +49,15 @@ class Column {
     }
     void push_back_nan();
     std::string to_string(int) const;
+    template <typename T>
+    void copy_vector(const std::vector<T>*, const std::vector<int>&);
 
    private:
     template <typename T>
     void add_elements(std::vector<T>*, const std::vector<T>&,
                       const std::vector<std::pair<int, int>>&);
-    std::variant<std::vector<double>, std::vector<std::string>> col;
+    std::variant<std::vector<double>, std::vector<std::string>,
+                 std::vector<bool>> col;
     void replace_nan();
     void replace_nan(int);
     bool is_null(size_t);

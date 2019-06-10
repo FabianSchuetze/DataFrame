@@ -37,31 +37,30 @@ void sort_df(DataFrame& df, const std::string& s) {
 }
 
 int main() {
-    typedef std::numeric_limits<double> nan;
-    double d = nan::quiet_NaN();
-    vector<vector<double>> first = {{10, d, -10, d}, {30, -100, 40, d}};
-    vector<vector<double>> second = {{-10, -20}, {-30, -40}, {-100, 6}};
-    vector<vector<string>> strings2 = {{"f", "l"}, {"m", "a"}, {"as", "ssd"}};
-    vector<string> string_col = {"u ", "NA", "new_test", "second"};
+    //vector<vector<bool>> first = {{true, false}, {false, true}};
+    vector<vector<double>> first = {{true, false}, {false, true}};
+    vector<std::string> string_col = {"fa", "ma"};
+    vector<double> bool_col = {false, true};
+    vector<string> idx_names = {"1", "2"};
     vector<string> col_names = {"first_col", "second_col"};
-    vector<string> col_names2 = {"first_col", "second_col", "third_col"};
-    vector<string> idx_names = {"1", "2", "4", "5"};
-    vector<string> idx_names2 = {"3", "1"};
     DataFrame df2 = DataFrame(idx_names, col_names, first);
     DataFrame df1 = df2;
-    df2["test_col"] = string_col;
-    std::cout << df2["second_col"] << std::endl;
-    sort_df<string>(df2, "test_col");
-    //df2 += 2;
-    std::cout << df2 << std::endl;
-    std::cout << std::endl;
-    std::cout << "is contigious: " << df2.is_contigious() << std::endl;
-    df2.make_contigious();
-    //DataFrame df3 = deep_copy(df2);
-    //for (const auto& i : df3.get_index_positions())
-        //std::cout << i << std::endl;
+    df2["test_col2"] = bool_col;
     std::cout << df2 << std::endl;
     std::cout << df1 << std::endl;
-    std::cout << "is contigious: " << df2.is_contigious() << std::endl;
+    std::cout << df1 + df2;
+    //std::cout << df2["second_col"] << std::endl;
+    //sort_df<string>(df2, "test_col");
+    //df2 += 2;
+    //std::cout << df2 << std::endl;
+    //std::cout << std::endl;
+    //std::cout << "is contigious: " << df2.is_contigious() << std::endl;
+    //df2.make_contigious();
+    ////DataFrame df3 = deep_copy(df2);
+    ////for (const auto& i : df3.get_index_positions())
+        ////std::cout << i << std::endl;
+    //std::cout << df2 << std::endl;
+    //std::cout << df1 << std::endl;
+    //std::cout << "is contigious: " << df2.is_contigious() << std::endl;
     return 0;
 }

@@ -7,13 +7,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Produce compile_commands.json
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
 add_compile_options(-Wall -Wextra -Wpedantic)
 
-#file(GLOB SOURCES
-    #dataframe/*.h
-    #dataframe/*.cpp
-    #)
 set(${LIBRARY_TARGET_NAME}_SRC
     dataframe/dataframe.cpp
     dataframe/column.cpp
@@ -36,21 +31,9 @@ endif(UNIX)
 
 add_executable(main main.cpp)
 add_executable(my_test test/test.cpp)
-    #dataframe/dataframeproxy.cpp dataframe/column.cpp dataframe/print.cpp 
-    #dataframe/operators.cpp)
-#add_executable(test2 test/test.cpp dataframe/dataframe.cpp
-    #dataframe/dataframeproxy.cpp dataframe/column.cpp dataframe/print.cpp 
-    #dataframe/operators.cpp)
-#add_executable(main main.cpp dataframe/dataframe.cpp
-    #dataframe/dataframeproxy.cpp dataframe/column.cpp dataframe/print.cpp 
-    #dataframe/operators.cpp)
-#add_executable(test2 test/test.cpp dataframe/dataframe.cpp
-    #dataframe/dataframeproxy.cpp dataframe/column.cpp dataframe/print.cpp 
-    #dataframe/operators.cpp)
 target_link_libraries(main Dataframe)
 target_link_libraries(my_test Dataframe)
 
 enable_testing()
 add_test(NAME my_test
          COMMAND my_test)
-

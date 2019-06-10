@@ -1,22 +1,43 @@
 #include "column.h"
 #include <cmath>
+#include <memory>
 #include <iostream>
 using std::holds_alternative;
 using std::pair;
 using std::string;
 using std::transform;
 using std::vector;
+using std::get_if;
+
+template <typename T>
+void Column::copy_vector(const vector<T>* val, const vector<int>& subsets) {
+    col = vector<T>();
+    for (int i : subsets) push_back<T>(val->at(i));
+}
 
 Column::Column(const Column& c, const vector<int>& subsets) {
-    if (const vector<double>* val = std::get_if<vector<double>>(&c.col)) {
-        col = vector<double>();
-        for (int i : subsets) push_back<double>(val->at(i));
-    } else if (const vector<string>* val =
-                   std::get_if<vector<string>>(&c.col)) {
-        col = vector<string>();
-        for (int i : subsets) push_back<string>(val->at(i));
+    if (const vector<double>* val = get_if<vector<double>>(&c.col)) {
+        copy_vector<double>(val, subsets);
+    } else if (const vector<string>* val = get_if<vector<string>>(&c.col)) {
+        copy_vector<string>(val, subsets);
+    } else if (const vector<bool>* val = get_if<vector<bool>>(&c.col)) {
+        copy_vector<bool>(val, subsets);
     }
 }
+//Column::Column(const Column& c, const vector<int>& subsets) {
+    //if (const vector<double>* val = std::get_if<vector<double>>(&c.col)) {
+        //col = vector<double>();
+        //for (int i : subsets) push_back<double>(val->at(i));
+    //} else if (const vector<string>* val =
+                   //std::get_if<vector<string>>(&c.col)) {
+        //col = vector<string>();
+        //for (int i : subsets) push_back<string>(val->at(i));
+    //} else if (const vector<bool>* val =
+                   //std::get_if<vector<bool>>(&c.col)) {
+        //col = vector<bool>();
+        //for (int i : subsets) push_back<bool>(val->at(i));
+    //}
+//}
 
 void Column::replace_nan() {
     for (size_t i = 0; i < size(); i++) replace_nan(i);
@@ -27,6 +48,8 @@ string Column::type_name() {
         return "double";
     else if (std::get_if<vector<string>>(&col))
         return "string";
+    else if (std::get_if<vector<bool>>(&col))
+        return "bool";
     else
         throw std::invalid_argument("Column has no elements");
 }
@@ -37,6 +60,10 @@ void Column::push_back_nan() {
         val->push_back(nan::quiet_NaN());
     else if (vector<string>* val = std::get_if<vector<string>>(&col))
         val->push_back("NA");
+    else if (std::get_if<vector<bool>>(&col)) {
+        string msg = "Attemting to push_back NA for a bool type causes failure";
+        throw std::runtime_error(msg);
+    }
 }
 
 void Column::replace_nan(int i) {
@@ -45,6 +72,10 @@ void Column::replace_nan(int i) {
         val->at(i) = nan::quiet_NaN();
     else if (vector<string>* val = std::get_if<vector<string>>(&col))
         val->at(i) = "NA";
+    else if (std::get_if<vector<bool>>(&col)) {
+        string msg = "Attemting to replace bool by NA causes failure";
+        throw std::runtime_error(msg);
+    }
 }
 
 template <class T>
@@ -59,6 +90,8 @@ size_t Column::size() const {
         return std::get<vector<double>>(col).size();
     else if (holds_alternative<vector<string>>(col))
         return std::get<vector<string>>(col).size();
+    else if (holds_alternative<vector<bool>>(col))
+        return std::get<vector<bool>>(col).size();
     else
         return 0;
 }
@@ -68,24 +101,28 @@ std::string Column::to_string(int i) const {
         return std::to_string(val->at(i));
     else if (const vector<string>* val = std::get_if<vector<string>>(&col))
         return val->at(i);
+    else if (const vector<bool>* val = std::get_if<vector<bool>>(&col))
+        return std::to_string(val->at(i));
     else
         throw std::invalid_argument("Position i not in vector");
 }
 
 template <typename T>
-bool val_is_null(const T& t) {
+bool vector_element_is_null(const T& t) {
     if constexpr (std::is_same<T, double>::value)
         return std::isnan(t);
-    else if (std::is_same<T, string>::value)
+    else if constexpr (std::is_same<T, string>::value)
         return t == "NA";
+    else if constexpr (std::is_same<T, bool>::value)
+        return false;
 }
 
 template <typename T>
 bool is_valid_pair(const vector<T>& lhs, const vector<T>& rhs,
                    const pair<int,int>& pair) {
     bool exists = pair.second > -1;
-    bool lhs_is_not_nan = !val_is_null(lhs.at(pair.first));
-    bool rhs_is_not_nan = !val_is_null(rhs.at(pair.first));
+    bool lhs_is_not_nan = !vector_element_is_null(lhs.at(pair.first));
+    bool rhs_is_not_nan = !vector_element_is_null(rhs.at(pair.first));
     return exists && lhs_is_not_nan && rhs_is_not_nan;
 }
 
@@ -106,9 +143,12 @@ bool Column::is_null(size_t pos) {
         return std::isnan(v->at(pos));
     else if (const vector<string>* v = std::get_if<vector<string>>(&col))
         return v->at(pos) == "NA";
+    else if (std::get_if<vector<string>>(&col))
+        return false;
     return true;  // avoid compiler warning
 }
 
+// I NEED TO THINK ABOUT THE CONVERSION!!!
 Column& Column::plus(const Column& rhs, const vector<pair<int, int>>& indices) {
     if (vector<double>* vec = std::get_if<vector<double>>(&col)) {
         const vector<double>* other = std::get_if<vector<double>>(&rhs.col);

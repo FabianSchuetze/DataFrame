@@ -45,6 +45,7 @@ class DataFrame {
 
     // Functions
     DataFrame();
+    // should I make this explicit?
     DataFrame(const DataFrameProxy&);
     template <typename T>
     DataFrame(const std::vector<std::string>&, const std::vector<std::string>&,
@@ -195,6 +196,12 @@ class DataFrame {
     SharedCol get_shared_copy(const std::string&) const;
 };
 
+/**
+ * @brief adds a value of type T to the dataframe.
+ *
+ * @throws std::invalid_argument if not all columns of the dataframe are of
+ * type T
+ */
 template <typename T>
 DataFrame operator+(const DataFrame&, const T&);
 DataFrame operator+(const DataFrame&, const DataFrame&);
@@ -205,6 +212,8 @@ DataFrame operator+(const DataFrame&, const DataFrame::DataFrameProxy&);
  * Create new instances of all the member columns. The functions is, for
  * example, used in the overloaed + operator.
  */
+template <typename T>
+DataFrame operator<(const DataFrame&, const T&);
 DataFrame deep_copy(const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
 std::vector<std::pair<int, int>> correspondence_position(const DataFrame&,

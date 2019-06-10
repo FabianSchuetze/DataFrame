@@ -103,7 +103,6 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
 template <typename T>
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<T>& other_col) {
-    std::cout << "in here\n";
     check_col_width(1, string{"must select one column"});
     check_col_len(other_col.size(), string{"len of vector num != colum"});
     insert_column(colNames[0], other_col);
@@ -113,13 +112,14 @@ template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<double>& other_col);
 template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<string>& other_col);
+template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
+    const vector<bool>& other_col);
 
 DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
     vector<pair<int, int>> indices = correspondence_position(*this, rhs);
     for (auto& x : column_names) {
         make_unique_if(x.first);
         try {
-            // IS THERE A COPY INVOLVED? WHY DON'T PASS A SHARED POINTER?!?
             columns[x.second]->plus(*rhs.get_shared_copy(x.first), indices);
         } catch (const std::out_of_range& e) {
             columns[x.second]->replace_nan();
@@ -177,3 +177,4 @@ DataFrame& DataFrame::operator+=(const T& t) {
 template DataFrame& DataFrame::operator+=(const double&);
 template DataFrame& DataFrame::operator+=(const int&);
 template DataFrame& DataFrame::operator+=(const string&);
+template DataFrame& DataFrame::operator+=(const bool&);
