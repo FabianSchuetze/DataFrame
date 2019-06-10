@@ -89,6 +89,17 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     }
     return *this;
 }
+DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
+        const DataFrame& rhs) {
+    check_col_width(rhs.size().second, string{"rhs and lhs col num differ"});
+    vector<string> rhs_names = rhs.get_column_names();
+    for (size_t i = 0; i < colNames.size(); ++i) {
+            SharedCol col = rhs.get_shared_copy(rhs_names[i]);
+            check_col_len(col->size(), "column lenght of DataFrames differ");
+            insert_column(colNames[i], col);
+    }
+    return *this;
+}
 
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<vector<double>>& others) {

@@ -11,6 +11,7 @@ class DataFrame::DataFrameProxy {
     DataFrameProxy(DataFrame&, const std::vector<std::string>&,
                    const std::vector<std::string>&);
     DataFrameProxy& operator=(const DataFrameProxy&);
+    DataFrameProxy& operator=(const DataFrame&);
     DataFrameProxy& operator=(const std::vector<std::vector<double>>&);
     template <typename T>
     DataFrameProxy& operator=(const std::vector<T>&);
@@ -18,6 +19,11 @@ class DataFrame::DataFrameProxy {
     friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
     friend DataFrame operator+(const DataFrameProxy&, const DataFrameProxy&);
     friend DataFrame operator+(const DataFrame&, const DataFrameProxy&);
+    template <typename T>
+    friend DataFrame operator<(const DataFrameProxy& lhs, const T& t) {
+        DataFrame copy = deep_copy(DataFrame(lhs));
+        return copy < t;
+    }
 
    private:
     DataFrame& theDataFrame;

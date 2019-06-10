@@ -1,13 +1,14 @@
 #include "column.h"
 #include <cmath>
-#include <memory>
 #include <iostream>
+#include <memory>
+using std::get_if;
 using std::holds_alternative;
+using std::is_same;
 using std::pair;
 using std::string;
 using std::transform;
 using std::vector;
-using std::get_if;
 
 template <typename T>
 void Column::copy_vector(const vector<T>* val, const vector<int>& subsets) {
@@ -24,20 +25,6 @@ Column::Column(const Column& c, const vector<int>& subsets) {
         copy_vector<bool>(val, subsets);
     }
 }
-//Column::Column(const Column& c, const vector<int>& subsets) {
-    //if (const vector<double>* val = std::get_if<vector<double>>(&c.col)) {
-        //col = vector<double>();
-        //for (int i : subsets) push_back<double>(val->at(i));
-    //} else if (const vector<string>* val =
-                   //std::get_if<vector<string>>(&c.col)) {
-        //col = vector<string>();
-        //for (int i : subsets) push_back<string>(val->at(i));
-    //} else if (const vector<bool>* val =
-                   //std::get_if<vector<bool>>(&c.col)) {
-        //col = vector<bool>();
-        //for (int i : subsets) push_back<bool>(val->at(i));
-    //}
-//}
 
 void Column::replace_nan() {
     for (size_t i = 0; i < size(); i++) replace_nan(i);
@@ -119,7 +106,7 @@ bool vector_element_is_null(const T& t) {
 
 template <typename T>
 bool is_valid_pair(const vector<T>& lhs, const vector<T>& rhs,
-                   const pair<int,int>& pair) {
+                   const pair<int, int>& pair) {
     bool exists = pair.second > -1;
     bool lhs_is_not_nan = !vector_element_is_null(lhs.at(pair.first));
     bool rhs_is_not_nan = !vector_element_is_null(rhs.at(pair.first));
@@ -152,7 +139,7 @@ void Column::convert_bool_to_double() {
     if (vector<bool>* vec = std::get_if<vector<bool>>(&col)) {
         vector<double> tmp(vec->begin(), vec->end());
         col = tmp;
-    } else 
+    } else
         throw std::invalid_argument("Can only convert boolean");
 }
 
@@ -162,21 +149,23 @@ Column Column::convert_bool_to_double(const Column& rhs) {
     return new_col;
 }
 
-void Column::add_to_double(const Column& rhs, const vector<pair<int, int>>& idx) {
+void Column::add_to_double(const Column& rhs,
+                           const vector<pair<int, int>>& idx) {
     vector<double>* vec = std::get_if<vector<double>>(&col);
     if (const vector<double>* other = std::get_if<vector<double>>(&rhs.col))
         add_elements(vec, *other, idx);
     else if (std::get_if<vector<bool>>(&rhs.col))
         this->plus(convert_bool_to_double(rhs), idx);
-    else 
+    else
         throw std::invalid_argument("Rhs has the wrong type");
 }
 
-void Column::add_to_string(const Column& rhs, const vector<pair<int, int>>& idx) {
+void Column::add_to_string(const Column& rhs,
+                           const vector<pair<int, int>>& idx) {
     vector<string>* vec = std::get_if<vector<string>>(&col);
     if (const vector<string>* other = std::get_if<vector<string>>(&rhs.col))
         add_elements(vec, *other, idx);
-    else 
+    else
         throw std::invalid_argument("Can only add strings to strings");
 }
 
@@ -217,4 +206,22 @@ Column operator+(const Column& c, const string& d) {
         string msg = "Cant add string " + d + ": incompatible column types";
         throw std::invalid_argument(msg);
     }
+}
+
+void Column::is_smaller_than(const double&t) {
+    std::vector<bool> r(size());
+    if (dvec* d = std::get_if<dvec>(&col))
+         transform(d->begin(), d->end(), r.begin(), [&](auto&x){return x<t;});
+    else 
+        throw std::invalid_argument("Column type different from double");
+    col = r;
+}
+
+void Column::is_smaller_than(const string&t) {
+    std::vector<bool> r(size());
+    if (svec* d = std::get_if<svec>(&col))
+         transform(d->begin(), d->end(), r.begin(), [&](auto&x) {return x<t;});
+    else 
+        throw std::invalid_argument("Column type different from string");
+    col = r;
 }

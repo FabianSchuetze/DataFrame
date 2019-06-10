@@ -47,8 +47,9 @@ int main() {
     DataFrame df2 = DataFrame(idx_names, col_names, second);
     std::cout << df2;
     std::cout << df1;
-    std::cout << df2 + df1;
-    df1.convert_bool_to_double("first_col");
+    df1["test"] = df2["second_col"] < 80.;
+    //std::cout << test;
+    //df1.convert_bool_to_double("first_col");
     std::cout << df1;
 
     //DataFrame df1 = df2;

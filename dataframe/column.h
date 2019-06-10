@@ -13,6 +13,8 @@ class Column {
     friend class DataFrame;
     friend void append_missing_cols(DataFrame&, const DataFrame&);
     friend std::string::size_type width(const Column&, std::vector<std::string>&);
+    template <typename T>
+    friend DataFrame operator<(const DataFrame&, const T&);
 
     Column();
     Column(const Column&, int);
@@ -65,6 +67,11 @@ class Column {
     bool is_null(size_t);
     void add_to_double(const Column&,const  std::vector<std::pair<int, int>>&);
     void add_to_string(const Column&,const  std::vector<std::pair<int, int>>&);
+    void is_smaller_than(const double&);
+    void is_smaller_than(const std::string&);
+    typedef std::vector<double> dvec;
+    typedef std::vector<std::string> svec;
+    typedef std::vector<bool> bvec;
 };
 
 Column operator+(const Column&, double d);

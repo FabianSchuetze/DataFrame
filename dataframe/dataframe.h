@@ -35,6 +35,13 @@ class DataFrame {
     friend DataFrame operator+(const DataFrameProxy&, const DataFrameProxy&);
     friend DataFrame operator+(const DataFrame&, const DataFrameProxy&);
     template <typename T>
+    friend DataFrame operator<(const DataFrame& lhs, const T& t) {
+        DataFrame copy = deep_copy(lhs);
+        for (const auto& x: copy.column_names)
+            copy.columns[x.second]->is_smaller_than(t);
+        return copy;
+    }
+    template <typename T>
     friend DataFrame operator+(const DataFrame& lhs, const T& t) {
         return deep_copy(lhs) += t;
     }
@@ -46,7 +53,7 @@ class DataFrame {
     // Functions
     DataFrame();
     // should I make this explicit?
-    DataFrame(const DataFrameProxy&);
+    explicit DataFrame(const DataFrameProxy&);
     template <typename T>
     DataFrame(const std::vector<std::string>&, const std::vector<std::string>&,
               const std::vector<std::vector<T>>&);
