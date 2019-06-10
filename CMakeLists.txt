@@ -1,0 +1,49 @@
+cmake_minimum_required (VERSION 3.5)
+
+project (Dataframe VERSION 0.1)
+set(LIBRARY_TARGET_NAME ${PROJECT_NAME})
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Produce compile_commands.json
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
+add_compile_options(-Wall -Wextra -Wpedantic)
+
+#file(GLOB SOURCES
+    #dataframe/*.h
+    #dataframe/*.cpp
+    #)
+set(${LIBRARY_TARGET_NAME}_SRC
+    dataframe/dataframe.cpp
+    dataframe/column.cpp
+    dataframe/print.cpp
+    dataframe/operators.cpp
+    dataframe/dataframeproxy.cpp
+)
+
+set(${LIBRARY_TARGET_NAME}_HDR
+    dataframe/ColumIterator.h
+    dataframe/dataframe.h
+    dataframe/column.h
+    dataframe/ConstColumnIterator.h
+    dataframe/dataframeproxy.h
+)
+
+if (UNIX)
+  add_library(${LIBRARY_TARGET_NAME} SHARED ${${LIBRARY_TARGET_NAME}_SRC})
+endif(UNIX)
+
+add_executable(main main.cpp)
+    #dataframe/dataframeproxy.cpp dataframe/column.cpp dataframe/print.cpp 
+    #dataframe/operators.cpp)
+#add_executable(test2 test/test.cpp dataframe/dataframe.cpp
+    #dataframe/dataframeproxy.cpp dataframe/column.cpp dataframe/print.cpp 
+    #dataframe/operators.cpp)
+#add_executable(main main.cpp dataframe/dataframe.cpp
+    #dataframe/dataframeproxy.cpp dataframe/column.cpp dataframe/print.cpp 
+    #dataframe/operators.cpp)
+#add_executable(test2 test/test.cpp dataframe/dataframe.cpp
+    #dataframe/dataframeproxy.cpp dataframe/column.cpp dataframe/print.cpp 
+    #dataframe/operators.cpp)
+target_link_libraries(main Dataframe)

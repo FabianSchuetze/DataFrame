@@ -50,7 +50,7 @@ vector<string> DataFrame::get_column_names() const {
     return get_names(column_names);
 }
 
-DataFrame::DataFrame() : columns(), index_names(), column_names(){};
+DataFrame::DataFrame() : columns(), index_names(), column_names(){}
 
 std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) {
     return static_cast<const DataFrame&>(*this).get_unique(s);  // Item 3
@@ -87,7 +87,7 @@ std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) const {
 }
 
 
-const int DataFrame::find_index_position(const string& s) const {
+int DataFrame::find_index_position(const string& s) const {
     for (const auto& x : index_names) {
         if (x.first == s) return x.second;
     }
@@ -113,7 +113,7 @@ int DataFrame::find_index_pair(const pair<string, int>& ele) {
     throw std::out_of_range("Could not find the index argument");
 }
 
-const int DataFrame::find_index_position(const std::string& s) {
+int DataFrame::find_index_position(const std::string& s) {
     return static_cast<const DataFrame&>(*this).find_index_position(s);
 }
 

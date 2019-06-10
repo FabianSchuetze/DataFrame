@@ -9,9 +9,9 @@ before_install:
 install:
   - sudo apt-get install -qq g++-9
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 100
-  - sudo apt-get install -qq cppcheck
 
 script:
-    - make
-    - ./out 
-    - cppcheck --quiet --error-exitcode=1 .
+    - mkdir build
+    - cd build
+    - cmake ..
+    - cmake --build . -- -j2

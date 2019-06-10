@@ -183,8 +183,8 @@ class DataFrame {
      * index values in the input
      */
     std::vector<int> get_index_positions(const std::vector<std::string>&) const;
-    const int find_index_position(const std::string&) const;
-    const int find_index_position(const std::string&);
+    int find_index_position(const std::string&) const;
+    int find_index_position(const std::string&);
     /**
      * @Return a shared_ptr to the column named s
      */

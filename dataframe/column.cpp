@@ -52,9 +52,9 @@ void Column::push_back(const T t) {
     std::get<vector<T>>(col).push_back(t);
 }
 
-const size_t Column::size() { return static_cast<const Column&>(*this).size(); }
+size_t Column::size() { return static_cast<const Column&>(*this).size(); }
 
-const size_t Column::size() const {
+size_t Column::size() const {
     if (holds_alternative<vector<double>>(col))
         return std::get<vector<double>>(col).size();
     else if (holds_alternative<vector<string>>(col))

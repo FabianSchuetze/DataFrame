@@ -33,8 +33,8 @@ class Column {
     /**
      * @brief Returns the length of the column
      */
-    const size_t size();
-    const size_t size() const;
+    size_t size();
+    size_t size() const;
     /**
      * @breif Returns the type of the stored data as a string
      */
