@@ -131,7 +131,7 @@ class DataFrame {
     DataFrameProxy operator[](const std::vector<std::string>& col_name);
     DataFrameProxy loc(const std::string&);
     std::pair<size_t, size_t> size() const;
-    int use_count(std::string);  // Can i const qualify it?
+    int use_count(const std::string&);  // Can i const qualify it?
     std::vector<std::string> get_index_names();
     std::vector<std::string> get_index_names() const;
     std::vector<std::string> get_column_names();

@@ -156,10 +156,11 @@ template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
 template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
                               const vector<vector<bool>>&);
 
-DataFrame::DataFrame(const DataFrame::DataFrameProxy& df) {
+DataFrame::DataFrame(const DataFrame::DataFrameProxy& df):
+    columns(), index_names(), column_names() {
     int i = 0;
     for (const string& name : df.colNames) {
-        int pos = df.theDataFrame.column_names[name];
+        int pos = df.theDataFrame.get_column_position(name);
         columns.push_back(df.theDataFrame.columns[pos]);
         column_names[name] = i++;
     }
@@ -173,8 +174,9 @@ std::pair<size_t, size_t> DataFrame::size() const {
     return make_pair(index_names.size(), columns.size());
 }
 
-int DataFrame::use_count(string col) {
-    return columns[column_names[col]].use_count();
+int DataFrame::use_count(const string& name) {
+    int pos = get_column_position(name);
+    return columns[pos].use_count();
 }
 
 vector<pair<int, int>> correspondence_position(const DataFrame& lhs,
@@ -218,7 +220,7 @@ bool DataFrame::contains_null(const string& s) {
 }
 
 void DataFrame::make_unique(const std::string& s) {
-    columns.at(column_names[s]) = get_unique(s);
+    columns.at(get_column_position(s)) = get_unique(s);
 }
 
 void DataFrame::make_unique(const std::vector<string>& vec) {
@@ -281,7 +283,10 @@ vector<string> DataFrame::get_column_names() {
 template vector<string> DataFrame::get_column_names<double>();
 template vector<string> DataFrame::get_column_names<string>();
 
-void DataFrame::drop_column(const string& s) { column_names.erase(s); }
+void DataFrame::drop_column(const string& s) {
+    columns[get_column_position(s)].~shared_ptr(); //reduce use_count()
+    column_names.erase(s); //delete reference to it;
+}
 
 void DataFrame::sort_by_index() {
     std::sort(index_names.begin(), index_names.end(), 
