@@ -35,6 +35,7 @@ if (UNIX)
 endif(UNIX)
 
 add_executable(main main.cpp)
+add_executable(my_test test/test.cpp)
     #dataframe/dataframeproxy.cpp dataframe/column.cpp dataframe/print.cpp 
     #dataframe/operators.cpp)
 #add_executable(test2 test/test.cpp dataframe/dataframe.cpp
@@ -47,3 +48,9 @@ add_executable(main main.cpp)
     #dataframe/dataframeproxy.cpp dataframe/column.cpp dataframe/print.cpp 
     #dataframe/operators.cpp)
 target_link_libraries(main Dataframe)
+target_link_libraries(my_test Dataframe)
+
+enable_testing()
+add_test(NAME my_test
+         COMMAND my_test)
+
