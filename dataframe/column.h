@@ -51,6 +51,8 @@ class Column {
     std::string to_string(int) const;
     template <typename T>
     void copy_vector(const std::vector<T>*, const std::vector<int>&);
+    void convert_bool_to_double();
+    Column convert_bool_to_double(const Column&);
 
    private:
     template <typename T>
@@ -61,6 +63,8 @@ class Column {
     void replace_nan();
     void replace_nan(int);
     bool is_null(size_t);
+    void add_to_double(const Column&,const  std::vector<std::pair<int, int>>&);
+    void add_to_string(const Column&,const  std::vector<std::pair<int, int>>&);
 };
 
 Column operator+(const Column&, double d);

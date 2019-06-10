@@ -148,15 +148,48 @@ bool Column::is_null(size_t pos) {
     return true;  // avoid compiler warning
 }
 
-// I NEED TO THINK ABOUT THE CONVERSION!!!
+void Column::convert_bool_to_double() {
+    if (vector<bool>* vec = std::get_if<vector<bool>>(&col)) {
+        vector<double> tmp(vec->begin(), vec->end());
+        col = tmp;
+    } else 
+        throw std::invalid_argument("Can only convert boolean");
+}
+
+Column Column::convert_bool_to_double(const Column& rhs) {
+    Column new_col = rhs;
+    new_col.convert_bool_to_double();
+    return new_col;
+}
+
+void Column::add_to_double(const Column& rhs, const vector<pair<int, int>>& idx) {
+    vector<double>* vec = std::get_if<vector<double>>(&col);
+    if (const vector<double>* other = std::get_if<vector<double>>(&rhs.col))
+        add_elements(vec, *other, idx);
+    else if (std::get_if<vector<bool>>(&rhs.col))
+        this->plus(convert_bool_to_double(rhs), idx);
+    else 
+        throw std::invalid_argument("Rhs has the wrong type");
+}
+
+void Column::add_to_string(const Column& rhs, const vector<pair<int, int>>& idx) {
+    vector<string>* vec = std::get_if<vector<string>>(&col);
+    if (const vector<string>* other = std::get_if<vector<string>>(&rhs.col))
+        add_elements(vec, *other, idx);
+    else 
+        throw std::invalid_argument("Can only add strings to strings");
+}
+
 Column& Column::plus(const Column& rhs, const vector<pair<int, int>>& indices) {
-    if (vector<double>* vec = std::get_if<vector<double>>(&col)) {
-        const vector<double>* other = std::get_if<vector<double>>(&rhs.col);
-        add_elements(vec, *other, indices);
-    } else if (vector<string>* vec = std::get_if<vector<string>>(&col)) {
-        const vector<string>* other = std::get_if<vector<string>>(&rhs.col);
-        add_elements(vec, *other, indices);
-    }
+    if (std::get_if<vector<double>>(&col))
+        add_to_double(rhs, indices);
+    else if (std::get_if<vector<string>>(&col))
+        add_to_string(rhs, indices);
+    else if (std::get_if<vector<bool>>(&col)) {
+        convert_bool_to_double();
+        this->plus(rhs, indices);
+    } else
+        throw std::runtime_error("Cannot find the right addition");
     return *this;
 }
 

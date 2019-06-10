@@ -308,3 +308,8 @@ bool DataFrame::is_contigious() {
         if ((existing_order[i] - existing_order[i-1]) != 1) return false;
     return true;
 }
+void DataFrame::convert_bool_to_double(const std::string& s) {
+    int pos = get_column_position(s);
+    columns[pos]->convert_bool_to_double();
+}
+

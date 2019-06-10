@@ -145,6 +145,10 @@ class DataFrame {
      * @brief aligns the index and the column positions
      */
     void make_contigious();
+    /**
+     * @brief Convert the boolean column name s to a double type
+     */
+    void convert_bool_to_double(const std::string&);
 
    private:
     std::vector<std::shared_ptr<Column>> columns;

@@ -37,18 +37,25 @@ void sort_df(DataFrame& df, const std::string& s) {
 }
 
 int main() {
-    //vector<vector<bool>> first = {{true, false}, {false, true}};
-    vector<vector<double>> first = {{true, false}, {false, true}};
+    vector<vector<bool>> first = {{true, false}, {false, true}};
+    vector<vector<double>> second = {{1, 6}, {-1, 10}};
     vector<std::string> string_col = {"fa", "ma"};
     vector<double> bool_col = {false, true};
     vector<string> idx_names = {"1", "2"};
     vector<string> col_names = {"first_col", "second_col"};
-    DataFrame df2 = DataFrame(idx_names, col_names, first);
-    DataFrame df1 = df2;
-    df2["test_col2"] = bool_col;
-    std::cout << df2 << std::endl;
-    std::cout << df1 << std::endl;
-    std::cout << df1 + df2;
+    DataFrame df1 = DataFrame(idx_names, col_names, first);
+    DataFrame df2 = DataFrame(idx_names, col_names, second);
+    std::cout << df2;
+    std::cout << df1;
+    std::cout << df2 + df1;
+    df1.convert_bool_to_double("first_col");
+    std::cout << df1;
+
+    //DataFrame df1 = df2;
+    //df2["test_col2"] = bool_col;
+    //std::cout << df2 << std::endl;
+    //std::cout << df1 << std::endl;
+    //std::cout << df1 + df2;
     //std::cout << df2["second_col"] << std::endl;
     //sort_df<string>(df2, "test_col");
     //df2 += 2;
