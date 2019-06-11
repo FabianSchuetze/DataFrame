@@ -126,11 +126,7 @@ class DataFrame {
     void sort_by_index();
     /**
      * @brief Sorts the dataframe by column named s
-     *
-     * The function is a template function as one needs to specify the type of
-     * the column according to which to sort the dataframe
      */
-    template <typename T>
     void sort_by_column(const std::string&);
     DataFrameProxy operator[](const std::string&);
     DataFrameProxy operator[](const std::vector<std::string>& col_name);
@@ -227,6 +223,8 @@ class DataFrame {
     template <typename T>
     void initialize_column(const std::string&);
     void insert_data(std::ifstream&, const std::vector<std::string>&);
+    template <typename T>
+    void sort_by_column_template(const std::string&);
 };
 
 /**

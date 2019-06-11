@@ -294,8 +294,20 @@ void DataFrame::sort_by_index() {
               [](auto& a, auto& b) { return a.first < b.first; });
 }
 
+void DataFrame::sort_by_column(const std::string& s) {
+    string type = columns[get_column_position(s)]->type_name();
+    if (type== "double")
+        sort_by_column_template<double>(s);
+    else if (type== "string")
+        sort_by_column_template<string>(s);
+    else if (type == "bool") {
+        string msg = "Column: " + s + " is type bool, no sort implemented";
+        throw std::logic_error(msg);
+    }
+}
+
 template <typename T>
-void DataFrame::sort_by_column(const string& s) {
+void DataFrame::sort_by_column_template(const string& s) {
     vector<pair<string, int>> new_index(index_names.size());
     vector<int> argsort = permutation_index<T>(s);
     for (size_t i = 0; i < argsort.size(); ++i) {
@@ -305,8 +317,8 @@ void DataFrame::sort_by_column(const string& s) {
     index_names = new_index;
 }
 
-template void DataFrame::sort_by_column<double>(const std::string&);
-template void DataFrame::sort_by_column<std::string>(const std::string&);
+template void DataFrame::sort_by_column_template<double>(const std::string&);
+template void DataFrame::sort_by_column_template<std::string>(const std::string&);
 
 bool DataFrame::is_contigious() {
     vector<int> existing_order = get_index_positions();
