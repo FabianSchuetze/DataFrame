@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['cbegin',['cbegin',['../classDataFrame.html#a857dadee258495743462244022a2dcce',1,'DataFrame']]],
-  ['cend',['cend',['../classDataFrame.html#a895c45b1be67d772aed3fa10169a1038',1,'DataFrame']]],
-  ['column',['Column',['../classColumn.html',1,'']]],
-  ['columniterator',['ColumnIterator',['../classDataFrame_1_1ColumnIterator.html',1,'DataFrame']]],
-  ['constcolumniterator',['ConstColumnIterator',['../classDataFrame_1_1ConstColumnIterator.html',1,'DataFrame']]]
+  ['append_5fmissing_5fcols',['append_missing_cols',['../classColumn.html#a27cc8acd51a5cd40e6a2726368914661',1,'Column::append_missing_cols()'],['../classDataFrame.html#a27cc8acd51a5cd40e6a2726368914661',1,'DataFrame::append_missing_cols()']]],
+  ['append_5fmissing_5frows',['append_missing_rows',['../classDataFrame.html#a221d3063f94569b545fe4c3ae56597e8',1,'DataFrame']]]
 ];

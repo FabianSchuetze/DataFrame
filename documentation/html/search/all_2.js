@@ -1,4 +1,8 @@
 var searchData=
 [
-  ['get_5funique',['get_unique',['../classDataFrame.html#a5909652f24e66c22922b4b4c910f2b09',1,'DataFrame::get_unique(const std::string &amp;)'],['../classDataFrame.html#afa835fbc006732850a6483ba8635db2e',1,'DataFrame::get_unique(const std::string &amp;) const'],['../classDataFrame.html#a6602096fc3d63c1211b25a31a802a504',1,'DataFrame::get_unique(const std::string &amp;, const std::vector&lt; int &gt; &amp;) const']]]
+  ['dataframe',['DataFrame',['../classDataFrame.html',1,'DataFrame'],['../classDataFrame.html#a31eb9b2eb2874c02156bcdad43ab2784',1,'DataFrame::DataFrame()']]],
+  ['dataframeproxy',['DataFrameProxy',['../classDataFrame_1_1DataFrameProxy.html',1,'DataFrame']]],
+  ['drop_5fcolumn',['drop_column',['../classDataFrame.html#afa6fd73a62f0d45b03e5df738a575693',1,'DataFrame']]],
+  ['drop_5frow',['drop_row',['../classDataFrame.html#a337c8f36b774778364dcde54b398fb5a',1,'DataFrame']]],
+  ['dropna',['dropna',['../classDataFrame.html#a6abc672ac4c439e3e785bd3f84c8da15',1,'DataFrame']]]
 ];

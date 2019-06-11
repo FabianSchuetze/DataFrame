@@ -5,6 +5,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <fstream>
 #include "column.h"
 
 /**
@@ -54,6 +55,10 @@ class DataFrame {
     DataFrame();
     // should I make this explicit?
     explicit DataFrame(const DataFrameProxy&);
+    /**
+     * @brief Create a new dataframe by reading from an file-stream
+     */
+    explicit DataFrame(std::ifstream&);
     template <typename T>
     DataFrame(const std::vector<std::string>&, const std::vector<std::string>&,
               const std::vector<std::vector<T>>&);
@@ -190,11 +195,13 @@ class DataFrame {
      */
     std::vector<int> get_index_positions() const;
     /**
-     * @bried returns the vector with index position as well, but instead of
-     * travering the entire index of the dataframe, the function looks up all
-     * index values in the input
+     * @brief returns the vector with index position corresponding to the index
+     * names in the input vector
      */
     std::vector<int> get_index_positions(const std::vector<std::string>&) const;
+    /**
+     * @brief finds the rows number for the index name given as input
+     */
     int find_index_position(const std::string&) const;
     int find_index_position(const std::string&);
     /**
@@ -205,6 +212,9 @@ class DataFrame {
      * @Return a shared_ptr to the column named s for a const-dataframe
      */
     SharedCol get_shared_copy(const std::string&) const;
+    void create_column_names(std::ifstream&);
+    void create_columns(std::ifstream&);
+    void insert_data(std::ifstream&);
 };
 
 /**

@@ -1,18 +1,20 @@
-#include "dataframe.h"
-#include "dataframeproxy.h"
 #include <algorithm>
 #include <iostream>
 #include <iterator>
+#include "dataframe.h"
+#include "dataframeproxy.h"
 using std::string;
 using std::vector;
 
-vector<string> conversion(const string& title,
-                          const vector<int>& idx,
+vector<string> conversion(const string& title, const vector<int>& idx,
                           const Column& c) {
     vector<string> res = {title};
-    int i =0;
-    for (auto const& x: idx) {
-        if (i == 5) break;
+    int i = 0;
+    for (auto const& x : idx) {
+        if (i == 10) {
+            res.push_back("TRUNCATED");
+            break;
+        }
         res.push_back(c.to_string(x));
         i++;
     }
@@ -21,8 +23,7 @@ vector<string> conversion(const string& title,
 
 string::size_type width(vector<string>& inp) {
     string::size_type maxlen = 0;
-    for (const auto& s: inp)
-        maxlen = std::max(maxlen, s.size());
+    for (const auto& s : inp) maxlen = std::max(maxlen, s.size());
     return maxlen;
 }
 
@@ -32,7 +33,7 @@ vector<string> frame(vector<string> vec) {
     string border(maxlen + 4, '-');
     border += "\n";
     ret.push_back(border);
-    int i =0;
+    int i = 0;
     for (auto const& s : vec) {
         ret.push_back("| " + s + string(maxlen - s.size(), ' ') + " |\n");
         if (i == 0) ret.push_back(border);
@@ -45,24 +46,34 @@ vector<string> frame(vector<string> vec) {
 void hcat(vector<string>& lhs, const vector<string> rhs) {
     for (size_t i = 0; i < lhs.size(); ++i) {
         string tmp = lhs[i];
-        lhs[i] = tmp.substr(0, tmp.size() -1) + rhs[i].substr(1);
+        lhs[i] = tmp.substr(0, tmp.size() - 1) + rhs[i].substr(1);
     }
 }
 
 vector<string> frame_index(vector<string> inp) {
     inp.insert(inp.begin(), string(""));
-    vector<string> output = frame(inp);
+    vector<string>::iterator end;
+    if (inp.size() > 11)
+        end = inp.begin() + 12;
+    else 
+        end = inp.end();
+    vector<string> output = frame(vector<string>(inp.begin(),end));
     return output;
+}
+void check_positions(vector<int>& inp) {
+    for (const int& x : inp)
+        if (x == -1) throw std::runtime_error("Could not find the index");
 }
 std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
     vector<string> output = frame_index(df.get_index_names());
     vector<int> positions = df.get_index_positions();
+    check_positions(positions);
     for (const std::pair<string, int>& x : df.column_names) {
-        vector<string> rhs = frame(conversion(x.first, positions,
-                                              *df.columns[x.second]));
+        vector<string> rhs =
+            frame(conversion(x.first, positions, *df.columns[x.second]));
         hcat(output, rhs);
     }
-    std::copy(output.begin(), output.end(), 
+    std::copy(output.begin(), output.end(),
               std::ostream_iterator<string>(os, " "));
     return os;
 }
@@ -76,7 +87,7 @@ std::ostream& operator<<(std::ostream& os,
         vector<string> rhs = frame(conversion(colName, subset, *c));
         hcat(output, rhs);
     }
-    std::copy(output.begin(), output.end(), 
+    std::copy(output.begin(), output.end(),
               std::ostream_iterator<string>(os, " "));
     return os;
 }

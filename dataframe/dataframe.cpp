@@ -1,11 +1,12 @@
 #include "dataframe.h"
+#include <algorithm>
 #include <iostream>
+#include <numeric>
 #include <ostream>
 #include <stdexcept>
-#include "dataframeproxy.h"
+#include <sstream>
 #include "ConstColumnIterator.h"
-#include <algorithm>
-#include <numeric>
+#include "dataframeproxy.h"
 class ColumnIterator;
 using std::make_pair;
 using std::make_shared;
@@ -50,7 +51,7 @@ vector<string> DataFrame::get_column_names() const {
     return get_names(column_names);
 }
 
-DataFrame::DataFrame() : columns(), index_names(), column_names(){}
+DataFrame::DataFrame() : columns(), index_names(), column_names() {}
 
 std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) {
     return static_cast<const DataFrame&>(*this).get_unique(s);  // Item 3
@@ -85,7 +86,6 @@ std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) const {
         throw std::out_of_range(msg);
     }
 }
-
 
 int DataFrame::find_index_position(const string& s) const {
     for (const auto& x : index_names) {
@@ -156,8 +156,8 @@ template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
 template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
                               const vector<vector<bool>>&);
 
-DataFrame::DataFrame(const DataFrame::DataFrameProxy& df):
-    columns(), index_names(), column_names() {
+DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
+    : columns(), index_names(), column_names() {
     int i = 0;
     for (const string& name : df.colNames) {
         int pos = df.theDataFrame.get_column_position(name);
@@ -166,6 +166,8 @@ DataFrame::DataFrame(const DataFrame::DataFrameProxy& df):
     }
     for (const string& name : df.idxNames) {
         int pos = df.theDataFrame.find_index_position(name);
+        if (pos == -1)
+            throw std::runtime_error("Could not find the index: " + name);
         index_names.push_back(make_pair(name, pos));
     }
 }
@@ -199,7 +201,8 @@ void DataFrame::append_index(const string& s) {
 }
 
 int DataFrame::get_column_position(const std::string& s) {
-    return static_cast<const DataFrame&>(*this).get_column_position(s);  // Item 3
+    return static_cast<const DataFrame&>(*this).get_column_position(
+        s);  // Item 3
 }
 
 int DataFrame::get_column_position(const std::string& s) const {
@@ -213,8 +216,7 @@ int DataFrame::get_column_position(const std::string& s) const {
 bool DataFrame::contains_null(const string& s) {
     int pos = find_index_position(s);
     for (auto const& cols : column_names) {
-        if (columns[cols.second]->is_null(pos))
-            return true;
+        if (columns[cols.second]->is_null(pos)) return true;
     }
     return false;
 }
@@ -235,19 +237,18 @@ void DataFrame::make_unique_if(const std::string& s) {
 }
 
 // == I choose to make only non-unqiue column unique and not the entire df ==
-//void DataFrame::make_unique_if(const vector<string>& c) {
-    //auto fun = [&](int a, const string& s) { return a + use_count(s); };
-    //if (std::accumulate(c.begin(), c.end(), 0, fun) > size().second)
-        //make_unique(c);
+// void DataFrame::make_unique_if(const vector<string>& c) {
+// auto fun = [&](int a, const string& s) { return a + use_count(s); };
+// if (std::accumulate(c.begin(), c.end(), 0, fun) > size().second)
+// make_unique(c);
 //}
 
 void DataFrame::make_unique_if(const vector<string>& c) {
-    for (const string& s : c)
-        make_unique_if(s);
+    for (const string& s : c) make_unique_if(s);
 }
-    //auto fun = [&](int a, const string& s) { return a + use_count(s); };
-    //if (std::accumulate(c.begin(), c.end(), 0, fun) > size().second)
-        //make_unique(c);
+// auto fun = [&](int a, const string& s) { return a + use_count(s); };
+// if (std::accumulate(c.begin(), c.end(), 0, fun) > size().second)
+// make_unique(c);
 //}
 
 void DataFrame::drop_row(const string& s) {
@@ -284,13 +285,13 @@ template vector<string> DataFrame::get_column_names<double>();
 template vector<string> DataFrame::get_column_names<string>();
 
 void DataFrame::drop_column(const string& s) {
-    columns[get_column_position(s)].~shared_ptr(); //reduce use_count()
-    column_names.erase(s); //delete reference to it;
+    columns[get_column_position(s)].~shared_ptr();  // reduce use_count()
+    column_names.erase(s);                          // delete reference to it;
 }
 
 void DataFrame::sort_by_index() {
-    std::sort(index_names.begin(), index_names.end(), 
-            [](auto&a, auto&b) { return a.first < b.first;});
+    std::sort(index_names.begin(), index_names.end(),
+              [](auto& a, auto& b) { return a.first < b.first; });
 }
 
 template <typename T>
@@ -310,10 +311,75 @@ template void DataFrame::sort_by_column<std::string>(const std::string&);
 bool DataFrame::is_contigious() {
     vector<int> existing_order = get_index_positions();
     for (size_t i = 1; i < existing_order.size(); ++i)
-        if ((existing_order[i] - existing_order[i-1]) != 1) return false;
+        if ((existing_order[i] - existing_order[i - 1]) != 1) return false;
     return true;
 }
 void DataFrame::convert_bool_to_double(const std::string& s) {
     int pos = get_column_position(s);
     columns[pos]->convert_bool_to_double();
+}
+
+void DataFrame::create_column_names(std::ifstream& file) {
+    std::string line, name;
+    std::getline(file, line);
+    int i = 0;
+    std::istringstream names(line);
+    while (std::getline(names, name, ',')) {
+        if (i > 0)
+            column_names[name] = i-1;
+        i++;
+    }
+}
+
+void DataFrame::create_columns(std::ifstream& file) {
+    std::string line, name;
+    std::getline(file, line);
+    int i = 0;
+    std::istringstream names(line);
+    while (std::getline(names, name, ',')) {
+        if (i > 0) {
+            if (name == "double") {
+                Column col = Column(vector<double>());
+                columns.push_back(make_shared<Column>(col));
+            }
+            else if (name == "string") {
+                Column col = Column(vector<string>());
+                columns.push_back(make_shared<Column>(col));
+            } else 
+                throw std::runtime_error("deals with strings and double");
+        }
+        i++;
+    }
+}
+
+void DataFrame::insert_data(std::ifstream& file) {
+    std::string line, name;
+    int line_number = 0;
+    while (std::getline(file, line)) {
+        int i = 0;
+        std::istringstream names(line);
+        while (std::getline(names, name, ',')) {
+            if (i == 0) {
+                std::cout << name << ": " << line_number << std::endl;
+                index_names.push_back(make_pair(name, line_number));
+            } else if (i > 0) {
+                double d = std::stod(name);
+                std::cout << "value: " << d << std::endl;
+                columns[i-1]->push_back<double>(d);
+            }
+            i++;
+        }
+        line_number++;
+    }
+}
+
+DataFrame::DataFrame(std::ifstream& file)
+    : columns(), index_names(), column_names()
+{
+    create_column_names(file);
+    create_columns(file);
+    insert_data(file);
+    std::cout << "completed\n";
+    //std::cout << size().first << std::endl;
+    //std::cout << size().second << std::endl;
 }

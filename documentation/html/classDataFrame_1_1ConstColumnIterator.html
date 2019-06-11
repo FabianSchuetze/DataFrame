@@ -64,12 +64,22 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classDataFrame_1_1ConstColumnIterator-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">DataFrame::ConstColumnIterator&lt; T &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="dynheader">
+Collaboration diagram for DataFrame::ConstColumnIterator&lt; T &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="classDataFrame_1_1ConstColumnIterator__coll__graph.png" border="0" usemap="#DataFrame_1_1ConstColumnIterator_3_01T_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="DataFrame_1_1ConstColumnIterator_3_01T_01_4_coll__map" id="DataFrame_1_1ConstColumnIterator_3_01T_01_4_coll__map">
+<area shape="rect" id="node2" href="classDataFrame.html" title="DataFrame" alt="" coords="86,5,173,32"/>
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -94,6 +104,24 @@ const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</
 <tr class="memitem:a5ee96a13f1a26a51514784435d35e86c"><td class="memItemLeft" align="right" valign="top"><a id="a5ee96a13f1a26a51514784435d35e86c"></a>
 <a class="el" href="classDataFrame_1_1ConstColumnIterator.html">ConstColumnIterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator--</b> (int)</td></tr>
 <tr class="separator:a5ee96a13f1a26a51514784435d35e86c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ad7dca2259015130616cb052e6997ba70"><td class="memItemLeft" align="right" valign="top"><a id="ad7dca2259015130616cb052e6997ba70"></a>
+std::shared_ptr&lt; <a class="el" href="classColumn.html">Column</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>check</b> (std::size_t, const std::string &amp;) const</td></tr>
+<tr class="separator:ad7dca2259015130616cb052e6997ba70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a9f8b079e45b708072aa9eec8ff4c7b98"><td class="memItemLeft" align="right" valign="top"><a id="a9f8b079e45b708072aa9eec8ff4c7b98"></a>
+const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>theDataFrame</b></td></tr>
+<tr class="separator:a9f8b079e45b708072aa9eec8ff4c7b98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4a28de973f2e243ca9a0f0b0523d95a"><td class="memItemLeft" align="right" valign="top"><a id="ae4a28de973f2e243ca9a0f0b0523d95a"></a>
+std::weak_ptr&lt; <a class="el" href="classColumn.html">Column</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>wptr</b></td></tr>
+<tr class="separator:ae4a28de973f2e243ca9a0f0b0523d95a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50d3d59e14b5ca2d4f2982d799f0100d"><td class="memItemLeft" align="right" valign="top"><a id="a50d3d59e14b5ca2d4f2982d799f0100d"></a>
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>curr</b></td></tr>
+<tr class="separator:a50d3d59e14b5ca2d4f2982d799f0100d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>

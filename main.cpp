@@ -3,6 +3,7 @@
 #include "dataframe/ColumnIterator.h"
 #include "dataframe/ConstColumnIterator.h"
 #include <vector>
+#include <fstream>
 #include <string>
 #include <iostream>
 #include <cmath>
@@ -36,39 +37,16 @@ void sort_df(DataFrame& df, const std::string& s) {
     df.sort_by_column<T>(s);
 }
 
+// NEED TO THINK HOW I CAN DO THIS WTTH CMAKE!
 int main() {
-    vector<vector<bool>> first = {{true, false}, {false, true}};
-    vector<vector<double>> second = {{1, 6}, {-1, 10}};
-    vector<std::string> string_col = {"fa", "ma"};
-    vector<double> bool_col = {false, true};
-    vector<string> idx_names = {"1", "2"};
-    vector<string> col_names = {"first_col", "second_col"};
-    DataFrame df1 = DataFrame(idx_names, col_names, first);
-    DataFrame df2 = DataFrame(idx_names, col_names, second);
-    std::cout << df2;
-    std::cout << df1;
-    df1["test"] = df2["second_col"] < 80.;
-    //std::cout << test;
-    //df1.convert_bool_to_double("first_col");
-    std::cout << df1;
-
-    //DataFrame df1 = df2;
-    //df2["test_col2"] = bool_col;
-    //std::cout << df2 << std::endl;
-    //std::cout << df1 << std::endl;
-    //std::cout << df1 + df2;
-    //std::cout << df2["second_col"] << std::endl;
-    //sort_df<string>(df2, "test_col");
-    //df2 += 2;
-    //std::cout << df2 << std::endl;
-    //std::cout << std::endl;
-    //std::cout << "is contigious: " << df2.is_contigious() << std::endl;
-    //df2.make_contigious();
-    ////DataFrame df3 = deep_copy(df2);
-    ////for (const auto& i : df3.get_index_positions())
-        ////std::cout << i << std::endl;
-    //std::cout << df2 << std::endl;
-    //std::cout << df1 << std::endl;
-    //std::cout << "is contigious: " << df2.is_contigious() << std::endl;
+    std::ifstream infile("forecast.csv");
+    DataFrame df1 = DataFrame(infile);
+    std::cout << "completed\n";
+    std::cout << df1.size().first << std::endl;
+    std::cout << df1.size().second << std::endl;
+    std::cout << df1.loc("2019-05-01") << std::endl;
+    DataFrame df2 = DataFrame(df1.loc("2019-04-30"));
+    //std::cout << df1.loc("2019-05-02") << std::endl;
+    std::cout << df1 << std::endl;
     return 0;
 }

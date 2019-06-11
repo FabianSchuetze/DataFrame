@@ -64,12 +64,22 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classDataFrame_1_1DataFrameProxy-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">DataFrame::DataFrameProxy Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="dynheader">
+Collaboration diagram for DataFrame::DataFrameProxy:</div>
+<div class="dyncontent">
+<div class="center"><img src="classDataFrame_1_1DataFrameProxy__coll__graph.png" border="0" usemap="#DataFrame_1_1DataFrameProxy_coll__map" alt="Collaboration graph"/></div>
+<map name="DataFrame_1_1DataFrameProxy_coll__map" id="DataFrame_1_1DataFrameProxy_coll__map">
+<area shape="rect" id="node2" href="classDataFrame.html" title="DataFrame" alt="" coords="59,5,146,32"/>
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -82,6 +92,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6d56fc9161384065db7812e513313731"><td class="memItemLeft" align="right" valign="top"><a id="a6d56fc9161384065db7812e513313731"></a>
 <a class="el" href="classDataFrame_1_1DataFrameProxy.html">DataFrameProxy</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classDataFrame_1_1DataFrameProxy.html">DataFrameProxy</a> &amp;)</td></tr>
 <tr class="separator:a6d56fc9161384065db7812e513313731"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a680def6fdcc7d488e10b2dba471f8854"><td class="memItemLeft" align="right" valign="top"><a id="a680def6fdcc7d488e10b2dba471f8854"></a>
+<a class="el" href="classDataFrame_1_1DataFrameProxy.html">DataFrameProxy</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;)</td></tr>
+<tr class="separator:a680def6fdcc7d488e10b2dba471f8854"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6c8c653d011966f9bf91396123bb0a5"><td class="memItemLeft" align="right" valign="top"><a id="ae6c8c653d011966f9bf91396123bb0a5"></a>
 <a class="el" href="classDataFrame_1_1DataFrameProxy.html">DataFrameProxy</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const std::vector&lt; std::vector&lt; double &gt;&gt; &amp;)</td></tr>
 <tr class="separator:ae6c8c653d011966f9bf91396123bb0a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -98,6 +111,40 @@ template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a6910b480e16f67a6ae3f5d36757c0a57"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classDataFrame_1_1DataFrameProxy.html">DataFrame::DataFrameProxy</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator=</b> (const vector&lt; T &gt; &amp;other_col)</td></tr>
 <tr class="separator:a6910b480e16f67a6ae3f5d36757c0a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a86f0a67b671260df875dd32d587d02c0"><td class="memItemLeft" align="right" valign="top"><a id="a86f0a67b671260df875dd32d587d02c0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>add_column</b> (const std::shared_ptr&lt; <a class="el" href="classColumn.html">Column</a> &gt; &amp;)</td></tr>
+<tr class="separator:a86f0a67b671260df875dd32d587d02c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0706f91d14181e989b3d41836a8b5cc6"><td class="memItemLeft" align="right" valign="top"><a id="a0706f91d14181e989b3d41836a8b5cc6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>replace_column</b> (int, const std::shared_ptr&lt; <a class="el" href="classColumn.html">Column</a> &gt; &amp;)</td></tr>
+<tr class="separator:a0706f91d14181e989b3d41836a8b5cc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93ea7598d298b57ba7c3226e72dfd42d"><td class="memItemLeft" align="right" valign="top"><a id="a93ea7598d298b57ba7c3226e72dfd42d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>check_col_width</b> (size_t, std::string)</td></tr>
+<tr class="separator:a93ea7598d298b57ba7c3226e72dfd42d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5a106a7251245dd7d0320172a775d43"><td class="memItemLeft" align="right" valign="top"><a id="ae5a106a7251245dd7d0320172a775d43"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>check_col_len</b> (size_t, std::string)</td></tr>
+<tr class="separator:ae5a106a7251245dd7d0320172a775d43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cf3701f97648ea7762f524496c21e6b"><td class="memItemLeft" align="right" valign="top"><a id="a8cf3701f97648ea7762f524496c21e6b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>insert_column</b> (const std::string &amp;, std::shared_ptr&lt; <a class="el" href="classColumn.html">Column</a> &gt; &amp;)</td></tr>
+<tr class="separator:a8cf3701f97648ea7762f524496c21e6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accc578b4911e2b9744616dc3623e4b02"><td class="memTemplParams" colspan="2"><a id="accc578b4911e2b9744616dc3623e4b02"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:accc578b4911e2b9744616dc3623e4b02"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>insert_column</b> (const std::string &amp;, const std::vector&lt; T &gt; &amp;)</td></tr>
+<tr class="separator:accc578b4911e2b9744616dc3623e4b02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a084054173a10f1494e0748c68e06fb3a"><td class="memItemLeft" align="right" valign="top"><a id="a084054173a10f1494e0748c68e06fb3a"></a>
+<a class="el" href="classDataFrame.html">DataFrame</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>theDataFrame</b></td></tr>
+<tr class="separator:a084054173a10f1494e0748c68e06fb3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1942a4c7499ed555a333b555c8ad9aab"><td class="memItemLeft" align="right" valign="top"><a id="a1942a4c7499ed555a333b555c8ad9aab"></a>
+std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>idxNames</b></td></tr>
+<tr class="separator:a1942a4c7499ed555a333b555c8ad9aab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ba3f257ca6e7506dda6ec39a1db414d"><td class="memItemLeft" align="right" valign="top"><a id="a0ba3f257ca6e7506dda6ec39a1db414d"></a>
+std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>colNames</b></td></tr>
+<tr class="separator:a0ba3f257ca6e7506dda6ec39a1db414d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:ac3cf826bc43b8ab4740915b5c60e7166"><td class="memItemLeft" align="right" valign="top"><a id="ac3cf826bc43b8ab4740915b5c60e7166"></a>
@@ -112,6 +159,10 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <tr class="memitem:a32fc0676af70bd35bf83e11c9ab946fc"><td class="memItemLeft" align="right" valign="top"><a id="a32fc0676af70bd35bf83e11c9ab946fc"></a>
 <a class="el" href="classDataFrame.html">DataFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator+</b> (const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;, const <a class="el" href="classDataFrame_1_1DataFrameProxy.html">DataFrameProxy</a> &amp;)</td></tr>
 <tr class="separator:a32fc0676af70bd35bf83e11c9ab946fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa1e3264e141ab931043d7f50c784394"><td class="memTemplParams" colspan="2"><a id="aaa1e3264e141ab931043d7f50c784394"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aaa1e3264e141ab931043d7f50c784394"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classDataFrame.html">DataFrame</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="classDataFrame_1_1DataFrameProxy.html">DataFrameProxy</a> &amp;lhs, const T &amp;t)</td></tr>
+<tr class="separator:aaa1e3264e141ab931043d7f50c784394"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>dataframe/<a class="el" href="dataframeproxy_8h_source.html">dataframeproxy.h</a></li>

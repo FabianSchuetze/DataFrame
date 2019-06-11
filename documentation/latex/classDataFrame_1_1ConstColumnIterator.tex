@@ -1,5 +1,14 @@
 \hypertarget{classDataFrame_1_1ConstColumnIterator}{}\section{Data\+Frame\+:\+:Const\+Column\+Iterator$<$ T $>$ Class Template Reference}
 \label{classDataFrame_1_1ConstColumnIterator}\index{Data\+Frame\+::\+Const\+Column\+Iterator$<$ T $>$@{Data\+Frame\+::\+Const\+Column\+Iterator$<$ T $>$}}
+
+
+Collaboration diagram for Data\+Frame\+:\+:Const\+Column\+Iterator$<$ T $>$\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=266pt]{classDataFrame_1_1ConstColumnIterator__coll__graph}
+\end{center}
+\end{figure}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -23,6 +32,24 @@ const T \& {\bfseries operator\mbox{[}$\,$\mbox{]}} (int) const
 \item 
 \mbox{\Hypertarget{classDataFrame_1_1ConstColumnIterator_a5ee96a13f1a26a51514784435d35e86c}\label{classDataFrame_1_1ConstColumnIterator_a5ee96a13f1a26a51514784435d35e86c}} 
 \hyperlink{classDataFrame_1_1ConstColumnIterator}{Const\+Column\+Iterator} {\bfseries operator-\/-\/} (int)
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1ConstColumnIterator_ad7dca2259015130616cb052e6997ba70}\label{classDataFrame_1_1ConstColumnIterator_ad7dca2259015130616cb052e6997ba70}} 
+std\+::shared\+\_\+ptr$<$ \hyperlink{classColumn}{Column} $>$ {\bfseries check} (std\+::size\+\_\+t, const std\+::string \&) const
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1ConstColumnIterator_a9f8b079e45b708072aa9eec8ff4c7b98}\label{classDataFrame_1_1ConstColumnIterator_a9f8b079e45b708072aa9eec8ff4c7b98}} 
+const \hyperlink{classDataFrame}{Data\+Frame} \& {\bfseries the\+Data\+Frame}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1ConstColumnIterator_ae4a28de973f2e243ca9a0f0b0523d95a}\label{classDataFrame_1_1ConstColumnIterator_ae4a28de973f2e243ca9a0f0b0523d95a}} 
+std\+::weak\+\_\+ptr$<$ \hyperlink{classColumn}{Column} $>$ {\bfseries wptr}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1ConstColumnIterator_a50d3d59e14b5ca2d4f2982d799f0100d}\label{classDataFrame_1_1ConstColumnIterator_a50d3d59e14b5ca2d4f2982d799f0100d}} 
+std\+::size\+\_\+t {\bfseries curr}
 \end{DoxyCompactItemize}
 \subsection*{Friends}
 \begin{DoxyCompactItemize}

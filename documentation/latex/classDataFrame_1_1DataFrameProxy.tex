@@ -1,5 +1,14 @@
 \hypertarget{classDataFrame_1_1DataFrameProxy}{}\section{Data\+Frame\+:\+:Data\+Frame\+Proxy Class Reference}
 \label{classDataFrame_1_1DataFrameProxy}\index{Data\+Frame\+::\+Data\+Frame\+Proxy@{Data\+Frame\+::\+Data\+Frame\+Proxy}}
+
+
+Collaboration diagram for Data\+Frame\+:\+:Data\+Frame\+Proxy\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=226pt]{classDataFrame_1_1DataFrameProxy__coll__graph}
+\end{center}
+\end{figure}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -12,6 +21,9 @@
 \mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a6d56fc9161384065db7812e513313731}\label{classDataFrame_1_1DataFrameProxy_a6d56fc9161384065db7812e513313731}} 
 \hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} \& {\bfseries operator=} (const \hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} \&)
 \item 
+\mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a680def6fdcc7d488e10b2dba471f8854}\label{classDataFrame_1_1DataFrameProxy_a680def6fdcc7d488e10b2dba471f8854}} 
+\hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} \& {\bfseries operator=} (const \hyperlink{classDataFrame}{Data\+Frame} \&)
+\item 
 \mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_ae6c8c653d011966f9bf91396123bb0a5}\label{classDataFrame_1_1DataFrameProxy_ae6c8c653d011966f9bf91396123bb0a5}} 
 \hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} \& {\bfseries operator=} (const std\+::vector$<$ std\+::vector$<$ double $>$$>$ \&)
 \item 
@@ -23,6 +35,39 @@
 \item 
 \mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a6910b480e16f67a6ae3f5d36757c0a57}\label{classDataFrame_1_1DataFrameProxy_a6910b480e16f67a6ae3f5d36757c0a57}} 
 {\footnotesize template$<$typename T $>$ }\\\hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+::\+Data\+Frame\+Proxy} \& {\bfseries operator=} (const vector$<$ T $>$ \&other\+\_\+col)
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a86f0a67b671260df875dd32d587d02c0}\label{classDataFrame_1_1DataFrameProxy_a86f0a67b671260df875dd32d587d02c0}} 
+void {\bfseries add\+\_\+column} (const std\+::shared\+\_\+ptr$<$ \hyperlink{classColumn}{Column} $>$ \&)
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a0706f91d14181e989b3d41836a8b5cc6}\label{classDataFrame_1_1DataFrameProxy_a0706f91d14181e989b3d41836a8b5cc6}} 
+void {\bfseries replace\+\_\+column} (int, const std\+::shared\+\_\+ptr$<$ \hyperlink{classColumn}{Column} $>$ \&)
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a93ea7598d298b57ba7c3226e72dfd42d}\label{classDataFrame_1_1DataFrameProxy_a93ea7598d298b57ba7c3226e72dfd42d}} 
+void {\bfseries check\+\_\+col\+\_\+width} (size\+\_\+t, std\+::string)
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_ae5a106a7251245dd7d0320172a775d43}\label{classDataFrame_1_1DataFrameProxy_ae5a106a7251245dd7d0320172a775d43}} 
+void {\bfseries check\+\_\+col\+\_\+len} (size\+\_\+t, std\+::string)
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a8cf3701f97648ea7762f524496c21e6b}\label{classDataFrame_1_1DataFrameProxy_a8cf3701f97648ea7762f524496c21e6b}} 
+void {\bfseries insert\+\_\+column} (const std\+::string \&, std\+::shared\+\_\+ptr$<$ \hyperlink{classColumn}{Column} $>$ \&)
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_accc578b4911e2b9744616dc3623e4b02}\label{classDataFrame_1_1DataFrameProxy_accc578b4911e2b9744616dc3623e4b02}} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries insert\+\_\+column} (const std\+::string \&, const std\+::vector$<$ T $>$ \&)
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a084054173a10f1494e0748c68e06fb3a}\label{classDataFrame_1_1DataFrameProxy_a084054173a10f1494e0748c68e06fb3a}} 
+\hyperlink{classDataFrame}{Data\+Frame} \& {\bfseries the\+Data\+Frame}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a1942a4c7499ed555a333b555c8ad9aab}\label{classDataFrame_1_1DataFrameProxy_a1942a4c7499ed555a333b555c8ad9aab}} 
+std\+::vector$<$ std\+::string $>$ {\bfseries idx\+Names}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a0ba3f257ca6e7506dda6ec39a1db414d}\label{classDataFrame_1_1DataFrameProxy_a0ba3f257ca6e7506dda6ec39a1db414d}} 
+std\+::vector$<$ std\+::string $>$ {\bfseries col\+Names}
 \end{DoxyCompactItemize}
 \subsection*{Friends}
 \begin{DoxyCompactItemize}
@@ -38,6 +83,9 @@ std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&, const \hyperlin
 \item 
 \mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a32fc0676af70bd35bf83e11c9ab946fc}\label{classDataFrame_1_1DataFrameProxy_a32fc0676af70bd35bf83e11c9ab946fc}} 
 \hyperlink{classDataFrame}{Data\+Frame} {\bfseries operator+} (const \hyperlink{classDataFrame}{Data\+Frame} \&, const \hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} \&)
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_aaa1e3264e141ab931043d7f50c784394}\label{classDataFrame_1_1DataFrameProxy_aaa1e3264e141ab931043d7f50c784394}} 
+{\footnotesize template$<$typename T $>$ }\\\hyperlink{classDataFrame}{Data\+Frame} {\bfseries operator$<$} (const \hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} \&lhs, const T \&t)
 \end{DoxyCompactItemize}
 
 
