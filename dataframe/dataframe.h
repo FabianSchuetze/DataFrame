@@ -113,6 +113,7 @@ class DataFrame {
      * @brief drops rows which contain na from the dataframe
      */
     void dropna();
+    void drop_row(std::vector<std::string>&);
     /**
      * @brief drops a row from the dataframe
      */

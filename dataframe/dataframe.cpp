@@ -252,21 +252,30 @@ void DataFrame::make_unique_if(const vector<string>& c) {
 }
 
 void DataFrame::drop_row(const string& s) {
-    auto it = std::find(index_positions.begin(), index_positions.end(), s);
-    if (it == index_positions.end())
-        throw std::runtime_error("Cannot find the index value");
-    index_names.erase(s);
-    index_positions.erase(it);
+    vector<string> tmp{s};
+    return drop_row(tmp);
 }
 
-// I THINK THIS IS NOT EXCEPTION SAFE!!!
+void DataFrame::drop_row(vector<string>& vec) {
+    std::sort(vec.begin(), vec.end());
+    auto fun = [&](const string& val) {
+        return !std::binary_search(vec.begin(), vec.end(), val);};
+    auto it = std::stable_partition(index_positions.begin(), 
+            index_positions.end(), fun);
+    index_positions.erase(it, index_positions.end());
+    for (string& s: vec)
+        index_names.erase(s);
+}
+
 void DataFrame::dropna() {
-    std::vector<string> index_copy = index_positions;
-    for (const string& s : index_copy) {
-        if (contains_null(s)) {
-            make_unique_if(get_column_names());
-            drop_row(s);
-        }
+    vector<string> to_drop;
+    // I can already do the stable partition here!!
+    std::copy_if(index_positions.begin(), index_positions.end(),
+            std::back_inserter(to_drop),
+            [this](const string&s) {return contains_null(s);});
+    if (to_drop.size() > 0) {
+        make_unique_if(get_column_names()); //why do I make that stuff unqiue?!?
+        drop_row(to_drop);
     }
 }
 
