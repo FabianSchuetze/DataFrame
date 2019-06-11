@@ -16,13 +16,17 @@ class Column {
     template <typename T>
     friend DataFrame operator<(const DataFrame&, const T&);
 
-    Column();
-    Column(const Column&, int);
+    Column(): col() {};
+    //Column(const Column&, int); I THINK THIS CONSTRUCTOR IS NOT NEEDED?!?
     /**
      * @brief Copy constructor for a new column, given an existing colum and a
-     * vecotr<int> indicating which position shall be copied
+     * vector<int> indicating which position shall be copied
      */
     Column(const Column&, const std::vector<int>&);
+    /**
+     * @brief constructs a column form a existing vector. 
+     * The vector must contains types of either double, string or boolean
+     */
     template <class T>
     explicit Column(const std::vector<T>& t): col(t) {}
     /**
@@ -30,6 +34,10 @@ class Column {
      * equivalence
      */
     Column& plus(const Column&, const std::vector<std::pair<int, int>>&);
+    /**
+     * Pushes a value of type T into the column
+     */
+    void convert_and_push_back(std::string&);
     template <class T>
     void push_back(const T);
     /**

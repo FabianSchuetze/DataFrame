@@ -1,7 +1,9 @@
 #include "column.h"
 #include <cmath>
 #include <iostream>
+#include <sstream>
 #include <memory>
+#include <ios>
 using std::get_if;
 using std::holds_alternative;
 using std::is_same;
@@ -65,6 +67,19 @@ void Column::replace_nan(int i) {
     }
 }
 
+void Column::convert_and_push_back(std::string& s) {
+    if (std::get_if<vector<double>>(&col))
+        push_back(std::stod(s));
+    if (std::get_if<vector<string>>(&col))
+        push_back(s);
+    if (std::get_if<vector<bool>>(&col)) {
+        std::istringstream is(s);
+        bool b;
+        is >> std::boolalpha >> b;
+        push_back(b);
+    }
+
+}
 template <class T>
 void Column::push_back(const T t) {
     std::get<vector<T>>(col).push_back(t);

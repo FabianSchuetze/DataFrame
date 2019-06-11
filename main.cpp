@@ -39,7 +39,7 @@ void sort_df(DataFrame& df, const std::string& s) {
 
 // NEED TO THINK HOW I CAN DO THIS WTTH CMAKE!
 int main() {
-    std::ifstream infile("forecast.csv");
+    std::ifstream infile("forecast2.csv"); //make a check about the file
     DataFrame df1 = DataFrame(infile);
     std::cout << "completed\n";
     std::cout << df1.size().first << std::endl;

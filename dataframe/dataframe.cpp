@@ -319,67 +319,70 @@ void DataFrame::convert_bool_to_double(const std::string& s) {
     columns[pos]->convert_bool_to_double();
 }
 
-void DataFrame::create_column_names(std::ifstream& file) {
+vector<string>  DataFrame::create_column_names(std::ifstream& file) {
     std::string line, name;
     std::getline(file, line);
-    int i = 0;
+    size_t i = 0;
+    vector<string>  cols;
     std::istringstream names(line);
+    std::getline(names, name, ','); // pass the index column
     while (std::getline(names, name, ',')) {
-        if (i > 0)
-            column_names[name] = i-1;
-        i++;
-    }
-}
-
-void DataFrame::create_columns(std::ifstream& file) {
-    std::string line, name;
-    std::getline(file, line);
-    int i = 0;
-    std::istringstream names(line);
-    while (std::getline(names, name, ',')) {
-        if (i > 0) {
-            if (name == "double") {
-                Column col = Column(vector<double>());
-                columns.push_back(make_shared<Column>(col));
-            }
-            else if (name == "string") {
-                Column col = Column(vector<string>());
-                columns.push_back(make_shared<Column>(col));
-            } else 
-                throw std::runtime_error("deals with strings and double");
+        cols.push_back(name);
+        try {
+            column_names.at(name);
+            throw std::invalid_argument("Duplicate column name " + name);
+        } catch(std::out_of_range& e) {
+            column_names[name] = i++;
         }
-        i++;
+    }
+    return cols;
+}
+
+template <typename T>
+void DataFrame::initialize_column(const string& s) {
+    Column col = Column(vector<T>());
+    columns[get_column_position(s)] = make_shared<Column>(col);
+}
+
+void DataFrame::initialize_column(std::ifstream& file, const vector<string>&cols) {
+    columns.resize(cols.size());
+    std::string line, name;
+    std::getline(file, line);
+    std::istringstream names(line);
+    std::getline(names, name, ','); // pass the index column
+    size_t i = 0;
+    while (std::getline(names, name, ',')) {
+        string colName = cols[i++];
+        if (name == "double")
+            initialize_column<double>(colName);
+        else if (name == "string")
+            initialize_column<string>(colName);
+        else if (name == "bool")
+            initialize_column<bool>(colName);
+        else 
+            throw std::invalid_argument("Input type: " + name + " incompatible");
     }
 }
 
-void DataFrame::insert_data(std::ifstream& file) {
+void DataFrame::insert_data(std::ifstream& file, const vector<string>& cols) {
     std::string line, name;
-    int line_number = 0;
+    size_t line_number = 0;
     while (std::getline(file, line)) {
-        int i = 0;
+        size_t i = 0;
         std::istringstream names(line);
+        std::getline(names, name, ',');
+        index_names.push_back(make_pair(name, line_number++));
         while (std::getline(names, name, ',')) {
-            if (i == 0) {
-                std::cout << name << ": " << line_number << std::endl;
-                index_names.push_back(make_pair(name, line_number));
-            } else if (i > 0) {
-                double d = std::stod(name);
-                std::cout << "value: " << d << std::endl;
-                columns[i-1]->push_back<double>(d);
-            }
-            i++;
+            int pos = get_column_position(cols[i++]);
+            columns[pos]->convert_and_push_back(name);
         }
-        line_number++;
     }
 }
 
 DataFrame::DataFrame(std::ifstream& file)
     : columns(), index_names(), column_names()
 {
-    create_column_names(file);
-    create_columns(file);
-    insert_data(file);
-    std::cout << "completed\n";
-    //std::cout << size().first << std::endl;
-    //std::cout << size().second << std::endl;
+    vector<string> colNames = create_column_names(file);
+    initialize_column(file, colNames);
+    insert_data(file, colNames);
 }

@@ -212,9 +212,21 @@ class DataFrame {
      * @Return a shared_ptr to the column named s for a const-dataframe
      */
     SharedCol get_shared_copy(const std::string&) const;
-    void create_column_names(std::ifstream&);
-    void create_columns(std::ifstream&);
-    void insert_data(std::ifstream&);
+    /**
+     * @brief Initilizes the map `column_names` from the first line of the csv file
+     */
+    std::vector<std::string> create_column_names(std::ifstream&);
+    /**
+     * @brief Initilizes the Columns with the datatypes mentiond in the second line
+     * of the csv file
+     */
+    void initialize_column(std::ifstream&, const std::vector<std::string>&);
+    /**
+     * @fils the previously intilaized columns and creates the index
+     */
+    template <typename T>
+    void initialize_column(const std::string&);
+    void insert_data(std::ifstream&, const std::vector<std::string>&);
 };
 
 /**
