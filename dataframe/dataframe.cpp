@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <iostream>
 #include <numeric>
+#include <chrono>
 #include <ostream>
 #include <stdexcept>
 #include <sstream>
@@ -160,16 +161,24 @@ DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
     : columns(), index_names(), column_names() {
     int i = 0;
     for (const string& name : df.colNames) {
-        int pos = df.theDataFrame.get_column_position(name);
-        columns.push_back(df.theDataFrame.columns[pos]);
+        columns.push_back(df.theDataFrame.get_shared_copy(name));
         column_names[name] = i++;
     }
-    for (const string& name : df.idxNames) {
-        int pos = df.theDataFrame.find_index_position(name);
-        if (pos == -1)
-            throw std::runtime_error("Could not find the index: " + name);
-        index_names.push_back(make_pair(name, pos));
-    }
+    std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
+    std::cout << "first\n";
+    vector<int> res = df.theDataFrame.get_index_positions(df.idxNames);
+    std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::seconds>( t2 - t1 ).count();
+    std::cout << "completed in: " + std::to_string(duration) + "\n";
+    std::transform(df.idxNames.begin(), df.idxNames.end(),
+            std::back_inserter(index_names),
+            [this](const string& s){return make_pair(s, find_index_position(s));});
+    //for (const string& name : df.idxNames) {
+        //int pos = df.theDataFrame.find_index_position(name);
+        //if (pos == -1)
+            //throw std::runtime_error("Could not find the index: " + name);
+        //index_names.push_back(make_pair(name, pos));
+    //}
 }
 
 std::pair<size_t, size_t> DataFrame::size() const {
