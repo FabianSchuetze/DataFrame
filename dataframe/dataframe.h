@@ -33,9 +33,9 @@ class DataFrame {
     friend DataFrame deep_copy(const DataFrame& lhs);
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
     friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
-    //friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
-    //friend DataFrame operator+(const DataFrameProxy&, const DataFrameProxy&);
-    //friend DataFrame operator+(const DataFrame&, const DataFrameProxy&);
+    friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
+    friend DataFrame operator+(const DataFrameProxy&, const DataFrameProxy&);
+    friend DataFrame operator+(const DataFrame&, const DataFrameProxy&);
     template <typename T>
     friend DataFrame operator<(const DataFrame& lhs, const T& t) {
         DataFrame copy = deep_copy(lhs);
@@ -43,14 +43,14 @@ class DataFrame {
             copy.columns[x.second]->is_smaller_than(t);
         return copy;
     }
-    //template <typename T>
-    //friend DataFrame operator+(const DataFrame& lhs, const T& t) {
-        //return deep_copy(lhs) += t;
-    //}
-    //friend std::vector<std::pair<int, int>> correspondence_position(
-        //const DataFrame&, const DataFrame&);
-    //friend void append_missing_rows(DataFrame&, const DataFrame&);
-    //friend void append_missing_cols(DataFrame&, const DataFrame&);
+    template <typename T>
+    friend DataFrame operator+(const DataFrame& lhs, const T& t) {
+        return deep_copy(lhs) += t;
+    }
+    friend std::vector<std::pair<int, int>> correspondence_position(
+        const DataFrame&, const DataFrame&);
+    friend void append_missing_rows(DataFrame&, const DataFrame&);
+    friend void append_missing_cols(DataFrame&, const DataFrame&);
 
     // Functions
     DataFrame();
@@ -86,9 +86,9 @@ class DataFrame {
      * If a colum or row or the rhs is not present in the lhs, a new column or
      * row is created in the lhs dataframe contains nas.
      */
-    //DataFrame& operator+=(const DataFrame& rhs);
-    //template <typename T>
-    //DataFrame& operator+=(const T&);
+    DataFrame& operator+=(const DataFrame& rhs);
+    template <typename T>
+    DataFrame& operator+=(const T&);
     template <class T>
     iter<T> begin(const std::string&);
     /**
@@ -183,16 +183,6 @@ class DataFrame {
     int get_column_position(const std::string&);
     int get_column_position(const std::string&) const;
     /**
-     * @brief Returns the vector with the column indices corresponding to the
-     * index values
-     *
-     * The index of a dataframe is a vector of pairs<string, int> which relates
-     * the name of the index to the position in the underlying storage vector.
-     * The index names might not be in the same ordering as the underlying data
-     * because the dataframe has been sorted or because rows have been droped.
-     */
-    //std::vector<int> get_index_positions() const;
-    /**
      * @brief returns the vector with index position corresponding to the index
      * names in the input vector
      */
@@ -235,10 +225,10 @@ class DataFrame {
  * @throws std::invalid_argument if not all columns of the dataframe are of
  * type T
  */
-//template <typename T>
-//DataFrame operator+(const DataFrame&, const T&);
-//DataFrame operator+(const DataFrame&, const DataFrame&);
-//DataFrame operator+(const DataFrame&, const DataFrame::DataFrameProxy&);
+template <typename T>
+DataFrame operator+(const DataFrame&, const T&);
+DataFrame operator+(const DataFrame&, const DataFrame&);
+DataFrame operator+(const DataFrame&, const DataFrame::DataFrameProxy&);
 /**
  * @brief deep copy of a DataFrame
  *

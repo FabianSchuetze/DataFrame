@@ -31,8 +31,10 @@ endif(UNIX)
 
 add_executable(main main.cpp)
 add_executable(my_test test/test.cpp)
+add_executable(old_main test/old_main.cpp)
 target_link_libraries(main Dataframe)
 target_link_libraries(my_test Dataframe)
+target_link_libraries(old_main Dataframe)
 
 file(COPY forecast2.csv DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY amits_example.csv DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
