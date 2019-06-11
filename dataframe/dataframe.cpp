@@ -6,6 +6,7 @@
 #include <ostream>
 #include <stdexcept>
 #include <sstream>
+#include <unordered_map>
 #include "ConstColumnIterator.h"
 #include "dataframeproxy.h"
 class ColumnIterator;
@@ -27,12 +28,12 @@ vector<int> DataFrame::get_index_positions(const vector<string>& inp) const {
     return res;
 }
 
-vector<int> DataFrame::get_index_positions() const {
-    vector<int> res;
-    std::transform(index_names.begin(), index_names.end(), back_inserter(res),
-                   [](const pair<string, int>& ele) { return ele.second; });
-    return res;
-}
+//vector<int> DataFrame::get_index_positions() const {
+    //vector<int> res;
+    //std::transform(index_names.begin(), index_names.end(), back_inserter(res),
+                   //[](const pair<string, int>& ele) { return ele.second; });
+    //return res;
+//}
 
 template <typename T>
 vector<string> get_names(T& cont) {
@@ -42,17 +43,16 @@ vector<string> get_names(T& cont) {
     return res;
 }
 
-vector<string> DataFrame::get_index_names() { return get_names(index_names); }
-vector<string> DataFrame::get_index_names() const {
-    return get_names(index_names);
-}
+vector<string> DataFrame::get_index_names() { return index_positions; }
+vector<string> DataFrame::get_index_names() const { return index_positions;}
 
 vector<string> DataFrame::get_column_names() { return get_names(column_names); }
 vector<string> DataFrame::get_column_names() const {
     return get_names(column_names);
 }
 
-DataFrame::DataFrame() : columns(), index_names(), column_names() {}
+DataFrame::DataFrame() : columns(), index_names(), index_positions(),
+    column_names() {}
 
 std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) {
     return static_cast<const DataFrame&>(*this).get_unique(s);  // Item 3
@@ -89,10 +89,11 @@ std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) const {
 }
 
 int DataFrame::find_index_position(const string& s) const {
-    for (const auto& x : index_names) {
-        if (x.first == s) return x.second;
+    try{
+        return index_names.at(s);
+    } catch (std::out_of_range& e) {
+        return -1;
     }
-    return -1;
 }
 
 template <typename T>
@@ -105,6 +106,8 @@ int get_pair(const T& cont, const pair<string, int>& ele) {
     return pos;
 }
 
+// REALLTY REALLY SLOW FUNCTION LINEAR!!! NEED TO CHANGE THAT!!!!
+// WHERE DO I NEED THIS FUNCTION FOR? I HAVE TO CHANGE THE DOWNSTRAM THING!
 int DataFrame::find_index_pair(const pair<string, int>& ele) {
     int pos = 0;
     for (const auto& x : index_names) {
@@ -125,14 +128,16 @@ void DataFrame::make_contigious() {
 
 DataFrame deep_copy(const DataFrame& lhs) {
     DataFrame new_df = DataFrame();
-    vector<int> old_positions = lhs.get_index_positions();
+    vector<int> old_positions = lhs.get_index_positions(lhs.index_positions);
     int i = 0, j = 0;
     for (auto const& x : lhs.column_names) {
         new_df.column_names[x.first] = i++;
         new_df.columns.push_back(lhs.get_unique(x.first, old_positions));
     }
-    for (auto const& x : lhs.index_names)
-        new_df.index_names.push_back(make_pair(x.first, j++));
+    for (const string& x : lhs.index_positions) {
+        new_df.index_names[x] = j++;
+        new_df.index_positions.push_back(x);
+    }
     return new_df;
 }
 
@@ -147,8 +152,11 @@ DataFrame::DataFrame(const vector<string>& idx, const vector<string>& n,
         columns.push_back(make_shared<Column>(cols[i]));
         column_names[n[i]] = i;
     }
-    for (size_t i = 0; i < idx.size(); ++i)
-        index_names.push_back(make_pair(idx[i], i));
+    size_t i = 0;
+    for (const string& s: idx) {
+        index_names[s] = i++;
+        index_positions.push_back(s);
+    }
 }
 template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
                               const vector<vector<double>>&);
@@ -158,27 +166,20 @@ template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
                               const vector<vector<bool>>&);
 
 DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
-    : columns(), index_names(), column_names() {
+    : columns(), index_names(), index_positions(), column_names() {
     int i = 0;
     for (const string& name : df.colNames) {
         columns.push_back(df.theDataFrame.get_shared_copy(name));
         column_names[name] = i++;
     }
-    std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
-    std::cout << "first\n";
-    vector<int> res = df.theDataFrame.get_index_positions(df.idxNames);
-    std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::seconds>( t2 - t1 ).count();
-    std::cout << "completed in: " + std::to_string(duration) + "\n";
-    std::transform(df.idxNames.begin(), df.idxNames.end(),
-            std::back_inserter(index_names),
-            [this](const string& s){return make_pair(s, find_index_position(s));});
-    //for (const string& name : df.idxNames) {
-        //int pos = df.theDataFrame.find_index_position(name);
-        //if (pos == -1)
-            //throw std::runtime_error("Could not find the index: " + name);
+    for (const string& name : df.idxNames) {
+        int pos = df.theDataFrame.find_index_position(name);
+        if (pos == -1)
+            throw std::runtime_error("Could not find the index: " + name);
+        index_names[name] = pos;
         //index_names.push_back(make_pair(name, pos));
-    //}
+    }
+    index_positions = df.idxNames;
 }
 
 std::pair<size_t, size_t> DataFrame::size() const {
@@ -190,23 +191,28 @@ int DataFrame::use_count(const string& name) {
     return columns[pos].use_count();
 }
 
-vector<pair<int, int>> correspondence_position(const DataFrame& lhs,
-                                               const DataFrame& other) {
-    vector<pair<int, int>> res;
-    int i = 0;
-    for (auto const& x : lhs.index_names) {
-        int other_pos = other.find_index_position(x.first);
-        res.push_back(make_pair(i++, other_pos));
-    }
-    return res;
-}
+//vector<pair<int, int>> correspondence_position(const DataFrame& lhs,
+                                               //const DataFrame& other) {
+    //vector<pair<int, int>> res;
+    //int i = 0;
+    //// ASSUMES THAT THE THING IS ORDERED!!! I NEED TO ITERATE OVER THE REVERSE
+    //// INDEX!!!
+    //for (auto const& x : lhs.index_names) {
+        //int other_pos = other.find_index_position(x.first);
+        //res.push_back(make_pair(i++, other_pos));
+        //// WHY DO I HAVE i++??? SHOULDNT I USE x.second;???
+    //}
+    //return res;
+//}
 
 void DataFrame::append_nan_rows() {
     for (auto& x : column_names) columns[x.second]->push_back_nan();
 }
 
 void DataFrame::append_index(const string& s) {
-    index_names.push_back(make_pair(s, index_names.size()));
+    index_names[s] = index_names.size();
+    index_positions.push_back(s);
+    //index_names.push_back(make_pair(s, index_names.size()));
 }
 
 int DataFrame::get_column_position(const std::string& s) {
@@ -250,13 +256,17 @@ void DataFrame::make_unique_if(const vector<string>& c) {
 }
 
 void DataFrame::drop_row(const string& s) {
-    int pos = find_index_pair(make_pair(s, find_index_position(s)));
-    index_names.erase(index_names.begin() + pos);
+    //int pos = find_index_pair(make_pair(s, find_index_position(s)));
+    index_names.erase(s);
+    auto it = std::find(index_positions.begin(), index_positions.end(), s);
+    index_positions.erase(it);
+    //index_names.erase(index_names.begin() + pos);
 }
 
 // I THINK THIS IS NOT EXCEPTION SAFE!!!
 void DataFrame::dropna() {
-    vector<pair<string, int>> index_copy = index_names;
+    std::unordered_map<string,int > index_copy = index_names;
+    //vector<pair<string, int>> index_copy = index_names;
     for (auto index_pair : index_copy) {
         if (contains_null(index_pair.first)) {
             make_unique_if(get_column_names());
@@ -288,8 +298,8 @@ void DataFrame::drop_column(const string& s) {
 }
 
 void DataFrame::sort_by_index() {
-    std::sort(index_names.begin(), index_names.end(),
-              [](auto& a, auto& b) { return a.first < b.first; });
+    std::sort(index_positions.begin(), index_positions.end(),
+              [](auto& a, auto& b) { return a < b; });
 }
 
 void DataFrame::sort_by_column(const std::string& s) {
@@ -306,20 +316,20 @@ void DataFrame::sort_by_column(const std::string& s) {
 
 template <typename T>
 void DataFrame::sort_by_column_template(const string& s) {
-    vector<pair<string, int>> new_index(index_names.size());
+    std::vector<string> new_index;
     vector<int> argsort = permutation_index<T>(s);
     for (size_t i = 0; i < argsort.size(); ++i) {
-        pair<string, int> tmp = index_names[argsort[i]];
-        new_index[i] = tmp;
+        string name = index_positions[argsort[i]];
+        new_index.push_back(name);
     }
-    index_names = new_index;
+    index_positions = new_index;
 }
 
 template void DataFrame::sort_by_column_template<double>(const std::string&);
 template void DataFrame::sort_by_column_template<std::string>(const std::string&);
 
 bool DataFrame::is_contigious() {
-    vector<int> existing_order = get_index_positions();
+    vector<int> existing_order = get_index_positions(index_positions);
     for (size_t i = 1; i < existing_order.size(); ++i)
         if ((existing_order[i] - existing_order[i - 1]) != 1) return false;
     return true;
@@ -381,7 +391,8 @@ void DataFrame::insert_data(std::ifstream& file, const vector<string>& cols) {
         size_t i = 0;
         std::istringstream names(line);
         std::getline(names, name, ',');
-        index_names.push_back(make_pair(name, line_number++));
+        index_names[name] = line_number++;
+        index_positions.push_back(name);
         while (std::getline(names, name, ',')) {
             int pos = get_column_position(cols[i++]);
             columns[pos]->convert_and_push_back(name);
@@ -390,7 +401,7 @@ void DataFrame::insert_data(std::ifstream& file, const vector<string>& cols) {
 }
 
 DataFrame::DataFrame(std::ifstream& file)
-    : columns(), index_names(), column_names()
+    : columns(), index_names(), index_positions(), column_names()
 {
     vector<string> colNames = create_column_names(file);
     initialize_column(file, colNames);

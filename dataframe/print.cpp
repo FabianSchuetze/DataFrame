@@ -79,7 +79,7 @@ void check_positions(vector<int>& inp) {
 
 std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
     vector<string> output = frame_index(df.get_index_names());
-    vector<int> positions = df.get_index_positions();
+    vector<int> positions = df.get_index_positions(df.index_positions);
     check_positions(positions);
     for (const std::pair<string, int>& x : df.column_names) {
         vector<string> rhs =

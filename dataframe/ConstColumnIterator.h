@@ -72,14 +72,16 @@ std::shared_ptr<Column> DataFrame::ConstColumnIterator<T>::check(
 template <class T>
 const T& DataFrame::ConstColumnIterator<T>::operator*() const {
     auto p = check(curr, "dereferencing past end");
-    int pos = theDataFrame.index_names[curr].second;
+    std::string name = theDataFrame.index_positions[curr];
+    int pos = theDataFrame.find_index_position(name);
     return (*p).template get_value<T>(pos);
 }
 
 template <class T>
 const T& DataFrame::ConstColumnIterator<T>::operator[](int i) const {
     auto p = check(i, "dereferencing past end");
-    int pos = theDataFrame.index_names[i].second;
+    std::string name = theDataFrame.index_positions[i];
+    int pos = theDataFrame.find_index_position(name);
     return (*p).template get_value<T>(pos);
 }
 

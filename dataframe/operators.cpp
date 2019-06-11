@@ -126,66 +126,67 @@ template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
 template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<bool>& other_col);
 
-DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
-    vector<pair<int, int>> indices = correspondence_position(*this, rhs);
-    for (auto& x : column_names) {
-        make_unique_if(x.first);
-        try {
-            columns[x.second]->plus(*rhs.get_shared_copy(x.first), indices);
-        } catch (const std::out_of_range& e) {
-            columns[x.second]->replace_nan();
-        }
-    }
-    return *this;
-}
+//DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
+    //vector<pair<int, int>> indices = correspondence_position(*this, rhs);
+    //for (auto& x : column_names) {
+        //make_unique_if(x.first);
+        //try {
+            //columns[x.second]->plus(*rhs.get_shared_copy(x.first), indices);
+        //} catch (const std::out_of_range& e) {
+            //columns[x.second]->replace_nan();
+        //}
+    //}
+    //return *this;
+//}
 
-void append_missing_rows(DataFrame& lhs, const DataFrame& rhs) {
-    vector<pair<int, int>> index_pairs = correspondence_position(rhs, lhs);
-    for (auto const& index_pair : index_pairs) {
-        if (index_pair.second == -1) {
-            lhs.append_nan_rows();
-            lhs.append_index(rhs.index_names[index_pair.first].first);
-        }
-    }
-}
+//void append_missing_rows(DataFrame& lhs, const DataFrame& rhs) {
+    //vector<pair<int, int>> index_pairs = correspondence_position(rhs, lhs);
+    //for (auto const& index_pair : index_pairs) {
+        //if (index_pair.second == -1) {
+            //lhs.append_nan_rows();
+            //lhs.append_index(rhs.index_names[index_pair.first].first);
+            //// I WOULD ACCESS THE REVERSE INDEX AS WELL?!?
+        //}
+    //}
+//}
 
-void append_missing_cols(DataFrame& lhs, const DataFrame& rhs) {
-    for (auto const& x : rhs.column_names) {
-        size_t capacity_so_far = lhs.column_names.size();
-        int lhsPos = find_or_add(x.first, lhs.column_names);
-        if (capacity_so_far < lhs.column_names.size()) {
-            lhs.columns.push_back(rhs.get_unique(x.first));
-            lhs.columns.at(lhsPos)->replace_nan();
-        }
-    }
-}
+//void append_missing_cols(DataFrame& lhs, const DataFrame& rhs) {
+    //for (auto const& x : rhs.column_names) {
+        //size_t capacity_so_far = lhs.column_names.size();
+        //int lhsPos = find_or_add(x.first, lhs.column_names);
+        //if (capacity_so_far < lhs.column_names.size()) {
+            //lhs.columns.push_back(rhs.get_unique(x.first));
+            //lhs.columns.at(lhsPos)->replace_nan();
+        //}
+    //}
+//}
 
-DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs) {
-    DataFrame sum = deep_copy(lhs);
-    append_missing_cols(sum, rhs);
-    append_missing_rows(sum, rhs);
-    return sum += rhs;
-}
+//DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs) {
+    //DataFrame sum = deep_copy(lhs);
+    //append_missing_cols(sum, rhs);
+    //append_missing_rows(sum, rhs);
+    //return sum += rhs;
+//}
 
-DataFrame operator+(const DataFrame::DataFrameProxy& lhs,
-                    const DataFrame::DataFrameProxy& rhs) {
-    return DataFrame(lhs) + DataFrame(rhs);
-}
+//DataFrame operator+(const DataFrame::DataFrameProxy& lhs,
+                    //const DataFrame::DataFrameProxy& rhs) {
+    //return DataFrame(lhs) + DataFrame(rhs);
+//}
 
-DataFrame operator+(const DataFrame& lhs,
-                    const DataFrame::DataFrameProxy& rhs) {
-    return lhs + DataFrame(rhs);
-}
+//DataFrame operator+(const DataFrame& lhs,
+                    //const DataFrame::DataFrameProxy& rhs) {
+    //return lhs + DataFrame(rhs);
+//}
 
-template <typename T>
-DataFrame& DataFrame::operator+=(const T& t) {
-    for (auto& x : column_names) {
-        Column new_col = *columns[x.second] + t;
-        columns[x.second] = std::make_shared<Column>(new_col);
-    }
-    return *this;
-}
-template DataFrame& DataFrame::operator+=(const double&);
-template DataFrame& DataFrame::operator+=(const int&);
-template DataFrame& DataFrame::operator+=(const string&);
-template DataFrame& DataFrame::operator+=(const bool&);
+//template <typename T>
+//DataFrame& DataFrame::operator+=(const T& t) {
+    //for (auto& x : column_names) {
+        //Column new_col = *columns[x.second] + t;
+        //columns[x.second] = std::make_shared<Column>(new_col);
+    //}
+    //return *this;
+//}
+//template DataFrame& DataFrame::operator+=(const double&);
+//template DataFrame& DataFrame::operator+=(const int&);
+//template DataFrame& DataFrame::operator+=(const string&);
+//template DataFrame& DataFrame::operator+=(const bool&);
