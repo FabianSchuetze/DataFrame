@@ -67,7 +67,14 @@ void Column::replace_nan(int i) {
     }
 }
 
-void Column::convert_and_push_back(std::string& s) {
+bool potential_na(const std::string& s) {
+    return (s.empty()) || (s == "None") || (s == "NaN") || (s == "null");
+}
+void Column::convert_and_push_back(const std::string& s) {
+    if (potential_na(s)) {
+        push_back_nan(); 
+        return;
+    }
     if (std::get_if<vector<double>>(&col))
         push_back(std::stod(s));
     if (std::get_if<vector<string>>(&col))
@@ -78,8 +85,8 @@ void Column::convert_and_push_back(std::string& s) {
         is >> std::boolalpha >> b;
         push_back(b);
     }
-
 }
+
 template <class T>
 void Column::push_back(const T t) {
     std::get<vector<T>>(col).push_back(t);

@@ -37,7 +37,7 @@ class Column {
     /**
      * Pushes a value of type T into the column
      */
-    void convert_and_push_back(std::string&);
+    void convert_and_push_back(const std::string&);
     template <class T>
     void push_back(const T);
     /**

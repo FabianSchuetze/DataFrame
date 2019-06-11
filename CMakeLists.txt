@@ -35,6 +35,7 @@ target_link_libraries(main Dataframe)
 target_link_libraries(my_test Dataframe)
 
 file(COPY forecast2.csv DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY amits_example.csv DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 enable_testing()
 add_test(NAME my_test

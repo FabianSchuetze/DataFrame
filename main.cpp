@@ -39,17 +39,21 @@ void sort_df(DataFrame& df, const std::string& s) {
 
 // NEED TO THINK HOW I CAN DO THIS WTTH CMAKE!
 int main() {
-    std::ifstream infile("forecast2.csv"); //make a check about the file
+    std::ifstream infile("amits_example.csv"); //make a check about the file
     DataFrame df1 = DataFrame(infile);
+    df1.sort_by_column("total_sales_volume");
     std::cout << "completed\n";
     std::cout << df1.size().first << std::endl;
     std::cout << df1.size().second << std::endl;
-    std::cout << df1.loc("2019-05-01") << std::endl;
-    DataFrame df2 = DataFrame(df1.loc("2019-04-30"));
+    std::cout << df1.loc("0") << std::endl;
+    //DataFrame df2 = DataFrame(df1.loc("2019-04-30"));
     std::cout << df1 << std::endl;
-    df1.sort_by_index();
-    std::cout << df1 << std::endl;
-    df1.sort_by_column("saex2");
-    std::cout << df1 << std::endl;
+    std::cout << "trying to get the new data\n";
+    DataFrame df2 = DataFrame(df1["total_sales_volume"]);
+    //std::cout << DataFrame(df1["total_sales_volume"]) << std::endl;
+    //df1.sort_by_index();
+    //std::cout << df1 << std::endl;
+    //df1.sort_by_column("saex2");
+    //std::cout << df1 << std::endl;
     return 0;
 }
