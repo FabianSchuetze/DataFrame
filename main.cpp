@@ -34,7 +34,7 @@ void fill_df(DataFrame& df) {
 
 template <typename T>
 void sort_df(DataFrame& df, const std::string& s) {
-    df.sort_by_column<T>(s);
+    df.sort_by_column(s);
 }
 
 // NEED TO THINK HOW I CAN DO THIS WTTH CMAKE!
@@ -46,7 +46,10 @@ int main() {
     std::cout << df1.size().second << std::endl;
     std::cout << df1.loc("2019-05-01") << std::endl;
     DataFrame df2 = DataFrame(df1.loc("2019-04-30"));
-    //std::cout << df1.loc("2019-05-02") << std::endl;
+    std::cout << df1 << std::endl;
+    df1.sort_by_index();
+    std::cout << df1 << std::endl;
+    df1.sort_by_column("saex2");
     std::cout << df1 << std::endl;
     return 0;
 }

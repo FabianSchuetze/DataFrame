@@ -236,20 +236,9 @@ void DataFrame::make_unique_if(const std::string& s) {
     }
 }
 
-// == I choose to make only non-unqiue column unique and not the entire df ==
-// void DataFrame::make_unique_if(const vector<string>& c) {
-// auto fun = [&](int a, const string& s) { return a + use_count(s); };
-// if (std::accumulate(c.begin(), c.end(), 0, fun) > size().second)
-// make_unique(c);
-//}
-
 void DataFrame::make_unique_if(const vector<string>& c) {
     for (const string& s : c) make_unique_if(s);
 }
-// auto fun = [&](int a, const string& s) { return a + use_count(s); };
-// if (std::accumulate(c.begin(), c.end(), 0, fun) > size().second)
-// make_unique(c);
-//}
 
 void DataFrame::drop_row(const string& s) {
     int pos = find_index_pair(make_pair(s, find_index_position(s)));

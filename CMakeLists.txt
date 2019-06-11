@@ -34,6 +34,8 @@ add_executable(my_test test/test.cpp)
 target_link_libraries(main Dataframe)
 target_link_libraries(my_test Dataframe)
 
+file(COPY forecast2.csv DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
 enable_testing()
 add_test(NAME my_test
          COMMAND my_test)
