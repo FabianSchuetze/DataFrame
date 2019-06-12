@@ -17,10 +17,11 @@ using std::shared_ptr;
 using std::string;
 using std::vector;
 
-void DataFrame::missing_col_error(const char* what, const string& s) {
+void missing_col_error(const char* what, string s) {
     std::string msg = " Column " + s + " not found";
     throw std::out_of_range(what + msg);
 }
+
 vector<int> DataFrame::get_index_positions(const vector<string>& inp) const {
     vector<int> res(inp.size(), 0);
     std::transform(inp.begin(), inp.end(), res.begin(),
@@ -56,8 +57,7 @@ std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) const {
         int idx = column_names.at(s);
         return make_shared<Column>(*columns.at(idx));
     } catch (const std::out_of_range& e) {
-        string msg = "No column with name " + s;
-        throw std::out_of_range(msg);
+        throw std::out_of_range("No column with name" + s);
     }
 }
 
@@ -76,8 +76,7 @@ std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) const {
         int idx = column_names.at(s);
         return columns[idx];
     } catch (const std::out_of_range& e) {
-        string msg = "No column with name " + s;
-        throw std::out_of_range(msg);
+        throw std::out_of_range("No col with name" + s);
     }
 }
 
@@ -87,27 +86,6 @@ int DataFrame::find_index_position(const string& s) const {
     } catch (std::out_of_range& e) {
         return -1;
     }
-}
-
-template <typename T>
-int get_pair(const T& cont, const pair<string, int>& ele) {
-    int pos = -1;
-    for (const auto& x : cont) {
-        if (x.first == ele.first && x.second == ele.second) return pos;
-        pos++;
-    }
-    return pos;
-}
-
-// REALLTY REALLY SLOW FUNCTION LINEAR!!! NEED TO CHANGE THAT!!!!
-// WHERE DO I NEED THIS FUNCTION FOR? I HAVE TO CHANGE THE DOWNSTRAM THING!
-int DataFrame::find_index_pair(const pair<string, int>& ele) {
-    int pos = 0;
-    for (const auto& x : index_names) {
-        if (x.first == ele.first && x.second == ele.second) return pos;
-        pos++;
-    }
-    throw std::out_of_range("Could not find the index argument");
 }
 
 int DataFrame::find_index_position(const std::string& s) {
@@ -134,6 +112,16 @@ DataFrame deep_copy(const DataFrame& lhs) {
     return new_df;
 }
 
+void DataFrame::append_index(const vector<string>& idx) {
+    for (const string& s: idx)
+        append_index(s);
+}
+
+void DataFrame::append_index(const string& s) {
+    index_names[s] = index_names.size();
+    index_positions.push_back(s);
+}
+
 template <typename T>
 DataFrame::DataFrame(const vector<string>& idx, const vector<string>& n,
                      const vector<vector<T>>& cols) {
@@ -145,11 +133,7 @@ DataFrame::DataFrame(const vector<string>& idx, const vector<string>& n,
         columns.push_back(make_shared<Column>(cols[i]));
         column_names[n[i]] = i;
     }
-    size_t i = 0;
-    for (const string& s : idx) {
-        index_names[s] = i++;
-        index_positions.push_back(s);
-    }
+    append_index(idx);
 }
 template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
                               const vector<vector<double>>&);
@@ -167,8 +151,7 @@ DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
     }
     for (const string& name : df.idxNames) {
         int pos = df.theDataFrame.find_index_position(name);
-        if (pos == -1)
-            throw std::runtime_error("Could not find the index: " + name);
+        if (pos == -1) throw std::runtime_error("Did not find index: " + name);
         index_names[name] = pos;
     }
     index_positions = df.idxNames;
@@ -199,11 +182,6 @@ void DataFrame::append_nan_rows() {
     for (auto& x : column_names) columns[x.second]->push_back_nan();
 }
 
-void DataFrame::append_index(const string& s) {
-    index_names[s] = index_names.size();
-    index_positions.push_back(s);
-    // index_names.push_back(make_pair(s, index_names.size()));
-}
 
 int DataFrame::get_column_position(const std::string& s) {
     return static_cast<const DataFrame&>(*this).get_column_position(
@@ -273,6 +251,7 @@ void DataFrame::dropna() {
         index_positions.erase(old_position, index_positions.end());
     }
 }
+
 template <typename T>
 vector<string> DataFrame::get_column_names() {
     string target;
@@ -407,12 +386,3 @@ DataFrame::DataFrame(std::ifstream& file)
     initialize_column(file, colNames);
     insert_data(file, colNames);
 }
-//template <typename T>
-//void DataFrame::fill_na(string& s, T& t) {
-    //iter<T> it = begin<T>(s);
-    //iter<T>  e = end<T>(s);
-    //std::transform(it, e, it, 
-            //[&t](auto& d) {return std::isnan(d) ? t : d;});
-//}
-
-//template void DataFrame::fill_na(string&, double&);

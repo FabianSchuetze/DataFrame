@@ -41,6 +41,7 @@ class DataFrame::DataFrameProxy {
     void insert_column(const std::string&, std::shared_ptr<Column>&);
     template <typename T>
     void insert_column(const std::string&, const std::vector<T>&);
+    void insert_column(const std::vector<std::string>&, const DataFrame&);
 };
 
 DataFrame operator+(const DataFrame::DataFrameProxy&,

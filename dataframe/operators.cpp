@@ -22,13 +22,14 @@ DataFrame::DataFrameProxy DataFrame::loc(const string& s) {
     return DataFrameProxy(*this, vector<string>{s}, get_column_names());
 }
 
-int find_or_add(const string& name, std::map<string, int>& columns) {
+bool maybe_add(const string& name, std::map<string, int>& columns) {
     try {
         columns.at(name);
-    } catch (const std::out_of_range& e) {
+        return false;
+    } catch (std::out_of_range& e) {
         columns[name] = columns.size();
     }
-    return columns.at(name);
+    return true;
 }
 
 void DataFrame::DataFrameProxy::replace_column(int idx,
@@ -53,10 +54,9 @@ void DataFrame::DataFrameProxy::check_col_len(size_t check, string m) {
 
 void DataFrame::DataFrameProxy::insert_column(const string& name,
                                               shared_ptr<Column>& inp) {
-    size_t current_cap = theDataFrame.column_names.size();
-    int lhsIdx = find_or_add(name, theDataFrame.column_names);
-    bool replace = theDataFrame.column_names.size() == current_cap;
-    replace ? replace_column(lhsIdx, inp) : add_column(inp);
+    bool add = maybe_add(name, theDataFrame.column_names); 
+    int lhsIdx = theDataFrame.get_column_position(name);
+    add ? add_column(inp) : replace_column(lhsIdx, inp);
 }
 
 template <typename T>
@@ -66,10 +66,21 @@ void DataFrame::DataFrameProxy::insert_column(const string& name,
     insert_column(name, col);
 }
 
+
+void DataFrame::DataFrameProxy::insert_column(const vector<string>& rhsNames,
+                                              const DataFrame& rhsDf) {
+    for (size_t i = 0; i < rhsNames.size(); ++i) {
+        SharedCol col = rhsDf.get_shared_copy(rhsNames[i]);
+        check_col_len(col->size(), "column lenght of DataFrames differ");
+        insert_column(colNames[i], col);
+    }
+}
+
 DataFrame& DataFrame::operator=(const DataFrame& rhs) {
     if (this != &rhs) {
         columns = rhs.columns;
         index_names = rhs.index_names;
+        index_positions = rhs.index_positions;
         column_names = rhs.column_names;
     }
     return *this;
@@ -78,25 +89,24 @@ DataFrame& DataFrame::operator=(const DataFrame& rhs) {
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const DataFrameProxy& rhs) {
     if (this != &rhs) {
-        check_col_width(rhs.colNames.size(), string{"rhs and lhs col num differ"});
-        for (size_t i = 0; i < colNames.size(); ++i) {
-            //string rhsName = rhs.colNames[i];
-            SharedCol col = rhs.theDataFrame.get_shared_copy(rhs.colNames[i]);
-            //shared_ptr<Column> col = rhs.theDataFrame.get_shared_copy(rhsName);
-            check_col_len(col->size(), "column lenght of DataFrames differ");
-            insert_column(colNames[i], col);
+        check_col_width(rhs.colNames.size(), string{"r & lhs col num differ"});
+        try{
+            insert_column(rhs.colNames, rhs.theDataFrame);
+        } catch(...) {
+            throw std::runtime_error("Assignment operator from DfProxy failed");
         }
     }
     return *this;
 }
+
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
         const DataFrame& rhs) {
     check_col_width(rhs.size().second, string{"rhs and lhs col num differ"});
     vector<string> rhs_names = rhs.get_column_names();
-    for (size_t i = 0; i < colNames.size(); ++i) {
-            SharedCol col = rhs.get_shared_copy(rhs_names[i]);
-            check_col_len(col->size(), "column lenght of DataFrames differ");
-            insert_column(colNames[i], col);
+    try{
+        insert_column(rhs.get_column_names(), rhs);
+    } catch(...) {
+        throw std::runtime_error("Assignment operator from Df failed");
     }
     return *this;
 }
@@ -151,9 +161,9 @@ void append_missing_rows(DataFrame& lhs, const DataFrame& rhs) {
 
 void append_missing_cols(DataFrame& lhs, const DataFrame& rhs) {
     for (auto const& x : rhs.column_names) {
-        size_t capacity_so_far = lhs.column_names.size();
-        int lhsPos = find_or_add(x.first, lhs.column_names);
-        if (capacity_so_far < lhs.column_names.size()) {
+        bool add = maybe_add(x.first, lhs.column_names);
+        int lhsPos = lhs.get_column_position(x.first);
+        if (add) {
             lhs.columns.push_back(rhs.get_unique(x.first));
             lhs.columns.at(lhsPos)->replace_nan();
         }

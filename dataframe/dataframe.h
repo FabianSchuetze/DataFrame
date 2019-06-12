@@ -185,11 +185,10 @@ class DataFrame {
     void append_nan_rows();
     void append_index(const std::string&);
     std::vector<std::string> frame(Column& c);
-    void missing_col_error(const char*, const std::string&);
     std::vector<int> contains_null();
     void make_unique(const std::string&);
     void make_unique(const std::vector<std::string>&);
-    int find_index_pair(const std::pair<std::string, int>&);
+    void append_index(const std::vector<std::string>&);
     template <class T>
     std::vector<int> permutation_index(const std::string& s);
     /**
@@ -257,8 +256,8 @@ template <typename T>
 DataFrame operator>(const DataFrame&, const T&);
 DataFrame deep_copy(const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
-//std::vector<std::pair<int, int>> correspondence_position(const DataFrame&,
-                                                         //const DataFrame&);
+std::vector<std::pair<int, int>> correspondence_position(const DataFrame&,
+                                                         const DataFrame&);
 /**
  * @brief creates nan rows in the lhs if rhs cols are not present in the lhs
  *
