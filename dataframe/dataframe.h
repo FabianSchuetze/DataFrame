@@ -44,6 +44,13 @@ class DataFrame {
         return copy;
     }
     template <typename T>
+    friend DataFrame operator>(const DataFrame& lhs, const T&t) {
+        DataFrame copy = deep_copy(lhs);
+        for (const auto& x: copy.column_names)
+            copy.columns[x.second]->is_greater_than(t);
+        return copy;
+    }
+    template <typename T>
     friend DataFrame operator+(const DataFrame& lhs, const T& t) {
         return deep_copy(lhs) += t;
     }
@@ -137,8 +144,16 @@ class DataFrame {
     int use_count(const std::string&);  // Can i const qualify it?
     std::vector<std::string> get_index_names();
     std::vector<std::string> get_index_names() const;
+    template <typename T>
+    void fill_na(std::string, T);
+    /** 
+     * @brief returns the names of all columns
+     */
     std::vector<std::string> get_column_names();
     std::vector<std::string> get_column_names() const;
+    /** 
+     * @brief returns the names of all columns of template type T
+     */
     template <typename T>
     std::vector<std::string> get_column_names();
     /**
@@ -238,6 +253,8 @@ DataFrame operator+(const DataFrame&, const DataFrame::DataFrameProxy&);
  */
 template <typename T>
 DataFrame operator<(const DataFrame&, const T&);
+template <typename T>
+DataFrame operator>(const DataFrame&, const T&);
 DataFrame deep_copy(const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
 //std::vector<std::pair<int, int>> correspondence_position(const DataFrame&,

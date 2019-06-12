@@ -85,8 +85,11 @@ template&lt;class T &gt; </td></tr>
 <a class="el" href="classColumn.html">Column</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classColumn.html#af4232d458c38e5a2c5a75c660664e105">plus</a> (const <a class="el" href="classColumn.html">Column</a> &amp;, const std::vector&lt; std::pair&lt; int, int &gt;&gt; &amp;)</td></tr>
 <tr class="memdesc:af4232d458c38e5a2c5a75c660664e105"><td class="mdescLeft">&#160;</td><td class="mdescRight">similar to the overloaded assigment operator but it checks equivalence <br /></td></tr>
 <tr class="separator:af4232d458c38e5a2c5a75c660664e105"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f7b60a5645dd0b604922ad10f0a4528"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a9f7b60a5645dd0b604922ad10f0a4528"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classColumn.html#a9f7b60a5645dd0b604922ad10f0a4528">push_back</a> (const T)</td></tr>
+<tr class="memitem:a9a318e80a0581ab65f1ec81499064bc4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classColumn.html#a9a318e80a0581ab65f1ec81499064bc4">convert_and_push_back</a> (const std::string &amp;)</td></tr>
+<tr class="separator:a9a318e80a0581ab65f1ec81499064bc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f7b60a5645dd0b604922ad10f0a4528"><td class="memTemplParams" colspan="2"><a id="a9f7b60a5645dd0b604922ad10f0a4528"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:a9f7b60a5645dd0b604922ad10f0a4528"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>push_back</b> (const T)</td></tr>
 <tr class="separator:a9f7b60a5645dd0b604922ad10f0a4528"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bbf8fcd3b445bf8f11bb1f03f76e747"><td class="memItemLeft" align="right" valign="top"><a id="a4bbf8fcd3b445bf8f11bb1f03f76e747"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classColumn.html#a4bbf8fcd3b445bf8f11bb1f03f76e747">size</a> ()</td></tr>
@@ -150,6 +153,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>replace_nan</b> ()</t
 <tr class="memitem:ae521b1b4d6717f928dc5d778f3dd6ef1"><td class="memItemLeft" align="right" valign="top"><a id="ae521b1b4d6717f928dc5d778f3dd6ef1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>replace_nan</b> (int)</td></tr>
 <tr class="separator:ae521b1b4d6717f928dc5d778f3dd6ef1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb84b641ffe0918fc7fbbd79e71e5763"><td class="memItemLeft" align="right" valign="top"><a id="aeb84b641ffe0918fc7fbbd79e71e5763"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>is_null</b> (std::vector&lt; int &gt; &amp;)</td></tr>
+<tr class="separator:aeb84b641ffe0918fc7fbbd79e71e5763"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf57b536d1d132a0f3d8841f4388bbee"><td class="memItemLeft" align="right" valign="top"><a id="abf57b536d1d132a0f3d8841f4388bbee"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_null</b> (size_t)</td></tr>
 <tr class="separator:abf57b536d1d132a0f3d8841f4388bbee"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -195,19 +201,17 @@ std::string::size_type&#160;</td><td class="memItemRight" valign="bottom"><b>wid
 <tr class="separator:a92ccb0425c54a5b5cd6f78ed1bb4c3ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a9f7b60a5645dd0b604922ad10f0a4528"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9f7b60a5645dd0b604922ad10f0a4528">&#9670;&nbsp;</a></span>push_back()</h2>
+<a id="a9a318e80a0581ab65f1ec81499064bc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a318e80a0581ab65f1ec81499064bc4">&#9670;&nbsp;</a></span>convert_and_push_back()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;class T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void Column::push_back </td>
+          <td class="memname">void Column::convert_and_push_back </td>
           <td>(</td>
-          <td class="paramtype">const T&#160;</td>
-          <td class="paramname"><em>t</em></td><td>)</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
           <td></td>
         </tr>
       </table>

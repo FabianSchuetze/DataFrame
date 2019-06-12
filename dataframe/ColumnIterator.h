@@ -1,5 +1,8 @@
+#ifndef GUARD_ColumnIterator_h
+#define GUARD_ColumnIterator_h
 #include "dataframe.h"
 #include <iostream>
+#include <cmath>
 
 class Column;
 template <class T>
@@ -109,3 +112,12 @@ DataFrame::ColumnIterator<T> DataFrame::ColumnIterator<T>::operator--(int) {
     --*this;
     return ret;
 }
+template <typename T>
+void DataFrame::fill_na(std::string s, T t) {
+    iter<T> it = begin<T>(s);
+    iter<T>  e = end<T>(s);
+    std::transform(it, e, it, 
+            [&t](auto& d) {return std::isnan(d) ? t : d;});
+}
+
+#endif

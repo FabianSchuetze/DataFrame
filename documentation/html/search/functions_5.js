@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['operator_2b_3d',['operator+=',['../classDataFrame.html#a61f3301cc72548b4b3536c0844fb156d',1,'DataFrame']]]
+  ['make_5fcontigious',['make_contigious',['../classDataFrame.html#a7a1b7c79f2b98e18ed5cda2852dd5341',1,'DataFrame']]]
 ];

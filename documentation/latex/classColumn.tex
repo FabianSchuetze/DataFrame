@@ -12,7 +12,10 @@
 \mbox{\Hypertarget{classColumn_af4232d458c38e5a2c5a75c660664e105}\label{classColumn_af4232d458c38e5a2c5a75c660664e105}} 
 \hyperlink{classColumn}{Column} \& \hyperlink{classColumn_af4232d458c38e5a2c5a75c660664e105}{plus} (const \hyperlink{classColumn}{Column} \&, const std\+::vector$<$ std\+::pair$<$ int, int $>$$>$ \&)
 \begin{DoxyCompactList}\small\item\em similar to the overloaded assigment operator but it checks equivalence \end{DoxyCompactList}\item 
-{\footnotesize template$<$class T $>$ }\\void \hyperlink{classColumn_a9f7b60a5645dd0b604922ad10f0a4528}{push\+\_\+back} (const T)
+void \hyperlink{classColumn_a9a318e80a0581ab65f1ec81499064bc4}{convert\+\_\+and\+\_\+push\+\_\+back} (const std\+::string \&)
+\item 
+\mbox{\Hypertarget{classColumn_a9f7b60a5645dd0b604922ad10f0a4528}\label{classColumn_a9f7b60a5645dd0b604922ad10f0a4528}} 
+{\footnotesize template$<$class T $>$ }\\void {\bfseries push\+\_\+back} (const T)
 \item 
 \mbox{\Hypertarget{classColumn_a4bbf8fcd3b445bf8f11bb1f03f76e747}\label{classColumn_a4bbf8fcd3b445bf8f11bb1f03f76e747}} 
 size\+\_\+t \hyperlink{classColumn_a4bbf8fcd3b445bf8f11bb1f03f76e747}{size} ()
@@ -70,6 +73,9 @@ void {\bfseries replace\+\_\+nan} ()
 \mbox{\Hypertarget{classColumn_ae521b1b4d6717f928dc5d778f3dd6ef1}\label{classColumn_ae521b1b4d6717f928dc5d778f3dd6ef1}} 
 void {\bfseries replace\+\_\+nan} (int)
 \item 
+\mbox{\Hypertarget{classColumn_aeb84b641ffe0918fc7fbbd79e71e5763}\label{classColumn_aeb84b641ffe0918fc7fbbd79e71e5763}} 
+void {\bfseries is\+\_\+null} (std\+::vector$<$ int $>$ \&)
+\item 
 \mbox{\Hypertarget{classColumn_abf57b536d1d132a0f3d8841f4388bbee}\label{classColumn_abf57b536d1d132a0f3d8841f4388bbee}} 
 bool {\bfseries is\+\_\+null} (size\+\_\+t)
 \item 
@@ -113,12 +119,11 @@ std\+::string\+::size\+\_\+type {\bfseries width} (const \hyperlink{classColumn}
 
 
 \subsection{Member Function Documentation}
-\mbox{\Hypertarget{classColumn_a9f7b60a5645dd0b604922ad10f0a4528}\label{classColumn_a9f7b60a5645dd0b604922ad10f0a4528}} 
-\index{Column@{Column}!push\+\_\+back@{push\+\_\+back}}
-\index{push\+\_\+back@{push\+\_\+back}!Column@{Column}}
-\subsubsection{\texorpdfstring{push\+\_\+back()}{push\_back()}}
-{\footnotesize\ttfamily template$<$class T $>$ \\
-void Column\+::push\+\_\+back (\begin{DoxyParamCaption}\item[{const T}]{t }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{classColumn_a9a318e80a0581ab65f1ec81499064bc4}\label{classColumn_a9a318e80a0581ab65f1ec81499064bc4}} 
+\index{Column@{Column}!convert\+\_\+and\+\_\+push\+\_\+back@{convert\+\_\+and\+\_\+push\+\_\+back}}
+\index{convert\+\_\+and\+\_\+push\+\_\+back@{convert\+\_\+and\+\_\+push\+\_\+back}!Column@{Column}}
+\subsubsection{\texorpdfstring{convert\+\_\+and\+\_\+push\+\_\+back()}{convert\_and\_push\_back()}}
+{\footnotesize\ttfamily void Column\+::convert\+\_\+and\+\_\+push\+\_\+back (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s }\end{DoxyParamCaption})}
 
 Pushes a value of type T into the column \mbox{\Hypertarget{classColumn_a4e1088bc99d0408a533a2eadfbcdca23}\label{classColumn_a4e1088bc99d0408a533a2eadfbcdca23}} 
 \index{Column@{Column}!type\+\_\+name@{type\+\_\+name}}

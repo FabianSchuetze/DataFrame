@@ -21,7 +21,7 @@ set(${LIBRARY_TARGET_NAME}_HDR
     dataframe/ColumIterator.h
     dataframe/dataframe.h
     dataframe/column.h
-    #dataframe/ConstColumnIterator.h
+    dataframe/ConstColumnIterator.h
     dataframe/dataframeproxy.h
 )
 

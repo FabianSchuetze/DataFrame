@@ -407,3 +407,12 @@ DataFrame::DataFrame(std::ifstream& file)
     initialize_column(file, colNames);
     insert_data(file, colNames);
 }
+//template <typename T>
+//void DataFrame::fill_na(string& s, T& t) {
+    //iter<T> it = begin<T>(s);
+    //iter<T>  e = end<T>(s);
+    //std::transform(it, e, it, 
+            //[&t](auto& d) {return std::isnan(d) ? t : d;});
+//}
+
+//template void DataFrame::fill_na(string&, double&);

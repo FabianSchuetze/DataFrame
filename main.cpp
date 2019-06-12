@@ -1,27 +1,33 @@
 #include "dataframe/dataframe.h"
 #include "dataframe/dataframeproxy.h"
 #include "dataframe/ColumnIterator.h"
-//#include "dataframe/ConstColumnIterator.h"
+#include "dataframe/ConstColumnIterator.h"
 #include <vector>
 #include <fstream>
 #include <string>
 #include <iostream>
 #include <cmath>
 #include <chrono>
+#include <numeric>
+
+using namespace std::chrono;
 
 using std::vector;
 using std::string;
 
-
-void fun(DataFrame& df) {
-    vector<string> string_col = {"new_test", "second"};
-    df["test"] = string_col;
-}
-
-// INTERESTING: DIDN'T DEFINE ASSIGNMENT OPERATOR BUT DOES WHAT I WANT, HOW?
-void fun2(DataFrame& df) {
-    vector<string> string_col = {"ttt", "ssss"};
-    df["test"] = string_col;
+vector<string> get_columns() {
+    vector<string> res;
+    vector<string> cols = {"total_sales_volume", "is_sale", "lead_canal"};
+    vector<string> xs ={"initial", "first", "second", "third", "fourth",
+          "fifth", "sixth", "seventh", "eight", "ninth",
+          "tenth"};
+    for (auto x : xs) {
+        string col1 = "saex2_" + x + "_is_payout";
+        string col2 = "saex2_" + x + "_actual";
+        cols.push_back(col1);
+        cols.push_back(col2);
+    }
+    return cols;
 }
 
 void fill_df(DataFrame& df) {
@@ -39,22 +45,28 @@ void sort_df(DataFrame& df, const std::string& s) {
 }
 
 int main() {
-    using milli = std::chrono::milliseconds;
-    std::ifstream infile("test2.csv"); //make a check about the file
+    std::ifstream infile("amits_example.csv"); //make a check about the file
     DataFrame df1 = DataFrame(infile);
-    auto start = std::chrono::high_resolution_clock::now();
-    //DataFrame df2 = df1;
-    df1.dropna();
-    df1.sort_by_column("account_id");
-    auto finish = std::chrono::high_resolution_clock::now();
-    auto total =std::chrono::duration_cast<milli>(finish - start).count();
-    std::cout << "myFunction() took " << total << " milliseconds\n";
-    std::cout << df1.size().first << std::endl;
-    std::cout << df1.size().second << std::endl;
-    ////std::cout << df1.loc("0") << std::endl;
-    std::cout << df1 << std::endl;
-    ////std::cout << "trying to get the new data\n";
-    //DataFrame df2 = DataFrame(df1["total_sales_volume"]);
-    //std::cout << df2 <<std::endl;
+    high_resolution_clock::time_point t1 = high_resolution_clock::now();
+    //std::cout << DataFrame(df1["total_sales_volume"]);
+    df1.fill_na<double>("total_sales_volume", 0);
+    df1["is_sale"] = df1["total_sales_volume"] > 0.;
+    vector<string> cols = get_columns();
+    DataFrame df2 = DataFrame(df1[cols]);
+    df2.dropna();
+    //std::cout << df2.size().first << std::endl;
+    //std::cout << df2.size().second << std::endl;
+    vector<double> series;
+    DataFrame::const_iter<double> real_begin = df2.cbegin<double>("total_sales_volume");
+    DataFrame::const_iter<double> real_end = df2.cend<double>("total_sales_volume");
+    DataFrame::const_iter<double> predicitons_begin = df2.cbegin<double>("saex2_initial_actual");
+    auto fun = [](const double& a, const double& b) {return std::abs(a - b);};
+    std::transform(real_begin, real_end, predicitons_begin, 
+            std::back_inserter(series), fun);
+    double avg = std::accumulate(series.begin(), series.end(), 0.) / series.size();
+    high_resolution_clock::time_point t2 = high_resolution_clock::now();
+    std::cout << avg << std::endl;
+    auto duration = duration_cast<milliseconds>( t2 - t1 ).count();
+    std::cout << duration;
     return 0;
 }

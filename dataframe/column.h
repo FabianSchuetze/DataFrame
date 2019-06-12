@@ -15,6 +15,8 @@ class Column {
     friend std::string::size_type width(const Column&, std::vector<std::string>&);
     template <typename T>
     friend DataFrame operator<(const DataFrame&, const T&);
+    template <typename T>
+    friend DataFrame operator>(const DataFrame&, const T&);
 
     Column(): col() {};
     //Column(const Column&, int); I THINK THIS CONSTRUCTOR IS NOT NEEDED?!?
@@ -78,6 +80,8 @@ class Column {
     void add_to_string(const Column&,const  std::vector<std::pair<int, int>>&);
     void is_smaller_than(const double&);
     void is_smaller_than(const std::string&);
+    void is_greater_than(const double&);
+    void is_greater_than(const std::string&);
     typedef std::vector<double> dvec;
     typedef std::vector<std::string> svec;
     typedef std::vector<bool> bvec;

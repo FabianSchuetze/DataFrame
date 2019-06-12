@@ -153,6 +153,9 @@ template&lt;class T &gt; </td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a6abc672ac4c439e3e785bd3f84c8da15">dropna</a> ()</td></tr>
 <tr class="memdesc:a6abc672ac4c439e3e785bd3f84c8da15"><td class="mdescLeft">&#160;</td><td class="mdescRight">drops rows which contain na from the dataframe <br /></td></tr>
 <tr class="separator:a6abc672ac4c439e3e785bd3f84c8da15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b5f5743f485c3f8c185abb59e9038a9"><td class="memItemLeft" align="right" valign="top"><a id="a0b5f5743f485c3f8c185abb59e9038a9"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>drop_row</b> (std::vector&lt; std::string &gt;)</td></tr>
+<tr class="separator:a0b5f5743f485c3f8c185abb59e9038a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a337c8f36b774778364dcde54b398fb5a"><td class="memItemLeft" align="right" valign="top"><a id="a337c8f36b774778364dcde54b398fb5a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a337c8f36b774778364dcde54b398fb5a">drop_row</a> (const std::string &amp;)</td></tr>
 <tr class="memdesc:a337c8f36b774778364dcde54b398fb5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">drops a row from the dataframe <br /></td></tr>
@@ -165,10 +168,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#ae9eb64b2d0c072459f85a4b840978060">sort_by_index</a> ()</td></tr>
 <tr class="memdesc:ae9eb64b2d0c072459f85a4b840978060"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sort the dataframe by its index. <br /></td></tr>
 <tr class="separator:ae9eb64b2d0c072459f85a4b840978060"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72c1c51a9562d55269477dabcc61ad12"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a72c1c51a9562d55269477dabcc61ad12"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a72c1c51a9562d55269477dabcc61ad12">sort_by_column</a> (const std::string &amp;)</td></tr>
-<tr class="memdesc:a72c1c51a9562d55269477dabcc61ad12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sorts the dataframe by column named s.  <a href="#a72c1c51a9562d55269477dabcc61ad12">More...</a><br /></td></tr>
-<tr class="separator:a72c1c51a9562d55269477dabcc61ad12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09c79a451ef2d4ff909e1d01d4788f22"><td class="memItemLeft" align="right" valign="top"><a id="a09c79a451ef2d4ff909e1d01d4788f22"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a09c79a451ef2d4ff909e1d01d4788f22">sort_by_column</a> (const std::string &amp;)</td></tr>
+<tr class="memdesc:a09c79a451ef2d4ff909e1d01d4788f22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sorts the dataframe by column named s. <br /></td></tr>
+<tr class="separator:a09c79a451ef2d4ff909e1d01d4788f22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf8a589cf1c78e72fdd92c3107550ea4"><td class="memItemLeft" align="right" valign="top"><a id="acf8a589cf1c78e72fdd92c3107550ea4"></a>
 <a class="el" href="classDataFrame_1_1DataFrameProxy.html">DataFrameProxy</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (const std::string &amp;)</td></tr>
 <tr class="separator:acf8a589cf1c78e72fdd92c3107550ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -190,15 +193,21 @@ std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bott
 <tr class="memitem:afbcd88c63518ff6f9d7ebcd9ba86b401"><td class="memItemLeft" align="right" valign="top"><a id="afbcd88c63518ff6f9d7ebcd9ba86b401"></a>
 std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>get_index_names</b> () const</td></tr>
 <tr class="separator:afbcd88c63518ff6f9d7ebcd9ba86b401"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea01776288aa64cf31b4975ee63f28ff"><td class="memTemplParams" colspan="2"><a id="aea01776288aa64cf31b4975ee63f28ff"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aea01776288aa64cf31b4975ee63f28ff"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>fill_na</b> (const std::string &amp;, T &amp;)</td></tr>
+<tr class="separator:aea01776288aa64cf31b4975ee63f28ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56207fb528a4d9583e38829fa6d2b7b0"><td class="memItemLeft" align="right" valign="top"><a id="a56207fb528a4d9583e38829fa6d2b7b0"></a>
-std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>get_column_names</b> ()</td></tr>
+std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a56207fb528a4d9583e38829fa6d2b7b0">get_column_names</a> ()</td></tr>
+<tr class="memdesc:a56207fb528a4d9583e38829fa6d2b7b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns the names of all columns <br /></td></tr>
 <tr class="separator:a56207fb528a4d9583e38829fa6d2b7b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7acff26f59b5fbd8553f5d9c8b181605"><td class="memItemLeft" align="right" valign="top"><a id="a7acff26f59b5fbd8553f5d9c8b181605"></a>
 std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>get_column_names</b> () const</td></tr>
 <tr class="separator:a7acff26f59b5fbd8553f5d9c8b181605"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52cc74262cffe3403bc8ee4f328833d7"><td class="memTemplParams" colspan="2"><a id="a52cc74262cffe3403bc8ee4f328833d7"></a>
 template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a52cc74262cffe3403bc8ee4f328833d7"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get_column_names</b> ()</td></tr>
+<tr class="memitem:a52cc74262cffe3403bc8ee4f328833d7"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a52cc74262cffe3403bc8ee4f328833d7">get_column_names</a> ()</td></tr>
+<tr class="memdesc:a52cc74262cffe3403bc8ee4f328833d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns the names of all columns of template type T <br /></td></tr>
 <tr class="separator:a52cc74262cffe3403bc8ee4f328833d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40f6420c823601946d56ba625484a74e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a40f6420c823601946d56ba625484a74e">is_contigious</a> ()</td></tr>
 <tr class="memdesc:a40f6420c823601946d56ba625484a74e"><td class="mdescLeft">&#160;</td><td class="mdescRight">checks if the ordering of underlying data align with the index  <a href="#a40f6420c823601946d56ba625484a74e">More...</a><br /></td></tr>
@@ -235,10 +244,14 @@ template&lt;typename T &gt; </td></tr>
 template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a2371f05dbcaa1a6e503ec0ab4e1e7099"><td class="memTemplItemLeft" align="right" valign="top">vector&lt; string &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get_column_names</b> ()</td></tr>
 <tr class="separator:a2371f05dbcaa1a6e503ec0ab4e1e7099"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1edd7605914e1a2004ed6e6a8df0e7a"><td class="memTemplParams" colspan="2"><a id="aa1edd7605914e1a2004ed6e6a8df0e7a"></a>
+<tr class="memitem:a413a01311375ca843576552805762b62"><td class="memTemplParams" colspan="2"><a id="a413a01311375ca843576552805762b62"></a>
 template&lt;typename T &gt; </td></tr>
-<tr class="memitem:aa1edd7605914e1a2004ed6e6a8df0e7a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>sort_by_column</b> (const string &amp;s)</td></tr>
-<tr class="separator:aa1edd7605914e1a2004ed6e6a8df0e7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a413a01311375ca843576552805762b62"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>sort_by_column_template</b> (const string &amp;s)</td></tr>
+<tr class="separator:a413a01311375ca843576552805762b62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ebe3553cef68aeb5c4a2ce85497f20d"><td class="memTemplParams" colspan="2"><a id="a6ebe3553cef68aeb5c4a2ce85497f20d"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a6ebe3553cef68aeb5c4a2ce85497f20d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>initialize_column</b> (const string &amp;s)</td></tr>
+<tr class="separator:a6ebe3553cef68aeb5c4a2ce85497f20d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -260,9 +273,9 @@ std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bott
 <tr class="memitem:af8b8dbf9680e79fca9731dbba671ad94"><td class="memItemLeft" align="right" valign="top"><a id="af8b8dbf9680e79fca9731dbba671ad94"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>missing_col_error</b> (const char *, const std::string &amp;)</td></tr>
 <tr class="separator:af8b8dbf9680e79fca9731dbba671ad94"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af012ea429daeef759621f73e8cbbaed2"><td class="memItemLeft" align="right" valign="top"><a id="af012ea429daeef759621f73e8cbbaed2"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains_null</b> (const std::string &amp;)</td></tr>
-<tr class="separator:af012ea429daeef759621f73e8cbbaed2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c07e473d7fcb446ae4b4313d24b6076"><td class="memItemLeft" align="right" valign="top"><a id="a0c07e473d7fcb446ae4b4313d24b6076"></a>
+std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>contains_null</b> ()</td></tr>
+<tr class="separator:a0c07e473d7fcb446ae4b4313d24b6076"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4262bac09b53ff891461cb9b8a26bc1"><td class="memItemLeft" align="right" valign="top"><a id="ae4262bac09b53ff891461cb9b8a26bc1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>make_unique</b> (const std::string &amp;)</td></tr>
 <tr class="separator:ae4262bac09b53ff891461cb9b8a26bc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -282,15 +295,13 @@ template&lt;class T &gt; </td></tr>
 <tr class="memitem:a8fbc548d04ff3217809f737c1a6b0e9d"><td class="memItemLeft" align="right" valign="top"><a id="a8fbc548d04ff3217809f737c1a6b0e9d"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>get_column_position</b> (const std::string &amp;) const</td></tr>
 <tr class="separator:a8fbc548d04ff3217809f737c1a6b0e9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae396eea4635ae7379d5fde60c7e26e61"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#ae396eea4635ae7379d5fde60c7e26e61">get_index_positions</a> () const</td></tr>
-<tr class="memdesc:ae396eea4635ae7379d5fde60c7e26e61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the vector with the column indices corresponding to the index values.  <a href="#ae396eea4635ae7379d5fde60c7e26e61">More...</a><br /></td></tr>
-<tr class="separator:ae396eea4635ae7379d5fde60c7e26e61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3b6078a1f93a0e11a262d42583c59d3"><td class="memItemLeft" align="right" valign="top"><a id="ac3b6078a1f93a0e11a262d42583c59d3"></a>
-std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#ac3b6078a1f93a0e11a262d42583c59d3">get_index_positions</a> (const std::vector&lt; std::string &gt; &amp;) const</td></tr>
-<tr class="memdesc:ac3b6078a1f93a0e11a262d42583c59d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns the vector with index position as well, but instead of traversing the entire index of the dataframe, the function looks up all index values in the input <br /></td></tr>
-<tr class="separator:ac3b6078a1f93a0e11a262d42583c59d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e67febaaae85a774c61197bcbfc7bf5"><td class="memItemLeft" align="right" valign="top"><a id="a7e67febaaae85a774c61197bcbfc7bf5"></a>
+std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a7e67febaaae85a774c61197bcbfc7bf5">get_index_positions</a> (const std::vector&lt; std::string &gt; &amp;) const</td></tr>
+<tr class="memdesc:a7e67febaaae85a774c61197bcbfc7bf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns the vector with index position corresponding to the index names in the input vector <br /></td></tr>
+<tr class="separator:a7e67febaaae85a774c61197bcbfc7bf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f2d00ceb463fe70ffedabc8152628c3"><td class="memItemLeft" align="right" valign="top"><a id="a9f2d00ceb463fe70ffedabc8152628c3"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>find_index_position</b> (const std::string &amp;) const</td></tr>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a9f2d00ceb463fe70ffedabc8152628c3">find_index_position</a> (const std::string &amp;) const</td></tr>
+<tr class="memdesc:a9f2d00ceb463fe70ffedabc8152628c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">finds the rows number for the index name given as input <br /></td></tr>
 <tr class="separator:a9f2d00ceb463fe70ffedabc8152628c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3560b7fd300654f336d47f7843e51f42"><td class="memItemLeft" align="right" valign="top"><a id="a3560b7fd300654f336d47f7843e51f42"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>find_index_position</b> (const std::string &amp;)</td></tr>
@@ -299,24 +310,36 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>find_index_position</b
 <tr class="separator:a6386fb76796f1f414311486aa5f253be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97842254d757876650ea5bada057855e"><td class="memItemLeft" align="right" valign="top">SharedCol&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a97842254d757876650ea5bada057855e">get_shared_copy</a> (const std::string &amp;) const</td></tr>
 <tr class="separator:a97842254d757876650ea5bada057855e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58b6f17ec1c51b993b16ae5287ba5c94"><td class="memItemLeft" align="right" valign="top"><a id="a58b6f17ec1c51b993b16ae5287ba5c94"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>create_column_names</b> (std::ifstream &amp;)</td></tr>
-<tr class="separator:a58b6f17ec1c51b993b16ae5287ba5c94"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcc4a605d4be1f108846e002adb7c1b3"><td class="memItemLeft" align="right" valign="top"><a id="adcc4a605d4be1f108846e002adb7c1b3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>create_columns</b> (std::ifstream &amp;)</td></tr>
-<tr class="separator:adcc4a605d4be1f108846e002adb7c1b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbc3c2d44c5d5a8783208d5e01417d39"><td class="memItemLeft" align="right" valign="top"><a id="acbc3c2d44c5d5a8783208d5e01417d39"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>insert_data</b> (std::ifstream &amp;)</td></tr>
-<tr class="separator:acbc3c2d44c5d5a8783208d5e01417d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad65521a6929933f95823efa3e5a095e9"><td class="memItemLeft" align="right" valign="top"><a id="ad65521a6929933f95823efa3e5a095e9"></a>
+std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#ad65521a6929933f95823efa3e5a095e9">create_column_names</a> (std::ifstream &amp;)</td></tr>
+<tr class="memdesc:ad65521a6929933f95823efa3e5a095e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initilizes the map <code>column_names</code> from the first line of the csv file. <br /></td></tr>
+<tr class="separator:ad65521a6929933f95823efa3e5a095e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a207e76c73a757f4a2ba9013de8beaec5"><td class="memItemLeft" align="right" valign="top"><a id="a207e76c73a757f4a2ba9013de8beaec5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a207e76c73a757f4a2ba9013de8beaec5">initialize_column</a> (std::ifstream &amp;, const std::vector&lt; std::string &gt; &amp;)</td></tr>
+<tr class="memdesc:a207e76c73a757f4a2ba9013de8beaec5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initilizes the Columns with the datatypes mentiond in the second line of the csv file. <br /></td></tr>
+<tr class="separator:a207e76c73a757f4a2ba9013de8beaec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a133bc6ff5a8d26e77deb65ec005f32a7"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a133bc6ff5a8d26e77deb65ec005f32a7"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a133bc6ff5a8d26e77deb65ec005f32a7">initialize_column</a> (const std::string &amp;)</td></tr>
+<tr class="separator:a133bc6ff5a8d26e77deb65ec005f32a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49d3f1a316e52031660658e9cfd8a78f"><td class="memItemLeft" align="right" valign="top"><a id="a49d3f1a316e52031660658e9cfd8a78f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>insert_data</b> (std::ifstream &amp;, const std::vector&lt; std::string &gt; &amp;)</td></tr>
+<tr class="separator:a49d3f1a316e52031660658e9cfd8a78f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af541608659c0b46139244a62a23d1c18"><td class="memTemplParams" colspan="2"><a id="af541608659c0b46139244a62a23d1c18"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:af541608659c0b46139244a62a23d1c18"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>sort_by_column_template</b> (const std::string &amp;)</td></tr>
+<tr class="separator:af541608659c0b46139244a62a23d1c18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a9c466c6766286ba229148f45e3a8eb87"><td class="memItemLeft" align="right" valign="top"><a id="a9c466c6766286ba229148f45e3a8eb87"></a>
 std::vector&lt; std::shared_ptr&lt; <a class="el" href="classColumn.html">Column</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>columns</b></td></tr>
 <tr class="separator:a9c466c6766286ba229148f45e3a8eb87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f4aba20b8b39450f6543ba2919a2693"><td class="memItemLeft" align="right" valign="top"><a id="a5f4aba20b8b39450f6543ba2919a2693"></a>
-std::vector&lt; index_pair &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>index_names</b></td></tr>
-<tr class="separator:a5f4aba20b8b39450f6543ba2919a2693"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3877a4d016a2a835a649e82b4e3b2be"><td class="memItemLeft" align="right" valign="top"><a id="ab3877a4d016a2a835a649e82b4e3b2be"></a>
+std::unordered_map&lt; std::string, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>index_names</b></td></tr>
+<tr class="separator:ab3877a4d016a2a835a649e82b4e3b2be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfc7eae69ff9b9e260a186200507e4d6"><td class="memItemLeft" align="right" valign="top"><a id="abfc7eae69ff9b9e260a186200507e4d6"></a>
+std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>index_positions</b></td></tr>
+<tr class="separator:abfc7eae69ff9b9e260a186200507e4d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae655c8a49567c2acd61bd2f05276779a"><td class="memItemLeft" align="right" valign="top"><a id="ae655c8a49567c2acd61bd2f05276779a"></a>
 std::map&lt; std::string, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>column_names</b></td></tr>
 <tr class="separator:ae655c8a49567c2acd61bd2f05276779a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -450,34 +473,6 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a id="ae396eea4635ae7379d5fde60c7e26e61"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae396eea4635ae7379d5fde60c7e26e61">&#9670;&nbsp;</a></span>get_index_positions()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">vector&lt; int &gt; DataFrame::get_index_positions </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns the vector with the column indices corresponding to the index values. </p>
-<p>The index of a dataframe is a vector of pairs&lt;string, int&gt; which relates the name of the index to the position in the underlying storage vector. The index names might not be in the same ordering as the underlying data because the dataframe has been sorted or because rows have been droped. </p>
-
-</div>
-</div>
 <a id="a6386fb76796f1f414311486aa5f253be"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6386fb76796f1f414311486aa5f253be">&#9670;&nbsp;</a></span>get_shared_copy() <span class="overload">[1/2]</span></h2>
 
@@ -553,6 +548,35 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a id="a133bc6ff5a8d26e77deb65ec005f32a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a133bc6ff5a8d26e77deb65ec005f32a7">&#9670;&nbsp;</a></span>initialize_column()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DataFrame::initialize_column </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>the previously intilaized columns and creates the index </p>
+
+</div>
+</div>
 <a id="a40f6420c823601946d56ba625484a74e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a40f6420c823601946d56ba625484a74e">&#9670;&nbsp;</a></span>is_contigious()</h2>
 
@@ -591,29 +615,6 @@ template&lt;class T &gt; </div>
 
 <p>The overloaded compound-assignment operator. </p>
 <p>If a colum or row or the rhs is not present in the lhs, a new column or row is created in the lhs dataframe contains nas. </p>
-
-</div>
-</div>
-<a id="a72c1c51a9562d55269477dabcc61ad12"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a72c1c51a9562d55269477dabcc61ad12">&#9670;&nbsp;</a></span>sort_by_column()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">template void DataFrame::sort_by_column&lt; double &gt; </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Sorts the dataframe by column named s. </p>
-<p>The function is a template function as one needs to specify the type of the column according to which to sort the dataframe </p>
 
 </div>
 </div>
