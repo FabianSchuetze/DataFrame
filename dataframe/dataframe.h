@@ -113,7 +113,7 @@ class DataFrame {
      * @brief drops rows which contain na from the dataframe
      */
     void dropna();
-    void drop_row(std::vector<std::string>&);
+    void drop_row(std::vector<std::string>);
     /**
      * @brief drops a row from the dataframe
      */
@@ -171,7 +171,7 @@ class DataFrame {
     void append_index(const std::string&);
     std::vector<std::string> frame(Column& c);
     void missing_col_error(const char*, const std::string&);
-    bool contains_null(const std::string&);
+    std::vector<int> contains_null();
     void make_unique(const std::string&);
     void make_unique(const std::vector<std::string>&);
     int find_index_pair(const std::pair<std::string, int>&);

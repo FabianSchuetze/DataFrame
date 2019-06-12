@@ -152,9 +152,22 @@ bool Column::is_null(size_t pos) {
         return std::isnan(v->at(pos));
     else if (const vector<string>* v = std::get_if<vector<string>>(&col))
         return v->at(pos) == "NA";
-    else if (std::get_if<vector<string>>(&col))
+    else if (std::get_if<vector<bool>>(&col))
         return false;
-    return true;  // avoid compiler warning
+    else
+        throw std::runtime_error("Cannot find value");
+}
+void Column::is_null(vector<int>& tmp) {
+    if (vector<double>* v = std::get_if<vector<double>>(&col))
+        std::transform(v->begin(), v->end(), tmp.begin(), tmp.begin(),
+                [](double &a, int &b) {return std::isnan(a) + b;});
+    else if (const vector<string>* v = std::get_if<vector<string>>(&col))
+        std::transform(v->begin(), v->end(), tmp.begin(), tmp.begin(),
+                [](const string& a, int& b) {return (a=="NA") + b;});
+    else if (std::get_if<vector<bool>>(&col))
+        ;
+    else
+        throw std::runtime_error("Cannot find value");
 }
 
 void Column::convert_bool_to_double() {

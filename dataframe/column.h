@@ -72,6 +72,7 @@ class Column {
                  std::vector<bool>> col;
     void replace_nan();
     void replace_nan(int);
+    void is_null(std::vector<int>&);
     bool is_null(size_t);
     void add_to_double(const Column&,const  std::vector<std::pair<int, int>>&);
     void add_to_string(const Column&,const  std::vector<std::pair<int, int>>&);

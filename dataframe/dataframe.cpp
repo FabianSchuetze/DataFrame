@@ -193,11 +193,6 @@ vector<pair<int, int>> correspondence_position(const DataFrame& lhs,
     };
     std::transform(lhs.index_positions.begin(), lhs.index_positions.end(),
                    res.begin(), fun);
-    ////int i = 0;
-    // for (const string& s : lhs.index_positions) {
-    // int other_pos = other.find_index_position(s);
-    // res.push_back(make_pair(lhs.find_index_position(s), other_pos));
-    //}
     return res;
 }
 
@@ -224,12 +219,12 @@ int DataFrame::get_column_position(const std::string& s) const {
     }
 }
 
-bool DataFrame::contains_null(const string& s) {
-    int pos = find_index_position(s);
-    for (auto const& cols : column_names) {
-        if (columns[cols.second]->is_null(pos)) return true;
+vector<int> DataFrame::contains_null() {
+    vector<int> inp (columns[0]->size(), 0);
+    for (const auto& cols: column_names) {
+        columns[cols.second]->is_null(inp);
     }
-    return false;
+    return inp;
 }
 
 void DataFrame::make_unique(const std::string& s) {
@@ -256,29 +251,28 @@ void DataFrame::drop_row(const string& s) {
     return drop_row(tmp);
 }
 
-void DataFrame::drop_row(vector<string>& vec) {
+void DataFrame::drop_row(vector<string> vec) {
     std::sort(vec.begin(), vec.end());
     auto fun = [&](const string& val) {
-        return !std::binary_search(vec.begin(), vec.end(), val);};
-    auto it = std::stable_partition(index_positions.begin(), 
-            index_positions.end(), fun);
+        return !std::binary_search(vec.begin(), vec.end(), val);
+    };
+    auto it = std::stable_partition(index_positions.begin(),
+                                    index_positions.end(), fun);
     index_positions.erase(it, index_positions.end());
-    for (string& s: vec)
-        index_names.erase(s);
+    for (string& s : vec) index_names.erase(s);
 }
 
 void DataFrame::dropna() {
-    vector<string> to_drop;
-    // I can already do the stable partition here!!
-    std::copy_if(index_positions.begin(), index_positions.end(),
-            std::back_inserter(to_drop),
-            [this](const string&s) {return contains_null(s);});
-    if (to_drop.size() > 0) {
-        make_unique_if(get_column_names()); //why do I make that stuff unqiue?!?
-        drop_row(to_drop);
+    vector<int> count = contains_null();
+    auto it = std::stable_partition(
+        index_positions.begin(), index_positions.end(),
+        [this, &count](const string& s) { return count[find_index_position(s)] == 0; });
+    if (it != index_positions.end()) {
+        auto const old_position = it;
+        while (it != index_positions.end()) index_names.erase(*it++);
+        index_positions.erase(old_position, index_positions.end());
     }
 }
-
 template <typename T>
 vector<string> DataFrame::get_column_names() {
     string target;
