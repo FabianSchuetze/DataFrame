@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <chrono>
 
 using std::vector;
 using std::string;
@@ -38,16 +39,22 @@ void sort_df(DataFrame& df, const std::string& s) {
 }
 
 int main() {
-    std::ifstream infile("amits_example.csv"); //make a check about the file
+    using milli = std::chrono::milliseconds;
+    std::ifstream infile("test2.csv"); //make a check about the file
     DataFrame df1 = DataFrame(infile);
+    auto start = std::chrono::high_resolution_clock::now();
+    //DataFrame df2 = df1;
+    df1.dropna();
     df1.sort_by_column("account_id");
-    //std::cout << "completed\n";
+    auto finish = std::chrono::high_resolution_clock::now();
+    auto total =std::chrono::duration_cast<milli>(finish - start).count();
+    std::cout << "myFunction() took " << total << " milliseconds\n";
     std::cout << df1.size().first << std::endl;
     std::cout << df1.size().second << std::endl;
-    //std::cout << df1.loc("0") << std::endl;
+    ////std::cout << df1.loc("0") << std::endl;
     std::cout << df1 << std::endl;
-    //std::cout << "trying to get the new data\n";
-    DataFrame df2 = DataFrame(df1["total_sales_volume"]);
-    std::cout << df2 <<std::endl;
+    ////std::cout << "trying to get the new data\n";
+    //DataFrame df2 = DataFrame(df1["total_sales_volume"]);
+    //std::cout << df2 <<std::endl;
     return 0;
 }

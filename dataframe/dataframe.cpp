@@ -170,7 +170,6 @@ DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
         if (pos == -1)
             throw std::runtime_error("Could not find the index: " + name);
         index_names[name] = pos;
-        // index_names.push_back(make_pair(name, pos));
     }
     index_positions = df.idxNames;
 }
@@ -220,8 +219,8 @@ int DataFrame::get_column_position(const std::string& s) const {
 }
 
 vector<int> DataFrame::contains_null() {
-    vector<int> inp (columns[0]->size(), 0);
-    for (const auto& cols: column_names) {
+    vector<int> inp(columns[0]->size(), 0);
+    for (const auto& cols : column_names) {
         columns[cols.second]->is_null(inp);
     }
     return inp;
@@ -264,9 +263,10 @@ void DataFrame::drop_row(vector<string> vec) {
 
 void DataFrame::dropna() {
     vector<int> count = contains_null();
-    auto it = std::stable_partition(
-        index_positions.begin(), index_positions.end(),
-        [this, &count](const string& s) { return count[find_index_position(s)] == 0; });
+    auto it = std::stable_partition(index_positions.begin(),
+            index_positions.end(),
+            [this, &count](const string& s)
+            { return count[find_index_position(s)] == 0; });
     if (it != index_positions.end()) {
         auto const old_position = it;
         while (it != index_positions.end()) index_names.erase(*it++);
