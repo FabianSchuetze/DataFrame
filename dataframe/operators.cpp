@@ -55,7 +55,7 @@ void DataFrame::DataFrameProxy::check_col_len(size_t check, string m) {
 void DataFrame::DataFrameProxy::insert_column(const string& name,
                                               shared_ptr<Column>& inp) {
     bool add = maybe_add(name, theDataFrame.column_names); 
-    int lhsIdx = theDataFrame.get_column_position(name);
+    int lhsIdx = theDataFrame.find_column_position(name);
     add ? add_column(inp) : replace_column(lhsIdx, inp);
 }
 
@@ -162,7 +162,7 @@ void append_missing_rows(DataFrame& lhs, const DataFrame& rhs) {
 void append_missing_cols(DataFrame& lhs, const DataFrame& rhs) {
     for (auto const& x : rhs.column_names) {
         bool add = maybe_add(x.first, lhs.column_names);
-        int lhsPos = lhs.get_column_position(x.first);
+        int lhsPos = lhs.find_column_position(x.first);
         if (add) {
             lhs.columns.push_back(rhs.get_unique(x.first));
             lhs.columns.at(lhsPos)->replace_nan();
