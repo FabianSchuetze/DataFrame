@@ -22,7 +22,7 @@ void missing_col_error(const char* what, string s) {
     throw std::out_of_range(what + msg);
 }
 
-vector<int> DataFrame::get_index_positions(const vector<string>& inp) const {
+vector<int> DataFrame::find_index_position(const vector<string>& inp) const {
     vector<int> res(inp.size(), 0);
     std::transform(inp.begin(), inp.end(), res.begin(),
                    [this](const string& s) { return find_index_position(s); });
@@ -63,7 +63,7 @@ std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) const {
 
 shared_ptr<Column> DataFrame::get_unique(const string& s,
                                          const vector<int>& v) const {
-    Column new_col = Column(*columns[get_column_position(s)], v);
+    Column new_col = Column(*columns[find_column_position(s)], v);
     return make_shared<Column>(new_col);
 }
 
@@ -99,16 +99,18 @@ void DataFrame::make_contigious() {
 
 DataFrame deep_copy(const DataFrame& lhs) {
     DataFrame new_df = DataFrame();
-    vector<int> old_positions = lhs.get_index_positions(lhs.index_positions);
-    int i = 0, j = 0;
+    // I THINK THE FUNCTION SHOULD RETURN THE SAME
+    vector<int> old_positions = lhs.find_index_position(lhs.index_positions);
+    int i = 0;
     for (auto const& x : lhs.column_names) {
         new_df.column_names[x.first] = i++;
         new_df.columns.push_back(lhs.get_unique(x.first, old_positions));
     }
-    for (const string& x : lhs.index_positions) {
-        new_df.index_names[x] = j++;
-        new_df.index_positions.push_back(x);
-    }
+    new_df.append_index(lhs.index_positions);
+    //for (const string& x : lhs.index_positions) {
+        //new_df.index_names[x] = j++;
+        //new_df.index_positions.push_back(x);
+    //}
     return new_df;
 }
 
@@ -144,12 +146,13 @@ template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
 
 DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
     : columns(), index_names(), index_positions(), column_names() {
-    int i = 0;
+    //int i = 0;
     for (const string& name : df.colNames) {
         columns.push_back(df.theDataFrame.get_shared_copy(name));
-        column_names[name] = i++;
+        column_names[name] = column_names.size();
     }
     for (const string& name : df.idxNames) {
+        // HERE THE FUNCTION RETURNS A SET AND ALSO INSERTS A SET AT THE END
         int pos = df.theDataFrame.find_index_position(name);
         if (pos == -1) throw std::runtime_error("Did not find index: " + name);
         index_names[name] = pos;
@@ -162,10 +165,12 @@ std::pair<size_t, size_t> DataFrame::size() const {
 }
 
 int DataFrame::use_count(const string& name) {
-    int pos = get_column_position(name);
+    int pos = find_column_position(name);
     return columns[pos].use_count();
 }
 
+// THE FUNCTION STILL HAS TO RETURN THE SAME BUT THE WAY IT DOES THAT WOULD
+// DIFFER
 vector<pair<int, int>> correspondence_position(const DataFrame& lhs,
                                                const DataFrame& other) {
     vector<pair<int, int>> res(lhs.index_positions.size());
@@ -183,12 +188,12 @@ void DataFrame::append_nan_rows() {
 }
 
 
-int DataFrame::get_column_position(const std::string& s) {
-    return static_cast<const DataFrame&>(*this).get_column_position(
+int DataFrame::find_column_position(const std::string& s) {
+    return static_cast<const DataFrame&>(*this).find_column_position(
         s);  // Item 3
 }
 
-int DataFrame::get_column_position(const std::string& s) const {
+int DataFrame::find_column_position(const std::string& s) const {
     try {
         return column_names.at(s);
     } catch (std::out_of_range& e) {
@@ -205,7 +210,7 @@ vector<int> DataFrame::contains_null() {
 }
 
 void DataFrame::make_unique(const std::string& s) {
-    columns.at(get_column_position(s)) = get_unique(s);
+    columns.at(find_column_position(s)) = get_unique(s);
 }
 
 void DataFrame::make_unique(const std::vector<string>& vec) {
@@ -270,7 +275,7 @@ template vector<string> DataFrame::get_column_names<double>();
 template vector<string> DataFrame::get_column_names<string>();
 
 void DataFrame::drop_column(const string& s) {
-    columns[get_column_position(s)].~shared_ptr();  // reduce use_count()
+    columns[find_column_position(s)].~shared_ptr();  // reduce use_count()
     column_names.erase(s);                          // delete reference to it;
 }
 
@@ -280,7 +285,7 @@ void DataFrame::sort_by_index() {
 }
 
 void DataFrame::sort_by_column(const std::string& s) {
-    string type = columns[get_column_position(s)]->type_name();
+    string type = columns[find_column_position(s)]->type_name();
     if (type == "double")
         sort_by_column_template<double>(s);
     else if (type == "string")
@@ -307,13 +312,14 @@ template void DataFrame::sort_by_column_template<std::string>(
     const std::string&);
 
 bool DataFrame::is_contigious() {
-    vector<int> existing_order = get_index_positions(index_positions);
+    // HERE THE FUNCTION WOULD STILL RETURN THE SAME INTERFACE
+    vector<int> existing_order = find_index_position(index_positions);
     for (size_t i = 1; i < existing_order.size(); ++i)
         if ((existing_order[i] - existing_order[i - 1]) != 1) return false;
     return true;
 }
 void DataFrame::convert_bool_to_double(const std::string& s) {
-    int pos = get_column_position(s);
+    int pos = find_column_position(s);
     columns[pos]->convert_bool_to_double();
 }
 
@@ -339,7 +345,7 @@ vector<string> DataFrame::create_column_names(std::ifstream& file) {
 template <typename T>
 void DataFrame::initialize_column(const string& s) {
     Column col = Column(vector<T>());
-    columns[get_column_position(s)] = make_shared<Column>(col);
+    columns[find_column_position(s)] = make_shared<Column>(col);
 }
 
 void DataFrame::initialize_column(std::ifstream& file,
@@ -374,7 +380,7 @@ void DataFrame::insert_data(std::ifstream& file, const vector<string>& cols) {
         index_names[name] = line_number++;
         index_positions.push_back(name);
         while (std::getline(names, name, ',')) {
-            int pos = get_column_position(cols[i++]);
+            int pos = find_column_position(cols[i++]);
             columns[pos]->convert_and_push_back(name);
         }
     }

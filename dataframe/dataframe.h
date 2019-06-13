@@ -195,13 +195,13 @@ class DataFrame {
      * @brief Returns an index number for the column named s
      * @throws std::out_of_range If the column name does not exist
      */
-    int get_column_position(const std::string&);
-    int get_column_position(const std::string&) const;
+    int find_column_position(const std::string&);
+    int find_column_position(const std::string&) const;
     /**
      * @brief returns the vector with index position corresponding to the index
      * names in the input vector
      */
-    std::vector<int> get_index_positions(const std::vector<std::string>&) const;
+    std::vector<int> find_index_position(const std::vector<std::string>&) const;
     /**
      * @brief finds the rows number for the index name given as input
      */

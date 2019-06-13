@@ -19,13 +19,12 @@ void Column::copy_vector(const vector<T>* val, const vector<int>& subsets) {
 }
 
 Column::Column(const Column& c, const vector<int>& subsets) {
-    if (const vector<double>* val = get_if<vector<double>>(&c.col)) {
+    if (const vector<double>* val = get_if<vector<double>>(&c.col))
         copy_vector<double>(val, subsets);
-    } else if (const vector<string>* val = get_if<vector<string>>(&c.col)) {
+    else if (const vector<string>* val = get_if<vector<string>>(&c.col))
         copy_vector<string>(val, subsets);
-    } else if (const vector<bool>* val = get_if<vector<bool>>(&c.col)) {
+    else if (const vector<bool>* val = get_if<vector<bool>>(&c.col))
         copy_vector<bool>(val, subsets);
-    }
 }
 
 void Column::replace_nan() {

@@ -48,8 +48,10 @@ int main() {
     std::ifstream infile("amits_example.csv"); //make a check about the file
     DataFrame df1 = DataFrame(infile);
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
-    //std::cout << DataFrame(df1["total_sales_volume"]);
+    std::cout << DataFrame(df1["total_sales_volume"]);
     df1.fill_na<double>("total_sales_volume", 0);
+    DataFrame test = DataFrame(df1["total_sales_volume"] > 0);
+    df1["is_sale"] = test;
     df1["is_sale"] = df1["total_sales_volume"] > 0.;
     vector<string> cols = get_columns();
     DataFrame df2 = DataFrame(df1[cols]);

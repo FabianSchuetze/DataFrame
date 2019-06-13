@@ -73,6 +73,8 @@ template <class T>
 T& DataFrame::ColumnIterator<T>::operator*() const {
     auto p = check(curr, "dereferencing past end");
     std::string name = theDataFrame.index_positions[curr];
+    // HERE CURR CHECKS HOW MUCH WE HAVE ALREADY ITERATED, WE WOULD NEED TO
+    // KNOW WHAT! WE ALREADY ITERATED, AS IF THE ITERATOR HAS ITS OWN SEARCH
     int pos = theDataFrame.find_index_position(name);
     return (*p).template get_value<T>(pos);
 }
