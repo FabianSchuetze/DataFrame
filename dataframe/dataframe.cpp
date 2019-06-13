@@ -275,6 +275,8 @@ template vector<string> DataFrame::get_column_names<double>();
 template vector<string> DataFrame::get_column_names<string>();
 
 void DataFrame::drop_column(const string& s) {
+    // WHAT HAPPENS IF THERE IS ONLY ONE SHARED POINTER OF IT? DOES THE THINK
+    // DROP OUT OF THE VECTOR?
     columns[find_column_position(s)].~shared_ptr();  // reduce use_count()
     column_names.erase(s);                          // delete reference to it;
 }
