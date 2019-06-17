@@ -101,16 +101,11 @@ DataFrame deep_copy(const DataFrame& lhs) {
     DataFrame new_df = DataFrame();
     // I THINK THE FUNCTION SHOULD RETURN THE SAME
     vector<int> old_positions = lhs.find_index_position(lhs.index_positions);
-    int i = 0;
     for (auto const& x : lhs.column_names) {
-        new_df.column_names[x.first] = i++;
+        new_df.column_names[x.first] = new_df.column_names.size();
         new_df.columns.push_back(lhs.get_unique(x.first, old_positions));
     }
     new_df.append_index(lhs.index_positions);
-    //for (const string& x : lhs.index_positions) {
-        //new_df.index_names[x] = j++;
-        //new_df.index_positions.push_back(x);
-    //}
     return new_df;
 }
 
@@ -154,7 +149,10 @@ DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
     for (const string& name : df.idxNames) {
         // HERE THE FUNCTION RETURNS A SET AND ALSO INSERTS A SET AT THE END
         int pos = df.theDataFrame.find_index_position(name);
-        if (pos == -1) throw std::runtime_error("Did not find index: " + name);
+        if (pos == -1) {
+            string msg = "Index: " + name + " not found in ";
+            throw std::runtime_error(msg + __PRETTY_FUNCTION__);
+        }
         index_names[name] = pos;
     }
     index_positions = df.idxNames;
@@ -376,13 +374,13 @@ void DataFrame::insert_data(std::ifstream& file, const vector<string>& cols) {
     std::string line, name;
     size_t line_number = 0;
     while (std::getline(file, line)) {
-        size_t i = 0;
         std::istringstream names(line);
         std::getline(names, name, ',');
         index_names[name] = line_number++;
         index_positions.push_back(name);
-        while (std::getline(names, name, ',')) {
-            int pos = find_column_position(cols[i++]);
+        for (const string& column_name: cols) {
+            std::getline(names, name, ',');
+            int pos = find_column_position(column_name);
             columns[pos]->convert_and_push_back(name);
         }
     }

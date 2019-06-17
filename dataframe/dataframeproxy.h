@@ -27,6 +27,7 @@ class DataFrame::DataFrameProxy {
     template <typename T>
     friend DataFrame operator>(const DataFrameProxy& lhs, const T& t) {
         DataFrame copy = deep_copy(DataFrame(lhs));
+        // I DO COPY THAT STUFF TWICE!!!
         return copy > t;
     }
 

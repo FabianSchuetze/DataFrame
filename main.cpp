@@ -17,7 +17,7 @@ using std::string;
 
 vector<string> get_columns() {
     vector<string> res;
-    vector<string> cols = {"total_sales_volume", "is_sale", "lead_canal"};
+    vector<string> cols = {"total_sales_volume", "is_sale"};
     vector<string> xs ={"initial", "first", "second", "third", "fourth",
           "fifth", "sixth", "seventh", "eight", "ninth",
           "tenth"};

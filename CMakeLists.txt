@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.5)
 
 project (Dataframe VERSION 0.1)
 set(LIBRARY_TARGET_NAME ${PROJECT_NAME})
-
+SET (CMAKE_CXX_COMPILER             "/usr/bin/g++")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Produce compile_commands.json
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -38,7 +38,6 @@ target_link_libraries(my_test Dataframe)
 target_link_libraries(old_main Dataframe)
 target_link_libraries(mae_example Dataframe)
 
-file(COPY forecast2.csv DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY amits_example.csv DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 enable_testing()
