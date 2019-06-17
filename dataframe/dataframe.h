@@ -186,6 +186,10 @@ class DataFrame {
     void make_unique_if(const std::string&);
     void make_unique_if(const std::vector<std::string>&);
     void append_nan_rows();
+    /**
+     * @brief Appends the string to the end of index_positions and adds it to
+     * the hash function index_names
+     */
     void append_index(const std::string&);
     std::vector<std::string> frame(Column& c);
     std::vector<int> contains_null();

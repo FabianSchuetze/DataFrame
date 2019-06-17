@@ -372,16 +372,13 @@ void DataFrame::initialize_column(std::ifstream& file,
 
 void DataFrame::insert_data(std::ifstream& file, const vector<string>& cols) {
     std::string line, name;
-    size_t line_number = 0;
     while (std::getline(file, line)) {
         std::istringstream names(line);
         std::getline(names, name, ',');
-        index_names[name] = line_number++;
-        index_positions.push_back(name);
-        for (const string& column_name: cols) {
+        append_index(name);
+        for (const string& col: cols) {
             std::getline(names, name, ',');
-            int pos = find_column_position(column_name);
-            columns[pos]->convert_and_push_back(name);
+            columns[find_column_position(col)]->convert_and_push_back(name);
         }
     }
 }
@@ -391,4 +388,10 @@ DataFrame::DataFrame(std::ifstream& file)
     vector<string> colNames = create_column_names(file);
     initialize_column(file, colNames);
     insert_data(file, colNames);
+    for (size_t i = 1; i < colNames.size(); ++i) {
+        if (columns[0]->size() != columns[i]->size()) {
+            string msg("Column " + colNames[i] + " has different len");
+            throw std::runtime_error(msg);
+        }
+    }
 }

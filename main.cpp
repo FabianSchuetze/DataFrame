@@ -48,27 +48,9 @@ int main() {
     std::ifstream infile("amits_example.csv"); //make a check about the file
     DataFrame df1 = DataFrame(infile);
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
-    std::cout << DataFrame(df1["total_sales_volume"]);
-    df1.fill_na<double>("total_sales_volume", 0);
-    DataFrame test = DataFrame(df1["total_sales_volume"] > 0);
-    df1["is_sale"] = test;
-    df1["is_sale"] = df1["total_sales_volume"] > 0.;
-    vector<string> cols = get_columns();
-    DataFrame df2 = DataFrame(df1[cols]);
-    df2.dropna();
-    //std::cout << df2.size().first << std::endl;
-    //std::cout << df2.size().second << std::endl;
-    vector<double> series;
-    DataFrame::const_iter<double> real_begin = df2.cbegin<double>("total_sales_volume");
-    DataFrame::const_iter<double> real_end = df2.cend<double>("total_sales_volume");
-    DataFrame::const_iter<double> predicitons_begin = df2.cbegin<double>("saex2_initial_actual");
-    auto fun = [](const double& a, const double& b) {return std::abs(a - b);};
-    std::transform(real_begin, real_end, predicitons_begin, 
-            std::back_inserter(series), fun);
-    double avg = std::accumulate(series.begin(), series.end(), 0.) / series.size();
+    df1.dropna();
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
-    std::cout << avg << std::endl;
     auto duration = duration_cast<milliseconds>( t2 - t1 ).count();
-    std::cout << duration;
+    std::cout << duration << std::endl;
     return 0;
 }
