@@ -66,6 +66,7 @@ class Column {
     void copy_vector(const std::vector<T>*, const std::deque<int>&);
     void convert_bool_to_double();
     Column convert_bool_to_double(const Column&);
+    void copy_row(int);
 
    private:
     template <typename T>

@@ -46,7 +46,7 @@ int main() {
     vector<string> col_names = {"first_col", "second_col"};
     vector<string> col_names2 = {"first_col", "second_col", "third_col"};
     vector<string> idx_names = {"1", "2", "4", "1"};
-    vector<string> idx_names2 = {"3", "2", "1"};
+    vector<string> idx_names2 = {"1", "3", "1"};
     DataFrame df2 = DataFrame(idx_names, col_names, first);
     DataFrame df1 = DataFrame(idx_names2, col_names, second);
     //df2["test_col"] = string_col;

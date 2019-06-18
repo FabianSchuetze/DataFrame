@@ -138,6 +138,7 @@ template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
 
 DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
     std::deque<pair<int, int>> indices = correspondence_position(*this, rhs);
+    append_duplicate_rows(indices);
     for (auto& x : column_names) {
         make_unique_if(x.first);
         try {

@@ -184,6 +184,9 @@ class DataFrame {
     std::unordered_map<std::string, std::deque<int>> index_names;
     std::vector<std::string> index_positions;
     std::map<std::string, int> column_names;
+    void append_duplicate_rows(std::deque<std::pair<int, int>>&);
+    void append_duplicate_rows(int);
+    void copy_row(int);
     void make_unique_if(const std::string&);
     void make_unique_if(const std::vector<std::string>&);
     void append_nan_rows();

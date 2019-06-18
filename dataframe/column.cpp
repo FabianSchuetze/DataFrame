@@ -105,6 +105,18 @@ size_t Column::size() const {
         return 0;
 }
 
+
+void Column::copy_row(int pos) {
+    if (const vector<double>* val = std::get_if<vector<double>>(&col))
+        push_back<double>(val->at(pos));
+    else if (const vector<string>* val = std::get_if<vector<string>>(&col))
+        push_back<string>(val->at(pos));
+    else if (const vector<bool>* val = std::get_if<vector<bool>>(&col))
+        push_back<bool>(val->at(pos));
+    else
+        throw std::invalid_argument("Position i not in vector");
+}
+
 std::string Column::to_string(int i) const {
     if (const vector<double>* val = std::get_if<vector<double>>(&col))
         return std::to_string(val->at(i));

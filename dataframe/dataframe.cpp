@@ -6,6 +6,7 @@
 #include <ostream>
 #include <sstream>
 #include <stdexcept>
+#include <unordered_set>
 #include <set>
 #include <unordered_map>
 #include "ConstColumnIterator.h"
@@ -119,7 +120,6 @@ void DataFrame::make_contigious() {
 
 DataFrame deep_copy(const DataFrame& lhs) {
     DataFrame new_df = DataFrame();
-    // I THINK THE FUNCTION SHOULD RETURN THE SAME
     deque<int> old_positions = lhs.find_index_position();
     for (auto const& x : lhs.column_names) {
         new_df.column_names[x.first] = new_df.column_names.size();
@@ -167,9 +167,7 @@ DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
         columns.push_back(df.theDataFrame.get_shared_copy(name));
         column_names[name] = column_names.size();
     }
-    // some duplicates in here
     for (const string& name : df.idxNames) {
-        // HERE THE FUNCTION RETURNS A SET AND ALSO INSERTS A SET AT THE END
         deque<int> pos = df.theDataFrame.find_index_position(name);
         index_names[name] = pos;
     }
@@ -206,6 +204,27 @@ deque<pair<int, int>> correspondence_position(const DataFrame& lhs,
         carthesian_product(lhsIdx, rhsIdx, res);
     }
     return res;
+}
+
+void DataFrame::copy_row(int pos) {
+    for (auto const x : column_names)
+        columns[x.second]->copy_row(pos);
+}
+
+void DataFrame::append_duplicate_rows(int pos) {
+    append_index(index_positions[pos]);
+    copy_row(pos);
+}
+
+void DataFrame::append_duplicate_rows(deque<pair<int, int>>& indices) {
+    std::unordered_set<int> s;
+    for (auto& pair: indices) {
+        if (s.count(pair.first)) {
+            append_duplicate_rows(pair.first);
+            pair.first = index_positions.size() - 1;
+        }
+        s.insert(pair.first);
+    }
 }
 
 void DataFrame::append_nan_rows() {
