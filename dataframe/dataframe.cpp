@@ -112,7 +112,6 @@ std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) const {
     }
 }
 
-
 void DataFrame::make_contigious() {
     DataFrame new_df = deep_copy(*this);
     *this = new_df;
@@ -143,8 +142,10 @@ void DataFrame::append_index(const string& s) {
 template <typename T>
 DataFrame::DataFrame(const vector<string>& idx, const vector<string>& n,
                      const vector<vector<T>>& cols) {
-    if (n.size() != cols.size())
-        throw std::invalid_argument("Column name len does not equal col len");
+    if (n.size() != cols.size()) {
+        string s("#of Input vector differs from # of colum names, in: ");
+        throw std::invalid_argument(s + __PRETTY_FUNCTION__);
+    }
     for (size_t i = 0; i < n.size(); ++i) {
         if (idx.size() != cols[i].size())
             throw std::invalid_argument("Data and index has different length");
@@ -183,31 +184,29 @@ int DataFrame::use_count(const string& name) {
     return columns[pos].use_count();
 }
 
-// THE FUNCTION STILL HAS TO RETURN THE SAME BUT THE WAY IT DOES THAT WOULD
-// DIFFER
-//vector<pair<int, int>> correspondence_position(const DataFrame& lhs,
-                                               //const DataFrame& other) {
-    //vector<pair<int, int>> res(lhs.index_positions.size());
-    //for (const string& s : lhs.index_positions) {
-        //deque<int> lhsIdx = lhs.find_index_position(s);
-        //deque<int> rhsIdx = other.find_index_position(s);
-        //size_t i = 0;
-        //while (i < lhsIdx.size() && i < rhsIdx.size()) {
-            //res.push_back(make_pair(lhsIdx[i], rhsIdx[i]))
+void carthesian_product(deque<int>& lhs, deque<int>& rhs, 
+                        deque<pair<int, int>>&inp) {
+    if (rhs.empty()) rhs.push_back(-1);
+    for (const int& a : lhs)
+        for (const int& b : rhs)
+            inp.push_back(make_pair(a,b));
+}
 
+std::set<string> unique_names(const vector<string>& inp) {
+    std::set<string>s(inp.begin(), inp.end());
+    return s;
+}
 
-
-        //}
-    //}
-    //vector<pair<int, int>> res(lhs.index_positions.size());
-    //auto fun = [&](const string& s) {
-        //return make_pair(lhs.find_index_position(s),
-                         //other.find_index_position(s));
-    //};
-    //std::transform(lhs.index_positions.begin(), lhs.index_positions.end(),
-                   //res.begin(), fun);
-    //return res;
-//}
+deque<pair<int, int>> correspondence_position(const DataFrame& lhs,
+                                               const DataFrame& other) {
+    deque<pair<int, int>> res;
+    for (const string& s : unique_names(lhs.index_positions)) {
+        deque<int> lhsIdx = lhs.find_index_position(s);
+        deque<int> rhsIdx = other.find_index_position(s);
+        carthesian_product(lhsIdx, rhsIdx, res);
+    }
+    return res;
+}
 
 void DataFrame::append_nan_rows() {
     for (auto& x : column_names) columns[x.second]->push_back_nan();

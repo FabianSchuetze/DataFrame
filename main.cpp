@@ -3,31 +3,23 @@
 #include "dataframe/ColumnIterator.h"
 #include "dataframe/ConstColumnIterator.h"
 #include <vector>
-#include <fstream>
 #include <string>
 #include <iostream>
 #include <cmath>
-#include <chrono>
-#include <numeric>
-
-using namespace std::chrono;
 
 using std::vector;
 using std::string;
 
-vector<string> get_columns() {
-    vector<string> res;
-    vector<string> cols = {"total_sales_volume", "is_sale"};
-    vector<string> xs ={"initial", "first", "second", "third", "fourth",
-          "fifth", "sixth", "seventh", "eight", "ninth",
-          "tenth"};
-    for (auto x : xs) {
-        string col1 = "saex2_" + x + "_is_payout";
-        string col2 = "saex2_" + x + "_actual";
-        cols.push_back(col1);
-        cols.push_back(col2);
-    }
-    return cols;
+
+void fun(DataFrame& df) {
+    vector<string> string_col = {"new_test", "second"};
+    df["test"] = string_col;
+}
+
+// INTERESTING: DIDN'T DEFINE ASSIGNMENT OPERATOR BUT DOES WHAT I WANT, HOW?
+void fun2(DataFrame& df) {
+    vector<string> string_col = {"ttt", "ssss"};
+    df["test"] = string_col;
 }
 
 void fill_df(DataFrame& df) {
@@ -45,14 +37,32 @@ void sort_df(DataFrame& df, const std::string& s) {
 }
 
 int main() {
-    std::ifstream infile("amits_example.csv"); //make a check about the file
-    DataFrame df1 = DataFrame(infile);
+    typedef std::numeric_limits<double> nan;
+    double d = nan::quiet_NaN();
+    vector<vector<double>> first = {{10, d, -10, -6}, {30, -100, 40, -5}};
+    vector<vector<double>> second = {{-10, -20, 30}, {-100, 6, -50}};
+    vector<vector<string>> strings2 = {{"f", "l"}, {"m", "a"}, {"as", "ssd"}};
+    vector<string> string_col = {"u ", "NA", "new_test", "second"};
+    vector<string> col_names = {"first_col", "second_col"};
+    vector<string> col_names2 = {"first_col", "second_col", "third_col"};
+    vector<string> idx_names = {"1", "2", "4", "1"};
+    vector<string> idx_names2 = {"3", "2", "1"};
+    DataFrame df2 = DataFrame(idx_names, col_names, first);
+    DataFrame df1 = DataFrame(idx_names2, col_names, second);
+    //df2["test_col"] = string_col;
+    std::cout << df2 << std::endl;
+    //sort_df<string>(df2, "test_col");
+    df2 += 2;
+    std::cout << df2 << std::endl;
+    std::cout << std::endl;
+    std::cout << "is contigious: " << df2.is_contigious() << std::endl;
+    df2.make_contigious();
+    //DataFrame df3 = deep_copy(df2);
+    //for (const auto& i : df3.get_index_positions())
+        //std::cout << i << std::endl;
+    std::cout << df2 << std::endl;
     std::cout << df1 << std::endl;
-    high_resolution_clock::time_point t1 = high_resolution_clock::now();
-    df1.dropna();
-    high_resolution_clock::time_point t2 = high_resolution_clock::now();
-    auto duration = duration_cast<milliseconds>( t2 - t1 ).count();
-    std::cout << duration << std::endl;
-    std::cout << df1.size().first << std::endl;
+    std::cout << df2 + df1 << std::endl;
+    std::cout << "is contigious: " << df2.is_contigious() << std::endl;
     return 0;
 }

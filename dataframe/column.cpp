@@ -129,15 +129,20 @@ bool vector_element_is_null(const T& t) {
 template <typename T>
 bool is_valid_pair(const vector<T>& lhs, const vector<T>& rhs,
                    const pair<int, int>& pair) {
-    bool exists = pair.second > -1;
-    bool lhs_is_not_nan = !vector_element_is_null(lhs.at(pair.first));
-    bool rhs_is_not_nan = !vector_element_is_null(rhs.at(pair.first));
-    return exists && lhs_is_not_nan && rhs_is_not_nan;
+    if (pair.second < 0)
+        return false;
+    try {
+        bool lhs_is_not_nan = !vector_element_is_null(lhs.at(pair.first));
+        bool rhs_is_not_nan = !vector_element_is_null(rhs.at(pair.second));
+        return lhs_is_not_nan && rhs_is_not_nan;
+    } catch (std::out_of_range& e) {
+        throw std::out_of_range("Couldnt get vector ele in 'is_valid_pair");
+    }
 }
 
 template <typename T>
 void Column::add_elements(vector<T>* lhs, const vector<T>& rhs,
-                          const vector<pair<int, int>>& indices) {
+                          const deque<pair<int, int>>& indices) {
     for (auto const& x : indices) {
         if (is_valid_pair<T>(*lhs, rhs, x))
             lhs->at(x.first) += rhs[x.second];
@@ -185,7 +190,7 @@ Column Column::convert_bool_to_double(const Column& rhs) {
 }
 
 void Column::add_to_double(const Column& rhs,
-                           const vector<pair<int, int>>& idx) {
+                           const deque<pair<int, int>>& idx) {
     vector<double>* vec = std::get_if<vector<double>>(&col);
     if (const vector<double>* other = std::get_if<vector<double>>(&rhs.col))
         add_elements(vec, *other, idx);
@@ -196,7 +201,7 @@ void Column::add_to_double(const Column& rhs,
 }
 
 void Column::add_to_string(const Column& rhs,
-                           const vector<pair<int, int>>& idx) {
+                           const deque<pair<int, int>>& idx) {
     vector<string>* vec = std::get_if<vector<string>>(&col);
     if (const vector<string>* other = std::get_if<vector<string>>(&rhs.col))
         add_elements(vec, *other, idx);
@@ -204,7 +209,7 @@ void Column::add_to_string(const Column& rhs,
         throw std::invalid_argument("Can only add strings to strings");
 }
 
-Column& Column::plus(const Column& rhs, const vector<pair<int, int>>& indices) {
+Column& Column::plus(const Column& rhs, const deque<pair<int, int>>& indices) {
     if (std::get_if<vector<double>>(&col))
         add_to_double(rhs, indices);
     else if (std::get_if<vector<string>>(&col))

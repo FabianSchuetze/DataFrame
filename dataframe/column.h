@@ -36,7 +36,7 @@ class Column {
      * @brief similar to the overloaded assigment operator but it checks
      * equivalence
      */
-    Column& plus(const Column&, const std::vector<std::pair<int, int>>&);
+    Column& plus(const Column&, const std::deque<std::pair<int, int>>&);
     /**
      * Pushes a value of type T into the column
      */
@@ -70,15 +70,15 @@ class Column {
    private:
     template <typename T>
     void add_elements(std::vector<T>*, const std::vector<T>&,
-                      const std::vector<std::pair<int, int>>&);
+                      const std::deque<std::pair<int, int>>&);
     std::variant<std::vector<double>, std::vector<std::string>,
                  std::vector<bool>> col;
     void replace_nan();
     void replace_nan(int);
     void is_null(std::vector<int>&);
     bool is_null(size_t);
-    void add_to_double(const Column&,const  std::vector<std::pair<int, int>>&);
-    void add_to_string(const Column&,const  std::vector<std::pair<int, int>>&);
+    void add_to_double(const Column&,const  std::deque<std::pair<int, int>>&);
+    void add_to_string(const Column&,const  std::deque<std::pair<int, int>>&);
     void is_smaller_than(const double&);
     void is_smaller_than(const std::string&);
     void is_greater_than(const double&);

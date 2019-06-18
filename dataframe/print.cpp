@@ -80,7 +80,7 @@ void check_positions(deque<int>& inp) {
 
 std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
     vector<string> output = frame_index(df.get_index_names());
-    deque<int> positions = df.find_index_position(df.index_positions);
+    deque<int> positions = df.find_index_position();
     check_positions(positions);
     for (const std::pair<string, int>& x : df.column_names) {
         vector<string> rhs =
@@ -100,6 +100,7 @@ std::ostream& operator<<(std::ostream& os,
                          const DataFrame::DataFrameProxy& df) {
     vector<string> output = frame_index(df.idxNames);
     // SAME INTERFACE AS BEFORE
+    // NEED TO BE CHANGED!!!
     deque<int> subset = df.theDataFrame.find_index_position(df.idxNames);
     check_positions(subset);
     for (string const& colName : df.colNames) {
