@@ -47,10 +47,12 @@ void sort_df(DataFrame& df, const std::string& s) {
 int main() {
     std::ifstream infile("amits_example.csv"); //make a check about the file
     DataFrame df1 = DataFrame(infile);
+    std::cout << df1 << std::endl;
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
     df1.dropna();
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     auto duration = duration_cast<milliseconds>( t2 - t1 ).count();
     std::cout << duration << std::endl;
+    std::cout << df1.size().first << std::endl;
     return 0;
 }

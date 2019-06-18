@@ -14,7 +14,8 @@ class DataFrame::ConstColumnIterator {
     friend bool operator!=(const const_iter<V>&, const const_iter<V>&);
     ConstColumnIterator();
     ConstColumnIterator(const DataFrame& a, int n, size_t sz = 0)
-        : theDataFrame(a), wptr(a.columns[n]), curr(sz) {}
+        : theDataFrame(a), wptr(a.columns[n]), curr(sz), iteration_order() {
+        iteration_order = a.find_index_position();}
     const T& operator*() const;
     const T& operator[](int) const;
     ConstColumnIterator& operator++();
@@ -27,6 +28,7 @@ class DataFrame::ConstColumnIterator {
     const DataFrame& theDataFrame;
     std::weak_ptr<Column> wptr;
     std::size_t curr;
+    std::deque<int> iteration_order;
 };
 
 template <class T>
@@ -72,16 +74,14 @@ std::shared_ptr<Column> DataFrame::ConstColumnIterator<T>::check(
 template <class T>
 const T& DataFrame::ConstColumnIterator<T>::operator*() const {
     auto p = check(curr, "dereferencing past end");
-    std::string name = theDataFrame.index_positions[curr];
-    int pos = theDataFrame.find_index_position(name);
+    int pos = iteration_order[curr];
     return (*p).template get_value<T>(pos);
 }
 
 template <class T>
 const T& DataFrame::ConstColumnIterator<T>::operator[](int i) const {
     auto p = check(i, "dereferencing past end");
-    std::string name = theDataFrame.index_positions[i];
-    int pos = theDataFrame.find_index_position(name);
+    int pos = iteration_order[curr];
     return (*p).template get_value<T>(pos);
 }
 

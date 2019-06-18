@@ -4,6 +4,7 @@
 #include <string>
 #include <variant>
 #include <vector>
+#include <deque>
 
 class DataFrame;
 class Column {
@@ -24,7 +25,7 @@ class Column {
      * @brief Copy constructor for a new column, given an existing colum and a
      * vector<int> indicating which position shall be copied
      */
-    Column(const Column&, const std::vector<int>&);
+    Column(const Column&, const std::deque<int>&);
     /**
      * @brief constructs a column form a existing vector. 
      * The vector must contains types of either double, string or boolean
@@ -62,7 +63,7 @@ class Column {
     void push_back_nan();
     std::string to_string(int) const;
     template <typename T>
-    void copy_vector(const std::vector<T>*, const std::vector<int>&);
+    void copy_vector(const std::vector<T>*, const std::deque<int>&);
     void convert_bool_to_double();
     Column convert_bool_to_double(const Column&);
 

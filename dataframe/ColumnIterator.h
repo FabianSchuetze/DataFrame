@@ -14,7 +14,8 @@ class DataFrame::ColumnIterator {
         friend bool operator!=(const iter<V>&, const iter<V>&);
         ColumnIterator();
         ColumnIterator(DataFrame& a, int n, size_t sz=0):
-            theDataFrame(a), wptr(a.columns[n]), curr(sz) {}
+            theDataFrame(a), wptr(a.columns[n]), curr(sz), iteration_order() {
+        iteration_order = a.find_index_position();}
         T& operator*() const;
         T& operator[](int);
         ColumnIterator& operator++();
@@ -26,6 +27,7 @@ class DataFrame::ColumnIterator {
         DataFrame& theDataFrame;
         std::weak_ptr<Column> wptr;
         std::size_t curr;
+        std::deque<int> iteration_order;
 
 };
 template <class T>
@@ -72,18 +74,14 @@ std::shared_ptr<Column> DataFrame::ColumnIterator<T>::check(
 template <class T>
 T& DataFrame::ColumnIterator<T>::operator*() const {
     auto p = check(curr, "dereferencing past end");
-    std::string name = theDataFrame.index_positions[curr];
-    // HERE CURR CHECKS HOW MUCH WE HAVE ALREADY ITERATED, WE WOULD NEED TO
-    // KNOW WHAT! WE ALREADY ITERATED, AS IF THE ITERATOR HAS ITS OWN SEARCH
-    int pos = theDataFrame.find_index_position(name);
+    int pos = iteration_order[curr];
     return (*p).template get_value<T>(pos);
 }
 
 template <class T>
 T& DataFrame::ColumnIterator<T>::operator[](int i) {
     auto p = check(i, "dereferencing past end");
-    std::string name = theDataFrame.index_positions[i];
-    int pos = theDataFrame.find_index_position(name);
+    int pos = iteration_order[curr];
     return (*p).template get_value<T>(pos);
 }
 

@@ -6,6 +6,7 @@
 #include <ostream>
 #include <sstream>
 #include <stdexcept>
+#include <set>
 #include <unordered_map>
 #include "ConstColumnIterator.h"
 #include "dataframeproxy.h"
@@ -16,19 +17,50 @@ using std::pair;
 using std::shared_ptr;
 using std::string;
 using std::vector;
+using std::deque;
 
 void missing_col_error(const char* what, string s) {
     std::string msg = " Column " + s + " not found";
     throw std::out_of_range(what + msg);
 }
 
-vector<int> DataFrame::find_index_position(const vector<string>& inp) const {
-    vector<int> res(inp.size(), 0);
-    std::transform(inp.begin(), inp.end(), res.begin(),
-                   [this](const string& s) { return find_index_position(s); });
+deque<int> DataFrame::find_index_position() const {
+    std::unordered_map<string, deque<int>>copy_index_names(index_names);
+    deque<int>res;
+    for (const string& s: index_positions) {
+        int pos = copy_index_names.at(s).front();
+        copy_index_names.at(s).pop_front();
+        res.push_back(pos);
+    }
+    return res;
+}
+deque<int> DataFrame::find_index_position() {
+    return static_cast<const DataFrame&>(*this).find_index_position();
+}
+
+deque<int> DataFrame::find_index_position(const vector<string>& inp) const {
+    std::set<string>s(inp.begin(),inp.end());
+    if (s.size() < inp.size())
+        std::cerr << "Input vector has duplicates, result has duplicates\n";
+    deque<int> res;
+    for (const string& s: inp) {
+        deque<int> tmp = find_index_position(s);
+        std::copy(tmp.begin(), tmp.end(), std::back_inserter(res));
+    }
     return res;
 }
 
+deque<int> DataFrame::find_index_position(const string& s) const {
+    try {
+        return index_names.at(s);
+    } catch (std::out_of_range& e) {
+        return deque<int>();
+    }
+}
+
+deque<int> DataFrame::find_index_position(const std::string& s) {
+    return static_cast<const DataFrame&>(*this).find_index_position(s);
+}
 template <typename T>
 vector<string> get_names(T& cont) {
     vector<string> res;
@@ -62,7 +94,7 @@ std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) const {
 }
 
 shared_ptr<Column> DataFrame::get_unique(const string& s,
-                                         const vector<int>& v) const {
+                                         const deque<int>& v) const {
     Column new_col = Column(*columns[find_column_position(s)], v);
     return make_shared<Column>(new_col);
 }
@@ -80,17 +112,6 @@ std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) const {
     }
 }
 
-int DataFrame::find_index_position(const string& s) const {
-    try {
-        return index_names.at(s);
-    } catch (std::out_of_range& e) {
-        return -1;
-    }
-}
-
-int DataFrame::find_index_position(const std::string& s) {
-    return static_cast<const DataFrame&>(*this).find_index_position(s);
-}
 
 void DataFrame::make_contigious() {
     DataFrame new_df = deep_copy(*this);
@@ -100,7 +121,7 @@ void DataFrame::make_contigious() {
 DataFrame deep_copy(const DataFrame& lhs) {
     DataFrame new_df = DataFrame();
     // I THINK THE FUNCTION SHOULD RETURN THE SAME
-    vector<int> old_positions = lhs.find_index_position(lhs.index_positions);
+    deque<int> old_positions = lhs.find_index_position();
     for (auto const& x : lhs.column_names) {
         new_df.column_names[x.first] = new_df.column_names.size();
         new_df.columns.push_back(lhs.get_unique(x.first, old_positions));
@@ -115,7 +136,7 @@ void DataFrame::append_index(const vector<string>& idx) {
 }
 
 void DataFrame::append_index(const string& s) {
-    index_names[s] = index_names.size();
+    index_names[s].push_back(index_positions.size());
     index_positions.push_back(s);
 }
 
@@ -140,26 +161,21 @@ template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
                               const vector<vector<bool>>&);
 
 DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
-    : columns(), index_names(), index_positions(), column_names() {
-    //int i = 0;
+    : columns(), index_names(), index_positions(df.idxNames), column_names() {
     for (const string& name : df.colNames) {
         columns.push_back(df.theDataFrame.get_shared_copy(name));
         column_names[name] = column_names.size();
     }
+    // some duplicates in here
     for (const string& name : df.idxNames) {
         // HERE THE FUNCTION RETURNS A SET AND ALSO INSERTS A SET AT THE END
-        int pos = df.theDataFrame.find_index_position(name);
-        if (pos == -1) {
-            string msg = "Index: " + name + " not found in ";
-            throw std::runtime_error(msg + __PRETTY_FUNCTION__);
-        }
+        deque<int> pos = df.theDataFrame.find_index_position(name);
         index_names[name] = pos;
     }
-    index_positions = df.idxNames;
 }
 
 std::pair<size_t, size_t> DataFrame::size() const {
-    return make_pair(index_names.size(), columns.size());
+    return make_pair(index_positions.size(), columns.size());
 }
 
 int DataFrame::use_count(const string& name) {
@@ -169,17 +185,29 @@ int DataFrame::use_count(const string& name) {
 
 // THE FUNCTION STILL HAS TO RETURN THE SAME BUT THE WAY IT DOES THAT WOULD
 // DIFFER
-vector<pair<int, int>> correspondence_position(const DataFrame& lhs,
-                                               const DataFrame& other) {
-    vector<pair<int, int>> res(lhs.index_positions.size());
-    auto fun = [&](const string& s) {
-        return make_pair(lhs.find_index_position(s),
-                         other.find_index_position(s));
-    };
-    std::transform(lhs.index_positions.begin(), lhs.index_positions.end(),
-                   res.begin(), fun);
-    return res;
-}
+//vector<pair<int, int>> correspondence_position(const DataFrame& lhs,
+                                               //const DataFrame& other) {
+    //vector<pair<int, int>> res(lhs.index_positions.size());
+    //for (const string& s : lhs.index_positions) {
+        //deque<int> lhsIdx = lhs.find_index_position(s);
+        //deque<int> rhsIdx = other.find_index_position(s);
+        //size_t i = 0;
+        //while (i < lhsIdx.size() && i < rhsIdx.size()) {
+            //res.push_back(make_pair(lhsIdx[i], rhsIdx[i]))
+
+
+
+        //}
+    //}
+    //vector<pair<int, int>> res(lhs.index_positions.size());
+    //auto fun = [&](const string& s) {
+        //return make_pair(lhs.find_index_position(s),
+                         //other.find_index_position(s));
+    //};
+    //std::transform(lhs.index_positions.begin(), lhs.index_positions.end(),
+                   //res.begin(), fun);
+    //return res;
+//}
 
 void DataFrame::append_nan_rows() {
     for (auto& x : column_names) columns[x.second]->push_back_nan();
@@ -244,15 +272,17 @@ void DataFrame::drop_row(vector<string> vec) {
 
 void DataFrame::dropna() {
     vector<int> count = contains_null();
-    auto it = std::stable_partition(index_positions.begin(),
-            index_positions.end(),
-            [this, &count](const string& s)
-            { return count[find_index_position(s)] == 0; });
-    if (it != index_positions.end()) {
-        auto const old_position = it;
-        while (it != index_positions.end()) index_names.erase(*it++);
-        index_positions.erase(old_position, index_positions.end());
-    }
+    auto fun = [&](const string& s) -> bool {
+        int pos = find_index_position(s).front();
+        index_names[s].pop_front();
+        if (count[pos] > 0)
+            return true;
+        index_names[s].push_back(pos);
+        return false;
+    };
+    auto new_end = std::remove_if(index_positions.begin(),
+            index_positions.end(), fun);
+    index_positions.erase(new_end, index_positions.end());
 }
 
 template <typename T>
@@ -313,7 +343,7 @@ template void DataFrame::sort_by_column_template<std::string>(
 
 bool DataFrame::is_contigious() {
     // HERE THE FUNCTION WOULD STILL RETURN THE SAME INTERFACE
-    vector<int> existing_order = find_index_position(index_positions);
+    deque<int> existing_order = find_index_position();
     for (size_t i = 1; i < existing_order.size(); ++i)
         if ((existing_order[i] - existing_order[i - 1]) != 1) return false;
     return true;

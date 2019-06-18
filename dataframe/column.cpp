@@ -11,14 +11,15 @@ using std::pair;
 using std::string;
 using std::transform;
 using std::vector;
+using std::deque;
 
 template <typename T>
-void Column::copy_vector(const vector<T>* val, const vector<int>& subsets) {
+void Column::copy_vector(const vector<T>* val, const deque<int>& subsets) {
     col = vector<T>();
     for (int i : subsets) push_back<T>(val->at(i));
 }
 
-Column::Column(const Column& c, const vector<int>& subsets) {
+Column::Column(const Column& c, const deque<int>& subsets) {
     if (const vector<double>* val = get_if<vector<double>>(&c.col))
         copy_vector<double>(val, subsets);
     else if (const vector<string>* val = get_if<vector<string>>(&c.col))

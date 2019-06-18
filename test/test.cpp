@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 #include "catch.hpp"
-#include "../dataframe/ColumnIterator.h"
-#include "../dataframe/ConstColumnIterator.h"
+//#include "../dataframe/ColumnIterator.h"
+//#include "../dataframe/ConstColumnIterator.h"
 #include "../dataframe/dataframe.h"
 #include "../dataframe/dataframeproxy.h"
 
