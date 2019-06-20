@@ -36,6 +36,14 @@ class Column {
      * @brief similar to the overloaded assigment operator but it checks
      * equivalence
      */
+    // I NEED TO RETURN A SHARED POINTER TO THE COLUMN!!!
+    template <typename T>
+    Column fill_column(size_t sz, T t) {
+        return Column(std::vector<T>(res(sz,t)));
+        //std::vector<T> res(sz, t);
+        //Column col(std::vector<T>(res(sz, t)));
+        //return col;
+    }
     Column& plus(const Column&, const std::deque<std::pair<int, int>>&);
     /**
      * Pushes a value of type T into the column
@@ -60,6 +68,8 @@ class Column {
             throw std::invalid_argument(s);
         }
     }
+    template <typename T>
+    void push_back_nan();
     void push_back_nan();
     std::string to_string(int) const;
     template <typename T>

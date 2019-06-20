@@ -63,7 +63,7 @@ class DataFrame {
     // Functions
     DataFrame();
     // should I make this explicit?
-    explicit DataFrame(const DataFrameProxy&);
+    DataFrame(const DataFrameProxy&);
     /**
      * @brief Create a new dataframe by reading from an file-stream
      */
@@ -189,6 +189,7 @@ class DataFrame {
     void copy_row(int);
     void make_unique_if(const std::string&);
     void make_unique_if(const std::vector<std::string>&);
+    void assert_same_column_length(const char*);
     void append_nan_rows();
     /**
      * @brief Appends the string to the end of index_positions and adds it to

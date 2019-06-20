@@ -52,7 +52,7 @@ int main() {
     //df2["test_col"] = string_col;
     std::cout << df2 << std::endl;
     //sort_df<string>(df2, "test_col");
-    df2 += 2;
+    //df2 += 2;
     std::cout << df2 << std::endl;
     std::cout << std::endl;
     std::cout << "is contigious: " << df2.is_contigious() << std::endl;
@@ -62,7 +62,9 @@ int main() {
         //std::cout << i << std::endl;
     std::cout << df2 << std::endl;
     std::cout << df1 << std::endl;
-    std::cout << df2 + df1 << std::endl;
+    DataFrame test = df2["first_col"] + df1;
+    std::cout << test << std::endl;
+    //std::cout << df2["first_col"] + df1 << std::endl;
     std::cout << "is contigious: " << df2.is_contigious() << std::endl;
     return 0;
 }

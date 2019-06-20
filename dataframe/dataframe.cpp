@@ -207,8 +207,10 @@ deque<pair<int, int>> correspondence_position(const DataFrame& lhs,
 }
 
 void DataFrame::copy_row(int pos) {
-    for (auto const x : column_names)
+    for (auto const x : column_names) {
+        std::cout << x.first << std::endl;
         columns[x.second]->copy_row(pos);
+    }
 }
 
 void DataFrame::append_duplicate_rows(int pos) {
@@ -228,7 +230,12 @@ void DataFrame::append_duplicate_rows(deque<pair<int, int>>& indices) {
 }
 
 void DataFrame::append_nan_rows() {
-    for (auto& x : column_names) columns[x.second]->push_back_nan();
+    for (auto& x : column_names) {
+        std::cout << "before: " << columns[x.second]->size() << std::endl;
+        columns[x.second]->push_back_nan();
+        std::cout << "after: " << columns[x.second]->size() << std::endl;
+    }
+    assert_same_column_length(__PRETTY_FUNCTION__);
 }
 
 
@@ -431,15 +438,25 @@ void DataFrame::insert_data(std::ifstream& file, const vector<string>& cols) {
     }
 }
 
+void DataFrame::assert_same_column_length(const char* pass) {
+    for (auto const x : column_names) {
+        if (columns[0]->size() != columns[x.second]->size()) {
+            string msg("Column " + x.first + " has different len, in:\n");
+            throw std::runtime_error(msg + pass);
+        }
+    }
+}
+
 DataFrame::DataFrame(std::ifstream& file)
     : columns(), index_names(), index_positions(), column_names() {
     vector<string> colNames = create_column_names(file);
     initialize_column(file, colNames);
     insert_data(file, colNames);
-    for (size_t i = 1; i < colNames.size(); ++i) {
-        if (columns[0]->size() != columns[i]->size()) {
-            string msg("Column " + colNames[i] + " has different len");
-            throw std::runtime_error(msg);
-        }
-    }
+    assert_same_column_length(__PRETTY_FUNCTION__);
+    //for (size_t i = 1; i < colNames.size(); ++i) {
+        //if (columns[0]->size() != columns[i]->size()) {
+            //string msg("Column " + colNames[i] + " has different len");
+            //throw std::runtime_error(msg);
+        //}
+    //}
 }

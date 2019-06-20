@@ -43,6 +43,23 @@ string Column::type_name() {
         throw std::invalid_argument("Column has no elements");
 }
 
+//template <typename T>
+//void Column::push_back_nan() {
+    //typedef std::numeric_limits<double> nan;
+    //if (std::is_same<T, double>::value)
+        //push_back(nan::quiet_NaN());
+    //else if (std::is_same<T, string>::value)
+        //push_back("NA");
+    //else if (std::is_same<T, bool>::value) {
+        //string msg = "Attemting to push_back NA for a bool type causes failure";
+        //throw std::runtime_error(msg);
+    //}
+    //else {
+        //string msg = "Not the correct template type";
+        //throw std::runtime_error(msg);
+    //}
+//}
+
 void Column::push_back_nan() {
     typedef std::numeric_limits<double> nan;
     if (vector<double>* val = std::get_if<vector<double>>(&col))

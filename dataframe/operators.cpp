@@ -150,6 +150,7 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
     return *this;
 }
 
+// should be a memeber function!!
 void append_missing_rows(DataFrame& lhs, const DataFrame& rhs) {
     std::deque<pair<int, int>> index_pairs = correspondence_position(rhs, lhs);
     for (auto const& index_pair : index_pairs) {
@@ -160,13 +161,21 @@ void append_missing_rows(DataFrame& lhs, const DataFrame& rhs) {
     }
 }
 
+// should be a memeber function!!
 void append_missing_cols(DataFrame& lhs, const DataFrame& rhs) {
     for (auto const& x : rhs.column_names) {
-        bool add = maybe_add(x.first, lhs.column_names);
-        int lhsPos = lhs.find_column_position(x.first);
-        if (add) {
-            lhs.columns.push_back(rhs.get_unique(x.first));
-            lhs.columns.at(lhsPos)->replace_nan();
+        if (maybe_add(x.first, lhs.column_names)) {
+            Column col;
+            string type = rhs.columns[x.second]->type_name();
+            size_t len = lhs.columns[0]->size();
+            if (type=="double") {
+                typedef std::numeric_limits<double> nan;
+                col = Column(vector<double>(len, nan::quiet_NaN()));
+            } else if (type=="string")
+                col = Column(vector<string>(len, "NA"));
+            else
+                throw std::runtime_error("cannot create Column");
+            lhs.columns.push_back(std::make_shared<Column>(col));
         }
     }
 }
@@ -175,7 +184,9 @@ DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs) {
     DataFrame sum = deep_copy(lhs);
     append_missing_cols(sum, rhs);
     append_missing_rows(sum, rhs);
-    return sum += rhs;
+    sum += rhs;
+    sum.assert_same_column_length(__PRETTY_FUNCTION__);
+    return sum;
 }
 
 DataFrame operator+(const DataFrame::DataFrameProxy& lhs,
