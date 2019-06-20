@@ -32,18 +32,6 @@ class Column {
      */
     template <class T>
     explicit Column(const std::vector<T>& t): col(t) {}
-    /**
-     * @brief similar to the overloaded assigment operator but it checks
-     * equivalence
-     */
-    // I NEED TO RETURN A SHARED POINTER TO THE COLUMN!!!
-    template <typename T>
-    Column fill_column(size_t sz, T t) {
-        return Column(std::vector<T>(res(sz,t)));
-        //std::vector<T> res(sz, t);
-        //Column col(std::vector<T>(res(sz, t)));
-        //return col;
-    }
     Column& plus(const Column&, const std::deque<std::pair<int, int>>&);
     /**
      * Pushes a value of type T into the column

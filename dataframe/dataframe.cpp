@@ -19,6 +19,7 @@ using std::shared_ptr;
 using std::string;
 using std::vector;
 using std::deque;
+bool maybe_add(const string&, std::map<string, int>&);
 
 void missing_col_error(const char* what, string s) {
     std::string msg = " Column " + s + " not found";
@@ -453,10 +454,39 @@ DataFrame::DataFrame(std::ifstream& file)
     initialize_column(file, colNames);
     insert_data(file, colNames);
     assert_same_column_length(__PRETTY_FUNCTION__);
-    //for (size_t i = 1; i < colNames.size(); ++i) {
-        //if (columns[0]->size() != columns[i]->size()) {
-            //string msg("Column " + colNames[i] + " has different len");
-            //throw std::runtime_error(msg);
-        //}
-    //}
+}
+
+void DataFrame::append_missing_rows(const DataFrame& rhs) {
+    std::deque<pair<int,int>> pairs = correspondence_position(rhs,*this);
+    for (auto const& pair : pairs) {
+        if (pair.second == -1) {
+            append_nan_rows();
+            append_index(rhs.index_positions[pair.first]);
+        }
+    }
+}
+
+std::shared_ptr<Column> emptye_Column(size_t sz, string type) {
+    Column col;
+    if (type == "double") {
+        typedef std::numeric_limits<double> nan;
+        col = Column(vector<double>(sz, nan::quiet_NaN()));
+    }
+    else if (type == "string")
+        col = Column(vector<string>(sz, "NA"));
+    else {
+        string m = "Cannot create empty Column";
+        throw std::runtime_error(m + __PRETTY_FUNCTION__);
+    }
+    return std::make_shared<Column>(col);
+}
+
+void DataFrame::append_missing_cols(const DataFrame& rhs) {
+    for (auto const& x : rhs.column_names) {
+        if (maybe_add(x.first, column_names)) {
+            size_t len = columns[0]->size();
+            string type = rhs.columns[x.second]->type_name();
+            columns.push_back(emptye_Column(len, type));
+        }
+    }
 }

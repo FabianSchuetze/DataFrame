@@ -57,8 +57,6 @@ class DataFrame {
     friend DataFrame operator+(const DataFrame& lhs, const T& t) {
         return deep_copy(lhs) += t;
     }
-    friend void append_missing_rows(DataFrame&, const DataFrame&);
-    friend void append_missing_cols(DataFrame&, const DataFrame&);
 
     // Functions
     DataFrame();
@@ -190,6 +188,8 @@ class DataFrame {
     void make_unique_if(const std::string&);
     void make_unique_if(const std::vector<std::string>&);
     void assert_same_column_length(const char*);
+    void append_missing_cols(const DataFrame&);
+    void append_missing_rows(const DataFrame&);
     void append_nan_rows();
     /**
      * @brief Appends the string to the end of index_positions and adds it to
