@@ -33,7 +33,6 @@ class DataFrame {
     friend class ColumnIterator;
     friend DataFrame deep_copy(const DataFrame& lhs);
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
-    friend std::ostream& operator<<(std::ostream&, const DataFrameProxy&);
     friend std::deque<std::pair<int, int>> correspondence_position(
             const DataFrame&, const DataFrame&);
     friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
@@ -60,8 +59,7 @@ class DataFrame {
 
     // Functions
     DataFrame();
-    // should I make this explicit?
-    DataFrame(const DataFrameProxy&);
+    DataFrame(const DataFrameProxy&); //allow implicit conversion;
     /**
      * @brief Create a new dataframe by reading from an file-stream
      */

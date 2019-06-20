@@ -60,10 +60,11 @@ int main() {
     //DataFrame df3 = deep_copy(df2);
     //for (const auto& i : df3.get_index_positions())
         //std::cout << i << std::endl;
-    std::cout << df2 << std::endl;
-    std::cout << df1 << std::endl;
-    DataFrame test = df2["first_col"] + df1;
-    std::cout << test << std::endl;
+    //std::cout << df2 << std::endl;
+    //std::cout << df1 << std::endl;
+    //std::cout << df2 + df1["first_col"];
+    std::cout << df1["first_col"];
+    //std::cout << test << std::endl;
     //std::cout << df2["first_col"] + df1 << std::endl;
     std::cout << "is contigious: " << df2.is_contigious() << std::endl;
     return 0;

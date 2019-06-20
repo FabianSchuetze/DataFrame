@@ -95,24 +95,3 @@ std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
               std::ostream_iterator<string>(os, " "));
     return os;
 }
-
-std::ostream& operator<<(std::ostream& os,
-                         const DataFrame::DataFrameProxy& df) {
-    vector<string> output = frame_index(df.idxNames);
-    // SAME INTERFACE AS BEFORE
-    // NEED TO BE CHANGED!!!
-    deque<int> subset = df.theDataFrame.find_index_position(df.idxNames);
-    check_positions(subset);
-    for (string const& colName : df.colNames) {
-        std::shared_ptr<Column> c = df.theDataFrame.get_unique(colName, subset);
-        vector<string> rhs = frame(conversion(colName, subset, *c));
-        hcat(output, rhs);
-        if (output[1].size() > 50)  {
-            hcat(output, rhs_truncate(rhs));
-            break;
-        }
-    }
-    std::copy(output.begin(), output.end(),
-              std::ostream_iterator<string>(os, " "));
-    return os;
-}
