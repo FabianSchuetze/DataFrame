@@ -52,8 +52,8 @@ class Column {
         if (std::holds_alternative<std::vector<T>>(col))
             return std::get<std::vector<T>>(col)[i];
         else {
-            std::string s = "template func `get_value` instanted w wrong type";
-            throw std::invalid_argument(s);
+            std::string s = "incompatible template type in\n: ";
+            throw std::invalid_argument(s + __PRETTY_FUNCTION__);
         }
     }
     template <typename T>

@@ -12,10 +12,10 @@ class DataFrame::ConstColumnIterator {
     friend bool operator==(const const_iter<V>&, const const_iter<V>&);
     template <class V>
     friend bool operator!=(const const_iter<V>&, const const_iter<V>&);
-    ConstColumnIterator();
     ConstColumnIterator(const DataFrame& a, int n, size_t sz = 0)
         : theDataFrame(a), wptr(a.columns[n]), curr(sz), iteration_order() {
         iteration_order = a.find_index_position();}
+    std::string to_string();
     const T& operator*() const;
     const T& operator[](int) const;
     ConstColumnIterator& operator++();
@@ -83,6 +83,13 @@ const T& DataFrame::ConstColumnIterator<T>::operator[](int i) const {
     auto p = check(i, "dereferencing past end");
     int pos = iteration_order[curr];
     return (*p).template get_value<T>(pos);
+}
+
+template <class T>
+std::string DataFrame::ConstColumnIterator<T>::to_string() {
+    auto p = check(curr, "dereferencing past end");
+    int pos = iteration_order[curr];
+    return (*p).to_string(pos);
 }
 
 template <class T>

@@ -19,6 +19,8 @@ class DataFrame {
     template <class T>
     class ConstColumnIterator;
     template <class T>
+    class Grouper;
+    template <class T>
     class ColumnIterator;
     class DataFrameProxy;
     template <typename T>
@@ -27,6 +29,8 @@ class DataFrame {
     using iter = typename DataFrame::ColumnIterator<T>;
     typedef std::shared_ptr<Column> SharedCol;
 
+    template <class T>
+    friend class Grouper;
     template <class T>
     friend class ConstColumnIterator;
     template <class T>
@@ -106,7 +110,7 @@ class DataFrame {
     template <class T>
     iter<T> end(const std::string&);
     /**
-     * @brief A constant iterator over the columns achored to the end of the
+     * @brief A constant iterator over the columns anchored to the end of the
      * column
      *
      * THe template arguments needs to equal the datatype of the column
@@ -167,13 +171,23 @@ class DataFrame {
      */
     bool is_contigious();
     /**
-     * @brief aligns the index and the column positions
+     * @brief Rearanges to data in the rows of the columns to be in line with
+     * the index again. 
+     *
+     * After the make_contiguous operation, the interface did not change but
+     * the position of the data in the columns is again in the same order as
+     * the index which might make processing the Dataframe and interating over
+     * it faster.
      */
     void make_contigious();
     /**
      * @brief Convert the boolean column name s to a double type
      */
     void convert_bool_to_double(const std::string&);
+    template <class T>
+    Grouper<T> groupby();
+    template <class T>
+    Grouper<T> groupby(const std::string&);
 
    private:
     std::vector<std::shared_ptr<Column>> columns;
@@ -193,12 +207,18 @@ class DataFrame {
      * @brief Appends the string to the end of index_positions and adds it to
      * the hash function index_names
      */
+    void append_column(const std::string&, const SharedCol&);
     void append_index(const std::string&);
+    /**
+     * @brief Uses the other function as helper function
+     */
+    void append_index(const std::vector<std::string>&);
+    //void append_index(std::vector<std::string>::iterator, 
+                      //std::vector<std::string>::iterator);
     std::vector<std::string> frame(Column& c);
     std::vector<int> contains_null();
     void make_unique(const std::string&);
     void make_unique(const std::vector<std::string>&);
-    void append_index(const std::vector<std::string>&);
     template <class T>
     std::vector<int> permutation_index(const std::string& s);
     /**
@@ -209,11 +229,6 @@ class DataFrame {
     int find_column_position(const std::string&) const;
     std::deque<int> find_index_position() const;
     std::deque<int> find_index_position();
-    /**
-     * @brief returns the vector with index position corresponding to the index
-     * names in the input vector
-     */
-    std::deque<int> find_index_position(const std::vector<std::string>&) const;
     /**
      * @brief finds the rows number for the index name given as input
      */

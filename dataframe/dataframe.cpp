@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include "ConstColumnIterator.h"
 #include "dataframeproxy.h"
+#include "grouper.h"
 class ColumnIterator;
 using std::make_pair;
 using std::make_shared;
@@ -38,18 +39,6 @@ deque<int> DataFrame::find_index_position() const {
 }
 deque<int> DataFrame::find_index_position() {
     return static_cast<const DataFrame&>(*this).find_index_position();
-}
-
-deque<int> DataFrame::find_index_position(const vector<string>& inp) const {
-    std::set<string>s(inp.begin(),inp.end());
-    if (s.size() < inp.size())
-        std::cerr << "Input vector has duplicates, result has duplicates\n";
-    deque<int> res;
-    for (const string& s: inp) {
-        deque<int> tmp = find_index_position(s);
-        std::copy(tmp.begin(), tmp.end(), std::back_inserter(res));
-    }
-    return res;
 }
 
 deque<int> DataFrame::find_index_position(const string& s) const {
@@ -123,11 +112,17 @@ DataFrame deep_copy(const DataFrame& lhs) {
     DataFrame new_df = DataFrame();
     deque<int> old_positions = lhs.find_index_position();
     for (auto const& x : lhs.column_names) {
-        new_df.column_names[x.first] = new_df.column_names.size();
-        new_df.columns.push_back(lhs.get_unique(x.first, old_positions));
+        new_df.append_column(x.first, lhs.get_unique(x.first, old_positions));
+        //new_df.column_names[x.first] = new_df.column_names.size();
+        //new_df.columns.push_back(lhs.get_unique(x.first, old_positions));
     }
     new_df.append_index(lhs.index_positions);
     return new_df;
+}
+
+void DataFrame::append_column(const string& name, const SharedCol& col) {
+    columns.push_back(col);
+    column_names[name] = column_names.size();
 }
 
 void DataFrame::append_index(const vector<string>& idx) {
@@ -355,12 +350,17 @@ void DataFrame::sort_by_column(const std::string& s) {
 template <typename T>
 void DataFrame::sort_by_column_template(const string& s) {
     std::vector<string> new_index;
-    vector<int> argsort = permutation_index<T>(s);
-    for (size_t i = 0; i < argsort.size(); ++i) {
-        string name = index_positions[argsort[i]];
-        new_index.push_back(name);
+    try {
+        vector<int> argsort = permutation_index<T>(s);
+        for (size_t i = 0; i < argsort.size(); ++i) {
+            string name = index_positions[argsort[i]];
+            new_index.push_back(name);
+        }
+        index_positions = new_index;
+    } catch (std::invalid_argument& c) {
+        string m = "Error for column " + s + " :\n";
+        throw std::invalid_argument(m + __PRETTY_FUNCTION__ + "\n" + c.what());
     }
-    index_positions = new_index;
 }
 
 template void DataFrame::sort_by_column_template<double>(const std::string&);

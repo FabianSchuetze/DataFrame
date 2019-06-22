@@ -12,7 +12,7 @@ class DataFrame::ColumnIterator {
         friend bool operator==(const iter<V>&, const iter<V>&);
         template <class V>
         friend bool operator!=(const iter<V>&, const iter<V>&);
-        ColumnIterator();
+        //ColumnIterator();
         ColumnIterator(DataFrame& a, int n, size_t sz=0):
             theDataFrame(a), wptr(a.columns[n]), curr(sz), iteration_order() {
         iteration_order = a.find_index_position();}

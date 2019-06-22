@@ -15,6 +15,7 @@ set(${LIBRARY_TARGET_NAME}_SRC
     dataframe/print.cpp
     dataframe/operators.cpp
     dataframe/dataframeproxy.cpp
+    dataframe/grouper.cpp
 )
 
 set(${LIBRARY_TARGET_NAME}_HDR
@@ -23,6 +24,7 @@ set(${LIBRARY_TARGET_NAME}_HDR
     dataframe/column.h
     dataframe/ConstColumnIterator.h
     dataframe/dataframeproxy.h
+    dataframe/grouper.h
 )
 
 if (UNIX)

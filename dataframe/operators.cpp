@@ -150,43 +150,6 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
     return *this;
 }
 
-// should be a memeber function!!
-//void DataFrame::append_missing_rows(const DataFrame& rhs) {
-    //std::deque<pair<int,int>> pairs = correspondence_position(rhs,*this);
-    //for (auto const& pair : pairs) {
-        //if (pair.second == -1) {
-            //append_nan_rows();
-            //append_index(rhs.index_positions[pair.first]);
-        //}
-    //}
-//}
-
-//// should be a memeber function!!
-//std::shared_ptr<Column> emptye_Column(size_t sz, string type) {
-    //Column col;
-    //if (type == "double") {
-        //typedef std::numeric_limits<double> nan;
-        //col = Column(vector<double>(sz, nan::quiet_NaN()));
-    //}
-    //else if (type == "string")
-        //col = Column(vector<string>(sz, "NA"));
-    //else {
-        //string m = "Cannot create empty Column";
-        //throw std::runtime_error(m + __PRETTY_FUNCTION__);
-    //}
-    //return std::make_shared<Column>(col);
-//}
-
-//void DataFrame::append_missing_cols(const DataFrame& rhs) {
-    //for (auto const& x : rhs.column_names) {
-        //if (maybe_add(x.first, column_names)) {
-            //size_t len = columns[0]->size();
-            //string type = rhs.columns[x.second]->type_name();
-            //columns.push_back(emptye_Column(len, type));
-        //}
-    //}
-//}
-
 DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs) {
     DataFrame sum = deep_copy(lhs);
     sum.append_missing_cols(rhs);
