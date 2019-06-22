@@ -4,6 +4,7 @@
 #include <numeric>
 using std::string;
 using std::vector;
+using std::deque;
 template <class T>
 DataFrame::Grouper<T>::Grouper(DataFrame& a)
     : theDataFrame(a),
@@ -24,14 +25,9 @@ DataFrame::Grouper<T>::Grouper(DataFrame& a, const std::string& s)
     column_names.erase(s);
 }
 
-double mean2(const std::deque<int>& pos, const DataFrame::SharedCol col) {
-    double o = std::accumulate(pos.begin(), pos.end(), 0.,
-            [&](double o, int i) {return o + col->get_value<double>(i);});
-    return o / pos.size();
-}
-
 template <class T>
-DataFrame DataFrame::Grouper<T>::mean() {
+DataFrame DataFrame::Grouper<T>::summarize(
+        double (*f)(const deque<int>&, const DataFrame::SharedCol&)) {
     DataFrame res;
     auto it = std::unique(index_positions.begin(), index_positions.end());
     index_positions.erase(it, index_positions.end());
@@ -40,18 +36,20 @@ DataFrame DataFrame::Grouper<T>::mean() {
             vector<double> tmp;
             SharedCol& col = theDataFrame.columns[n.second];
             for (const auto idx : index_positions)
-                tmp.push_back(mean2(old_index_names[idx], col));
+                tmp.push_back(f(old_index_names[idx], col));
             res.append_column(n.first, std::make_shared<Column>(Column(tmp)));
-            //res.columns.push_back(std::make_shared<Column>(Column(tmp)));
-            //res.column_names[n.first] = res.column_names.size();
         }
     }
     res.append_index(index_positions);
     res.assert_same_column_length(__PRETTY_FUNCTION__);
     return res;
 }
-template DataFrame DataFrame::Grouper<double>::mean();
-
+template DataFrame 
+DataFrame::Grouper<double>::summarize(double (*f)(const std::deque<int>&,
+                                      const DataFrame::SharedCol&));
+template DataFrame 
+DataFrame::Grouper<string>::summarize(double (*f)(const std::deque<int>&,
+                                      const DataFrame::SharedCol&));
 template <class T>
 DataFrame::Grouper<T> DataFrame::groupby() {
     sort_by_index();
