@@ -1,0 +1,28 @@
+\hypertarget{classcount}{}\section{count Class Reference}
+\label{classcount}\index{count@{count}}
+
+
+Inheritance diagram for count\+:
+% FIG 0
+
+
+Collaboration diagram for count\+:
+% FIG 1
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classcount_a49985a21acf6b490d3ad185020150e61}\label{classcount_a49985a21acf6b490d3ad185020150e61}} 
+{\bfseries count} (std\+::string type=\char`\"{}string\char`\"{})
+\item 
+\mbox{\Hypertarget{classcount_a22512539171947d0da6d32be50cf78e1}\label{classcount_a22512539171947d0da6d32be50cf78e1}} 
+double {\bfseries func} (const std\+::deque$<$ int $>$ \&pos, const Data\+Frame\+::\+Shared\+Col \&col) override
+\item 
+\mbox{\Hypertarget{classcount_ad428e4959d5ce5ab2c16bbe100587129}\label{classcount_ad428e4959d5ce5ab2c16bbe100587129}} 
+std\+::string {\bfseries get\+\_\+name} () override
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+dataframe/grouper.\+h\end{DoxyCompactItemize}

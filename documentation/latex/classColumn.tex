@@ -3,15 +3,15 @@
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classColumn_a10196a56bf17147b81a40aac7eda70f8}\label{classColumn_a10196a56bf17147b81a40aac7eda70f8}} 
-\hyperlink{classColumn_a10196a56bf17147b81a40aac7eda70f8}{Column} (const \hyperlink{classColumn}{Column} \&, const std\+::vector$<$ int $>$ \&)
+\mbox{\Hypertarget{classColumn_a30a8c38e6e84788f58541d3a2ee1d686}\label{classColumn_a30a8c38e6e84788f58541d3a2ee1d686}} 
+\hyperlink{classColumn_a30a8c38e6e84788f58541d3a2ee1d686}{Column} (const \hyperlink{classColumn}{Column} \&, const std\+::deque$<$ int $>$ \&)
 \begin{DoxyCompactList}\small\item\em Copy constructor for a new column, given an existing colum and a vector$<$int$>$ indicating which position shall be copied. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classColumn_ab9bd37fa800223b400c0a1158ca244e1}\label{classColumn_ab9bd37fa800223b400c0a1158ca244e1}} 
 {\footnotesize template$<$class T $>$ }\\\hyperlink{classColumn_ab9bd37fa800223b400c0a1158ca244e1}{Column} (const std\+::vector$<$ T $>$ \&t)
 \begin{DoxyCompactList}\small\item\em constructs a column form a existing vector. The vector must contains types of either double, string or boolean \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classColumn_af4232d458c38e5a2c5a75c660664e105}\label{classColumn_af4232d458c38e5a2c5a75c660664e105}} 
-\hyperlink{classColumn}{Column} \& \hyperlink{classColumn_af4232d458c38e5a2c5a75c660664e105}{plus} (const \hyperlink{classColumn}{Column} \&, const std\+::vector$<$ std\+::pair$<$ int, int $>$$>$ \&)
-\begin{DoxyCompactList}\small\item\em similar to the overloaded assigment operator but it checks equivalence \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classColumn_a0520f2439432e39147de6f4779af018b}\label{classColumn_a0520f2439432e39147de6f4779af018b}} 
+\hyperlink{classColumn}{Column} \& {\bfseries plus} (const \hyperlink{classColumn}{Column} \&, const std\+::deque$<$ std\+::pair$<$ int, int $>$$>$ \&)
+\item 
 void \hyperlink{classColumn_a9a318e80a0581ab65f1ec81499064bc4}{convert\+\_\+and\+\_\+push\+\_\+back} (const std\+::string \&)
 \item 
 \mbox{\Hypertarget{classColumn_a9f7b60a5645dd0b604922ad10f0a4528}\label{classColumn_a9f7b60a5645dd0b604922ad10f0a4528}} 
@@ -28,14 +28,17 @@ std\+::string \hyperlink{classColumn_a4e1088bc99d0408a533a2eadfbcdca23}{type\+\_
 \mbox{\Hypertarget{classColumn_a507bdbaed821dc3862faa1e9698906ea}\label{classColumn_a507bdbaed821dc3862faa1e9698906ea}} 
 {\footnotesize template$<$class T $>$ }\\T \& {\bfseries get\+\_\+value} (int i)
 \item 
+\mbox{\Hypertarget{classColumn_a4ccc3e6bd77f8ecb2be4e21bfa320203}\label{classColumn_a4ccc3e6bd77f8ecb2be4e21bfa320203}} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries push\+\_\+back\+\_\+nan} ()
+\item 
 \mbox{\Hypertarget{classColumn_a342b60c48bc540d172e0060b224dcb17}\label{classColumn_a342b60c48bc540d172e0060b224dcb17}} 
 void {\bfseries push\+\_\+back\+\_\+nan} ()
 \item 
 \mbox{\Hypertarget{classColumn_a60542759dc32b9b720456e42f0fd25f4}\label{classColumn_a60542759dc32b9b720456e42f0fd25f4}} 
 std\+::string {\bfseries to\+\_\+string} (int) const
 \item 
-\mbox{\Hypertarget{classColumn_a093b8822a9d33c6d3e90edcdc282edbf}\label{classColumn_a093b8822a9d33c6d3e90edcdc282edbf}} 
-{\footnotesize template$<$typename T $>$ }\\void {\bfseries copy\+\_\+vector} (const std\+::vector$<$ T $>$ $\ast$, const std\+::vector$<$ int $>$ \&)
+\mbox{\Hypertarget{classColumn_a595ff87a14279346948c50988a83185c}\label{classColumn_a595ff87a14279346948c50988a83185c}} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries copy\+\_\+vector} (const std\+::vector$<$ T $>$ $\ast$, const std\+::deque$<$ int $>$ \&)
 \item 
 \mbox{\Hypertarget{classColumn_a596eaf672ea34b915b2ea7115cd6af65}\label{classColumn_a596eaf672ea34b915b2ea7115cd6af65}} 
 void {\bfseries convert\+\_\+bool\+\_\+to\+\_\+double} ()
@@ -43,11 +46,14 @@ void {\bfseries convert\+\_\+bool\+\_\+to\+\_\+double} ()
 \mbox{\Hypertarget{classColumn_a1ff5bc681f42685b468bb5440b57e7f5}\label{classColumn_a1ff5bc681f42685b468bb5440b57e7f5}} 
 \hyperlink{classColumn}{Column} {\bfseries convert\+\_\+bool\+\_\+to\+\_\+double} (const \hyperlink{classColumn}{Column} \&)
 \item 
-\mbox{\Hypertarget{classColumn_ac5357a91646f6404ca8e91da13ec3492}\label{classColumn_ac5357a91646f6404ca8e91da13ec3492}} 
-{\footnotesize template$<$typename T $>$ }\\void {\bfseries copy\+\_\+vector} (const vector$<$ T $>$ $\ast$val, const vector$<$ int $>$ \&subsets)
+\mbox{\Hypertarget{classColumn_a9848ca7b01211e319ef8cb1851a55c47}\label{classColumn_a9848ca7b01211e319ef8cb1851a55c47}} 
+void {\bfseries copy\+\_\+row} (int)
 \item 
-\mbox{\Hypertarget{classColumn_a4765ba82c849fc60fc86e0f54206ac4c}\label{classColumn_a4765ba82c849fc60fc86e0f54206ac4c}} 
-{\footnotesize template$<$typename T $>$ }\\void {\bfseries add\+\_\+elements} (vector$<$ T $>$ $\ast$lhs, const vector$<$ T $>$ \&rhs, const vector$<$ pair$<$ int, int $>$$>$ \&indices)
+\mbox{\Hypertarget{classColumn_a0eae5296cc06f353d689939a546879f1}\label{classColumn_a0eae5296cc06f353d689939a546879f1}} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries copy\+\_\+vector} (const vector$<$ T $>$ $\ast$val, const deque$<$ int $>$ \&subsets)
+\item 
+\mbox{\Hypertarget{classColumn_ad5ffcde8a4c12fe6336819814c08cf03}\label{classColumn_ad5ffcde8a4c12fe6336819814c08cf03}} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries add\+\_\+elements} (vector$<$ T $>$ $\ast$lhs, const vector$<$ T $>$ \&rhs, const deque$<$ pair$<$ int, int $>$$>$ \&indices)
 \end{DoxyCompactItemize}
 \subsection*{Private Types}
 \begin{DoxyCompactItemize}
@@ -64,8 +70,8 @@ typedef std\+::vector$<$ bool $>$ {\bfseries bvec}
 \subsection*{Private Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classColumn_a7a0741eff30c01cfbed5627e9cf263f5}\label{classColumn_a7a0741eff30c01cfbed5627e9cf263f5}} 
-{\footnotesize template$<$typename T $>$ }\\void {\bfseries add\+\_\+elements} (std\+::vector$<$ T $>$ $\ast$, const std\+::vector$<$ T $>$ \&, const std\+::vector$<$ std\+::pair$<$ int, int $>$$>$ \&)
+\mbox{\Hypertarget{classColumn_a49632d8170d8289b39ace8713c467724}\label{classColumn_a49632d8170d8289b39ace8713c467724}} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries add\+\_\+elements} (std\+::vector$<$ T $>$ $\ast$, const std\+::vector$<$ T $>$ \&, const std\+::deque$<$ std\+::pair$<$ int, int $>$$>$ \&)
 \item 
 \mbox{\Hypertarget{classColumn_ac56702c1c3e153d9434c89a9a471d130}\label{classColumn_ac56702c1c3e153d9434c89a9a471d130}} 
 void {\bfseries replace\+\_\+nan} ()
@@ -79,17 +85,23 @@ void {\bfseries is\+\_\+null} (std\+::vector$<$ int $>$ \&)
 \mbox{\Hypertarget{classColumn_abf57b536d1d132a0f3d8841f4388bbee}\label{classColumn_abf57b536d1d132a0f3d8841f4388bbee}} 
 bool {\bfseries is\+\_\+null} (size\+\_\+t)
 \item 
-\mbox{\Hypertarget{classColumn_a0d4c790fa30f5da90cd47ddf4df2ea7a}\label{classColumn_a0d4c790fa30f5da90cd47ddf4df2ea7a}} 
-void {\bfseries add\+\_\+to\+\_\+double} (const \hyperlink{classColumn}{Column} \&, const std\+::vector$<$ std\+::pair$<$ int, int $>$$>$ \&)
+\mbox{\Hypertarget{classColumn_adc19d61d8ec7dbea5f238c4a7013b23a}\label{classColumn_adc19d61d8ec7dbea5f238c4a7013b23a}} 
+void {\bfseries add\+\_\+to\+\_\+double} (const \hyperlink{classColumn}{Column} \&, const std\+::deque$<$ std\+::pair$<$ int, int $>$$>$ \&)
 \item 
-\mbox{\Hypertarget{classColumn_a6edd300552de8cb4d1d31310685aad7f}\label{classColumn_a6edd300552de8cb4d1d31310685aad7f}} 
-void {\bfseries add\+\_\+to\+\_\+string} (const \hyperlink{classColumn}{Column} \&, const std\+::vector$<$ std\+::pair$<$ int, int $>$$>$ \&)
+\mbox{\Hypertarget{classColumn_a7ae5f86b705809c07375e4a30cde9b0f}\label{classColumn_a7ae5f86b705809c07375e4a30cde9b0f}} 
+void {\bfseries add\+\_\+to\+\_\+string} (const \hyperlink{classColumn}{Column} \&, const std\+::deque$<$ std\+::pair$<$ int, int $>$$>$ \&)
 \item 
 \mbox{\Hypertarget{classColumn_ad33840850da11510dea2d045214f376c}\label{classColumn_ad33840850da11510dea2d045214f376c}} 
 void {\bfseries is\+\_\+smaller\+\_\+than} (const double \&)
 \item 
 \mbox{\Hypertarget{classColumn_a5f693c2940b4c8158bfd5391520d7369}\label{classColumn_a5f693c2940b4c8158bfd5391520d7369}} 
 void {\bfseries is\+\_\+smaller\+\_\+than} (const std\+::string \&)
+\item 
+\mbox{\Hypertarget{classColumn_ae109b8fe90f79ce2a320446913ada121}\label{classColumn_ae109b8fe90f79ce2a320446913ada121}} 
+void {\bfseries is\+\_\+greater\+\_\+than} (const double \&)
+\item 
+\mbox{\Hypertarget{classColumn_ae8434716fcda24ed6624735d45ff362a}\label{classColumn_ae8434716fcda24ed6624735d45ff362a}} 
+void {\bfseries is\+\_\+greater\+\_\+than} (const std\+::string \&)
 \end{DoxyCompactItemize}
 \subsection*{Private Attributes}
 \begin{DoxyCompactItemize}
@@ -115,7 +127,10 @@ void \hyperlink{classColumn_a27cc8acd51a5cd40e6a2726368914661}{append\+\_\+missi
 std\+::string\+::size\+\_\+type {\bfseries width} (const \hyperlink{classColumn}{Column} \&, std\+::vector$<$ std\+::string $>$ \&)
 \item 
 {\footnotesize template$<$typename T $>$ }\\\hyperlink{classDataFrame}{Data\+Frame} \hyperlink{classColumn_a92ccb0425c54a5b5cd6f78ed1bb4c3ff}{operator$<$} (const \hyperlink{classDataFrame}{Data\+Frame} \&, const T \&)
-\begin{DoxyCompactList}\small\item\em deep copy of a \hyperlink{classDataFrame}{Data\+Frame} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em deep copy of a \hyperlink{classDataFrame}{Data\+Frame} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classColumn_acd17a18489660c217522c8b39ed04867}\label{classColumn_acd17a18489660c217522c8b39ed04867}} 
+{\footnotesize template$<$typename T $>$ }\\\hyperlink{classDataFrame}{Data\+Frame} {\bfseries operator$>$} (const \hyperlink{classDataFrame}{Data\+Frame} \&, const T \&)
+\end{DoxyCompactItemize}
 
 
 \subsection{Member Function Documentation}
@@ -138,7 +153,7 @@ Returns the type of the stored data as a string
 \index{Column@{Column}!append\+\_\+missing\+\_\+cols@{append\+\_\+missing\+\_\+cols}}
 \index{append\+\_\+missing\+\_\+cols@{append\+\_\+missing\+\_\+cols}!Column@{Column}}
 \subsubsection{\texorpdfstring{append\+\_\+missing\+\_\+cols}{append\_missing\_cols}}
-{\footnotesize\ttfamily void append\+\_\+missing\+\_\+cols (\begin{DoxyParamCaption}\item[{\hyperlink{classDataFrame}{Data\+Frame} \&}]{lhs,  }\item[{const \hyperlink{classDataFrame}{Data\+Frame} \&}]{rhs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+{\footnotesize\ttfamily void append\+\_\+missing\+\_\+cols (\begin{DoxyParamCaption}\item[{\hyperlink{classDataFrame}{Data\+Frame} \&}]{,  }\item[{const \hyperlink{classDataFrame}{Data\+Frame} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
 
 
 

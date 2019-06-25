@@ -25,6 +25,7 @@ set(${LIBRARY_TARGET_NAME}_HDR
     dataframe/ConstColumnIterator.h
     dataframe/dataframeproxy.h
     dataframe/grouper.h
+    dataframe/GroupbyFunctions.h
 )
 
 if (UNIX)

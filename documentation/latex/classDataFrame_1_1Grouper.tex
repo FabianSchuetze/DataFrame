@@ -1,0 +1,49 @@
+\hypertarget{classDataFrame_1_1Grouper}{}\section{Data\+Frame\+:\+:Grouper$<$ T $>$ Class Template Reference}
+\label{classDataFrame_1_1Grouper}\index{Data\+Frame\+::\+Grouper$<$ T $>$@{Data\+Frame\+::\+Grouper$<$ T $>$}}
+
+
+Collaboration diagram for Data\+Frame\+:\+:Grouper$<$ T $>$\+:
+% FIG 0
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_a474177da006d9ba18bd4bf2fd3809dd4}\label{classDataFrame_1_1Grouper_a474177da006d9ba18bd4bf2fd3809dd4}} 
+{\bfseries Grouper} (\hyperlink{classDataFrame}{Data\+Frame} \&)
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_aaf8d3173c0d890c3ac082adf2bb1f400}\label{classDataFrame_1_1Grouper_aaf8d3173c0d890c3ac082adf2bb1f400}} 
+{\bfseries Grouper} (\hyperlink{classDataFrame}{Data\+Frame} \&, const std\+::string \&)
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_a364e765427d5268d8ab515341dcb02b1}\label{classDataFrame_1_1Grouper_a364e765427d5268d8ab515341dcb02b1}} 
+\hyperlink{classDataFrame}{Data\+Frame} {\bfseries summarize} (\hyperlink{classStatistic}{Statistic} $\ast$)
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_a2e806e00d5c98346dfdfb01a61651ae6}\label{classDataFrame_1_1Grouper_a2e806e00d5c98346dfdfb01a61651ae6}} 
+std\+::vector$<$ std\+::string $>$ {\bfseries elegible\+\_\+types} (const std\+::string \&)
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_aa8519a3b8eb2c8fa471a2de09516ba9e}\label{classDataFrame_1_1Grouper_aa8519a3b8eb2c8fa471a2de09516ba9e}} 
+void {\bfseries make\+\_\+index\+\_\+unique} ()
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_a145dbdc7827d0d4ccdbbcf5ed7efb413}\label{classDataFrame_1_1Grouper_a145dbdc7827d0d4ccdbbcf5ed7efb413}} 
+\hyperlink{classDataFrame}{Data\+Frame} \& {\bfseries the\+Data\+Frame}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_a1b17c37868718cfbbf5f1f24a35b6b77}\label{classDataFrame_1_1Grouper_a1b17c37868718cfbbf5f1f24a35b6b77}} 
+std\+::unordered\+\_\+map$<$ std\+::string, std\+::deque$<$ int $>$ $>$ {\bfseries old\+\_\+index\+\_\+names}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_a87e56749cb1af1156a905dde5cc76f63}\label{classDataFrame_1_1Grouper_a87e56749cb1af1156a905dde5cc76f63}} 
+std\+::vector$<$ std\+::string $>$ {\bfseries index\+\_\+positions}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_a1234cff8d2ca6a76c52e6390216215d1}\label{classDataFrame_1_1Grouper_a1234cff8d2ca6a76c52e6390216215d1}} 
+std\+::map$<$ std\+::string, int $>$ {\bfseries column\+\_\+names}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+dataframe/dataframe.\+h\item 
+dataframe/grouper.\+h\item 
+dataframe/grouper.\+cpp\end{DoxyCompactItemize}

@@ -1,4 +1,5 @@
 #include "grouper.h"
+#include "GroupbyFunctions.h"
 #include <numeric>
 #include <set>
 #include "ConstColumnIterator.h"
@@ -7,14 +8,14 @@ using std::string;
 using std::vector;
 template <class T>
 DataFrame::Grouper<T>::Grouper(DataFrame& a)
-    : theDataFrame(a),
+    : columns(a.columns),
       old_index_names(a.index_names),
       index_positions(a.index_positions),
       column_names(a.column_names) {}
 
 template <typename T>
 DataFrame::Grouper<T>::Grouper(DataFrame& a, const std::string& s)
-    : theDataFrame(a) {
+    : columns(a.columns) {
     std::deque<int> old_index_positions = a.find_index_position();
     int i = 0;
     for (const_iter<T> b = a.cbegin<T>(s); b != a.cend<T>(s); ++b) {
@@ -31,9 +32,10 @@ vector<string> DataFrame::Grouper<T>::elegible_types(const string& s) {
     if (s == "string")
         for (auto const n : column_names) elegible.push_back(n.first);
     else {
-        for (auto const n : column_names)
-            if (theDataFrame.columns[n.second]->type_name() == s)
+        for (auto const n : column_names) {
+            if (columns[n.second]->type_name() == s)
                 elegible.push_back(n.first);
+        }
     }
     return elegible;
 }
@@ -49,7 +51,7 @@ DataFrame DataFrame::Grouper<T>::summarize(Statistic* f) {
     make_index_unique();
     for (const string& s : elegible_types(f->get_name())) {
         vector<double> tmp;
-        SharedCol& col = theDataFrame.columns[column_names[s]];
+        SharedCol& col = columns[column_names[s]];
         for (const auto idx : index_positions)
             tmp.push_back(f->func(old_index_names[idx], col));
         res.append_column(s, std::make_shared<Column>(Column(tmp)));
@@ -77,3 +79,12 @@ DataFrame::Grouper<T> DataFrame::groupby(const string& s) {
 template DataFrame::Grouper<string> DataFrame::groupby();
 template DataFrame::Grouper<string> DataFrame::groupby(const string&);
 template DataFrame::Grouper<double> DataFrame::groupby(const string&);
+
+template <class T>
+DataFrame::Grouper<T> DataFrame::DataFrameProxy::groupby(const string& s) {
+    return DataFrame(*this).groupby<T>(s);
+}
+template DataFrame::Grouper<string> DataFrame::DataFrameProxy::groupby(
+    const string&);
+template DataFrame::Grouper<double> DataFrame::DataFrameProxy::groupby(
+    const string&);

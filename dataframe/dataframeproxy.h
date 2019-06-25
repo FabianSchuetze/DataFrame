@@ -29,6 +29,9 @@ class DataFrame::DataFrameProxy {
         // I DO COPY THAT STUFF TWICE!!!
         return copy > t;
     }
+    template <class T>
+    Grouper<T> groupby(const std::string&);
+
 
    private:
     DataFrame& theDataFrame;

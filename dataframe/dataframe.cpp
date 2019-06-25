@@ -4,22 +4,22 @@
 #include <iostream>
 #include <numeric>
 #include <ostream>
+#include <set>
 #include <sstream>
 #include <stdexcept>
-#include <unordered_set>
-#include <set>
 #include <unordered_map>
+#include <unordered_set>
 #include "ConstColumnIterator.h"
 #include "dataframeproxy.h"
 #include "grouper.h"
 class ColumnIterator;
+using std::deque;
 using std::make_pair;
 using std::make_shared;
 using std::pair;
 using std::shared_ptr;
 using std::string;
 using std::vector;
-using std::deque;
 bool maybe_add(const string&, std::map<string, int>&);
 
 void missing_col_error(const char* what, string s) {
@@ -28,9 +28,9 @@ void missing_col_error(const char* what, string s) {
 }
 
 deque<int> DataFrame::find_index_position() const {
-    std::unordered_map<string, deque<int>>copy_index_names(index_names);
-    deque<int>res;
-    for (const string& s: index_positions) {
+    std::unordered_map<string, deque<int>> copy_index_names(index_names);
+    deque<int> res;
+    for (const string& s : index_positions) {
         int pos = copy_index_names.at(s).front();
         copy_index_names.at(s).pop_front();
         res.push_back(pos);
@@ -99,7 +99,8 @@ std::shared_ptr<Column> DataFrame::get_shared_copy(const std::string& s) const {
         int idx = column_names.at(s);
         return columns[idx];
     } catch (const std::out_of_range& e) {
-        throw std::out_of_range("No col with name" + s);
+        string m = "No col with name " + s + " in\n" + __PRETTY_FUNCTION__;
+        throw std::out_of_range(m);
     }
 }
 
@@ -113,8 +114,8 @@ DataFrame deep_copy(const DataFrame& lhs) {
     deque<int> old_positions = lhs.find_index_position();
     for (auto const& x : lhs.column_names) {
         new_df.append_column(x.first, lhs.get_unique(x.first, old_positions));
-        //new_df.column_names[x.first] = new_df.column_names.size();
-        //new_df.columns.push_back(lhs.get_unique(x.first, old_positions));
+        // new_df.column_names[x.first] = new_df.column_names.size();
+        // new_df.columns.push_back(lhs.get_unique(x.first, old_positions));
     }
     new_df.append_index(lhs.index_positions);
     return new_df;
@@ -126,8 +127,7 @@ void DataFrame::append_column(const string& name, const SharedCol& col) {
 }
 
 void DataFrame::append_index(const vector<string>& idx) {
-    for (const string& s: idx)
-        append_index(s);
+    for (const string& s : idx) append_index(s);
 }
 
 void DataFrame::append_index(const string& s) {
@@ -159,9 +159,12 @@ template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
 
 DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
     : columns(), index_names(), index_positions(df.idxNames), column_names() {
-    for (const string& name : df.colNames) {
-        columns.push_back(df.theDataFrame.get_shared_copy(name));
-        column_names[name] = column_names.size();
+    try {
+        for (const string& name : df.colNames)
+            append_column(name, df.theDataFrame.get_shared_copy(name));
+    } catch (std::out_of_range& e) {
+        string m = string("In\n") + __PRETTY_FUNCTION__ + ":\n" + e.what();
+        throw std::out_of_range(m);
     }
     for (const string& name : df.idxNames) {
         deque<int> pos = df.theDataFrame.find_index_position(name);
@@ -178,21 +181,20 @@ int DataFrame::use_count(const string& name) {
     return columns[pos].use_count();
 }
 
-void carthesian_product(deque<int>& lhs, deque<int>& rhs, 
-                        deque<pair<int, int>>&inp) {
+void carthesian_product(deque<int>& lhs, deque<int>& rhs,
+                        deque<pair<int, int>>& inp) {
     if (rhs.empty()) rhs.push_back(-1);
     for (const int& a : lhs)
-        for (const int& b : rhs)
-            inp.push_back(make_pair(a,b));
+        for (const int& b : rhs) inp.push_back(make_pair(a, b));
 }
 
 std::set<string> unique_names(const vector<string>& inp) {
-    std::set<string>s(inp.begin(), inp.end());
+    std::set<string> s(inp.begin(), inp.end());
     return s;
 }
 
 deque<pair<int, int>> correspondence_position(const DataFrame& lhs,
-                                               const DataFrame& other) {
+                                              const DataFrame& other) {
     deque<pair<int, int>> res;
     for (const string& s : unique_names(lhs.index_positions)) {
         deque<int> lhsIdx = lhs.find_index_position(s);
@@ -216,7 +218,7 @@ void DataFrame::append_duplicate_rows(int pos) {
 
 void DataFrame::append_duplicate_rows(deque<pair<int, int>>& indices) {
     std::unordered_set<int> s;
-    for (auto& pair: indices) {
+    for (auto& pair : indices) {
         if (s.count(pair.first)) {
             append_duplicate_rows(pair.first);
             pair.first = index_positions.size() - 1;
@@ -233,7 +235,6 @@ void DataFrame::append_nan_rows() {
     }
     assert_same_column_length(__PRETTY_FUNCTION__);
 }
-
 
 int DataFrame::find_column_position(const std::string& s) {
     return static_cast<const DataFrame&>(*this).find_column_position(
@@ -296,13 +297,12 @@ void DataFrame::dropna() {
     auto fun = [&](const string& s) -> bool {
         int pos = find_index_position(s).front();
         index_names[s].pop_front();
-        if (count[pos] > 0)
-            return true;
+        if (count[pos] > 0) return true;
         index_names[s].push_back(pos);
         return false;
     };
-    auto new_end = std::remove_if(index_positions.begin(),
-            index_positions.end(), fun);
+    auto new_end =
+        std::remove_if(index_positions.begin(), index_positions.end(), fun);
     index_positions.erase(new_end, index_positions.end());
 }
 
@@ -327,7 +327,7 @@ void DataFrame::drop_column(const string& s) {
     // WHAT HAPPENS IF THERE IS ONLY ONE SHARED POINTER OF IT? DOES THE THINK
     // DROP OUT OF THE VECTOR?
     columns[find_column_position(s)].~shared_ptr();  // reduce use_count()
-    column_names.erase(s);                          // delete reference to it;
+    column_names.erase(s);                           // delete reference to it;
 }
 
 void DataFrame::sort_by_index() {
@@ -432,7 +432,7 @@ void DataFrame::insert_data(std::ifstream& file, const vector<string>& cols) {
         std::istringstream names(line);
         std::getline(names, name, ',');
         append_index(name);
-        for (const string& col: cols) {
+        for (const string& col : cols) {
             std::getline(names, name, ',');
             columns[find_column_position(col)]->convert_and_push_back(name);
         }
@@ -457,7 +457,7 @@ DataFrame::DataFrame(std::ifstream& file)
 }
 
 void DataFrame::append_missing_rows(const DataFrame& rhs) {
-    std::deque<pair<int,int>> pairs = correspondence_position(rhs,*this);
+    std::deque<pair<int, int>> pairs = correspondence_position(rhs, *this);
     for (auto const& pair : pairs) {
         if (pair.second == -1) {
             append_nan_rows();
@@ -471,8 +471,7 @@ std::shared_ptr<Column> emptye_Column(size_t sz, string type) {
     if (type == "double") {
         typedef std::numeric_limits<double> nan;
         col = Column(vector<double>(sz, nan::quiet_NaN()));
-    }
-    else if (type == "string")
+    } else if (type == "string")
         col = Column(vector<string>(sz, "NA"));
     else {
         string m = "Cannot create empty Column";

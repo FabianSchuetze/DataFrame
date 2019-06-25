@@ -184,8 +184,14 @@ class DataFrame {
      * @brief Convert the boolean column name s to a double type
      */
     void convert_bool_to_double(const std::string&);
+    /**
+     * @brief Groups the dataframe by index and return a grouper object
+     */
     template <class T>
     Grouper<T> groupby();
+    /**
+     * @brief groups the dataframe by column s and return a grouper object
+     */
     template <class T>
     Grouper<T> groupby(const std::string&);
 

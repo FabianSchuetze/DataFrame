@@ -72,19 +72,18 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a10196a56bf17147b81a40aac7eda70f8"><td class="memItemLeft" align="right" valign="top"><a id="a10196a56bf17147b81a40aac7eda70f8"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classColumn.html#a10196a56bf17147b81a40aac7eda70f8">Column</a> (const <a class="el" href="classColumn.html">Column</a> &amp;, const std::vector&lt; int &gt; &amp;)</td></tr>
-<tr class="memdesc:a10196a56bf17147b81a40aac7eda70f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor for a new column, given an existing colum and a vector&lt;int&gt; indicating which position shall be copied. <br /></td></tr>
-<tr class="separator:a10196a56bf17147b81a40aac7eda70f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30a8c38e6e84788f58541d3a2ee1d686"><td class="memItemLeft" align="right" valign="top"><a id="a30a8c38e6e84788f58541d3a2ee1d686"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classColumn.html#a30a8c38e6e84788f58541d3a2ee1d686">Column</a> (const <a class="el" href="classColumn.html">Column</a> &amp;, const std::deque&lt; int &gt; &amp;)</td></tr>
+<tr class="memdesc:a30a8c38e6e84788f58541d3a2ee1d686"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor for a new column, given an existing colum and a vector&lt;int&gt; indicating which position shall be copied. <br /></td></tr>
+<tr class="separator:a30a8c38e6e84788f58541d3a2ee1d686"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9bd37fa800223b400c0a1158ca244e1"><td class="memTemplParams" colspan="2"><a id="ab9bd37fa800223b400c0a1158ca244e1"></a>
 template&lt;class T &gt; </td></tr>
 <tr class="memitem:ab9bd37fa800223b400c0a1158ca244e1"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classColumn.html#ab9bd37fa800223b400c0a1158ca244e1">Column</a> (const std::vector&lt; T &gt; &amp;t)</td></tr>
 <tr class="memdesc:ab9bd37fa800223b400c0a1158ca244e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">constructs a column form a existing vector. The vector must contains types of either double, string or boolean <br /></td></tr>
 <tr class="separator:ab9bd37fa800223b400c0a1158ca244e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4232d458c38e5a2c5a75c660664e105"><td class="memItemLeft" align="right" valign="top"><a id="af4232d458c38e5a2c5a75c660664e105"></a>
-<a class="el" href="classColumn.html">Column</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classColumn.html#af4232d458c38e5a2c5a75c660664e105">plus</a> (const <a class="el" href="classColumn.html">Column</a> &amp;, const std::vector&lt; std::pair&lt; int, int &gt;&gt; &amp;)</td></tr>
-<tr class="memdesc:af4232d458c38e5a2c5a75c660664e105"><td class="mdescLeft">&#160;</td><td class="mdescRight">similar to the overloaded assigment operator but it checks equivalence <br /></td></tr>
-<tr class="separator:af4232d458c38e5a2c5a75c660664e105"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0520f2439432e39147de6f4779af018b"><td class="memItemLeft" align="right" valign="top"><a id="a0520f2439432e39147de6f4779af018b"></a>
+<a class="el" href="classColumn.html">Column</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>plus</b> (const <a class="el" href="classColumn.html">Column</a> &amp;, const std::deque&lt; std::pair&lt; int, int &gt;&gt; &amp;)</td></tr>
+<tr class="separator:a0520f2439432e39147de6f4779af018b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a318e80a0581ab65f1ec81499064bc4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classColumn.html#a9a318e80a0581ab65f1ec81499064bc4">convert_and_push_back</a> (const std::string &amp;)</td></tr>
 <tr class="separator:a9a318e80a0581ab65f1ec81499064bc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f7b60a5645dd0b604922ad10f0a4528"><td class="memTemplParams" colspan="2"><a id="a9f7b60a5645dd0b604922ad10f0a4528"></a>
@@ -104,30 +103,37 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</
 template&lt;class T &gt; </td></tr>
 <tr class="memitem:a507bdbaed821dc3862faa1e9698906ea"><td class="memTemplItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get_value</b> (int i)</td></tr>
 <tr class="separator:a507bdbaed821dc3862faa1e9698906ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ccc3e6bd77f8ecb2be4e21bfa320203"><td class="memTemplParams" colspan="2"><a id="a4ccc3e6bd77f8ecb2be4e21bfa320203"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a4ccc3e6bd77f8ecb2be4e21bfa320203"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>push_back_nan</b> ()</td></tr>
+<tr class="separator:a4ccc3e6bd77f8ecb2be4e21bfa320203"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a342b60c48bc540d172e0060b224dcb17"><td class="memItemLeft" align="right" valign="top"><a id="a342b60c48bc540d172e0060b224dcb17"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>push_back_nan</b> ()</td></tr>
 <tr class="separator:a342b60c48bc540d172e0060b224dcb17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60542759dc32b9b720456e42f0fd25f4"><td class="memItemLeft" align="right" valign="top"><a id="a60542759dc32b9b720456e42f0fd25f4"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>to_string</b> (int) const</td></tr>
 <tr class="separator:a60542759dc32b9b720456e42f0fd25f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a093b8822a9d33c6d3e90edcdc282edbf"><td class="memTemplParams" colspan="2"><a id="a093b8822a9d33c6d3e90edcdc282edbf"></a>
+<tr class="memitem:a595ff87a14279346948c50988a83185c"><td class="memTemplParams" colspan="2"><a id="a595ff87a14279346948c50988a83185c"></a>
 template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a093b8822a9d33c6d3e90edcdc282edbf"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>copy_vector</b> (const std::vector&lt; T &gt; *, const std::vector&lt; int &gt; &amp;)</td></tr>
-<tr class="separator:a093b8822a9d33c6d3e90edcdc282edbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a595ff87a14279346948c50988a83185c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>copy_vector</b> (const std::vector&lt; T &gt; *, const std::deque&lt; int &gt; &amp;)</td></tr>
+<tr class="separator:a595ff87a14279346948c50988a83185c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a596eaf672ea34b915b2ea7115cd6af65"><td class="memItemLeft" align="right" valign="top"><a id="a596eaf672ea34b915b2ea7115cd6af65"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>convert_bool_to_double</b> ()</td></tr>
 <tr class="separator:a596eaf672ea34b915b2ea7115cd6af65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ff5bc681f42685b468bb5440b57e7f5"><td class="memItemLeft" align="right" valign="top"><a id="a1ff5bc681f42685b468bb5440b57e7f5"></a>
 <a class="el" href="classColumn.html">Column</a>&#160;</td><td class="memItemRight" valign="bottom"><b>convert_bool_to_double</b> (const <a class="el" href="classColumn.html">Column</a> &amp;)</td></tr>
 <tr class="separator:a1ff5bc681f42685b468bb5440b57e7f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5357a91646f6404ca8e91da13ec3492"><td class="memTemplParams" colspan="2"><a id="ac5357a91646f6404ca8e91da13ec3492"></a>
+<tr class="memitem:a9848ca7b01211e319ef8cb1851a55c47"><td class="memItemLeft" align="right" valign="top"><a id="a9848ca7b01211e319ef8cb1851a55c47"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>copy_row</b> (int)</td></tr>
+<tr class="separator:a9848ca7b01211e319ef8cb1851a55c47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0eae5296cc06f353d689939a546879f1"><td class="memTemplParams" colspan="2"><a id="a0eae5296cc06f353d689939a546879f1"></a>
 template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ac5357a91646f6404ca8e91da13ec3492"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>copy_vector</b> (const vector&lt; T &gt; *val, const vector&lt; int &gt; &amp;subsets)</td></tr>
-<tr class="separator:ac5357a91646f6404ca8e91da13ec3492"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4765ba82c849fc60fc86e0f54206ac4c"><td class="memTemplParams" colspan="2"><a id="a4765ba82c849fc60fc86e0f54206ac4c"></a>
+<tr class="memitem:a0eae5296cc06f353d689939a546879f1"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>copy_vector</b> (const vector&lt; T &gt; *val, const deque&lt; int &gt; &amp;subsets)</td></tr>
+<tr class="separator:a0eae5296cc06f353d689939a546879f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5ffcde8a4c12fe6336819814c08cf03"><td class="memTemplParams" colspan="2"><a id="ad5ffcde8a4c12fe6336819814c08cf03"></a>
 template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a4765ba82c849fc60fc86e0f54206ac4c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>add_elements</b> (vector&lt; T &gt; *lhs, const vector&lt; T &gt; &amp;rhs, const vector&lt; pair&lt; int, int &gt;&gt; &amp;indices)</td></tr>
-<tr class="separator:a4765ba82c849fc60fc86e0f54206ac4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5ffcde8a4c12fe6336819814c08cf03"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>add_elements</b> (vector&lt; T &gt; *lhs, const vector&lt; T &gt; &amp;rhs, const deque&lt; pair&lt; int, int &gt;&gt; &amp;indices)</td></tr>
+<tr class="separator:ad5ffcde8a4c12fe6336819814c08cf03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
 Private Types</h2></td></tr>
@@ -143,10 +149,10 @@ typedef std::vector&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bot
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a7a0741eff30c01cfbed5627e9cf263f5"><td class="memTemplParams" colspan="2"><a id="a7a0741eff30c01cfbed5627e9cf263f5"></a>
+<tr class="memitem:a49632d8170d8289b39ace8713c467724"><td class="memTemplParams" colspan="2"><a id="a49632d8170d8289b39ace8713c467724"></a>
 template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a7a0741eff30c01cfbed5627e9cf263f5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>add_elements</b> (std::vector&lt; T &gt; *, const std::vector&lt; T &gt; &amp;, const std::vector&lt; std::pair&lt; int, int &gt;&gt; &amp;)</td></tr>
-<tr class="separator:a7a0741eff30c01cfbed5627e9cf263f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49632d8170d8289b39ace8713c467724"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>add_elements</b> (std::vector&lt; T &gt; *, const std::vector&lt; T &gt; &amp;, const std::deque&lt; std::pair&lt; int, int &gt;&gt; &amp;)</td></tr>
+<tr class="separator:a49632d8170d8289b39ace8713c467724"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac56702c1c3e153d9434c89a9a471d130"><td class="memItemLeft" align="right" valign="top"><a id="ac56702c1c3e153d9434c89a9a471d130"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>replace_nan</b> ()</td></tr>
 <tr class="separator:ac56702c1c3e153d9434c89a9a471d130"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,18 +165,24 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>is_null</b> (std::vec
 <tr class="memitem:abf57b536d1d132a0f3d8841f4388bbee"><td class="memItemLeft" align="right" valign="top"><a id="abf57b536d1d132a0f3d8841f4388bbee"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_null</b> (size_t)</td></tr>
 <tr class="separator:abf57b536d1d132a0f3d8841f4388bbee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d4c790fa30f5da90cd47ddf4df2ea7a"><td class="memItemLeft" align="right" valign="top"><a id="a0d4c790fa30f5da90cd47ddf4df2ea7a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>add_to_double</b> (const <a class="el" href="classColumn.html">Column</a> &amp;, const std::vector&lt; std::pair&lt; int, int &gt;&gt; &amp;)</td></tr>
-<tr class="separator:a0d4c790fa30f5da90cd47ddf4df2ea7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6edd300552de8cb4d1d31310685aad7f"><td class="memItemLeft" align="right" valign="top"><a id="a6edd300552de8cb4d1d31310685aad7f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>add_to_string</b> (const <a class="el" href="classColumn.html">Column</a> &amp;, const std::vector&lt; std::pair&lt; int, int &gt;&gt; &amp;)</td></tr>
-<tr class="separator:a6edd300552de8cb4d1d31310685aad7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc19d61d8ec7dbea5f238c4a7013b23a"><td class="memItemLeft" align="right" valign="top"><a id="adc19d61d8ec7dbea5f238c4a7013b23a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>add_to_double</b> (const <a class="el" href="classColumn.html">Column</a> &amp;, const std::deque&lt; std::pair&lt; int, int &gt;&gt; &amp;)</td></tr>
+<tr class="separator:adc19d61d8ec7dbea5f238c4a7013b23a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ae5f86b705809c07375e4a30cde9b0f"><td class="memItemLeft" align="right" valign="top"><a id="a7ae5f86b705809c07375e4a30cde9b0f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>add_to_string</b> (const <a class="el" href="classColumn.html">Column</a> &amp;, const std::deque&lt; std::pair&lt; int, int &gt;&gt; &amp;)</td></tr>
+<tr class="separator:a7ae5f86b705809c07375e4a30cde9b0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad33840850da11510dea2d045214f376c"><td class="memItemLeft" align="right" valign="top"><a id="ad33840850da11510dea2d045214f376c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>is_smaller_than</b> (const double &amp;)</td></tr>
 <tr class="separator:ad33840850da11510dea2d045214f376c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f693c2940b4c8158bfd5391520d7369"><td class="memItemLeft" align="right" valign="top"><a id="a5f693c2940b4c8158bfd5391520d7369"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>is_smaller_than</b> (const std::string &amp;)</td></tr>
 <tr class="separator:a5f693c2940b4c8158bfd5391520d7369"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae109b8fe90f79ce2a320446913ada121"><td class="memItemLeft" align="right" valign="top"><a id="ae109b8fe90f79ce2a320446913ada121"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>is_greater_than</b> (const double &amp;)</td></tr>
+<tr class="separator:ae109b8fe90f79ce2a320446913ada121"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8434716fcda24ed6624735d45ff362a"><td class="memItemLeft" align="right" valign="top"><a id="ae8434716fcda24ed6624735d45ff362a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>is_greater_than</b> (const std::string &amp;)</td></tr>
+<tr class="separator:ae8434716fcda24ed6624735d45ff362a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -199,6 +211,10 @@ std::string::size_type&#160;</td><td class="memItemRight" valign="bottom"><b>wid
 <tr class="memitem:a92ccb0425c54a5b5cd6f78ed1bb4c3ff"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classDataFrame.html">DataFrame</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classColumn.html#a92ccb0425c54a5b5cd6f78ed1bb4c3ff">operator&lt;</a> (const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;, const T &amp;)</td></tr>
 <tr class="memdesc:a92ccb0425c54a5b5cd6f78ed1bb4c3ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">deep copy of a <a class="el" href="classDataFrame.html">DataFrame</a>  <a href="#a92ccb0425c54a5b5cd6f78ed1bb4c3ff">More...</a><br /></td></tr>
 <tr class="separator:a92ccb0425c54a5b5cd6f78ed1bb4c3ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd17a18489660c217522c8b39ed04867"><td class="memTemplParams" colspan="2"><a id="acd17a18489660c217522c8b39ed04867"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:acd17a18489660c217522c8b39ed04867"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classDataFrame.html">DataFrame</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&gt;</b> (const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;, const T &amp;)</td></tr>
+<tr class="separator:acd17a18489660c217522c8b39ed04867"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a9a318e80a0581ab65f1ec81499064bc4"></a>
@@ -252,13 +268,13 @@ std::string::size_type&#160;</td><td class="memItemRight" valign="bottom"><b>wid
           <td class="memname">void append_missing_cols </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classDataFrame.html">DataFrame</a> &amp;&#160;</td>
-          <td class="paramname"><em>lhs</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em>&#160;</td>
+          <td class="paramname">&#160;</td>
         </tr>
         <tr>
           <td></td>

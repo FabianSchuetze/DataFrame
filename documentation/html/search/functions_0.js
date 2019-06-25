@@ -1,9 +1,5 @@
 var searchData=
 [
-  ['cbegin',['cbegin',['../classDataFrame.html#a857dadee258495743462244022a2dcce',1,'DataFrame']]],
-  ['cend',['cend',['../classDataFrame.html#a895c45b1be67d772aed3fa10169a1038',1,'DataFrame']]],
-  ['column',['Column',['../classColumn.html#a10196a56bf17147b81a40aac7eda70f8',1,'Column::Column(const Column &amp;, const std::vector&lt; int &gt; &amp;)'],['../classColumn.html#ab9bd37fa800223b400c0a1158ca244e1',1,'Column::Column(const std::vector&lt; T &gt; &amp;t)']]],
-  ['convert_5fand_5fpush_5fback',['convert_and_push_back',['../classColumn.html#a9a318e80a0581ab65f1ec81499064bc4',1,'Column']]],
-  ['convert_5fbool_5fto_5fdouble',['convert_bool_to_double',['../classDataFrame.html#ae97d60f192876309e2615abffb544cbe',1,'DataFrame']]],
-  ['create_5fcolumn_5fnames',['create_column_names',['../classDataFrame.html#ad65521a6929933f95823efa3e5a095e9',1,'DataFrame']]]
+  ['append_5fcolumn',['append_column',['../classDataFrame.html#aec1676a627594d227b776cf78fad9825',1,'DataFrame']]],
+  ['append_5findex',['append_index',['../classDataFrame.html#a4563aac177df2d5d5f517b08e69f2e29',1,'DataFrame']]]
 ];

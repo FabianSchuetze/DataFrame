@@ -39,8 +39,10 @@ string Column::type_name() {
         return "string";
     else if (std::get_if<vector<bool>>(&col))
         return "bool";
-    else
-        throw std::invalid_argument("Column has no elements");
+    else {
+        string m = string("Colum has no elements:\n") + __PRETTY_FUNCTION__;
+        throw std::invalid_argument(m);
+    }
 }
 
 void Column::push_back_nan() {
