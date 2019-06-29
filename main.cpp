@@ -2,10 +2,12 @@
 #include "dataframe/dataframeproxy.h"
 #include "dataframe/ColumnIterator.h"
 #include "dataframe/ConstColumnIterator.h"
+#include "dataframe/grouper.h"
 #include <vector>
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <numeric>
 
 using std::vector;
 using std::string;
@@ -37,35 +39,37 @@ void sort_df(DataFrame& df, const std::string& s) {
 }
 
 int main() {
-    typedef std::numeric_limits<double> nan;
-    double d = nan::quiet_NaN();
-    vector<vector<double>> first = {{10, d, -10, -6}, {30, -100, 40, -5}};
-    vector<vector<double>> second = {{-10, -20, 30}, {-100, 6, -50}};
+    vector<vector<double>> first = {{10, 10, -10, -8}, {30, -100, 40, 100}};
+    vector<vector<double>> second = {{-10, -20, -30, -40}, {-100, 6, 0, 0}};
     vector<vector<string>> strings2 = {{"f", "l"}, {"m", "a"}, {"as", "ssd"}};
-    vector<string> string_col = {"u ", "NA", "new_test", "second"};
+    vector<string> string_col = {"u ", "NA", "NA", "second"};
     vector<string> col_names = {"first_col", "second_col"};
     vector<string> col_names2 = {"first_col", "second_col", "third_col"};
-    vector<string> idx_names = {"1", "2", "4", "1"};
-    vector<string> idx_names2 = {"1", "3", "1"};
+    vector<string> idx_names = {"1", "2", "4", "5"};
+    vector<string> idx_names2 = {"3", "1"};
     DataFrame df2 = DataFrame(idx_names, col_names, first);
-    DataFrame df1 = DataFrame(idx_names2, col_names, second);
-    //df2["test_col"] = string_col;
-    std::cout << df2 << std::endl;
-    //sort_df<string>(df2, "test_col");
+    DataFrame df1 = DataFrame(idx_names, col_names, second);
+    df2["test_col"] = string_col;
+    sort_df<string>(df2, "test_col");
     //df2 += 2;
+    std::cout << df1 << std::endl;
     std::cout << df2 << std::endl;
-    std::cout << std::endl;
-    std::cout << "is contigious: " << df2.is_contigious() << std::endl;
-    df2.make_contigious();
-    //DataFrame df3 = deep_copy(df2);
-    //for (const auto& i : df3.get_index_positions())
-        //std::cout << i << std::endl;
-    //std::cout << df2 << std::endl;
-    //std::cout << df1 << std::endl;
-    //std::cout << df2 + df1["first_col"];
-    std::cout << df1["first_col"];
-    //std::cout << test << std::endl;
-    //std::cout << df2["first_col"] + df1 << std::endl;
-    std::cout << "is contigious: " << df2.is_contigious() << std::endl;
+    //std::cout << "is contigious: " << df2.is_contigious() << std::endl;
+    vector<string> sub({"first_col", "second_col"});
+    DataFrame abc = df1[sub];
+    DataFrame::Grouper<double> group = df1[sub].groupby<double>("second_col");
+    //DataFrame::Grouper<double> group = abc.groupby<double>("second_col");
+    DataFrame::Grouper<double> group2 = df2.groupby<double>("first_col");
+    // NAMESPACE POLUTION!!
+    mean t;
+    Statistic *p = &t;
+    //mean t;
+    //p = &t;
+    DataFrame test = group.summarize(p);
+    DataFrame test2 = group2.summarize(p);
+    //DataFrame test2 = group.summarize(&DataFrame::Grouper<double>::mean)
+        //group->*f);
+    std::cout << test << std::endl;
+    std::cout << test2 << std::endl;
     return 0;
 }

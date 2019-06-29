@@ -219,8 +219,6 @@ class DataFrame {
      * @brief Uses the other function as helper function
      */
     void append_index(const std::vector<std::string>&);
-    //void append_index(std::vector<std::string>::iterator, 
-                      //std::vector<std::string>::iterator);
     std::vector<std::string> frame(Column& c);
     std::vector<int> contains_null();
     void make_unique(const std::string&);
@@ -249,12 +247,13 @@ class DataFrame {
      */
     SharedCol get_shared_copy(const std::string&) const;
     /**
-     * @brief Initilizes the map `column_names` from the first line of the csv file
+     * @brief Initilizes the map `column_names` from the first line of the csv
+     * file
      */
     std::vector<std::string> create_column_names(std::ifstream&);
     /**
-     * @brief Initilizes the Columns with the datatypes mentiond in the second line
-     * of the csv file
+     * @brief Initilizes the Columns with the datatypes mentiond in the second
+     * line of the csv file
      */
     void initialize_column(std::ifstream&, const std::vector<std::string>&);
     /**
