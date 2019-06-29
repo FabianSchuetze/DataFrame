@@ -16,6 +16,7 @@ set(${LIBRARY_TARGET_NAME}_SRC
     dataframe/operators.cpp
     dataframe/dataframeproxy.cpp
     dataframe/grouper.cpp
+    dataframe/index.cpp
 )
 
 set(${LIBRARY_TARGET_NAME}_HDR
@@ -26,6 +27,7 @@ set(${LIBRARY_TARGET_NAME}_HDR
     dataframe/dataframeproxy.h
     dataframe/grouper.h
     dataframe/GroupbyFunctions.h
+    dataframe/index.h
 )
 
 if (UNIX)

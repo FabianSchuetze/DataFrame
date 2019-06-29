@@ -5,7 +5,6 @@
 #include <map>
 #include <memory>
 #include <string>
-#include <unordered_map>
 #include <utility>
 #include <vector>
 #include "column.h"
@@ -122,11 +121,11 @@ class DataFrame {
      * @brief drops rows which contain na from the dataframe
      */
     void dropna();
-    void drop_row(std::vector<std::string>);
+    void drop_row(const std::vector<std::deque<Index::ele>>&);
     /**
      * @brief drops a row from the dataframe
      */
-    void drop_row(const std::string&);
+    void drop_row(const std::deque<Index::ele>&);
     /**
      * @brief drops a column from the dataframe
      */
@@ -147,8 +146,8 @@ class DataFrame {
      */
     std::pair<size_t, size_t> size() const;
     int use_count(const std::string&);  // Can i const qualify it?
-    std::vector<std::string> get_index_names();
-    std::vector<std::string> get_index_names() const;
+    //std::vector<std::string> get_index_names();
+    //std::vector<std::string> get_index_names() const;
     template <typename T>
     void fill_na(std::string, T);
     /**
@@ -198,7 +197,7 @@ class DataFrame {
 
    private:
     std::vector<std::shared_ptr<Column>> columns;
-    Index index;
+    //Index index;
     //std::unordered_map<std::string, std::deque<int>> index_names;
     //std::vector<std::string> index_positions;
     std::map<std::string, int> column_names;
@@ -216,11 +215,11 @@ class DataFrame {
      * the hash function index_names
      */
     void append_column(const std::string&, const SharedCol&);
-    void append_index(const std::string&);
+    //void append_index(const std::string&);
     /**
      * @brief Uses the other function as helper function
      */
-    void append_index(const std::vector<std::string>&);
+    //void append_index(const std::vector<std::string>&);
     std::vector<std::string> frame(Column& c);
     std::vector<int> contains_null();
     void make_unique(const std::string&);
@@ -233,13 +232,13 @@ class DataFrame {
      */
     int find_column_position(const std::string&);
     int find_column_position(const std::string&) const;
-    std::deque<int> find_index_position() const;
-    std::deque<int> find_index_position();
+    //std::deque<int> find_index_position() const;
+    //std::deque<int> find_index_position();
     /**
      * @brief finds the rows number for the index name given as input
      */
-    std::deque<int> find_index_position(const std::string&) const;
-    std::deque<int> find_index_position(const std::string&);
+    //std::deque<int> find_index_position(const std::string&) const;
+    //std::deque<int> find_index_position(const std::string&);
     /**
      * @Return a shared_ptr to the column named s
      */

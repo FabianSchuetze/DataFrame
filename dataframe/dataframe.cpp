@@ -7,7 +7,6 @@
 #include <set>
 #include <sstream>
 #include <stdexcept>
-#include <unordered_map>
 #include <unordered_set>
 #include "ConstColumnIterator.h"
 #include "dataframeproxy.h"
@@ -27,31 +26,31 @@ void missing_col_error(const char* what, string s) {
     throw std::out_of_range(what + msg);
 }
 
-deque<int> DataFrame::find_index_position() const {
-    std::unordered_map<string, deque<int>> copy_index_names(index_names);
-    deque<int> res;
-    for (const string& s : index_positions) {
-        int pos = copy_index_names.at(s).front();
-        copy_index_names.at(s).pop_front();
-        res.push_back(pos);
-    }
-    return res;
-}
-deque<int> DataFrame::find_index_position() {
-    return static_cast<const DataFrame&>(*this).find_index_position();
-}
+//deque<int> DataFrame::find_index_position() const {
+    //std::unordered_map<string, deque<int>> copy_index_names(index_names);
+    //deque<int> res;
+    //for (const string& s : index_positions) {
+        //int pos = copy_index_names.at(s).front();
+        //copy_index_names.at(s).pop_front();
+        //res.push_back(pos);
+    //}
+    //return res;
+//}
+//deque<int> DataFrame::find_index_position() {
+    //return static_cast<const DataFrame&>(*this).find_index_position();
+//}
 
-deque<int> DataFrame::find_index_position(const string& s) const {
-    try {
-        return index_names.at(s);
-    } catch (std::out_of_range& e) {
-        return deque<int>();
-    }
-}
+//deque<int> DataFrame::find_index_position(const string& s) const {
+    //try {
+        //return index_names.at(s);
+    //} catch (std::out_of_range& e) {
+        //return deque<int>();
+    //}
+//}
 
-deque<int> DataFrame::find_index_position(const std::string& s) {
-    return static_cast<const DataFrame&>(*this).find_index_position(s);
-}
+//deque<int> DataFrame::find_index_position(const std::string& s) {
+    //return static_cast<const DataFrame&>(*this).find_index_position(s);
+//}
 template <typename T>
 vector<string> get_names(T& cont) {
     vector<string> res;
@@ -60,16 +59,20 @@ vector<string> get_names(T& cont) {
     return res;
 }
 
-vector<string> DataFrame::get_index_names() { return index_positions; }
-vector<string> DataFrame::get_index_names() const { return index_positions; }
-
-vector<string> DataFrame::get_column_names() { return get_names(column_names); }
+vector<string> DataFrame::get_column_names() { 
+    return static_cast<const DataFrame&>(*this).get_column_names();
+}
 vector<string> DataFrame::get_column_names() const {
-    return get_names(column_names);
+    vector<string> res(column_names.size());
+    auto b = column_names.begin();
+    auto e = column_names.end();
+    std::transform(b, e, res, [](const auto& ele) { return ele.first; });
+    return res;
 }
 
 DataFrame::DataFrame()
-    : columns(), index_names(), index_positions(), column_names() {}
+    : columns(), column_names() {Index();}
+    //: columns(), index_names(), index_positions(), column_names() {}
 
 std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) {
     return static_cast<const DataFrame&>(*this).get_unique(s);  // Item 3
@@ -111,13 +114,11 @@ void DataFrame::make_contigious() {
 
 DataFrame deep_copy(const DataFrame& lhs) {
     DataFrame new_df = DataFrame();
-    deque<int> old_positions = lhs.find_index_position();
+    deque<int> old_positions = lhs.index.find_index_position();
     for (auto const& x : lhs.column_names) {
         new_df.append_column(x.first, lhs.get_unique(x.first, old_positions));
-        // new_df.column_names[x.first] = new_df.column_names.size();
-        // new_df.columns.push_back(lhs.get_unique(x.first, old_positions));
     }
-    new_df.append_index(lhs.index_positions);
+    new_df.index.append_index(lhs.index.index_positions);
     return new_df;
 }
 
@@ -126,14 +127,14 @@ void DataFrame::append_column(const string& name, const SharedCol& col) {
     column_names[name] = column_names.size();
 }
 
-void DataFrame::append_index(const vector<string>& idx) {
-    for (const string& s : idx) append_index(s);
-}
+//void DataFrame::append_index(const vector<string>& idx) {
+    //for (const string& s : idx) append_index(s);
+//}
 
-void DataFrame::append_index(const string& s) {
-    index_names[s].push_back(index_positions.size());
-    index_positions.push_back(s);
-}
+//void DataFrame::append_index(const string& s) {
+    //index_names[s].push_back(index_positions.size());
+    //index_positions.push_back(s);
+//}
 
 template <typename T>
 DataFrame::DataFrame(const vector<string>& idx, const vector<string>& n,
@@ -148,7 +149,7 @@ DataFrame::DataFrame(const vector<string>& idx, const vector<string>& n,
         columns.push_back(make_shared<Column>(cols[i]));
         column_names[n[i]] = i;
     }
-    append_index(idx);
+    index.append_index(idx);
 }
 template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
                               const vector<vector<double>>&);
@@ -158,7 +159,8 @@ template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
                               const vector<vector<bool>>&);
 
 DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
-    : columns(), index_names(), index_positions(df.idxNames), column_names() {
+    : columns(), column_names() {
+    //: columns(), index_names(), index_positions(df.idxNames), column_names() {
     try {
         for (const string& name : df.colNames)
             append_column(name, df.theDataFrame.get_shared_copy(name));
@@ -166,14 +168,15 @@ DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
         string m = string("In\n") + __PRETTY_FUNCTION__ + ":\n" + e.what();
         throw std::out_of_range(m);
     }
-    for (const string& name : df.idxNames) {
-        deque<int> pos = df.theDataFrame.find_index_position(name);
-        index_names[name] = pos;
+    index.index_positions = df.idxElements;
+    for (const auto& val : df.idxElements) {
+        deque<int> pos = df.theDataFrame.index.find_index_position(val);
+        index.index_names[val] = pos;
     }
 }
 
 std::pair<size_t, size_t> DataFrame::size() const {
-    return make_pair(index_positions.size(), columns.size());
+    return make_pair(index.size(), columns.size());
 }
 
 int DataFrame::use_count(const string& name) {
@@ -188,17 +191,17 @@ void carthesian_product(deque<int>& lhs, deque<int>& rhs,
         for (const int& b : rhs) inp.push_back(make_pair(a, b));
 }
 
-std::set<string> unique_names(const vector<string>& inp) {
-    std::set<string> s(inp.begin(), inp.end());
-    return s;
-}
+//std::set<string> unique_names(const vector<string>& inp) {
+    //std::set<string> s(inp.begin(), inp.end());
+    //return s;
+//}
 
 deque<pair<int, int>> correspondence_position(const DataFrame& lhs,
                                               const DataFrame& other) {
     deque<pair<int, int>> res;
-    for (const string& s : unique_names(lhs.index_positions)) {
-        deque<int> lhsIdx = lhs.find_index_position(s);
-        deque<int> rhsIdx = other.find_index_position(s);
+    for (auto const& e : lhs.index.unique_elements()) {
+        deque<int> lhsIdx = lhs.index.find_index_position(e);
+        deque<int> rhsIdx = other.index.find_index_position(e);
         carthesian_product(lhsIdx, rhsIdx, res);
     }
     return res;
@@ -212,7 +215,7 @@ void DataFrame::copy_row(int pos) {
 }
 
 void DataFrame::append_duplicate_rows(int pos) {
-    append_index(index_positions[pos]);
+    index.append_index(index.index_positions[pos]);
     copy_row(pos);
 }
 
@@ -221,7 +224,7 @@ void DataFrame::append_duplicate_rows(deque<pair<int, int>>& indices) {
     for (auto& pair : indices) {
         if (s.count(pair.first)) {
             append_duplicate_rows(pair.first);
-            pair.first = index_positions.size() - 1;
+            pair.first = index.index_positions.size() - 1;
         }
         s.insert(pair.first);
     }
@@ -276,34 +279,34 @@ void DataFrame::make_unique_if(const vector<string>& c) {
     for (const string& s : c) make_unique_if(s);
 }
 
-void DataFrame::drop_row(const string& s) {
-    vector<string> tmp{s};
+void DataFrame::drop_row(const std::deque<Index::ele>& e) {
+    vector<deque<Index::ele>> tmp{e};
     return drop_row(tmp);
 }
 
-void DataFrame::drop_row(vector<string> vec) {
+void DataFrame::drop_row(const vector<deque<Index::ele>>& vec) {
     std::sort(vec.begin(), vec.end());
     auto fun = [&](const string& val) {
         return !std::binary_search(vec.begin(), vec.end(), val);
     };
-    auto it = std::stable_partition(index_positions.begin(),
-                                    index_positions.end(), fun);
-    index_positions.erase(it, index_positions.end());
-    for (string& s : vec) index_names.erase(s);
+    auto it = std::stable_partition(index.index_positions.begin(),
+                                    index.index_positions.end(), fun);
+    index.index_positions.erase(it, index.index_positions.end());
+    for (auto& v : vec) index.index_names.erase(v);
 }
 
 void DataFrame::dropna() {
     vector<int> count = contains_null();
-    auto fun = [&](const string& s) -> bool {
-        int pos = find_index_position(s).front();
-        index_names[s].pop_front();
+    auto fun = [&](const auto& e) -> bool {
+        int pos = index.find_index_position(e).front();
+        index.index_names[e].pop_front();
         if (count[pos] > 0) return true;
-        index_names[s].push_back(pos);
+        index.index_names[e].push_back(pos);
         return false;
     };
-    auto new_end =
-        std::remove_if(index_positions.begin(), index_positions.end(), fun);
-    index_positions.erase(new_end, index_positions.end());
+    auto b = index.index_positions.begin();
+    auto e = index.index_positions.end();
+    index.index_positions.erase(std::remove_if(b, e, fun), e);
 }
 
 template <typename T>
@@ -331,8 +334,9 @@ void DataFrame::drop_column(const string& s) {
 }
 
 void DataFrame::sort_by_index() {
-    std::sort(index_positions.begin(), index_positions.end(),
-              [](auto& a, auto& b) { return a < b; });
+    auto b = index.index_positions.begin();
+    auto e = index.index_positions.end();
+    std::sort(b, e, [](auto& a, auto& b) { return a < b; });
 }
 
 void DataFrame::sort_by_column(const std::string& s) {
@@ -349,14 +353,14 @@ void DataFrame::sort_by_column(const std::string& s) {
 
 template <typename T>
 void DataFrame::sort_by_column_template(const string& s) {
-    std::vector<string> new_index;
+    std::vector<std::deque<Index::ele>> new_index;
     try {
         vector<int> argsort = permutation_index<T>(s);
         for (size_t i = 0; i < argsort.size(); ++i) {
-            string name = index_positions[argsort[i]];
-            new_index.push_back(name);
+            auto e = index.index_positions[argsort[i]];
+            new_index.push_back(e);
         }
-        index_positions = new_index;
+        index.index_positions = new_index;
     } catch (std::invalid_argument& c) {
         string m = "Error for column " + s + " :\n";
         throw std::invalid_argument(m + __PRETTY_FUNCTION__ + "\n" + c.what());
@@ -369,7 +373,7 @@ template void DataFrame::sort_by_column_template<std::string>(
 
 bool DataFrame::is_contigious() {
     // HERE THE FUNCTION WOULD STILL RETURN THE SAME INTERFACE
-    deque<int> existing_order = find_index_position();
+    deque<int> existing_order = index.find_index_position();
     for (size_t i = 1; i < existing_order.size(); ++i)
         if ((existing_order[i] - existing_order[i - 1]) != 1) return false;
     return true;
@@ -431,7 +435,7 @@ void DataFrame::insert_data(std::ifstream& file, const vector<string>& cols) {
     while (std::getline(file, line)) {
         std::istringstream names(line);
         std::getline(names, name, ',');
-        append_index(name);
+        index.append_index(name);
         for (const string& col : cols) {
             std::getline(names, name, ',');
             columns[find_column_position(col)]->convert_and_push_back(name);
@@ -449,7 +453,7 @@ void DataFrame::assert_same_column_length(const char* pass) {
 }
 
 DataFrame::DataFrame(std::ifstream& file)
-    : columns(), index_names(), index_positions(), column_names() {
+    : columns(), column_names() {
     vector<string> colNames = create_column_names(file);
     initialize_column(file, colNames);
     insert_data(file, colNames);
@@ -461,7 +465,7 @@ void DataFrame::append_missing_rows(const DataFrame& rhs) {
     for (auto const& pair : pairs) {
         if (pair.second == -1) {
             append_nan_rows();
-            append_index(rhs.index_positions[pair.first]);
+            index.append_index(rhs.index.index_positions[pair.first]);
         }
     }
 }

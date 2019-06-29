@@ -14,7 +14,7 @@ class DataFrame::ConstColumnIterator {
     friend bool operator!=(const const_iter<V>&, const const_iter<V>&);
     ConstColumnIterator(const DataFrame& a, int n, size_t sz = 0)
         : theDataFrame(a), wptr(a.columns[n]), curr(sz), iteration_order() {
-        iteration_order = a.find_index_position();}
+        iteration_order = a.index.find_index_position();}
     std::string to_string();
     const T& operator*() const;
     const T& operator[](int) const;
@@ -56,7 +56,7 @@ template <class T>
 DataFrame::ConstColumnIterator<T> DataFrame::cend(const std::string& s) {
     try {
         return ConstColumnIterator<T>(*this, column_names.at(s),
-                                      index_names.size());
+                                      index.size());
     } catch (std::out_of_range& e) {
         throw std::out_of_range("Column: " + s + " not found");
     }

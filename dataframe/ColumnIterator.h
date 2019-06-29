@@ -15,7 +15,7 @@ class DataFrame::ColumnIterator {
         //ColumnIterator();
         ColumnIterator(DataFrame& a, int n, size_t sz=0):
             theDataFrame(a), wptr(a.columns[n]), curr(sz), iteration_order() {
-        iteration_order = a.find_index_position();}
+        iteration_order = a.index.find_index_position();}
         T& operator*() const;
         T& operator[](int);
         ColumnIterator& operator++();
@@ -56,7 +56,7 @@ template <class T>
 DataFrame::ColumnIterator<T> DataFrame::end(const std::string& s) {
     try {
         make_unique_if(s);
-        return ColumnIterator<T>(*this, column_names.at(s), index_names.size());
+        return ColumnIterator<T>(*this, column_names.at(s), index.size());
     } catch (std::out_of_range& e) {
         throw std::out_of_range("Column: " + s + " not found");
     }

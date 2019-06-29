@@ -11,7 +11,7 @@ using std::transform;
 using std::vector;
 
 DataFrame::DataFrameProxy DataFrame::operator[](const vector<string>& names) {
-    return DataFrameProxy(*this, get_index_names(), names);
+    return DataFrameProxy(*this, index.get_index_names(), names);
 }
 
 DataFrame::DataFrameProxy DataFrame::operator[](const string& name) {
@@ -19,7 +19,8 @@ DataFrame::DataFrameProxy DataFrame::operator[](const string& name) {
 }
 
 DataFrame::DataFrameProxy DataFrame::loc(const string& s) {
-    return DataFrameProxy(*this, vector<string>{s}, get_column_names());
+    return DataFrameProxy(*this, vector<std::deque<Index::ele>>{{s}},
+                          get_column_names());
 }
 
 bool maybe_add(const string& name, std::map<string, int>& columns) {
@@ -79,8 +80,8 @@ void DataFrame::DataFrameProxy::insert_column(const vector<string>& rhsNames,
 DataFrame& DataFrame::operator=(const DataFrame& rhs) {
     if (this != &rhs) {
         columns = rhs.columns;
-        index_names = rhs.index_names;
-        index_positions = rhs.index_positions;
+        index.index_names = rhs.index.index_names;
+        index.index_positions = rhs.index.index_positions;
         column_names = rhs.column_names;
     }
     return *this;

@@ -1,14 +1,15 @@
 #ifndef GUARD_DataFrameProxy_h
 #define GUARD_DataFrameProxy_h
 #include "dataframe.h"
+#include "index.h"
 
 class DataFrame::DataFrameProxy {
    public:
     friend class DataFrame;
     DataFrameProxy();
-    DataFrameProxy(DataFrame&, const std::vector<std::string>&,
+    DataFrameProxy(DataFrame&, const std::vector<std::deque<Index::ele>>&,
                    const std::string&);
-    DataFrameProxy(DataFrame&, const std::vector<std::string>&,
+    DataFrameProxy(DataFrame&, const std::vector<std::deque<Index::ele>>&,
                    const std::vector<std::string>&);
     DataFrameProxy& operator=(const DataFrameProxy&);
     DataFrameProxy& operator=(const DataFrame&);
@@ -35,7 +36,8 @@ class DataFrame::DataFrameProxy {
 
    private:
     DataFrame& theDataFrame;
-    std::vector<std::string> idxNames;
+    std::vector<std::deque<Index::ele>> idxElements;
+    //std::vector<std::string> idxNames;
     std::vector<std::string> colNames;
     void add_column(const std::shared_ptr<Column>&);
     void replace_column(int, const std::shared_ptr<Column>&);

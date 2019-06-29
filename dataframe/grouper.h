@@ -16,8 +16,8 @@ class DataFrame::Grouper {
    private:
     std::vector<std::string> elegible_types(const std::string&);
     std::vector<SharedCol> columns;
-    std::unordered_map<std::string, std::deque<int>> old_index_names;
-    std::vector<std::string> index_positions;
+    std::map<std::deque<Index::ele>, std::deque<int>> old_index_names;
+    std::vector<std::deque<Index::ele>> index_positions;
     std::map<std::string, int> column_names;
     void make_index_unique();
 };
