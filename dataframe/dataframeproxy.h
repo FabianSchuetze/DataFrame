@@ -7,10 +7,8 @@ class DataFrame::DataFrameProxy {
    public:
     friend class DataFrame;
     DataFrameProxy();
-    DataFrameProxy(DataFrame&, const std::vector<std::deque<Index::ele>>&,
-                   const std::string&);
-    DataFrameProxy(DataFrame&, const std::vector<std::deque<Index::ele>>&,
-                   const std::vector<std::string>&);
+    DataFrameProxy(DataFrame&, const std::string&);
+    DataFrameProxy(DataFrame&, const std::vector<std::string>&);
     DataFrameProxy& operator=(const DataFrameProxy&);
     DataFrameProxy& operator=(const DataFrame&);
     DataFrameProxy& operator=(const std::vector<std::vector<double>>&);
@@ -36,8 +34,6 @@ class DataFrame::DataFrameProxy {
 
    private:
     DataFrame& theDataFrame;
-    std::vector<std::deque<Index::ele>> idxElements;
-    //std::vector<std::string> idxNames;
     std::vector<std::string> colNames;
     void add_column(const std::shared_ptr<Column>&);
     void replace_column(int, const std::shared_ptr<Column>&);

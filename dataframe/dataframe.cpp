@@ -51,24 +51,24 @@ void missing_col_error(const char* what, string s) {
 //deque<int> DataFrame::find_index_position(const std::string& s) {
     //return static_cast<const DataFrame&>(*this).find_index_position(s);
 //}
-template <typename T>
-vector<string> get_names(T& cont) {
-    vector<string> res;
-    std::transform(cont.begin(), cont.end(), std::back_inserter(res),
-                   [](const pair<string, int>& ele) { return ele.first; });
-    return res;
-}
+//template <typename T>
+//vector<string> get_names(T& cont) {
+    //vector<string> res;
+    //std::transform(cont.begin(), cont.end(), std::back_inserter(res),
+                   //[](const pair<string, int>& ele) { return ele.first; });
+    //return res;
+//}
 
-vector<string> DataFrame::get_column_names() { 
-    return static_cast<const DataFrame&>(*this).get_column_names();
-}
-vector<string> DataFrame::get_column_names() const {
-    vector<string> res(column_names.size());
-    auto b = column_names.begin();
-    auto e = column_names.end();
-    std::transform(b, e, res, [](const auto& ele) { return ele.first; });
-    return res;
-}
+//vector<string> DataFrame::get_column_names() { 
+    //return static_cast<const DataFrame&>(*this).get_column_names();
+//}
+//vector<string> DataFrame::get_column_names() const {
+    //vector<string> res(column_names.size());
+    //auto b = column_names.begin();
+    //auto e = column_names.end();
+    //std::transform(b, e, res, [](const auto& ele) { return ele.first; });
+    //return res;
+//}
 
 DataFrame::DataFrame()
     : columns(), column_names() {Index();}
@@ -159,7 +159,7 @@ template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
                               const vector<vector<bool>>&);
 
 DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
-    : columns(), column_names() {
+    : columns(), index(df.theDataFrame.index), column_names() {
     //: columns(), index_names(), index_positions(df.idxNames), column_names() {
     try {
         for (const string& name : df.colNames)
@@ -168,11 +168,11 @@ DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
         string m = string("In\n") + __PRETTY_FUNCTION__ + ":\n" + e.what();
         throw std::out_of_range(m);
     }
-    index.index_positions = df.idxElements;
-    for (const auto& val : df.idxElements) {
-        deque<int> pos = df.theDataFrame.index.find_index_position(val);
-        index.index_names[val] = pos;
-    }
+    //index.index_positions = df.idxElements;
+    //for (const auto& val : df.idxElements) {
+        //deque<int> pos = df.theDataFrame.index.find_index_position(val);
+        //index.index_names[val] = pos;
+    //}
 }
 
 std::pair<size_t, size_t> DataFrame::size() const {
@@ -279,21 +279,21 @@ void DataFrame::make_unique_if(const vector<string>& c) {
     for (const string& s : c) make_unique_if(s);
 }
 
-void DataFrame::drop_row(const std::deque<Index::ele>& e) {
-    vector<deque<Index::ele>> tmp{e};
-    return drop_row(tmp);
-}
+//void DataFrame::drop_row(std::deque<Index::ele>& e) {
+    //vector<deque<Index::ele>> tmp{e};
+    //return drop_row(tmp);
+//}
 
-void DataFrame::drop_row(const vector<deque<Index::ele>>& vec) {
-    std::sort(vec.begin(), vec.end());
-    auto fun = [&](const string& val) {
-        return !std::binary_search(vec.begin(), vec.end(), val);
-    };
-    auto it = std::stable_partition(index.index_positions.begin(),
-                                    index.index_positions.end(), fun);
-    index.index_positions.erase(it, index.index_positions.end());
-    for (auto& v : vec) index.index_names.erase(v);
-}
+//void DataFrame::drop_row(vector<deque<Index::ele>>& vec) {
+    //std::sort(vec.begin(), vec.end());
+    //auto fun = [&](const auto& val) {
+        //return !std::binary_search(vec.begin(), vec.end(), val);
+    //};
+    //auto it = std::stable_partition(index.index_positions.begin(),
+                                    //index.index_positions.end(), fun);
+    //index.index_positions.erase(it, index.index_positions.end());
+    //for (auto& v : vec) index.index_names.erase(v);
+//}
 
 void DataFrame::dropna() {
     vector<int> count = contains_null();
@@ -309,22 +309,22 @@ void DataFrame::dropna() {
     index.index_positions.erase(std::remove_if(b, e, fun), e);
 }
 
-template <typename T>
-vector<string> DataFrame::get_column_names() {
-    string target;
-    if (std::is_same<T, double>::value) target = "double";
-    if (std::is_same<T, string>::value) target = "string";
-    auto fun = [&](const pair<string, int>& x) {
-        return columns[x.second]->type_name() == target ? true : false;
-    };
-    vector<pair<string, int>> res;
-    std::copy_if(column_names.begin(), column_names.end(),
-                 std::back_inserter(res), fun);
-    return get_names(res);
-}
+//template <typename T>
+//vector<string> DataFrame::get_column_names() {
+    //string target;
+    //if (std::is_same<T, double>::value) target = "double";
+    //if (std::is_same<T, string>::value) target = "string";
+    //auto fun = [&](const pair<string, int>& x) {
+        //return columns[x.second]->type_name() == target ? true : false;
+    //};
+    //vector<pair<string, int>> res;
+    //std::copy_if(column_names.begin(), column_names.end(),
+                 //std::back_inserter(res), fun);
+    //return get_names(res);
+//}
 
-template vector<string> DataFrame::get_column_names<double>();
-template vector<string> DataFrame::get_column_names<string>();
+//template vector<string> DataFrame::get_column_names<double>();
+//template vector<string> DataFrame::get_column_names<string>();
 
 void DataFrame::drop_column(const string& s) {
     // WHAT HAPPENS IF THERE IS ONLY ONE SHARED POINTER OF IT? DOES THE THINK

@@ -11,17 +11,17 @@ using std::transform;
 using std::vector;
 
 DataFrame::DataFrameProxy DataFrame::operator[](const vector<string>& names) {
-    return DataFrameProxy(*this, index.get_index_names(), names);
+    return DataFrameProxy(*this, names);
 }
 
 DataFrame::DataFrameProxy DataFrame::operator[](const string& name) {
     return operator[](vector<string>{name});
 }
 
-DataFrame::DataFrameProxy DataFrame::loc(const string& s) {
-    return DataFrameProxy(*this, vector<std::deque<Index::ele>>{{s}},
-                          get_column_names());
-}
+//DataFrame::DataFrameProxy DataFrame::loc(const string& s) {
+    //return DataFrameProxy(*this, vector<std::deque<Index::ele>>{{s}},
+                          //get_column_names());
+//}
 
 bool maybe_add(const string& name, std::map<string, int>& columns) {
     try {
@@ -100,17 +100,17 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     return *this;
 }
 
-DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
-        const DataFrame& rhs) {
-    check_col_width(rhs.size().second, string{"rhs and lhs col num differ"});
-    vector<string> rhs_names = rhs.get_column_names();
-    try{
-        insert_column(rhs.get_column_names(), rhs);
-    } catch(...) {
-        throw std::runtime_error("Assignment operator from Df failed");
-    }
-    return *this;
-}
+//DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
+        //const DataFrame& rhs) {
+    //check_col_width(rhs.size().second, string{"rhs and lhs col num differ"});
+    //vector<string> rhs_names = rhs.get_column_names();
+    //try{
+        //insert_column(rhs.get_column_names(), rhs);
+    //} catch(...) {
+        //throw std::runtime_error("Assignment operator from Df failed");
+    //}
+    //return *this;
+//}
 
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<vector<double>>& others) {
