@@ -1,26 +1,26 @@
-#include "../dataframe/dataframe.h"
-#include "../dataframe/dataframeproxy.h"
+#include <chrono>
+#include <cmath>
+#include <fstream>
+#include <iostream>
+#include <numeric>
+#include <string>
+#include <vector>
 #include "../dataframe/ColumnIterator.h"
 #include "../dataframe/ConstColumnIterator.h"
-#include <vector>
-#include <fstream>
-#include <string>
-#include <iostream>
-#include <cmath>
-#include <chrono>
-#include <numeric>
+#include "../dataframe/dataframe.h"
+#include "../dataframe/dataframeproxy.h"
 
 using namespace std::chrono;
 
-using std::vector;
 using std::string;
+using std::vector;
 
 vector<string> get_columns() {
     vector<string> res;
-    vector<string> cols = {"total_sales_volume", "is_sale", "lead_canal"};
-    vector<string> xs ={"initial", "first", "second", "third", "fourth",
-          "fifth", "sixth", "seventh", "eight", "ninth",
-          "tenth"};
+    vector<string> cols = {"total_sales_volume", "is_sale"};
+    vector<string> xs = {"initial", "first", "second", "third",
+                         "fourth",  "fifth", "sixth",  "seventh",
+                         "eight",   "ninth", "tenth"};
     for (auto x : xs) {
         string col1 = "saex2_" + x + "_is_payout";
         string col2 = "saex2_" + x + "_actual";
@@ -34,8 +34,9 @@ void fill_df(DataFrame& df) {
     vector<string> double_names = df.get_column_names<double>();
     for (const string& s : double_names) {
         DataFrame::iter<double> it = df.begin<double>(s);
-        DataFrame::iter<double>  e = df.end<double>(s);
-        std::transform(it, e, it, [](auto& d) {return std::isnan(d) ? 0 : d;});
+        DataFrame::iter<double> e = df.end<double>(s);
+        std::transform(it, e, it,
+                       [](auto& d) { return std::isnan(d) ? 0 : d; });
     }
 }
 
@@ -45,7 +46,7 @@ void sort_df(DataFrame& df, const std::string& s) {
 }
 
 int main() {
-    std::ifstream infile("amits_example.csv"); //make a check about the file
+    std::ifstream infile("amits_example.csv");  // make a check about the file
     DataFrame df1 = DataFrame(infile);
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
     std::cout << DataFrame(df1["total_sales_volume"]);
@@ -56,19 +57,23 @@ int main() {
     vector<string> cols = get_columns();
     DataFrame df2 = DataFrame(df1[cols]);
     df2.dropna();
-    //std::cout << df2.size().first << std::endl;
-    //std::cout << df2.size().second << std::endl;
+    std::cout << df2.size().first << std::endl;
+    std::cout << df2.size().second << std::endl;
     vector<double> series;
-    DataFrame::const_iter<double> real_begin = df2.cbegin<double>("total_sales_volume");
-    DataFrame::const_iter<double> real_end = df2.cend<double>("total_sales_volume");
-    DataFrame::const_iter<double> predicitons_begin = df2.cbegin<double>("saex2_initial_actual");
-    auto fun = [](const double& a, const double& b) {return std::abs(a - b);};
-    std::transform(real_begin, real_end, predicitons_begin, 
-            std::back_inserter(series), fun);
-    double avg = std::accumulate(series.begin(), series.end(), 0.) / series.size();
+    DataFrame::const_iter<double> real_begin =
+        df2.cbegin<double>("total_sales_volume");
+    DataFrame::const_iter<double> real_end =
+        df2.cend<double>("total_sales_volume");
+    DataFrame::const_iter<double> predicitons_begin =
+        df2.cbegin<double>("saex2_initial_actual");
+    auto fun = [](const double& a, const double& b) { return std::abs(a - b); };
+    std::transform(real_begin, real_end, predicitons_begin,
+                   std::back_inserter(series), fun);
+    double avg =
+        std::accumulate(series.begin(), series.end(), 0.) / series.size();
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     std::cout << avg << std::endl;
-    auto duration = duration_cast<milliseconds>( t2 - t1 ).count();
-    std::cout << duration;
+    auto duration = duration_cast<milliseconds>(t2 - t1).count();
+    std::cout << "The entire duration is: " << duration << std::endl;
     return 0;
 }

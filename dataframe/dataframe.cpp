@@ -5,7 +5,6 @@
 #include <numeric>
 #include <ostream>
 #include <set>
-#include <sstream>
 #include <stdexcept>
 #include <unordered_set>
 #include "ConstColumnIterator.h"
@@ -348,66 +347,6 @@ void DataFrame::convert_bool_to_double(const std::string& s) {
     columns[pos]->convert_bool_to_double();
 }
 
-vector<string> DataFrame::create_column_names(std::ifstream& file) {
-    std::string line, name;
-    std::getline(file, line);
-    size_t i = 0;
-    vector<string> cols;
-    std::istringstream names(line);
-    std::getline(names, name, ',');  // pass the index column
-    while (std::getline(names, name, ',')) {
-        cols.push_back(name);
-        try {
-            column_names.at(name);
-            throw std::invalid_argument("Duplicate column name " + name);
-        } catch (std::out_of_range& e) {
-            column_names[name] = i++;
-        }
-    }
-    return cols;
-}
-
-template <typename T>
-void DataFrame::initialize_column(const string& s) {
-    Column col = Column(vector<T>());
-    columns[find_column_position(s)] = make_shared<Column>(col);
-}
-
-void DataFrame::initialize_column(std::ifstream& file,
-                                  const vector<string>& cols) {
-    columns.resize(cols.size());
-    std::string line, name;
-    std::getline(file, line);
-    std::istringstream names(line);
-    std::getline(names, name, ',');  // pass the index column
-    size_t i = 0;
-    while (std::getline(names, name, ',')) {
-        string colName = cols[i++];
-        if (name == "double")
-            initialize_column<double>(colName);
-        else if (name == "string")
-            initialize_column<string>(colName);
-        else if (name == "bool")
-            initialize_column<bool>(colName);
-        else
-            throw std::invalid_argument("Input type: " + name +
-                                        " incompatible");
-    }
-}
-
-void DataFrame::insert_data(std::ifstream& file, const vector<string>& cols) {
-    std::string line, name;
-    while (std::getline(file, line)) {
-        std::istringstream names(line);
-        std::getline(names, name, ',');
-        index.append_index(name);
-        for (const string& col : cols) {
-            std::getline(names, name, ',');
-            columns[find_column_position(col)]->convert_and_push_back(name);
-        }
-    }
-}
-
 void DataFrame::assert_same_column_length(const char* pass) {
     for (auto const x : column_names) {
         if (columns[0]->size() != columns[x.second]->size()) {
@@ -435,7 +374,7 @@ void DataFrame::append_missing_rows(const DataFrame& rhs) {
     }
 }
 
-std::shared_ptr<Column> emptye_Column(size_t sz, string type) {
+std::shared_ptr<Column> empty_Column(size_t sz, string type) {
     Column col;
     if (type == "double") {
         typedef std::numeric_limits<double> nan;
@@ -454,7 +393,7 @@ void DataFrame::append_missing_cols(const DataFrame& rhs) {
         if (maybe_add(x.first, column_names)) {
             size_t len = columns[0]->size();
             string type = rhs.columns[x.second]->type_name();
-            columns.push_back(emptye_Column(len, type));
+            columns.push_back(empty_Column(len, type));
         }
     }
 }

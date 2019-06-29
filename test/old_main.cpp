@@ -2,6 +2,7 @@
 #include "../dataframe/dataframeproxy.h"
 #include "../dataframe/ColumnIterator.h"
 #include "../dataframe/ConstColumnIterator.h"
+#include "../dataframe/grouper.h"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -38,8 +39,7 @@ void sort_df(DataFrame& df, const std::string& s) {
 
 int main() {
     typedef std::numeric_limits<double> nan;
-    double d = nan::quiet_NaN();
-    vector<vector<double>> first = {{10, d, -10, d}, {30, -100, 40, d}};
+    vector<vector<double>> first = {{10, 10, -10, -8}, {30, -100, 40, 100}};
     vector<vector<double>> second = {{-10, -20}, {-30, -40}, {-100, 6}};
     vector<vector<string>> strings2 = {{"f", "l"}, {"m", "a"}, {"as", "ssd"}};
     vector<string> string_col = {"u ", "NA", "new_test", "second"};
@@ -50,18 +50,15 @@ int main() {
     DataFrame df2 = DataFrame(idx_names, col_names, first);
     DataFrame df1 = df2;
     df2["test_col"] = string_col;
-    std::cout << df2["second_col"] << std::endl;
+    std::cout << df2 << std::endl;
     sort_df<string>(df2, "test_col");
     //df2 += 2;
     std::cout << df2 << std::endl;
-    std::cout << std::endl;
     std::cout << "is contigious: " << df2.is_contigious() << std::endl;
     df2.make_contigious();
-    //DataFrame df3 = deep_copy(df2);
-    //for (const auto& i : df3.get_index_positions())
-        //std::cout << i << std::endl;
     std::cout << df2 << std::endl;
     std::cout << df1 << std::endl;
     std::cout << "is contigious: " << df2.is_contigious() << std::endl;
+    DataFrame::Grouper<double> group = df2.groupby<double>("test_col");
     return 0;
 }

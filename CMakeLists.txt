@@ -17,6 +17,7 @@ set(${LIBRARY_TARGET_NAME}_SRC
     dataframe/dataframeproxy.cpp
     dataframe/grouper.cpp
     dataframe/index.cpp
+    dataframe/csv_reader.cpp
 )
 
 set(${LIBRARY_TARGET_NAME}_HDR
