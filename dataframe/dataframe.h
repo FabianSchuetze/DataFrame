@@ -1,14 +1,15 @@
 #ifndef GUARD_dataframe_h
 #define GUARD_dataframe_h
+#include <deque>
+#include <fstream>
 #include <map>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
-#include <fstream>
-#include <unordered_map>
-#include <deque>
 #include "column.h"
+#include "index.h"
 
 /**
  *  A test class. A more elaborate class description.
@@ -38,21 +39,21 @@ class DataFrame {
     friend DataFrame deep_copy(const DataFrame& lhs);
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
     friend std::deque<std::pair<int, int>> correspondence_position(
-            const DataFrame&, const DataFrame&);
+        const DataFrame&, const DataFrame&);
     friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
     friend DataFrame operator+(const DataFrameProxy&, const DataFrameProxy&);
     friend DataFrame operator+(const DataFrame&, const DataFrameProxy&);
     template <typename T>
     friend DataFrame operator<(const DataFrame& lhs, const T& t) {
         DataFrame copy = deep_copy(lhs);
-        for (const auto& x: copy.column_names)
+        for (const auto& x : copy.column_names)
             copy.columns[x.second]->is_smaller_than(t);
         return copy;
     }
     template <typename T>
-    friend DataFrame operator>(const DataFrame& lhs, const T&t) {
+    friend DataFrame operator>(const DataFrame& lhs, const T& t) {
         DataFrame copy = deep_copy(lhs);
-        for (const auto& x: copy.column_names)
+        for (const auto& x : copy.column_names)
             copy.columns[x.second]->is_greater_than(t);
         return copy;
     }
@@ -63,7 +64,7 @@ class DataFrame {
 
     // Functions
     DataFrame();
-    DataFrame(const DataFrameProxy&); //allow implicit conversion;
+    DataFrame(const DataFrameProxy&);  // allow implicit conversion;
     /**
      * @brief Create a new dataframe by reading from an file-stream
      */
@@ -142,7 +143,7 @@ class DataFrame {
     DataFrameProxy operator[](const std::vector<std::string>& col_name);
     DataFrameProxy loc(const std::string&);
     /**
-     * @brief Returns a pair with the row (first) and column (second) numbers 
+     * @brief Returns a pair with the row (first) and column (second) numbers
      */
     std::pair<size_t, size_t> size() const;
     int use_count(const std::string&);  // Can i const qualify it?
@@ -150,12 +151,12 @@ class DataFrame {
     std::vector<std::string> get_index_names() const;
     template <typename T>
     void fill_na(std::string, T);
-    /** 
+    /**
      * @brief returns the names of all columns
      */
     std::vector<std::string> get_column_names();
     std::vector<std::string> get_column_names() const;
-    /** 
+    /**
      * @brief returns the names of all columns of template type T
      */
     template <typename T>
@@ -172,7 +173,7 @@ class DataFrame {
     bool is_contigious();
     /**
      * @brief Rearanges to data in the rows of the columns to be in line with
-     * the index again. 
+     * the index again.
      *
      * After the make_contiguous operation, the interface did not change but
      * the position of the data in the columns is again in the same order as
@@ -197,8 +198,9 @@ class DataFrame {
 
    private:
     std::vector<std::shared_ptr<Column>> columns;
-    std::unordered_map<std::string, std::deque<int>> index_names;
-    std::vector<std::string> index_positions;
+    Index index;
+    //std::unordered_map<std::string, std::deque<int>> index_names;
+    //std::vector<std::string> index_positions;
     std::map<std::string, int> column_names;
     void append_duplicate_rows(std::deque<std::pair<int, int>>&);
     void append_duplicate_rows(int);
@@ -289,7 +291,7 @@ DataFrame operator>(const DataFrame&, const T&);
 DataFrame deep_copy(const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
 std::deque<std::pair<int, int>> correspondence_position(const DataFrame&,
-                                                         const DataFrame&);
+                                                        const DataFrame&);
 /**
  * @brief creates nan rows in the lhs if rhs cols are not present in the lhs
  *
@@ -302,6 +304,7 @@ void append_missing_rows(DataFrame&, const DataFrame&);
  *
  * When adding two dataframes columns that are not present in both dataframes
  * generate a new column in the to be created dataframe with missing cols
+ * Index index;
  */
 void append_missing_cols(DataFrame&, const DataFrame&);
 #endif
