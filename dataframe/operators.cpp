@@ -100,17 +100,17 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     return *this;
 }
 
-//DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
-        //const DataFrame& rhs) {
-    //check_col_width(rhs.size().second, string{"rhs and lhs col num differ"});
-    //vector<string> rhs_names = rhs.get_column_names();
-    //try{
-        //insert_column(rhs.get_column_names(), rhs);
-    //} catch(...) {
-        //throw std::runtime_error("Assignment operator from Df failed");
-    //}
-    //return *this;
-//}
+DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
+        const DataFrame& rhs) {
+    check_col_width(rhs.size().second, string{"rhs and lhs col num differ"});
+    vector<string> rhs_names = rhs.get_column_names();
+    try{
+        insert_column(rhs.get_column_names(), rhs);
+    } catch(...) {
+        throw std::runtime_error("Assignment operator from Df failed");
+    }
+    return *this;
+}
 
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<vector<double>>& others) {

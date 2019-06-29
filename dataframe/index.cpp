@@ -106,3 +106,32 @@ std::set<deque<Index::ele>> Index::unique_elements() const {
 std::set<deque<Index::ele>> Index::unique_elements() {
     return static_cast<const Index&>(*this).unique_elements();
 }
+std::string to_string(Index::ele e) {
+    if (const int* val = std::get_if<int>(&e))
+        return std::to_string(*val);
+    else if (const string* val = std::get_if<string>(&e))
+        return *val;
+    else {
+        std::string m = "Cannot convert value, in:\n";
+        throw std::invalid_argument(m + __PRETTY_FUNCTION__);
+    }
+}
+
+string convert_deque_to_string(const deque<Index::ele>& inp) {
+    string res("");
+    for (const Index::ele& e: inp)
+        res += to_string(e) + ", ";
+    return string(res.begin(), res.end() - 2);
+}
+
+vector<string> Index::get_index_as_string() const {
+    vector<string> res(index_positions.size());
+    int i = 0;
+    for (auto const& val : index_positions)
+        res[i++] = convert_deque_to_string(val);
+    return res;
+}
+
+std::vector<std::string> Index::get_index_as_string() {
+    return static_cast<const Index&>(*this).get_index_as_string();
+}

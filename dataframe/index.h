@@ -53,6 +53,8 @@ class Index {
     std::deque<int> find_index_position() const;
     std::vector<std::deque<ele>> get_index_names();
     std::vector<std::deque<ele>> get_index_names() const;
+    std::vector<std::string> get_index_as_string() const;
+    std::vector<std::string> get_index_as_string();
     int size() {return index_positions.size();}
     int size()const {return index_positions.size();}
     std::set<std::deque<ele>> unique_elements();

@@ -7,7 +7,7 @@ using std::string;
 using std::vector;
 using std::deque;
 
-vector<string> conversion(const string& title, const deque<int>& idx,
+vector<string> col_to_string(const string& title, const deque<int>& idx,
                           const Column& c) {
     vector<string> res = {title};
     int i = 0;
@@ -45,6 +45,10 @@ vector<string> frame(vector<string> vec) {
 }
 
 void hcat(vector<string>& lhs, const vector<string> rhs) {
+    if (lhs.size() != rhs.size()) {
+        string m("Cannot print as columns have different lenngth, in:\n");
+        throw std::runtime_error(m + __PRETTY_FUNCTION__);
+    }
     for (size_t i = 0; i < lhs.size(); ++i) {
         string tmp = lhs[i];
         lhs[i] = tmp.substr(0, tmp.size() - 1) + rhs[i].substr(1);
@@ -79,12 +83,13 @@ void check_positions(deque<int>& inp) {
 }
 
 std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
-    vector<string> output = frame_index(df.get_index_names());
-    deque<int> positions = df.find_index_position();
+    vector<string> output = frame_index(df.index.get_index_as_string());
+    deque<int> positions = df.index.find_index_position();
     check_positions(positions);
     for (const std::pair<string, int>& x : df.column_names) {
-        vector<string> rhs =
-            frame(conversion(x.first, positions, *df.columns[x.second]));
+        DataFrame::SharedCol col = df.columns[x.second];
+        vector<string> tmp = col_to_string(x.first, positions, *col);
+        vector<string> rhs = frame(tmp);
         hcat(output, rhs);
         if (output[1].size() > 50)  {
             hcat(output, rhs_truncate(rhs));

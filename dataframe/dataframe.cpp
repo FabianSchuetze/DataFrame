@@ -26,53 +26,49 @@ void missing_col_error(const char* what, string s) {
     throw std::out_of_range(what + msg);
 }
 
-//deque<int> DataFrame::find_index_position() const {
-    //std::unordered_map<string, deque<int>> copy_index_names(index_names);
-    //deque<int> res;
-    //for (const string& s : index_positions) {
-        //int pos = copy_index_names.at(s).front();
-        //copy_index_names.at(s).pop_front();
-        //res.push_back(pos);
-    //}
-    //return res;
-//}
-//deque<int> DataFrame::find_index_position() {
-    //return static_cast<const DataFrame&>(*this).find_index_position();
-//}
+template <typename t>
+vector<string> get_names(t& cont) {
+    vector<string> res;
+    std::transform(cont.begin(), cont.end(), std::back_inserter(res),
+                   [](const pair<string, int>& ele) { return ele.first; });
+    return res;
+}
 
-//deque<int> DataFrame::find_index_position(const string& s) const {
-    //try {
-        //return index_names.at(s);
-    //} catch (std::out_of_range& e) {
-        //return deque<int>();
-    //}
-//}
+vector<string> DataFrame::get_column_names() { 
+    return static_cast<const DataFrame&>(*this).get_column_names();
+}
 
-//deque<int> DataFrame::find_index_position(const std::string& s) {
-    //return static_cast<const DataFrame&>(*this).find_index_position(s);
-//}
-//template <typename T>
-//vector<string> get_names(T& cont) {
-    //vector<string> res;
-    //std::transform(cont.begin(), cont.end(), std::back_inserter(res),
-                   //[](const pair<string, int>& ele) { return ele.first; });
-    //return res;
-//}
+template <typename T>
+vector<string> get_names(const T& inp) {
+    vector<string> o(inp.size());
+    auto b = inp.begin();
+    auto e = inp.end();
+    std::transform(b, e, o.begin(), [](const auto& ele) { return ele.first; });
+    return o;
+}
+vector<string> DataFrame::get_column_names() const {
+    return get_names(column_names);
+}
 
-//vector<string> DataFrame::get_column_names() { 
-    //return static_cast<const DataFrame&>(*this).get_column_names();
-//}
-//vector<string> DataFrame::get_column_names() const {
-    //vector<string> res(column_names.size());
-    //auto b = column_names.begin();
-    //auto e = column_names.end();
-    //std::transform(b, e, res, [](const auto& ele) { return ele.first; });
-    //return res;
-//}
+template <typename T>
+vector<string> DataFrame::get_column_names() {
+    string target;
+    if (std::is_same<T, double>::value) target = "double";
+    if (std::is_same<T, string>::value) target = "string";
+    auto fun = [&](const pair<string, int>& x) {
+        return columns[x.second]->type_name() == target ? true : false;
+    };
+    std::vector<std::pair<string, int>> res;
+    std::copy_if(column_names.begin(), column_names.end(),
+                 std::back_inserter(res), fun);
+    return get_names(res);
+}
+
+template vector<string> DataFrame::get_column_names<double>();
+template vector<string> DataFrame::get_column_names<string>();
 
 DataFrame::DataFrame()
     : columns(), column_names() {Index();}
-    //: columns(), index_names(), index_positions(), column_names() {}
 
 std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) {
     return static_cast<const DataFrame&>(*this).get_unique(s);  // Item 3
@@ -127,15 +123,6 @@ void DataFrame::append_column(const string& name, const SharedCol& col) {
     column_names[name] = column_names.size();
 }
 
-//void DataFrame::append_index(const vector<string>& idx) {
-    //for (const string& s : idx) append_index(s);
-//}
-
-//void DataFrame::append_index(const string& s) {
-    //index_names[s].push_back(index_positions.size());
-    //index_positions.push_back(s);
-//}
-
 template <typename T>
 DataFrame::DataFrame(const vector<string>& idx, const vector<string>& n,
                      const vector<vector<T>>& cols) {
@@ -160,7 +147,6 @@ template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
 
 DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
     : columns(), index(df.theDataFrame.index), column_names() {
-    //: columns(), index_names(), index_positions(df.idxNames), column_names() {
     try {
         for (const string& name : df.colNames)
             append_column(name, df.theDataFrame.get_shared_copy(name));
@@ -190,11 +176,6 @@ void carthesian_product(deque<int>& lhs, deque<int>& rhs,
     for (const int& a : lhs)
         for (const int& b : rhs) inp.push_back(make_pair(a, b));
 }
-
-//std::set<string> unique_names(const vector<string>& inp) {
-    //std::set<string> s(inp.begin(), inp.end());
-    //return s;
-//}
 
 deque<pair<int, int>> correspondence_position(const DataFrame& lhs,
                                               const DataFrame& other) {
@@ -309,22 +290,6 @@ void DataFrame::dropna() {
     index.index_positions.erase(std::remove_if(b, e, fun), e);
 }
 
-//template <typename T>
-//vector<string> DataFrame::get_column_names() {
-    //string target;
-    //if (std::is_same<T, double>::value) target = "double";
-    //if (std::is_same<T, string>::value) target = "string";
-    //auto fun = [&](const pair<string, int>& x) {
-        //return columns[x.second]->type_name() == target ? true : false;
-    //};
-    //vector<pair<string, int>> res;
-    //std::copy_if(column_names.begin(), column_names.end(),
-                 //std::back_inserter(res), fun);
-    //return get_names(res);
-//}
-
-//template vector<string> DataFrame::get_column_names<double>();
-//template vector<string> DataFrame::get_column_names<string>();
 
 void DataFrame::drop_column(const string& s) {
     // WHAT HAPPENS IF THERE IS ONLY ONE SHARED POINTER OF IT? DOES THE THINK
