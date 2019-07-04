@@ -81,7 +81,7 @@ T& DataFrame::ColumnIterator<T>::operator*() const {
 template <class T>
 T& DataFrame::ColumnIterator<T>::operator[](int i) {
     auto p = check(i, "dereferencing past end");
-    int pos = iteration_order[curr];
+    int pos = iteration_order[i];
     return (*p).template get_value<T>(pos);
 }
 
