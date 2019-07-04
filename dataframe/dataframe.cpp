@@ -328,14 +328,6 @@ void DataFrame::sort_by_index() {
     //index.index_positions = new_index;
 //}
 
-//template void 
-//DataFrame::sort_by_column<std::string>(ConstColumnIterator<string>v1);
-//template void 
-//DataFrame::sort_by_column<std::string>(ConstColumnIterator<string>v1,
-                                       //ConstColumnIterator<string>v2);
-//template void DataFrame::sort_by_column_template<std::string>(
-    //const std::string&);
-
 bool DataFrame::is_contigious() {
     // HERE THE FUNCTION WOULD STILL RETURN THE SAME INTERFACE
     deque<int> existing_order = index.find_index_position();

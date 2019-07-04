@@ -81,7 +81,7 @@ const T& DataFrame::ConstColumnIterator<T>::operator*() const {
 template <class T>
 const T& DataFrame::ConstColumnIterator<T>::operator[](int i) const {
     auto p = check(i, "dereferencing past end");
-    int pos = iteration_order[curr];
+    int pos = iteration_order[i];
     return (*p).template get_value<T>(pos);
 }
 
@@ -143,13 +143,12 @@ void group_equal_values(std::vector<std::tuple<int, E, int>>& inp) {
 }
 
 template <typename N, typename E>
-std::vector<std::tuple<int, N, int>> replace_val(
-        DataFrame::const_iter<N> b,
+std::vector<std::tuple<int, N, int>> replace_val(DataFrame::const_iter<N>& b,
         std::vector<std::tuple<int, E,int>>& inp) {
-    size_t len = 3;
-    std::vector<std::tuple<int, N, int>> new_index(len);
-    for (size_t i = 0; i < len; i++) {
+    std::vector<std::tuple<int, N, int>> new_index(inp.size());
+    for (size_t i = 0; i < inp.size(); i++) {
         int curr = std::get<0>(inp[i]);
+        std::cout << b[curr] << std::endl;
         new_index[i] = std::make_tuple(curr, b[curr], std::get<2>(inp[i]));
     }
     return new_index;
@@ -176,24 +175,30 @@ return_indices(const std::vector<std::tuple<int, E, int>>& inp) {
 }
 
 template <typename E, typename none = void>
-std::vector<int> sort2(std::vector<std::tuple<int, E, int>> inp) {
+std::vector<int> sort(std::vector<std::tuple<int, E, int>> inp) {
     std::cout << __PRETTY_FUNCTION__ << std::endl;
-    std::cout << "came here3\n";
     sort_pairs<E>(inp);
     return return_indices<E>(inp);
 }
 
 template <typename E, typename T1, typename... T2>
 std::vector<int> 
-sort2(DataFrame::ConstColumnIterator<T1> v1, 
-      DataFrame::ConstColumnIterator<T2>... v2,
+sort(DataFrame::const_iter<T1> v1, DataFrame::const_iter<T2>... v2,
      std::vector<std::tuple<int, E, int>>& inp){
+    std::cout << "\n";
     std::cout << __PRETTY_FUNCTION__ << std::endl;
     sort_pairs<E>(inp);
     group_equal_values(inp);
+    for (auto const v : inp)
+        std::cout << std::get<0>(v) << " " << std::get<1>(v) << " " <<
+            std::get<2>(v) << ",  ";
+    std::cout << std::endl;
     std::vector<std::tuple<int, T1, int>> res = replace_val<T1, E>(v1, inp);
-    std::cout << "came here2\n";
-    return sort2(v2..., res);
+    for (auto const v : res)
+        std::cout << std::get<0>(v) << " " << std::get<1>(v) << " " <<
+            std::get<2>(v) << ",  ";
+    std::cout << std::endl;
+    return sort(v2..., res);
 }
 
 template <class T>
@@ -206,18 +211,18 @@ std::vector<int> get_arguments(const std::vector<std::pair<int, T>>& inp) {
 
 template <typename T1, typename... T2>
 std::vector<int> 
-permutation_index(DataFrame::const_iter<T1> it,
-                  DataFrame::const_iter<T2>... it2, DataFrame& df) {
+permutation_index(DataFrame::const_iter<T1>& it,
+                  DataFrame::const_iter<T2>&... it2, DataFrame& df) {
     std::cout << __PRETTY_FUNCTION__ << std::endl;
     std::vector<std::tuple<int, T1, int>> res(df.size().first);
     for (size_t i = 0; i < res.size(); ++i) 
         res[i] = std::make_tuple(i, *it++, 0);
     for (auto const v : res)
-        std::cout << std::get<1>(v) << std::endl;
+        std::cout << std::get<0>(v) << " " << std::get<1>(v) << " " <<
+            std::get<2>(v) << std::endl;
     //typename std::vector<std::pair<int, T>>::iterator boundary;
     //boundary = partition_pairs<T>(res);
-    std::cout << "reach the end\n";
-    return sort2<T1, T2...>(it2..., res);
+    return sort<T1, T2...>(it2..., res);
 }
 
 template <typename T1, typename... T2>

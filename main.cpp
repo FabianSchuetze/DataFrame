@@ -51,11 +51,16 @@ int main() {
     DataFrame df1 = DataFrame(idx_names, col_names, second);
     df2["test_col"] = string_col;
     std::cout << df2 << std::endl;
-    df2.sort_by_column<string, string>(df2.cbegin<string>("test_col"),
-                                       df2.cbegin<string>("test_col"));
+    DataFrame::const_iter<double> b = df2.cbegin<double>("second_col");
+    //for (size_t i = 0; i < 3; i++) {
+        ////std::cout << *b++ << std::endl;
+        //std::cout << b[i] << std::endl;
+    //}
+    df2.sort_by_column<double, double>(df2.cbegin<double>("first_col"),
+                                       df2.cbegin<double>("second_col"));
     //sort_df<string>(df2, "test_col");
     //df2 += 2;
-    //std::cout << df1 << std::endl;
+    std::cout << df2 << std::endl;
     //std::cout << df2 << std::endl;
     ////std::cout << "is contigious: " << df2.is_contigious() << std::endl;
     //vector<string> sub({"first_col", "second_col"});
