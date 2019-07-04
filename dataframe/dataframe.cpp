@@ -315,19 +315,24 @@ void DataFrame::sort_by_index() {
     //}
 //}
 
-template <typename T1, typename... T2>
-void DataFrame::sort_by_column(std::initializer_list<string> s) {
-    std::vector<std::deque<Index::ele>> new_index;
-    vector<int> argsort = permutation_index<T1, T2...>(s);
-    for (size_t i = 0; i < argsort.size(); ++i) {
-        auto e = index.index_positions[argsort[i]];
-        new_index.push_back(e);
-    }
-    index.index_positions = new_index;
-}
+//template <typename T1, typename... T2>
+//void DataFrame::sort_by_column(ConstColumnIterator<T1>v1,
+                               //ConstColumnIterator<T2>...v2) {
+    //std::vector<std::deque<Index::ele>> new_index;
+    //vector<int> argsort = 
+        //permutation_index<T1, T2...>(v1, v2..., *this);
+    //for (size_t i = 0; i < argsort.size(); ++i) {
+        //auto e = index.index_positions[argsort[i]];
+        //new_index.push_back(e);
+    //}
+    //index.index_positions = new_index;
+//}
 
-template void 
-DataFrame::sort_by_column<std::string>(std::initializer_list<std::string>);
+//template void 
+//DataFrame::sort_by_column<std::string>(ConstColumnIterator<string>v1);
+//template void 
+//DataFrame::sort_by_column<std::string>(ConstColumnIterator<string>v1,
+                                       //ConstColumnIterator<string>v2);
 //template void DataFrame::sort_by_column_template<std::string>(
     //const std::string&);
 

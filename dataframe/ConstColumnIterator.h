@@ -145,7 +145,6 @@ void group_equal_values(std::vector<std::tuple<int, E, int>>& inp) {
 template <typename N, typename E>
 std::vector<std::tuple<int, N, int>> replace_val(
         DataFrame::const_iter<N> b,
-        DataFrame::const_iter<N> e,
         std::vector<std::tuple<int, E,int>>& inp) {
     size_t len = 3;
     std::vector<std::tuple<int, N, int>> new_index(len);
@@ -153,6 +152,7 @@ std::vector<std::tuple<int, N, int>> replace_val(
         int curr = std::get<0>(inp[i]);
         new_index[i] = std::make_tuple(curr, b[curr], std::get<2>(inp[i]));
     }
+    return new_index;
 }
 
 template <typename T>
@@ -175,36 +175,25 @@ return_indices(const std::vector<std::tuple<int, E, int>>& inp) {
     return res;
 }
 
-template <typename E>
-std::vector<int> sort_final(std::vector<std::tuple<int, E, int>> inp) {
+template <typename E, typename none = void>
+std::vector<int> sort2(std::vector<std::tuple<int, E, int>> inp) {
+    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    std::cout << "came here3\n";
     sort_pairs<E>(inp);
     return return_indices<E>(inp);
 }
-//template std::vector<int>
-//sort_final<std::string>(std::vector<std::tuple<int, std::string, int>>);
-
-template std::vector<int>
-DataFrame::prev_sort<std::string, std::string, std::string>(
-        const std::initializer_list<std::string>,
-       std::vector<std::tuple<int, std::string, int>>&, size_t);
-template std::vector<int>
-DataFrame::prev_sort<std::string, std::string>(
-        const std::initializer_list<std::string>,
-       std::vector<std::tuple<int, std::string, int>>&, size_t);
 
 template <typename E, typename T1, typename... T2>
 std::vector<int> 
-DataFrame::prev_sort(const std::initializer_list<std::string>s,
-     std::vector<std::tuple<int, E, int>>& inp, size_t rep) {
+sort2(DataFrame::ConstColumnIterator<T1> v1, 
+      DataFrame::ConstColumnIterator<T2>... v2,
+     std::vector<std::tuple<int, E, int>>& inp){
+    std::cout << __PRETTY_FUNCTION__ << std::endl;
     sort_pairs<E>(inp);
     group_equal_values(inp);
-    ConstColumnIterator<T1> b = cbegin<T1>(s.begin()[rep]);
-    ConstColumnIterator<T1> e = cend<T1>(s.begin()[rep]);
-    std::vector<std::tuple<int, T1, int>> res = replace_val<T1, E>(b, e, inp);
-    if (rep < s.size())
-        return prev_sort<T1, T2...>(s, res, 2);
-    else
-        return sort_final<T1>(res);
+    std::vector<std::tuple<int, T1, int>> res = replace_val<T1, E>(v1, inp);
+    std::cout << "came here2\n";
+    return sort2(v2..., res);
 }
 
 template <class T>
@@ -217,20 +206,30 @@ std::vector<int> get_arguments(const std::vector<std::pair<int, T>>& inp) {
 
 template <typename T1, typename... T2>
 std::vector<int> 
-DataFrame::permutation_index(std::initializer_list<std::string> s) {
-    ConstColumnIterator<T1> it = cbegin<T1>(*s.begin());
-    std::vector<std::tuple<int, T1, int>> res(size().first);
+permutation_index(DataFrame::const_iter<T1> it,
+                  DataFrame::const_iter<T2>... it2, DataFrame& df) {
+    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    std::vector<std::tuple<int, T1, int>> res(df.size().first);
     for (size_t i = 0; i < res.size(); ++i) 
         res[i] = std::make_tuple(i, *it++, 0);
+    for (auto const v : res)
+        std::cout << std::get<1>(v) << std::endl;
     //typename std::vector<std::pair<int, T>>::iterator boundary;
     //boundary = partition_pairs<T>(res);
-    if (s.size() > 1)
-        return prev_sort<T1, T2...>(s, res, 1);
-    else 
-        return sort_final<T1>(res);
+    std::cout << "reach the end\n";
+    return sort2<T1, T2...>(it2..., res);
 }
-template std::vector<int>
-DataFrame::permutation_index<std::string>(
-        std::initializer_list<std::string>);
 
+template <typename T1, typename... T2>
+void DataFrame::sort_by_column(ConstColumnIterator<T1>v1,
+                               ConstColumnIterator<T2>...v2) {
+    std::vector<std::deque<Index::ele>> new_index;
+    std::vector<int> argsort = 
+        permutation_index<T1, T2...>(v1, v2..., *this);
+    for (size_t i = 0; i < argsort.size(); ++i) {
+        auto e = index.index_positions[argsort[i]];
+        new_index.push_back(e);
+    }
+    index.index_positions = new_index;
+}
 #endif

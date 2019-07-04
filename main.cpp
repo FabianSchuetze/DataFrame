@@ -33,10 +33,10 @@ void fill_df(DataFrame& df) {
     }
 }
 
-template <typename T>
-void sort_df(DataFrame& df, const std::string& s) {
-    df.sort_by_column<T>({s});
-}
+//template <typename T, typename T2...>
+//void sort_df(DataFrame& df, const std::string& s) {
+    //df.sort_by_column<T>(df.cbegin<T>(s), df.cbegin<T>(s));
+//}
 
 int main() {
     vector<vector<double>> first = {{10, 10, -10, -8}, {30, -100, 40, 100}};
@@ -51,19 +51,21 @@ int main() {
     DataFrame df1 = DataFrame(idx_names, col_names, second);
     df2["test_col"] = string_col;
     std::cout << df2 << std::endl;
-    sort_df<string>(df2, "test_col");
+    df2.sort_by_column<string, string>(df2.cbegin<string>("test_col"),
+                                       df2.cbegin<string>("test_col"));
+    //sort_df<string>(df2, "test_col");
     //df2 += 2;
-    std::cout << df1 << std::endl;
-    std::cout << df2 << std::endl;
-    //std::cout << "is contigious: " << df2.is_contigious() << std::endl;
-    vector<string> sub({"first_col", "second_col"});
-    DataFrame abc = df1[sub];
+    //std::cout << df1 << std::endl;
+    //std::cout << df2 << std::endl;
+    ////std::cout << "is contigious: " << df2.is_contigious() << std::endl;
+    //vector<string> sub({"first_col", "second_col"});
+    //DataFrame abc = df1[sub];
     //DataFrame::Grouper<double> group = df1[sub].groupby<double>("second_col");
     //DataFrame::Grouper<double> group = abc.groupby<double>("second_col");
     //DataFrame::Grouper<double> group2 = df2.groupby<double>("first_col");
     // NAMESPACE POLUTION!!
-    mean t;
-    Statistic *p = &t;
+    //mean t;
+    //Statistic *p = &t;
     //mean t;
     //p = &t;
     //DataFrame test = group.summarize(p);

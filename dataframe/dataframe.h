@@ -138,7 +138,8 @@ class DataFrame {
      * @brief Sorts the dataframe by column named s
      */
     template <typename T1, typename... T2>
-    void sort_by_column(std::initializer_list<std::string>);
+    void sort_by_column(ConstColumnIterator<T1>,
+                        ConstColumnIterator<T2>...);
     DataFrameProxy operator[](const std::string&);
     DataFrameProxy operator[](const std::vector<std::string>& col_name);
     //DataFrameProxy loc(const std::string&);
@@ -211,11 +212,6 @@ class DataFrame {
     void append_missing_cols(const DataFrame&);
     void append_missing_rows(const DataFrame&);
     void append_nan_rows();
-    template <typename E, typename T1, typename... T2>
-    std::vector<int> prev_sort(const std::initializer_list<std::string>s,
-            std::vector<std::tuple<int, E, int>>& inp, size_t rep);
-    template <typename T1, typename... T2>
-    std::vector<int> permutation_index(std::initializer_list<std::string>);
     /**
      * @brief Appends the string to the end of index_positions and adds it to
      * the hash function index_names
