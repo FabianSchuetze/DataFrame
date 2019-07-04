@@ -71,21 +71,21 @@ DataFrame::Grouper<T> DataFrame::groupby() {
     return grouper;
 }
 
-template <class T>
-DataFrame::Grouper<T> DataFrame::groupby(const string& s) {
-    sort_by_column_template<T>(s);
-    Grouper<T> grouper(*this, s);
-    return grouper;
-}
+//template <class T>
+//DataFrame::Grouper<T> DataFrame::groupby(const string& s) {
+    ////sort_by_column_template<T>(s);
+    //Grouper<T> grouper(*this, s);
+    //return grouper;
+//}
 template DataFrame::Grouper<string> DataFrame::groupby();
-template DataFrame::Grouper<string> DataFrame::groupby(const string&);
-template DataFrame::Grouper<double> DataFrame::groupby(const string&);
+//template DataFrame::Grouper<string> DataFrame::groupby(const string&);
+//template DataFrame::Grouper<double> DataFrame::groupby(const string&);
 
-template <class T>
-DataFrame::Grouper<T> DataFrame::DataFrameProxy::groupby(const string& s) {
-    return DataFrame(*this).groupby<T>(s);
-}
-template DataFrame::Grouper<string> DataFrame::DataFrameProxy::groupby(
-    const string&);
-template DataFrame::Grouper<double> DataFrame::DataFrameProxy::groupby(
-    const string&);
+//template <class T>
+//DataFrame::Grouper<T> DataFrame::DataFrameProxy::groupby(const string& s) {
+    //return DataFrame(*this).groupby<T>(s);
+//}
+//template DataFrame::Grouper<string> DataFrame::DataFrameProxy::groupby(
+    //const string&);
+//template DataFrame::Grouper<double> DataFrame::DataFrameProxy::groupby(
+    //const string&);

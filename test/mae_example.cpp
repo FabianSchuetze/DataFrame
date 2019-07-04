@@ -40,10 +40,10 @@ void fill_df(DataFrame& df) {
     }
 }
 
-template <typename T>
-void sort_df(DataFrame& df, const std::string& s) {
-    df.sort_by_column(s);
-}
+//template <typename T>
+//void sort_df(DataFrame& df, const std::string& s) {
+    //df.sort_by_column(s);
+//}
 
 int main() {
     std::ifstream infile("amits_example.csv");  // make a check about the file

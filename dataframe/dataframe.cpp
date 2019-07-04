@@ -303,37 +303,33 @@ void DataFrame::sort_by_index() {
     std::sort(b, e, [](auto& a, auto& b) { return a < b; });
 }
 
-void DataFrame::sort_by_column(const std::string& s) {
-    string type = columns[find_column_position(s)]->type_name();
-    if (type == "double")
-        sort_by_column_template<double>(s);
-    else if (type == "string")
-        sort_by_column_template<string>(s);
-    else if (type == "bool") {
-        string msg = "Column: " + s + " is type bool, no sort implemented";
-        throw std::logic_error(msg);
-    }
-}
+//void DataFrame::sort_by_column(const std::string& s) {
+    //string type = columns[find_column_position(s)]->type_name();
+    //if (type == "double")
+        //sort_by_column_template<double>(s);
+    //else if (type == "string")
+        //sort_by_column_template<string>(s);
+    //else if (type == "bool") {
+        //string msg = "Column: " + s + " is type bool, no sort implemented";
+        //throw std::logic_error(msg);
+    //}
+//}
 
-template <typename T>
-void DataFrame::sort_by_column_template(const string& s) {
+template <typename T1, typename... T2>
+void DataFrame::sort_by_column(std::initializer_list<string> s) {
     std::vector<std::deque<Index::ele>> new_index;
-    try {
-        vector<int> argsort = permutation_index<T>(s);
-        for (size_t i = 0; i < argsort.size(); ++i) {
-            auto e = index.index_positions[argsort[i]];
-            new_index.push_back(e);
-        }
-        index.index_positions = new_index;
-    } catch (std::invalid_argument& c) {
-        string m = "Error for column " + s + " :\n";
-        throw std::invalid_argument(m + __PRETTY_FUNCTION__ + "\n" + c.what());
+    vector<int> argsort = permutation_index<T1, T2...>(s);
+    for (size_t i = 0; i < argsort.size(); ++i) {
+        auto e = index.index_positions[argsort[i]];
+        new_index.push_back(e);
     }
+    index.index_positions = new_index;
 }
 
-template void DataFrame::sort_by_column_template<double>(const std::string&);
-template void DataFrame::sort_by_column_template<std::string>(
-    const std::string&);
+template void 
+DataFrame::sort_by_column<std::string>(std::initializer_list<std::string>);
+//template void DataFrame::sort_by_column_template<std::string>(
+    //const std::string&);
 
 bool DataFrame::is_contigious() {
     // HERE THE FUNCTION WOULD STILL RETURN THE SAME INTERFACE

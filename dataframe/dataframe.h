@@ -137,7 +137,8 @@ class DataFrame {
     /**
      * @brief Sorts the dataframe by column named s
      */
-    void sort_by_column(const std::string&);
+    template <typename T1, typename... T2>
+    void sort_by_column(std::initializer_list<std::string>);
     DataFrameProxy operator[](const std::string&);
     DataFrameProxy operator[](const std::vector<std::string>& col_name);
     //DataFrameProxy loc(const std::string&);
@@ -192,8 +193,8 @@ class DataFrame {
     /**
      * @brief groups the dataframe by column s and return a grouper object
      */
-    template <class T>
-    Grouper<T> groupby(const std::string&);
+    //template <class T>
+    //Grouper<T> groupby(const std::string&);
 
    private:
     std::vector<std::shared_ptr<Column>> columns;
@@ -210,6 +211,11 @@ class DataFrame {
     void append_missing_cols(const DataFrame&);
     void append_missing_rows(const DataFrame&);
     void append_nan_rows();
+    template <typename E, typename T1, typename... T2>
+    std::vector<int> prev_sort(const std::initializer_list<std::string>s,
+            std::vector<std::tuple<int, E, int>>& inp, size_t rep);
+    template <typename T1, typename... T2>
+    std::vector<int> permutation_index(std::initializer_list<std::string>);
     /**
      * @brief Appends the string to the end of index_positions and adds it to
      * the hash function index_names
@@ -224,8 +230,6 @@ class DataFrame {
     std::vector<int> contains_null();
     void make_unique(const std::string&);
     void make_unique(const std::vector<std::string>&);
-    template <class T>
-    std::vector<int> permutation_index(const std::string& s);
     /**
      * @brief Returns an index number for the column named s
      * @throws std::out_of_range If the column name does not exist
@@ -263,8 +267,6 @@ class DataFrame {
     template <typename T>
     void initialize_column(const std::string&);
     void insert_data(std::ifstream&, const std::vector<std::string>&);
-    template <typename T>
-    void sort_by_column_template(const std::string&);
 };
 
 /**

@@ -35,7 +35,7 @@ void fill_df(DataFrame& df) {
 
 template <typename T>
 void sort_df(DataFrame& df, const std::string& s) {
-    df.sort_by_column(s);
+    df.sort_by_column<T>({s});
 }
 
 int main() {
@@ -50,6 +50,7 @@ int main() {
     DataFrame df2 = DataFrame(idx_names, col_names, first);
     DataFrame df1 = DataFrame(idx_names, col_names, second);
     df2["test_col"] = string_col;
+    std::cout << df2 << std::endl;
     sort_df<string>(df2, "test_col");
     //df2 += 2;
     std::cout << df1 << std::endl;
@@ -57,19 +58,19 @@ int main() {
     //std::cout << "is contigious: " << df2.is_contigious() << std::endl;
     vector<string> sub({"first_col", "second_col"});
     DataFrame abc = df1[sub];
-    DataFrame::Grouper<double> group = df1[sub].groupby<double>("second_col");
+    //DataFrame::Grouper<double> group = df1[sub].groupby<double>("second_col");
     //DataFrame::Grouper<double> group = abc.groupby<double>("second_col");
-    DataFrame::Grouper<double> group2 = df2.groupby<double>("first_col");
+    //DataFrame::Grouper<double> group2 = df2.groupby<double>("first_col");
     // NAMESPACE POLUTION!!
     mean t;
     Statistic *p = &t;
     //mean t;
     //p = &t;
-    DataFrame test = group.summarize(p);
-    DataFrame test2 = group2.summarize(p);
+    //DataFrame test = group.summarize(p);
+    //DataFrame test2 = group2.summarize(p);
     //DataFrame test2 = group.summarize(&DataFrame::Grouper<double>::mean)
         //group->*f);
-    std::cout << test << std::endl;
-    std::cout << test2 << std::endl;
+    //std::cout << test << std::endl;
+    //std::cout << test2 << std::endl;
     return 0;
 }

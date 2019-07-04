@@ -132,11 +132,79 @@ typename std::vector<std::pair<int, T>>::iterator partition_pairs(
     }
 }
 
-template <class T>
-void sort_pairs(typename std::vector<std::pair<int, T>>::iterator end,
-                std::vector<std::pair<int, T>>& inp) {
-    auto fun = [&](auto& a, auto& b) { return a.second < b.second; };
-    std::sort(inp.begin(), end, fun);
+template <typename E>
+void group_equal_values(std::vector<std::tuple<int, E, int>>& inp) {
+    int group_id = 0;
+    std::get<2>(inp[0]) = group_id;
+    for (size_t i = 1; i < inp.size(); i++) {
+        if (std::get<1>(inp[i]) != std::get<1>(inp[i-1])) group_id++;
+        std::get<2>(inp[i]) = group_id;
+    }
+}
+
+template <typename N, typename E>
+std::vector<std::tuple<int, N, int>> replace_val(
+        DataFrame::const_iter<N> b,
+        DataFrame::const_iter<N> e,
+        std::vector<std::tuple<int, E,int>>& inp) {
+    size_t len = 3;
+    std::vector<std::tuple<int, N, int>> new_index(len);
+    for (size_t i = 0; i < len; i++) {
+        int curr = std::get<0>(inp[i]);
+        new_index[i] = std::make_tuple(curr, b[curr], std::get<2>(inp[i]));
+    }
+}
+
+template <typename T>
+void sort_pairs(std::vector<std::tuple<int, T, int>>& inp) {
+    auto fun = [&](auto& a, auto& b) -> bool {
+        if (std::get<2>(a) == std::get<2>(b))
+            return std::get<1>(a) < std::get<1>(b);
+        else
+            return false;
+    };
+    std::sort(inp.begin(), inp.end(), fun);
+}
+
+template <typename E>
+std::vector<int> 
+return_indices(const std::vector<std::tuple<int, E, int>>& inp) {
+    std::vector<int> res(inp.size());
+    for (size_t i = 0; i < inp.size(); i++)
+        res[i] = std::get<0>(inp[i]);
+    return res;
+}
+
+template <typename E>
+std::vector<int> sort_final(std::vector<std::tuple<int, E, int>> inp) {
+    sort_pairs<E>(inp);
+    return return_indices<E>(inp);
+}
+//template std::vector<int>
+//sort_final<std::string>(std::vector<std::tuple<int, std::string, int>>);
+
+template std::vector<int>
+DataFrame::prev_sort<std::string, std::string, std::string>(
+        const std::initializer_list<std::string>,
+       std::vector<std::tuple<int, std::string, int>>&, size_t);
+template std::vector<int>
+DataFrame::prev_sort<std::string, std::string>(
+        const std::initializer_list<std::string>,
+       std::vector<std::tuple<int, std::string, int>>&, size_t);
+
+template <typename E, typename T1, typename... T2>
+std::vector<int> 
+DataFrame::prev_sort(const std::initializer_list<std::string>s,
+     std::vector<std::tuple<int, E, int>>& inp, size_t rep) {
+    sort_pairs<E>(inp);
+    group_equal_values(inp);
+    ConstColumnIterator<T1> b = cbegin<T1>(s.begin()[rep]);
+    ConstColumnIterator<T1> e = cend<T1>(s.begin()[rep]);
+    std::vector<std::tuple<int, T1, int>> res = replace_val<T1, E>(b, e, inp);
+    if (rep < s.size())
+        return prev_sort<T1, T2...>(s, res, 2);
+    else
+        return sort_final<T1>(res);
 }
 
 template <class T>
@@ -147,15 +215,22 @@ std::vector<int> get_arguments(const std::vector<std::pair<int, T>>& inp) {
     return res;
 }
 
-template <class T>
-std::vector<int> DataFrame::permutation_index(const std::string& s) {
-    ConstColumnIterator<T> it = cbegin<T>(s);
-    std::vector<std::pair<int, T>> res(size().first);
-    for (size_t i = 0; i < res.size(); ++i) res[i] = std::make_pair(i, *it++);
-    typename std::vector<std::pair<int, T>>::iterator boundary;
-    boundary = partition_pairs<T>(res);
-    sort_pairs<T>(boundary, res);
-    return get_arguments<T>(res);
+template <typename T1, typename... T2>
+std::vector<int> 
+DataFrame::permutation_index(std::initializer_list<std::string> s) {
+    ConstColumnIterator<T1> it = cbegin<T1>(*s.begin());
+    std::vector<std::tuple<int, T1, int>> res(size().first);
+    for (size_t i = 0; i < res.size(); ++i) 
+        res[i] = std::make_tuple(i, *it++, 0);
+    //typename std::vector<std::pair<int, T>>::iterator boundary;
+    //boundary = partition_pairs<T>(res);
+    if (s.size() > 1)
+        return prev_sort<T1, T2...>(s, res, 1);
+    else 
+        return sort_final<T1>(res);
 }
+template std::vector<int>
+DataFrame::permutation_index<std::string>(
+        std::initializer_list<std::string>);
 
 #endif

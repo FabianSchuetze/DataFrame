@@ -6,6 +6,7 @@
 #include "dataframeproxy.h"
 #include "GroupbyFunctions.h"
 
+// I NEED MULTIPLE TYPES!!!
 template <class T>
 class DataFrame::Grouper {
    public:

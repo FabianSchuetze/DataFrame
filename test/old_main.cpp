@@ -32,10 +32,10 @@ void fill_df(DataFrame& df) {
     }
 }
 
-template <typename T>
-void sort_df(DataFrame& df, const std::string& s) {
-    df.sort_by_column(s);
-}
+//template <typename T>
+//void sort_df(DataFrame& df, const std::string& s) {
+    //df.sort_by_column(s);
+//}
 
 int main() {
     typedef std::numeric_limits<double> nan;
@@ -51,7 +51,7 @@ int main() {
     DataFrame df1 = df2;
     df2["test_col"] = string_col;
     std::cout << df2 << std::endl;
-    sort_df<string>(df2, "test_col");
+    //sort_df<string>(df2, "test_col");
     //df2 += 2;
     std::cout << df2 << std::endl;
     std::cout << "is contigious: " << df2.is_contigious() << std::endl;
@@ -59,6 +59,6 @@ int main() {
     std::cout << df2 << std::endl;
     std::cout << df1 << std::endl;
     std::cout << "is contigious: " << df2.is_contigious() << std::endl;
-    DataFrame::Grouper<double> group = df2.groupby<double>("test_col");
+    //DataFrame::Grouper<double> group = df2.groupby<double>("test_col");
     return 0;
 }
