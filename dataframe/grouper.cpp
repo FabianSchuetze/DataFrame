@@ -6,26 +6,6 @@
 using std::deque;
 using std::string;
 using std::vector;
-template <class T>
-DataFrame::Grouper<T>::Grouper(DataFrame& a)
-    : columns(a.columns),
-      old_index_names(a.index.index_names),
-      index_positions(a.index.index_positions),
-      column_names(a.column_names) {}
-
-template <typename T>
-DataFrame::Grouper<T>::Grouper(DataFrame& a, const std::string& s)
-    : columns(a.columns) {
-    std::deque<int> old_index_positions = a.index.find_index_position();
-    int i = 0;
-    for (const_iter<T> b = a.cbegin<T>(s); b != a.cend<T>(s); ++b) {
-        std::deque<Index::ele> tmp{*b};
-        index_positions.push_back(tmp);
-        old_index_names[tmp].push_back(old_index_positions[i++]);
-    }
-    column_names = a.column_names;
-    column_names.erase(s);
-}
 
 template <class T>
 vector<string> DataFrame::Grouper<T>::elegible_types(const string& s) {
@@ -70,22 +50,3 @@ DataFrame::Grouper<T> DataFrame::groupby() {
     Grouper<T> grouper(*this);
     return grouper;
 }
-
-//template <class T>
-//DataFrame::Grouper<T> DataFrame::groupby(const string& s) {
-    ////sort_by_column_template<T>(s);
-    //Grouper<T> grouper(*this, s);
-    //return grouper;
-//}
-template DataFrame::Grouper<string> DataFrame::groupby();
-//template DataFrame::Grouper<string> DataFrame::groupby(const string&);
-//template DataFrame::Grouper<double> DataFrame::groupby(const string&);
-
-//template <class T>
-//DataFrame::Grouper<T> DataFrame::DataFrameProxy::groupby(const string& s) {
-    //return DataFrame(*this).groupby<T>(s);
-//}
-//template DataFrame::Grouper<string> DataFrame::DataFrameProxy::groupby(
-    //const string&);
-//template DataFrame::Grouper<double> DataFrame::DataFrameProxy::groupby(
-    //const string&);

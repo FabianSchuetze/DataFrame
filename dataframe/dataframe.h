@@ -194,8 +194,8 @@ class DataFrame {
     /**
      * @brief groups the dataframe by column s and return a grouper object
      */
-    //template <class T>
-    //Grouper<T> groupby(const std::string&);
+    template <class T>
+    Grouper<T> groupby(DataFrame::const_iter<T>);
 
    private:
     std::vector<std::shared_ptr<Column>> columns;

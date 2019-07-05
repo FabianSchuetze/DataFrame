@@ -150,14 +150,17 @@ bool is_nan(const T& t) {
 }
 
 template <typename T>
+bool elegible_comparison(T& t1, T& t2) {
+    if (is_nan(t1)) return true;  // make sort non-stable
+    else return t1 < t2;
+}
+
+template <typename T>
 void sort_pairs(std::vector<std::tuple<int, T, int>>& inp) {
     auto fun = [&](auto& a, auto& b) -> bool {
-        if (std::get<2>(a) == std::get<2>(b)) {
-            if (is_nan(std::get<1>(a)))
-                return true;  // make sort non-stable
-            else
-                return std::get<1>(a) < std::get<1>(b);
-        } else
+        if (std::get<2>(a) == std::get<2>(b))
+            return elegible_comparison(std::get<1>(a), std::get<1>(b));
+        else
             return false;
     };
     std::sort(inp.begin(), inp.end(), fun);
@@ -199,10 +202,9 @@ std::vector<int> permutation_idx(DataFrame::const_iter<T1>& it,
 template <typename T1, typename... T2>
 void DataFrame::sort_by_column(ConstColumnIterator<T1> v,
                                ConstColumnIterator<T2>... v2) {
-    std::vector<std::deque<Index::ele>> new_index;
     std::vector<int> idx = permutation_idx<T1, T2...>(v, v2..., size().first);
-    for (size_t i = 0; i < idx.size(); ++i)
-        new_index.push_back(index.index_positions[idx[i]]);
+    std::vector<std::deque<Index::ele>> new_index;
+    for (int v : idx) new_index.push_back(index.index_positions[v]);
     index.index_positions = new_index;
 }
 #endif
