@@ -1,26 +1,34 @@
 #ifndef GUARD_index_h
 #define GUARD_index_h
 #include <deque>
+#include <iostream>
 #include <map>
+#include <set>
 #include <string>
 #include <variant>
 #include <vector>
-#include <set>
 class DataFrame;
 class Index {
    public:
     friend class DataFrame;
     friend DataFrame deep_copy(const DataFrame& lhs);
+    // NEED TO ADD DOUBLE!
     typedef std::variant<int, std::string> ele;
     typedef std::map<std::deque<ele>, std::deque<int>> index_map_type;
     Index() : index_positions(), index_names(){};
+    template <typename T1, typename... T>
+    Index(const std::vector<T1>&, const std::vector<T>&...);
     void append_index(const std::vector<std::deque<ele>>&);
     void append_index(const std::deque<ele>&);
-    //template <typename T>
-    void append_index(const std::vector<std::string>&);
-    void append_index(const std::vector<int>&);
-    void append_index(const int&);
-    void append_index(const std::string&);
+    // template <typename T>
+    template <typename T>
+    void append_index(const std::vector<T>&);
+    //void append_index(const std::vector<std::string>&);
+    //void append_index(const std::vector<int>&);
+    template <typename T>
+    void append_index(const T&);
+    //void append_index(const int&);
+    //void append_index(const std::string&);
     /**
      * Appends the input to the end of the index
      */
@@ -30,8 +38,10 @@ class Index {
      */
     template <typename T>
     void append_index_column(const std::vector<T>& inp) {
-        if (inp.size() != index_positions.size())
-            throw std::invalid_argument("Cant do it in " + __PRETTY_FUNCTION__);
+        if (inp.size() != index_positions.size()) {
+            std::string m("The input column is of different size, in:\n");
+            throw std::invalid_argument(m + __PRETTY_FUNCTION__);
+        }
         std::map<std::deque<ele>, std::deque<int>> new_index_names;
         int i = 0;
         for (auto& tmp : index_positions) {
@@ -55,8 +65,8 @@ class Index {
     std::vector<std::deque<ele>> get_index_names() const;
     std::vector<std::string> get_index_as_string() const;
     std::vector<std::string> get_index_as_string();
-    int size() {return index_positions.size();}
-    int size()const {return index_positions.size();}
+    int size() { return index_positions.size(); }
+    int size() const { return index_positions.size(); }
     std::set<std::deque<ele>> unique_elements();
     std::set<std::deque<ele>> unique_elements() const;
 
@@ -76,5 +86,54 @@ class Index {
     void append_value(const T& t, std::deque<ele>& set) {
         set.push_back(t);
     }
+    template <typename T1>
+    void expand_index(const std::vector<T1>&);
+    template <typename T1, typename... T>
+    void expand_index(const std::vector<T1>&, const std::vector<T>&...);
 };
+
+template <typename T>
+void check_values() {
+    static_assert(
+        std::is_same<T, int>::value || std::is_same<T, std::string>::value,
+        "Index restricted to int or string");
+}
+
+template <typename T>
+void Index::append_index(const T& t) {
+    std::deque<ele> s{t};
+    append_index(s);
+    //index_names[s].push_back(index_positions.size());
+    //index_positions.push_back(s);
+}
+template <typename T>
+void Index::append_index(const std::vector<T>& inp) {
+    check_values<T>();
+    //static_assert(
+        //std::is_same<T, int>::value || std::is_same<T, std::string>::value,
+        //"Index restricted to int or string");
+    for (const T& t : inp) append_index(t);
+}
+
+template <typename T1>
+void Index::expand_index(const std::vector<T1>& v1) {
+    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    append_index_column<T1>(v1);
+}
+
+template <typename T1, typename... T>
+void Index::expand_index(const std::vector<T1>& v1,
+                         const std::vector<T>&... v2) {
+    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    append_index_column<T1>(v1);
+    expand_index<T...>(v2...);
+}
+
+template <typename T1, typename... T>
+Index::Index(const std::vector<T1>& v1, const std::vector<T>&... v2)
+    : index_positions(), index_names() {
+    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    append_index(v1);
+    expand_index<T...>(v2...);
+}
 #endif

@@ -71,6 +71,9 @@ class DataFrame {
     template <typename T>
     DataFrame(const std::vector<std::string>&, const std::vector<std::string>&,
               const std::vector<std::vector<T>>&);
+    template <typename T>
+    DataFrame(const Index&, const std::vector<std::string>&, 
+              const std::vector<std::vector<T>>&);
     DataFrame& operator=(const DataFrame&);
     /**
      * @brief Returns a shared pointer to a new version of an Column named s
@@ -304,4 +307,21 @@ void append_missing_rows(DataFrame&, const DataFrame&);
  * Index index;
  */
 void append_missing_cols(DataFrame&, const DataFrame&);
+
+// template functions //
+template <typename T>
+DataFrame::DataFrame(const Index& idx, const std::vector<std::string>& n,
+                     const std::vector<std::vector<T>>& cols) {
+    if (n.size() != cols.size()) {
+        std::string s("#of Input vector differs from # of colum names, in: ");
+        throw std::invalid_argument(s + __PRETTY_FUNCTION__);
+    }
+    for (size_t i = 0; i < n.size(); ++i) {
+        if (idx.size() != cols[i].size())
+            throw std::invalid_argument("Data and index has different length");
+        columns.push_back(std::make_shared<Column>(cols[i]));
+        column_names[n[i]] = i;
+    }
+    index = idx;
+}
 #endif
