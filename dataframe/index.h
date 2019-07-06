@@ -23,12 +23,12 @@ class Index {
     // template <typename T>
     template <typename T>
     void append_index(const std::vector<T>&);
-    //void append_index(const std::vector<std::string>&);
-    //void append_index(const std::vector<int>&);
+    // void append_index(const std::vector<std::string>&);
+    // void append_index(const std::vector<int>&);
     template <typename T>
     void append_index(const T&);
-    //void append_index(const int&);
-    //void append_index(const std::string&);
+    // void append_index(const int&);
+    // void append_index(const std::string&);
     /**
      * Appends the input to the end of the index
      */
@@ -37,19 +37,7 @@ class Index {
      * @brief Puts the input vector at the end of the existing index
      */
     template <typename T>
-    void append_index_column(const std::vector<T>& inp) {
-        if (inp.size() != index_positions.size()) {
-            std::string m("The input column is of different size, in:\n");
-            throw std::invalid_argument(m + __PRETTY_FUNCTION__);
-        }
-        std::map<std::deque<ele>, std::deque<int>> new_index_names;
-        int i = 0;
-        for (auto& tmp : index_positions) {
-            append_value(inp[i], tmp);
-            new_index_names[tmp].push_back(i++);
-        }
-        index_names = new_index_names;
-    }
+    void append_index_column(const std::vector<T>& inp);
     /**
      * @brief Drops the all index values at position pos inplace
      */
@@ -103,28 +91,37 @@ template <typename T>
 void Index::append_index(const T& t) {
     std::deque<ele> s{t};
     append_index(s);
-    //index_names[s].push_back(index_positions.size());
-    //index_positions.push_back(s);
 }
+
 template <typename T>
 void Index::append_index(const std::vector<T>& inp) {
     check_values<T>();
-    //static_assert(
-        //std::is_same<T, int>::value || std::is_same<T, std::string>::value,
-        //"Index restricted to int or string");
     for (const T& t : inp) append_index(t);
+}
+
+template <typename T>
+void Index::append_index_column(const std::vector<T>& inp) {
+    if (inp.size() != index_positions.size()) {
+        std::string m("The input column is of different size, in:\n");
+        throw std::invalid_argument(m + __PRETTY_FUNCTION__);
+    }
+    std::map<std::deque<ele>, std::deque<int>> new_index_names;
+    int i = 0;
+    for (auto& tmp : index_positions) {
+        append_value(inp[i], tmp);
+        new_index_names[tmp].push_back(i++);
+    }
+    index_names = new_index_names;
 }
 
 template <typename T1>
 void Index::expand_index(const std::vector<T1>& v1) {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
     append_index_column<T1>(v1);
 }
 
 template <typename T1, typename... T>
 void Index::expand_index(const std::vector<T1>& v1,
                          const std::vector<T>&... v2) {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
     append_index_column<T1>(v1);
     expand_index<T...>(v2...);
 }
@@ -132,7 +129,6 @@ void Index::expand_index(const std::vector<T1>& v1,
 template <typename T1, typename... T>
 Index::Index(const std::vector<T1>& v1, const std::vector<T>&... v2)
     : index_positions(), index_names() {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
     append_index(v1);
     expand_index<T...>(v2...);
 }

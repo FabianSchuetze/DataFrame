@@ -3,6 +3,7 @@
 using std::deque;
 using std::string;
 using std::vector;
+
 void Index::append_row(const deque<ele>& row) {
     index_names[row].push_back(index_positions.size());
     index_positions.push_back(row);
@@ -59,30 +60,10 @@ void Index::append_index(const deque<ele>& s) {
     index_names[s].push_back(index_positions.size());
     index_positions.push_back(s);
 }
-//void Index::append_index(const int& t) {
-    //deque<ele> s{t};
-    //append_index(s);
-    ////index_names[s].push_back(index_positions.size());
-    ////index_positions.push_back(s);
-//}
-//void Index::append_index(const string& t) {
-    //deque<ele> s{t};
-    //append_index(s);
-    ////index_names[s].push_back(index_positions.size());
-    ////index_positions.push_back(s);
-//}
 
 void Index::append_index(const vector<deque<ele>>& idx) {
     for (const auto& s : idx) append_index(s);
 }
-
-//void Index::append_index(const std::vector<int>& inp) {
-    //for (const int& t : inp) append_index(t);
-//}
-
-//void Index::append_index(const std::vector<std::string>& inp) {
-    //for (const std::string& t : inp) append_index(t);
-//}
 
 std::set<deque<Index::ele>> Index::unique_elements() const {
     auto b = index_positions.begin();
@@ -106,8 +87,7 @@ std::string to_string(Index::ele e) {
 
 string convert_deque_to_string(const deque<Index::ele>& inp) {
     string res("");
-    for (const Index::ele& e: inp)
-        res += to_string(e) + ", ";
+    for (const Index::ele& e : inp) res += to_string(e) + ", ";
     return string(res.begin(), res.end() - 2);
 }
 
