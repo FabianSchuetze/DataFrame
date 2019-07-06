@@ -39,10 +39,12 @@ add_executable(main main.cpp)
 add_executable(my_test test/test.cpp)
 add_executable(old_main test/old_main.cpp)
 add_executable(mae_example test/mae_example.cpp)
+add_executable(index_test test/index_test.cpp)
 target_link_libraries(main Dataframe)
 target_link_libraries(my_test Dataframe)
 target_link_libraries(old_main Dataframe)
 target_link_libraries(mae_example Dataframe)
+target_link_libraries(index_test Dataframe)
 
 file(COPY amits_example.csv DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 

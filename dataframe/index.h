@@ -20,15 +20,13 @@ class Index {
     Index(const std::vector<T1>&, const std::vector<T>&...);
     void append_index(const std::vector<std::deque<ele>>&);
     void append_index(const std::deque<ele>&);
-    // template <typename T>
+    /** 
+     * @brief Appends a vector of type int or string to the index
+     */
     template <typename T>
     void append_index(const std::vector<T>&);
-    // void append_index(const std::vector<std::string>&);
-    // void append_index(const std::vector<int>&);
     template <typename T>
     void append_index(const T&);
-    // void append_index(const int&);
-    // void append_index(const std::string&);
     /**
      * Appends the input to the end of the index
      */
@@ -71,7 +69,7 @@ class Index {
      * desired position.
      */
     template <typename T>
-    void append_value(const T& t, std::deque<ele>& set) {
+    void expand_value(const T& t, std::deque<ele>& set) {
         set.push_back(t);
     }
     template <typename T1>
@@ -108,7 +106,7 @@ void Index::append_index_column(const std::vector<T>& inp) {
     std::map<std::deque<ele>, std::deque<int>> new_index_names;
     int i = 0;
     for (auto& tmp : index_positions) {
-        append_value(inp[i], tmp);
+        expand_value(inp[i], tmp);
         new_index_names[tmp].push_back(i++);
     }
     index_names = new_index_names;
@@ -130,6 +128,6 @@ template <typename T1, typename... T>
 Index::Index(const std::vector<T1>& v1, const std::vector<T>&... v2)
     : index_positions(), index_names() {
     append_index(v1);
-    expand_index<T...>(v2...);
+    if constexpr (sizeof...(T) > 0) expand_index<T...>(v2...);
 }
 #endif
