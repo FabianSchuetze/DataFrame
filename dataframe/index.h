@@ -7,19 +7,24 @@
 #include <string>
 #include <variant>
 #include <vector>
+
 class DataFrame;
 class Index {
    public:
     friend class DataFrame;
     friend DataFrame deep_copy(const DataFrame& lhs);
     // NEED TO ADD DOUBLE!
-    typedef std::variant<int, std::string> ele;
+    typedef std::variant<int, std::string, double> ele;
     typedef std::map<std::deque<ele>, std::deque<int>> index_map_type;
     Index() : index_positions(), index_names(){};
     template <typename T1, typename... T>
     Index(const std::vector<T1>&, const std::vector<T>&...);
+    template <typename T1, typename... T>
+    Index(const std::deque<int>&, const std::vector<T1>&,
+          const std::vector<T>&...);
     void append_index(const std::vector<std::deque<ele>>&);
     void append_index(const std::deque<ele>&);
+    void append_index(const std::deque<ele>&, int);
     /** 
      * @brief Appends a vector of type int or string to the index
      */
@@ -27,6 +32,11 @@ class Index {
     void append_index(const std::vector<T>&);
     template <typename T>
     void append_index(const T&);
+    template <typename T>
+    void append_index(const std::vector<T>&, const std::deque<int>&);
+
+    template <typename T>
+    void append_index(const T&, int);
     /**
      * Appends the input to the end of the index
      */
@@ -81,10 +91,16 @@ class Index {
 template <typename T>
 void check_values() {
     static_assert(
-        std::is_same<T, int>::value || std::is_same<T, std::string>::value,
+        std::is_same<T, int>::value || std::is_same<T, std::string>::value ||
+        std::is_same<T, double>::value,
         "Index restricted to int or string");
 }
 
+template <typename T>
+void Index::append_index(const T& t, int p) {
+    std::deque<ele> s{t};
+    append_index(s, p);
+}
 template <typename T>
 void Index::append_index(const T& t) {
     std::deque<ele> s{t};
@@ -98,12 +114,21 @@ void Index::append_index(const std::vector<T>& inp) {
 }
 
 template <typename T>
+void Index::append_index(const std::vector<T>& b, const std::deque<int>& pos) {
+    check_values<T>();
+    for (size_t i = 0; i < pos.size(); i++) {
+        append_index(b[i], pos[i]);
+    }
+}
+
+template <typename T>
 void Index::append_index_column(const std::vector<T>& inp) {
     if (inp.size() != index_positions.size()) {
         std::string m("The input column is of different size, in:\n");
         throw std::invalid_argument(m + __PRETTY_FUNCTION__);
     }
-    std::map<std::deque<ele>, std::deque<int>> new_index_names;
+    index_map_type new_index_names;
+    //std::map<std::deque<ele>, std::deque<int>> new_index_names;
     int i = 0;
     for (auto& tmp : index_positions) {
         expand_value(inp[i], tmp);
@@ -127,7 +152,15 @@ void Index::expand_index(const std::vector<T1>& v1,
 template <typename T1, typename... T>
 Index::Index(const std::vector<T1>& v1, const std::vector<T>&... v2)
     : index_positions(), index_names() {
+    std::cout << __PRETTY_FUNCTION__ << std::endl;
     append_index(v1);
+    if constexpr (sizeof...(T) > 0) expand_index<T...>(v2...);
+}
+
+template <typename T1, typename... T>
+Index::Index(const std::deque<int>& pos, const std::vector<T1>& v1,
+            const std::vector<T>&...v2) {
+    append_index<T1>(v1, pos);
     if constexpr (sizeof...(T) > 0) expand_index<T...>(v2...);
 }
 #endif

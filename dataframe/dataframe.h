@@ -13,12 +13,13 @@
 /**
  *  A test class. A more elaborate class description.
  */
+class Index;
 class DataFrame {
    public:
     typedef std::pair<std::string, int> index_pair;
     template <class T>
     class ConstColumnIterator;
-    template <class T>
+    template <class... T>
     class Grouper;
     template <class T>
     class ColumnIterator;
@@ -29,7 +30,7 @@ class DataFrame {
     using iter = typename DataFrame::ColumnIterator<T>;
     typedef std::shared_ptr<Column> SharedCol;
 
-    template <class T>
+    template <class... T>
     friend class Grouper;
     template <class T>
     friend class ConstColumnIterator;
@@ -192,13 +193,13 @@ class DataFrame {
     /**
      * @brief Groups the dataframe by index and return a grouper object
      */
-    template <class T>
-    Grouper<T> groupby();
+    //template <class... T>
+    //Grouper<T...> groupby();
     /**
      * @brief groups the dataframe by column s and return a grouper object
      */
-    template <class T>
-    Grouper<T> groupby(DataFrame::const_iter<T>);
+    template <class... T>
+    Grouper<T...> groupby(DataFrame::const_iter<T>...);
 
    private:
     std::vector<std::shared_ptr<Column>> columns;

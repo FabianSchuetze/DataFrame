@@ -61,6 +61,11 @@ void Index::append_index(const deque<ele>& s) {
     index_positions.push_back(s);
 }
 
+void Index::append_index(const deque<ele>& s, int pos) {
+    index_names[s].push_back(pos);
+    index_positions.push_back(s);
+}
+
 void Index::append_index(const vector<deque<ele>>& idx) {
     for (const auto& s : idx) append_index(s);
 }

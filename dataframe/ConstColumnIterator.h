@@ -19,10 +19,18 @@ class DataFrame::ConstColumnIterator {
     std::string to_string();
     const T& operator*() const;
     const T& operator[](int) const;
+    // NEED TO DEFINE OWN ITERATOR!
+    //const T* operator->() const;
     ConstColumnIterator& operator++();
     ConstColumnIterator operator++(int);
     ConstColumnIterator& operator--();
     ConstColumnIterator operator--(int);
+    // NOT A GOOD STYLE!
+    std::vector<T> return_vector(size_t i);
+    void reset() {
+        curr = 0;
+        iteration_order = theDataFrame.index.find_index_position();
+    }
 
    private:
     std::shared_ptr<Column> check(std::size_t, const std::string&) const;
@@ -73,21 +81,24 @@ std::shared_ptr<Column> DataFrame::ConstColumnIterator<T>::check(
 
 template <class T>
 const T& DataFrame::ConstColumnIterator<T>::operator*() const {
-    auto p = check(curr, "dereferencing past end");
+    std::string m("dereferencing past end, in:\n");
+    auto p = check(curr, m + __PRETTY_FUNCTION__ );
     int pos = iteration_order[curr];
     return (*p).template get_value<T>(pos);
 }
 
 template <class T>
 const T& DataFrame::ConstColumnIterator<T>::operator[](int i) const {
-    auto p = check(i, "dereferencing past end");
+    std::string m("dereferencing past end, in:\n");
     int pos = iteration_order[i];
+    auto p = check(pos, m + __PRETTY_FUNCTION__ );
     return (*p).template get_value<T>(pos);
 }
 
 template <class T>
 std::string DataFrame::ConstColumnIterator<T>::to_string() {
-    auto p = check(curr, "dereferencing past end");
+    std::string m("dereferencing past end, in:\n");
+    auto p = check(curr, m + __PRETTY_FUNCTION__ );
     int pos = iteration_order[curr];
     return (*p).to_string(pos);
 }
@@ -207,4 +218,16 @@ void DataFrame::sort_by_column(ConstColumnIterator<T1> v,
     for (int v : idx) new_index.push_back(index.index_positions[v]);
     index.index_positions = new_index;
 }
+template <class T>
+std::vector<T> DataFrame::ConstColumnIterator<T>::return_vector(size_t len) {
+    std::vector<T> res;
+    std::cout << res.size() << std::endl;
+    for (size_t i = 0; i < len; i++) {
+        std::cout << i << ", " << (*this)[i] << ", " << len << std::endl;
+        res.push_back((*this)[i]);
+        //res[i] = *this[i];
+    }
+    return res;
+}
+
 #endif
