@@ -51,13 +51,13 @@ int main() {
     DataFrame df1 = DataFrame(idx_names, col_names, second);
     df2["test_col"] = string_col;
     std::cout << df2 << std::endl;
-    DataFrame::const_iter<double> b = df2.cbegin<double>("second_col");
+    DataFrame::const_iter<double> b = df2.cbegin<double>("first_col");
+    DataFrame::const_iter<double> a = df2.cend<double>("first_col");
     //for (size_t i = 0; i < 3; i++) {
         ////std::cout << *b++ << std::endl;
         //std::cout << b[i] << std::endl;
     //}
-    df2.sort_by_column<double, double>(df2.cbegin<double>("first_col"),
-                                       df2.cbegin<double>("second_col"));
+    df2.sort_by_column<double>(df2.cbegin<double>("first_col"));
     //sort_df<string>(df2, "test_col");
     //df2 += 2;
     std::cout << df2 << std::endl;
@@ -67,17 +67,18 @@ int main() {
     //DataFrame abc = df1[sub];
     //DataFrame::Grouper<double> group = df1[sub].groupby<double>("second_col");
     //DataFrame::Grouper<double> group = abc.groupby<double>("second_col");
-    //DataFrame::Grouper<double> group2 = df2.groupby<double>("first_col");
-    // NAMESPACE POLUTION!!
-    //mean t;
-    //Statistic *p = &t;
-    //mean t;
-    //p = &t;
+    DataFrame::Grouper<double> group2 = df2.groupby<double>(
+            df2.cbegin<double>("first_col"));
+            ////df2.cbegin<double>("second_col"));
+    ////// NAMESPACE POLUTION!!
+    mean t;
+    Statistic *p = &t;
+    //////p = &t;
     //DataFrame test = group.summarize(p);
-    //DataFrame test2 = group2.summarize(p);
-    //DataFrame test2 = group.summarize(&DataFrame::Grouper<double>::mean)
-        //group->*f);
-    //std::cout << test << std::endl;
-    //std::cout << test2 << std::endl;
+    DataFrame test2 = group2.summarize(p);
+    //////DataFrame test2 = group.summarize(&DataFrame::Grouper<double>::mean)
+        //////group->*f);
+    //////std::cout << test << std::endl;
+    std::cout << test2 << std::endl;
     return 0;
 }

@@ -128,7 +128,6 @@ void Index::append_index_column(const std::vector<T>& inp) {
         throw std::invalid_argument(m + __PRETTY_FUNCTION__);
     }
     index_map_type new_index_names;
-    //std::map<std::deque<ele>, std::deque<int>> new_index_names;
     int i = 0;
     for (auto& tmp : index_positions) {
         expand_value(inp[i], tmp);
@@ -152,7 +151,6 @@ void Index::expand_index(const std::vector<T1>& v1,
 template <typename T1, typename... T>
 Index::Index(const std::vector<T1>& v1, const std::vector<T>&... v2)
     : index_positions(), index_names() {
-    std::cout << __PRETTY_FUNCTION__ << std::endl;
     append_index(v1);
     if constexpr (sizeof...(T) > 0) expand_index<T...>(v2...);
 }

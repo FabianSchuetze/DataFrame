@@ -84,6 +84,8 @@ std::string to_string(Index::ele e) {
         return std::to_string(*val);
     else if (const string* val = std::get_if<string>(&e))
         return *val;
+    else if (const double* val = std::get_if<double>(&e))
+        return std::to_string(*val);
     else {
         std::string m = "Cannot convert value, in:\n";
         throw std::invalid_argument(m + __PRETTY_FUNCTION__);

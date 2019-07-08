@@ -18,8 +18,6 @@ class DataFrame::Grouper {
     std::vector<std::string> elegible_types(const std::string&);
     std::vector<SharedCol> columns;
     Index group_index;
-    //std::map<std::deque<Index::ele>, std::deque<int>> old_index_names;
-    //std::vector<std::deque<Index::ele>> group_index_positions;
     std::map<std::string, int> group_column_names;
     void make_index_unique();
 };
@@ -30,11 +28,27 @@ DataFrame::Grouper<T...>::Grouper(DataFrame& a)
       group_index.index_positions = a.index.index_positions;
     }
 
+template <typename T1,  typename... T>
+void reset_iterator(DataFrame::const_iter<T1> it1,
+                    DataFrame::const_iter<T>... it) {
+    it1.reset();
+    if constexpr (sizeof...(T) > 0) reset_iterator<T...>(it...);
+}
+
+template <typename T>
+std::vector<T> return_vector(std::deque<int>& idx, DataFrame::const_iter<T>& b) {
+    std::vector<T>res(idx.size());
+    for (size_t i = 0 ; i < idx.size(); i++)
+        res[i] = *b++;
+    return res;
+}
+
 template <typename... T>
 DataFrame::Grouper<T...>::Grouper(DataFrame& a, DataFrame::const_iter<T>&... b)
     : columns(a.columns) {
     std::deque<int> old_index_positions = a.index.find_index_position();
-    Index test = Index(old_index_positions, b.return_vector(4)...);
+    group_index = Index(old_index_positions, 
+                        return_vector(old_index_positions, b)...);
     //group_index = Index(old_index_positions, b...);
     //create_index(b..., old_index_positions);
     //for (size_t i = 0; i < old_index_positions.size(); i++) {
@@ -49,20 +63,9 @@ DataFrame::Grouper<T...>::Grouper(DataFrame& a, DataFrame::const_iter<T>&... b)
     //column_names.erase(s);
 }
 
-
-template <typename T1,  typename... T>
-void reset_iterator(DataFrame::const_iter<T1> it1,
-                    DataFrame::const_iter<T>... it) {
-    it1.reset();
-    if constexpr (sizeof...(T) > 0) reset_iterator<T...>(it...);
-}
-
 template <typename... T>
 DataFrame::Grouper<T...> DataFrame::groupby(DataFrame::const_iter<T>... it) {
-    std::cout << "inside1\n";
     sort_by_column<T...>(it...);
-    reset_iterator<T...>(it...);
-    std::cout << "inside1\n";
     Grouper<T...> grouper(*this, it...);
     return grouper;
 }
@@ -87,6 +90,7 @@ void DataFrame::Grouper<T...>::make_index_unique() {
                      group_index.index_positions.end());
     group_index.index_positions.erase(it, group_index.index_positions.end());
 }
+
 template <class... T>
 DataFrame DataFrame::Grouper<T...>::summarize(Statistic* f) {
     DataFrame res;

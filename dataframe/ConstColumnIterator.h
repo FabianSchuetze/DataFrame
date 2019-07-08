@@ -221,12 +221,12 @@ void DataFrame::sort_by_column(ConstColumnIterator<T1> v,
 template <class T>
 std::vector<T> DataFrame::ConstColumnIterator<T>::return_vector(size_t len) {
     std::vector<T> res;
-    std::cout << res.size() << std::endl;
     for (size_t i = 0; i < len; i++) {
-        std::cout << i << ", " << (*this)[i] << ", " << len << std::endl;
         res.push_back((*this)[i]);
-        //res[i] = *this[i];
+        //res.push_back(*this);
+        //this++;
     }
+        //res.push_back((*this)[i]);
     return res;
 }
 
