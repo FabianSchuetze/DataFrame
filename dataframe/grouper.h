@@ -28,19 +28,19 @@ DataFrame::Grouper<T...>::Grouper(DataFrame& a)
       group_index.index_positions = a.index.index_positions;
     }
 
-//template <typename T1,  typename... T>
-//void reset_iterator(DataFrame::const_iter<T1> it1,
-                    //DataFrame::const_iter<T>... it) {
-    //it1.reset();
-    //if constexpr (sizeof...(T) > 0) reset_iterator<T...>(it...);
-//}
+template <typename T1,  typename... T>
+void reset_iterator(DataFrame::const_iter<T1> it1,
+                    DataFrame::const_iter<T>... it) {
+    it1.reset();
+    if constexpr (sizeof...(T) > 0) reset_iterator<T...>(it...);
+}
 
 //// NOT A GOOD STYLE!
 template <typename T>
-std::vector<T> return_vector(std::deque<int>& idx, DataFrame::const_iter<T>& b) {
-    std::vector<T>res(idx.size());
-    for (size_t i = 0 ; i < idx.size(); i++)
-        res[i] = *b++;
+std::vector<T> return_vector(std::string n, DataFrame& df) {
+    std::vector<T>res;
+    DataFrame::const_iter<T> it = df.cbegin<T>(n);
+    while (it != df.cend<T>(n)) res.push_back(*it++);
     return res;
 }
 
@@ -48,17 +48,17 @@ template <typename... T>
 DataFrame::Grouper<T...>::Grouper(DataFrame& a, DataFrame::const_iter<T>&... b)
     : columns(a.columns) {
     std::deque<int> old_index_positions = a.index.find_index_position();
-    group_index = Index(old_index_positions, 
-                        return_vector(old_index_positions, b)...);
+    group_index = Index(old_index_positions,
+                        return_vector<T>(b.return_name(), a)...);
     group_column_names = a.column_names;
-    // NEED TO DO THAT SOON
-    group_column_names.erase(b.return_name()...);
+    //group_column_names.erase(b.return_name())...;
 }
 
 template <typename... T>
 DataFrame::Grouper<T...> DataFrame::groupby(DataFrame::const_iter<T>... it) {
-    sort_by_column<T...>(it...);
-    Grouper<T...> grouper(*this, it...);
+    DataFrame df_copy = *this;
+    df_copy.sort_by_column<T...>(it...);
+    Grouper<T...> grouper(df_copy, it...);
     return grouper;
 }
 template <class... T>

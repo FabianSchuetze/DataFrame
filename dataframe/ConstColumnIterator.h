@@ -30,6 +30,10 @@ class DataFrame::ConstColumnIterator {
     ConstColumnIterator& operator--();
     ConstColumnIterator operator--(int);
     std::string return_name() {return name;}
+    void reset() {
+        curr = 0;
+        iteration_order = theDataFrame.index.find_index_position();
+    }
 
    private:
     std::shared_ptr<Column> check(std::size_t, const std::string&) const;
@@ -45,7 +49,6 @@ template <class T>
 bool operator==(const DataFrame::ConstColumnIterator<T>& lhs,
                 const DataFrame::ConstColumnIterator<T>& rhs) {
     return (lhs.name == rhs.name) && (lhs.curr == rhs.curr);
-    //return lhs.curr == rhs.curr;
 }
 
 template <class T>
