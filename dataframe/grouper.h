@@ -6,7 +6,6 @@
 #include "dataframeproxy.h"
 #include "GroupbyFunctions.h"
 
-// I NEED MULTIPLE TYPES!!!
 template <class... T>
 class DataFrame::Grouper {
    public:
@@ -21,6 +20,7 @@ class DataFrame::Grouper {
     std::map<std::string, int> group_column_names;
     void make_index_unique();
 };
+
 template <class... T>
 DataFrame::Grouper<T...>::Grouper(DataFrame& a)
     : columns(a.columns), group_index(), group_column_names(a.column_names) {
@@ -28,13 +28,14 @@ DataFrame::Grouper<T...>::Grouper(DataFrame& a)
       group_index.index_positions = a.index.index_positions;
     }
 
-template <typename T1,  typename... T>
-void reset_iterator(DataFrame::const_iter<T1> it1,
-                    DataFrame::const_iter<T>... it) {
-    it1.reset();
-    if constexpr (sizeof...(T) > 0) reset_iterator<T...>(it...);
-}
+//template <typename T1,  typename... T>
+//void reset_iterator(DataFrame::const_iter<T1> it1,
+                    //DataFrame::const_iter<T>... it) {
+    //it1.reset();
+    //if constexpr (sizeof...(T) > 0) reset_iterator<T...>(it...);
+//}
 
+//// NOT A GOOD STYLE!
 template <typename T>
 std::vector<T> return_vector(std::deque<int>& idx, DataFrame::const_iter<T>& b) {
     std::vector<T>res(idx.size());
@@ -49,18 +50,9 @@ DataFrame::Grouper<T...>::Grouper(DataFrame& a, DataFrame::const_iter<T>&... b)
     std::deque<int> old_index_positions = a.index.find_index_position();
     group_index = Index(old_index_positions, 
                         return_vector(old_index_positions, b)...);
-    //group_index = Index(old_index_positions, b...);
-    //create_index(b..., old_index_positions);
-    //for (size_t i = 0; i < old_index_positions.size(); i++) {
-    ////int i = 0;
-    ////for (const_iter<T> b = a.cbegin<T>(s); b != a.cend<T>(s); ++b) {
-        //std::deque<Index::ele> tmp{*b++};
-        //group_index_positions.push_back(tmp);
-        //old_index_names[tmp].push_back(old_index_positions[i++]);
-    //}
     group_column_names = a.column_names;
     // NEED TO DO THAT SOON
-    //column_names.erase(s);
+    group_column_names.erase(b.return_name()...);
 }
 
 template <typename... T>

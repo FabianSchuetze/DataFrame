@@ -15,7 +15,6 @@ set(${LIBRARY_TARGET_NAME}_SRC
     dataframe/print.cpp
     dataframe/operators.cpp
     dataframe/dataframeproxy.cpp
-    dataframe/grouper.cpp
     dataframe/index.cpp
     dataframe/csv_reader.cpp
 )

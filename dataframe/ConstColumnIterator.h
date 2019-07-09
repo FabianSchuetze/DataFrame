@@ -12,8 +12,12 @@ class DataFrame::ConstColumnIterator {
     friend bool operator==(const const_iter<V>&, const const_iter<V>&);
     template <class V>
     friend bool operator!=(const const_iter<V>&, const const_iter<V>&);
-    ConstColumnIterator(const DataFrame& a, int n, size_t sz = 0)
-        : theDataFrame(a), wptr(a.columns[n]), curr(sz), iteration_order() {
+    ConstColumnIterator(const DataFrame& a, std::string _name, size_t sz = 0)
+        : theDataFrame(a), 
+          wptr(a.columns[a.find_column_position(_name)]),
+          curr(sz),
+          iteration_order(),
+          name(_name) {
         iteration_order = a.index.find_index_position();
     }
     std::string to_string();
@@ -25,12 +29,7 @@ class DataFrame::ConstColumnIterator {
     ConstColumnIterator operator++(int);
     ConstColumnIterator& operator--();
     ConstColumnIterator operator--(int);
-    // NOT A GOOD STYLE!
-    std::vector<T> return_vector(size_t i);
-    void reset() {
-        curr = 0;
-        iteration_order = theDataFrame.index.find_index_position();
-    }
+    std::string return_name() {return name;}
 
    private:
     std::shared_ptr<Column> check(std::size_t, const std::string&) const;
@@ -38,12 +37,15 @@ class DataFrame::ConstColumnIterator {
     std::weak_ptr<Column> wptr;
     std::size_t curr;
     std::deque<int> iteration_order;
+    std::string name;
+    //int pos;
 };
 
 template <class T>
 bool operator==(const DataFrame::ConstColumnIterator<T>& lhs,
                 const DataFrame::ConstColumnIterator<T>& rhs) {
-    return lhs.curr == rhs.curr;
+    return (lhs.name == rhs.name) && (lhs.curr == rhs.curr);
+    //return lhs.curr == rhs.curr;
 }
 
 template <class T>
@@ -55,18 +57,20 @@ bool operator!=(const DataFrame::ConstColumnIterator<T>& lhs,
 template <class T>
 DataFrame::ConstColumnIterator<T> DataFrame::cbegin(const std::string& s) {
     try {
-        return ConstColumnIterator<T>(*this, column_names.at(s));
+        return ConstColumnIterator<T>(*this, s);
     } catch (std::out_of_range& e) {
-        throw std::out_of_range("Column: " + s + " not found");
+        std::string m = "Column " + s + " not found, in\n:";
+        throw std::out_of_range(m + __PRETTY_FUNCTION__);
     }
 }
 
 template <class T>
 DataFrame::ConstColumnIterator<T> DataFrame::cend(const std::string& s) {
     try {
-        return ConstColumnIterator<T>(*this, column_names.at(s), index.size());
+        return ConstColumnIterator<T>(*this, s, index.size());
     } catch (std::out_of_range& e) {
-        throw std::out_of_range("Column: " + s + " not found");
+        std::string m = "Column " + s + " not found, in\n:";
+        throw std::out_of_range(m + __PRETTY_FUNCTION__);
     }
 }
 
@@ -218,16 +222,4 @@ void DataFrame::sort_by_column(ConstColumnIterator<T1> v,
     for (int v : idx) new_index.push_back(index.index_positions[v]);
     index.index_positions = new_index;
 }
-template <class T>
-std::vector<T> DataFrame::ConstColumnIterator<T>::return_vector(size_t len) {
-    std::vector<T> res;
-    for (size_t i = 0; i < len; i++) {
-        res.push_back((*this)[i]);
-        //res.push_back(*this);
-        //this++;
-    }
-        //res.push_back((*this)[i]);
-    return res;
-}
-
 #endif

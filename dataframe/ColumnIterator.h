@@ -13,27 +13,35 @@ class DataFrame::ColumnIterator {
         template <class V>
         friend bool operator!=(const iter<V>&, const iter<V>&);
         //ColumnIterator();
-        ColumnIterator(DataFrame& a, int n, size_t sz=0):
-            theDataFrame(a), wptr(a.columns[n]), curr(sz), iteration_order() {
-        iteration_order = a.index.find_index_position();}
+        ColumnIterator(DataFrame& a, std::string _name, size_t sz=0):
+            theDataFrame(a), 
+          wptr(a.columns[a.find_column_position(_name)]),
+          curr(sz),
+          iteration_order(),
+          name(_name) {
+        iteration_order = a.index.find_index_position();
+    }
         T& operator*() const;
         T& operator[](int);
         ColumnIterator& operator++();
         ColumnIterator operator++(int);
         ColumnIterator& operator--();
         ColumnIterator operator--(int);
+        std::string return_name() {return name;}
     private:
         std::shared_ptr<Column> check(std::size_t, const std::string&) const;
         DataFrame& theDataFrame;
         std::weak_ptr<Column> wptr;
         std::size_t curr;
         std::deque<int> iteration_order;
+        std::string name;
 
 };
 template <class T>
 bool operator==(const DataFrame::ColumnIterator<T>& lhs,
                 const DataFrame::ColumnIterator<T>& rhs) {
-    return lhs.curr == rhs.curr;
+    return (lhs.name == rhs.name) && (lhs.curr == rhs.curr);
+    //return lhs.curr == rhs.curr;
 }
 
 template <class T>
@@ -46,9 +54,10 @@ template <class T>
 DataFrame::ColumnIterator<T> DataFrame::begin(const std::string& s) {
     try {
         make_unique_if(s);
-        return ColumnIterator<T>(*this, column_names.at(s));
+        return ColumnIterator<T>(*this, s);
     } catch (std::out_of_range& e) {
-        throw std::out_of_range("Column: " + s + " not found");
+        std::string m = "Column " + s + " not found, in\n:";
+        throw std::out_of_range(m + __PRETTY_FUNCTION__);
     }
 }
 
@@ -56,9 +65,10 @@ template <class T>
 DataFrame::ColumnIterator<T> DataFrame::end(const std::string& s) {
     try {
         make_unique_if(s);
-        return ColumnIterator<T>(*this, column_names.at(s), index.size());
+        return ColumnIterator<T>(*this, s, index.size());
     } catch (std::out_of_range& e) {
-        throw std::out_of_range("Column: " + s + " not found");
+        std::string m = "Column " + s + " not found, in\n:";
+        throw std::out_of_range(m + __PRETTY_FUNCTION__);
     }
 }
 
