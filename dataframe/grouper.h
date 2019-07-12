@@ -1,11 +1,11 @@
 #ifndef GUARD_Grouper_h
 #define GUARD_Grouper_h
-#include <functional>
 #include <algorithm>
+#include <functional>
 #include <numeric>
+#include "GroupbyFunctions.h"
 #include "dataframe.h"
 #include "dataframeproxy.h"
-#include "GroupbyFunctions.h"
 
 template <class... T>
 class DataFrame::Grouper {
@@ -25,11 +25,11 @@ class DataFrame::Grouper {
 template <class... T>
 DataFrame::Grouper<T...>::Grouper(DataFrame& a)
     : columns(a.columns), group_index(), group_column_names(a.column_names) {
-      group_index.index_names = a.index.index_names;
-      group_index.index_positions = a.index.index_positions;
-    }
+    group_index.index_names = a.index.index_names;
+    group_index.index_positions = a.index.index_positions;
+}
 
-template <typename T1,  typename... T>
+template <typename T1, typename... T>
 void reset_iterator(DataFrame::const_iter<T1> it1,
                     DataFrame::const_iter<T>... it) {
     it1.reset();
@@ -39,17 +39,18 @@ void reset_iterator(DataFrame::const_iter<T1> it1,
 //// NOT A GOOD STYLE!
 template <typename T>
 std::vector<T> return_vector(std::string n, DataFrame& df) {
-    std::vector<T>res;
+    std::vector<T> res;
     DataFrame::const_iter<T> it = df.cbegin<T>(n);
     while (it != df.cend<T>(n)) res.push_back(*it++);
     return res;
 }
 
-template <typename... T>
-std::string erase_column_name(std::map<std::string, int>&cols,
-                              DataFrame::const_iter<T>&...b) {
-    cols.erase(b.return_name());
-    
+template <typename T1, typename... T>
+void erase_column_name(std::map<std::string, int>& cols,
+                       DataFrame::const_iter<T1>& b1,
+                       DataFrame::const_iter<T>&... b) {
+    cols.erase(b1.return_name());
+    if constexpr (sizeof...(T) > 0) erase_column_name<T...>(cols, b...);
 }
 
 template <typename... T>
@@ -58,7 +59,7 @@ DataFrame::Grouper<T...>::Grouper(DataFrame& a, DataFrame::const_iter<T>&... b)
     std::deque<int> old_pos = a.index.find_index_position();
     group_index = Index(old_pos, return_vector<T>(b.return_name(), a)...);
     group_column_names = a.column_names;
-    //group_column_names.erase(b.return_name()...)
+    erase_column_name<T...>(group_column_names, b...);
 }
 
 template <typename... T>
@@ -69,8 +70,8 @@ DataFrame::Grouper<T...> DataFrame::groupby(DataFrame::const_iter<T>... it) {
     return grouper;
 }
 template <class... T>
-std::vector<std::string>
-DataFrame::Grouper<T...>::elegible_types(const std::string& s) {
+std::vector<std::string> DataFrame::Grouper<T...>::elegible_types(
+    const std::string& s) {
     std::vector<std::string> elegible;
     if (s == "string")
         for (auto const n : group_column_names) elegible.push_back(n.first);
