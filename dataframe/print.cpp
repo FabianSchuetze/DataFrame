@@ -2,7 +2,7 @@
 #include <iostream>
 #include <iterator>
 #include "dataframe.h"
-#include "dataframeproxy.h"
+//#include "dataframeproxy.h"
 using std::string;
 using std::vector;
 using std::deque;

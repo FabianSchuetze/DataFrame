@@ -67,7 +67,7 @@ class Index {
     std::set<std::deque<ele>> unique_elements() const;
 
    private:
-    std::vector<std::deque<ele>> index_positions;
+    std::vector<std::deque<ele>> index_positions; //deque: multiindex
     index_map_type index_names;
     /**
      * Given the input deque, the function inplace removes inplace the element
@@ -101,6 +101,7 @@ void Index::append_index(const T& t, int p) {
     std::deque<ele> s{t};
     append_index(s, p);
 }
+
 template <typename T>
 void Index::append_index(const T& t) {
     std::deque<ele> s{t};
@@ -130,8 +131,10 @@ void Index::append_index_column(const std::vector<T>& inp) {
     index_map_type new_index_names;
     int i = 0;
     for (auto& tmp : index_positions) {
-        expand_value(inp[i], tmp);
-        new_index_names[tmp].push_back(i++);
+        int old_value = index_names.at(tmp).front();
+        index_names.at(tmp).pop_front();
+        expand_value(inp[i++], tmp);
+        new_index_names[tmp].push_back(old_value);
     }
     index_names = new_index_names;
 }

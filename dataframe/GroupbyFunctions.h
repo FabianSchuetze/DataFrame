@@ -3,6 +3,7 @@
 #include <numeric>
 #include "dataframe.h"
 #include "dataframeproxy.h"
+
 class Statistic {
    public:
     Statistic() : type_name("double") {}

@@ -1,6 +1,7 @@
 #ifndef GUARD_Grouper_h
 #define GUARD_Grouper_h
 #include <functional>
+#include <algorithm>
 #include <numeric>
 #include "dataframe.h"
 #include "dataframeproxy.h"
@@ -45,13 +46,19 @@ std::vector<T> return_vector(std::string n, DataFrame& df) {
 }
 
 template <typename... T>
+std::string erase_column_name(std::map<std::string, int>&cols,
+                              DataFrame::const_iter<T>&...b) {
+    cols.erase(b.return_name());
+    
+}
+
+template <typename... T>
 DataFrame::Grouper<T...>::Grouper(DataFrame& a, DataFrame::const_iter<T>&... b)
     : columns(a.columns) {
-    std::deque<int> old_index_positions = a.index.find_index_position();
-    group_index = Index(old_index_positions,
-                        return_vector<T>(b.return_name(), a)...);
+    std::deque<int> old_pos = a.index.find_index_position();
+    group_index = Index(old_pos, return_vector<T>(b.return_name(), a)...);
     group_column_names = a.column_names;
-    //group_column_names.erase(b.return_name())...;
+    //group_column_names.erase(b.return_name()...)
 }
 
 template <typename... T>
@@ -75,11 +82,12 @@ DataFrame::Grouper<T...>::elegible_types(const std::string& s) {
     }
     return elegible;
 }
+
 template <class... T>
 void DataFrame::Grouper<T...>::make_index_unique() {
-    auto it =
-        std::unique(group_index.index_positions.begin(),
-                     group_index.index_positions.end());
+    auto b = group_index.index_positions.begin();
+    auto e = group_index.index_positions.end();
+    auto it = std::unique(b, e);
     group_index.index_positions.erase(it, group_index.index_positions.end());
 }
 
