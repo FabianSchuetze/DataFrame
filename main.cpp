@@ -39,10 +39,10 @@ void fill_df(DataFrame& df) {
 //}
 
 int main() {
-    vector<vector<double>> first = {{10, 10, -10, -8}, {30, -100, 40, 100}};
+    vector<vector<double>> first = {{10, 10, 10, -8}, {30, -100, 40, 100}};
     vector<vector<double>> second = {{-10, -20, -30, -40}, {-100, 6, 0, 0}};
     vector<vector<string>> strings2 = {{"f", "l"}, {"m", "a"}, {"as", "ssd"}};
-    vector<string> string_col = {"u ", "NA", "NA", "second"};
+    vector<string> string_col = {"u", "u", "z", "second"};
     vector<string> col_names = {"first_col", "second_col"};
     vector<string> col_names2 = {"first_col", "second_col", "third_col"};
     vector<string> idx_names = {"1", "2", "4", "5"};
@@ -57,8 +57,7 @@ int main() {
         ////std::cout << *b++ << std::endl;
         //std::cout << b[i] << std::endl;
     //}
-    df2.sort_by_column<double>(df2.cbegin<double>("first_col"));
-    //sort_df<string>(df2, "test_col");
+    //df2.sort_by_column<double>(df2.cbegin<double>("first_col"));
     //df2 += 2;
     std::cout << df2 << std::endl;
     //std::cout << df2 << std::endl;
@@ -67,9 +66,12 @@ int main() {
     //DataFrame abc = df1[sub];
     //DataFrame::Grouper<double> group = df1[sub].groupby<double>("second_col");
     //DataFrame::Grouper<double> group = abc.groupby<double>("second_col");
-    DataFrame::Grouper<double> group2 = df2.groupby<double>(
-            df2.cbegin<double>("first_col"));
-            ////df2.cbegin<double>("second_col"));
+    //DataFrame::Grouper<double> group2 = df2.groupby<double>(
+            //df2.cbegin<double>("first_col"));
+    DataFrame::Grouper<double, string> group2 = df2.groupby<double, string>(
+            df2.cbegin<double>("first_col"),
+            df2.cbegin<string>("test_col"));
+            //df2.cbegin<double>("second_col"));
     ////// NAMESPACE POLUTION!!
     mean t;
     Statistic *p = &t;
@@ -80,5 +82,6 @@ int main() {
         //////group->*f);
     //////std::cout << test << std::endl;
     std::cout << test2 << std::endl;
+    std::cout << df2 << std::endl; // MUST BE THE SAME AS ABOVE!!!
     return 0;
 }
