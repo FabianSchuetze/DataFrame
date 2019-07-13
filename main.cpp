@@ -83,5 +83,6 @@ int main() {
     //////std::cout << test << std::endl;
     std::cout << test2 << std::endl;
     std::cout << df2 << std::endl; // MUST BE THE SAME AS ABOVE!!!
+    std::vector<double> res(df2.begin<double>("first_col"), df2.end<double>("first_col"));
     return 0;
 }
