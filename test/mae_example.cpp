@@ -60,11 +60,11 @@ int main() {
     std::cout << df2.size().first << std::endl;
     std::cout << df2.size().second << std::endl;
     vector<double> series;
-    DataFrame::const_iter<double> real_begin =
+    DataFrame::const_iterator<double> real_begin =
         df2.cbegin<double>("total_sales_volume");
-    DataFrame::const_iter<double> real_end =
+    DataFrame::const_iterator<double> real_end =
         df2.cend<double>("total_sales_volume");
-    DataFrame::const_iter<double> predicitons_begin =
+    DataFrame::const_iterator<double> predicitons_begin =
         df2.cbegin<double>("saex2_initial_actual");
     auto fun = [](const double& a, const double& b) { return std::abs(a - b); };
     std::transform(real_begin, real_end, predicitons_begin,

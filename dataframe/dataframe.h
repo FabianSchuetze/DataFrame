@@ -18,14 +18,12 @@ class DataFrame {
    public:
     typedef std::pair<std::string, int> index_pair;
     template <class T>
-    class ConstColumnIterator;
+    class const_iterator;
     template <class... T>
     class Grouper;
     template <class T>
     class ColumnIterator;
     class DataFrameProxy;
-    template <typename T>
-    using const_iter = typename DataFrame::ConstColumnIterator<T>;
     template <typename T>
     using iter = typename DataFrame::ColumnIterator<T>;
     typedef std::shared_ptr<Column> SharedCol;
@@ -33,7 +31,7 @@ class DataFrame {
     template <class... T>
     friend class Grouper;
     template <class T>
-    friend class ConstColumnIterator;
+    friend class const_iterator;
     template <class T>
     friend class ColumnIterator;
     friend DataFrame deep_copy(const DataFrame& lhs);
@@ -115,7 +113,7 @@ class DataFrame {
      * THe template arguments needs to equal the datatype of the column
      */
     template <class T>
-    const_iter<T> cbegin(const std::string&);
+    const_iterator<T> cbegin(const std::string&);
     template <class T>
     iter<T> end(const std::string&);
     /**
@@ -125,7 +123,7 @@ class DataFrame {
      * THe template arguments needs to equal the datatype of the column
      */
     template <class T>
-    const_iter<T> cend(const std::string&);
+    const_iterator<T> cend(const std::string&);
     /**
      * @brief drops rows which contain na from the dataframe
      */
@@ -147,7 +145,7 @@ class DataFrame {
      * @brief Sorts the dataframe by column named s
      */
     template <typename T1, typename... T2>
-    void sort_by_column(ConstColumnIterator<T1>, ConstColumnIterator<T2>...);
+    void sort_by_column(const_iterator<T1>, const_iterator<T2>...);
     DataFrameProxy operator[](const std::string&);
     DataFrameProxy operator[](const std::vector<std::string>& col_name);
     // DataFrameProxy loc(const std::string&);
@@ -203,7 +201,7 @@ class DataFrame {
      * @brief groups the dataframe by column s and return a grouper object
      */
     template <class... T>
-    Grouper<T...> groupby(DataFrame::const_iter<T>...);
+    Grouper<T...> groupby(DataFrame::const_iterator<T>...);
 
    private:
     std::vector<std::shared_ptr<Column>> columns;

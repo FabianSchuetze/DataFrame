@@ -33,10 +33,10 @@ void fill_df(DataFrame& df) {
     }
 }
 
-//template <typename T, typename T2...>
-//void sort_df(DataFrame& df, const std::string& s) {
-    //df.sort_by_column<T>(df.cbegin<T>(s), df.cbegin<T>(s));
-//}
+template <typename T>
+void sort_df(DataFrame& df, const std::string& s) {
+    df.sort_by_column<T>(df.cbegin<T>(s), df.cbegin<T>(s));
+}
 
 int main() {
     vector<vector<double>> first = {{10, 10, 10, -8}, {30, -100, 40, 100}};
@@ -51,21 +51,10 @@ int main() {
     DataFrame df1 = DataFrame(idx_names, col_names, second);
     df2["test_col"] = string_col;
     std::cout << df2 << std::endl;
-    DataFrame::const_iter<double> b = df2.cbegin<double>("first_col");
-    DataFrame::const_iter<double> a = df2.cend<double>("first_col");
-    //for (size_t i = 0; i < 3; i++) {
-        ////std::cout << *b++ << std::endl;
-        //std::cout << b[i] << std::endl;
-    //}
-    //df2.sort_by_column<double>(df2.cbegin<double>("first_col"));
-    //df2 += 2;
+    DataFrame::const_iterator<double> b = df2.cbegin<double>("first_col");
+    DataFrame::const_iterator<double> a = df2.cend<double>("first_col");
     std::cout << df2 << std::endl;
-    //std::cout << df2 << std::endl;
-    ////std::cout << "is contigious: " << df2.is_contigious() << std::endl;
-    //vector<string> sub({"first_col", "second_col"});
-    //DataFrame abc = df1[sub];
-    //DataFrame::Grouper<double> group = df1[sub].groupby<double>("second_col");
-    //DataFrame::Grouper<double> group = abc.groupby<double>("second_col");
+    //sort_df<double>(df2, "first_col");
     //DataFrame::Grouper<double> group2 = df2.groupby<double>(
             //df2.cbegin<double>("first_col"));
     DataFrame::Grouper<double, string> group2 = df2.groupby<double, string>(
@@ -82,7 +71,12 @@ int main() {
         //////group->*f);
     //////std::cout << test << std::endl;
     std::cout << test2 << std::endl;
-    std::cout << df2 << std::endl; // MUST BE THE SAME AS ABOVE!!!
-    std::vector<double> res(df2.begin<double>("first_col"), df2.end<double>("first_col"));
+    //std::cout << df2 << std::endl; // MUST BE THE SAME AS ABOVE!!!
+    DataFrame::const_iterator<double> itb = df2.cbegin<double>("first_col");
+    DataFrame::const_iterator<double> ite = df2.cend<double>("first_col");
+    std::vector<double> res(itb, ite);
+    for (auto const& v : res) 
+        std::cout << v << std::endl;
+    //std::cout << res.size();
     return 0;
 }
