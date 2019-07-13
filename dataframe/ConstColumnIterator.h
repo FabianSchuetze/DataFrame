@@ -9,7 +9,8 @@ class Column;
 template <class T>
 class DataFrame::const_iterator {
    public:
-     typedef std::forward_iterator_tag iterator_category;
+       // MAKE RANDOM ACCESS ITERATORS!!!
+     typedef std::bidirectional_iterator_tag iterator_category;
      typedef T value_type;
      typedef std::ptrdiff_t difference_type;
      typedef T* pointer;
