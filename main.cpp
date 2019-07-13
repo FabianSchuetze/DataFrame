@@ -27,8 +27,8 @@ void fun2(DataFrame& df) {
 void fill_df(DataFrame& df) {
     vector<string> double_names = df.get_column_names<double>();
     for (const string& s : double_names) {
-        DataFrame::iter<double> it = df.begin<double>(s);
-        DataFrame::iter<double>  e = df.end<double>(s);
+        DataFrame::iterator<double> it = df.begin<double>(s);
+        DataFrame::iterator<double>  e = df.end<double>(s);
         std::transform(it, e, it, [](auto& d) {return std::isnan(d) ? 0 : d;});
     }
 }
@@ -54,9 +54,6 @@ int main() {
     DataFrame::const_iterator<double> b = df2.cbegin<double>("first_col");
     DataFrame::const_iterator<double> a = df2.cend<double>("first_col");
     std::cout << df2 << std::endl;
-    //sort_df<double>(df2, "first_col");
-    //DataFrame::Grouper<double> group2 = df2.groupby<double>(
-            //df2.cbegin<double>("first_col"));
     DataFrame::Grouper<double, string> group2 = df2.groupby<double, string>(
             df2.cbegin<double>("first_col"),
             df2.cbegin<string>("test_col"));
@@ -64,19 +61,18 @@ int main() {
     ////// NAMESPACE POLUTION!!
     mean t;
     Statistic *p = &t;
-    //////p = &t;
-    //DataFrame test = group.summarize(p);
     DataFrame test2 = group2.summarize(p);
-    //////DataFrame test2 = group.summarize(&DataFrame::Grouper<double>::mean)
-        //////group->*f);
-    //////std::cout << test << std::endl;
     std::cout << test2 << std::endl;
-    //std::cout << df2 << std::endl; // MUST BE THE SAME AS ABOVE!!!
-    DataFrame::const_iterator<double> itb = df2.cbegin<double>("first_col");
-    DataFrame::const_iterator<double> ite = df2.cend<double>("first_col");
-    std::vector<double> res(itb, ite);
-    for (auto const& v : res) 
-        std::cout << v << std::endl;
-    //std::cout << res.size();
-    return 0;
+    std::cout << df2.use_count("first_col") << std::endl;
+    DataFrame::iterator<double> itb = df2.begin<double>("first_col");
+    DataFrame::iterator<double> ite = df2.end<double>("first_col");
+    vector<double>res(itb, ite);
+    std::replace(itb, ite, 10, 100);
+    std::cout << df2 << std::endl;
+
+    //if (it != ite)
+        //std::cout << *it << std::endl;
+    //else
+        //std::cout << "not found\n";
+    //return 0;
 }

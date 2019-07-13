@@ -22,10 +22,10 @@ class DataFrame {
     template <class... T>
     class Grouper;
     template <class T>
-    class ColumnIterator;
+    class iterator;
     class DataFrameProxy;
-    template <typename T>
-    using iter = typename DataFrame::ColumnIterator<T>;
+    //template <typename T>
+    //using iter = typename DataFrame::iterator<T>;
     typedef std::shared_ptr<Column> SharedCol;
 
     template <class... T>
@@ -33,7 +33,7 @@ class DataFrame {
     template <class T>
     friend class const_iterator;
     template <class T>
-    friend class ColumnIterator;
+    friend class iterator;
     friend DataFrame deep_copy(const DataFrame& lhs);
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
     friend std::deque<std::pair<int, int>> correspondence_position(
@@ -105,7 +105,7 @@ class DataFrame {
     template <typename T>
     DataFrame& operator+=(const T&);
     template <class T>
-    iter<T> begin(const std::string&);
+    iterator<T> begin(const std::string&);
     /**
      * @brief A constant iterator over the columns achored to the beginning of
      * the column
@@ -115,7 +115,7 @@ class DataFrame {
     template <class T>
     const_iterator<T> cbegin(const std::string&);
     template <class T>
-    iter<T> end(const std::string&);
+    iterator<T> end(const std::string&);
     /**
      * @brief A constant iterator over the columns anchored to the end of the
      * column

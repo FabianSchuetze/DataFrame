@@ -26,8 +26,8 @@ void fun2(DataFrame& df) {
 void fill_df(DataFrame& df) {
     vector<string> double_names = df.get_column_names<double>();
     for (const string& s : double_names) {
-        DataFrame::iter<double> it = df.begin<double>(s);
-        DataFrame::iter<double>  e = df.end<double>(s);
+        DataFrame::iterator<double> it = df.begin<double>(s);
+        DataFrame::iterator<double>  e = df.end<double>(s);
         std::transform(it, e, it, [](auto& d) {return std::isnan(d) ? 0 : d;});
     }
 }
