@@ -39,16 +39,18 @@ void sort_df(DataFrame& df, const std::string& s) {
 }
 
 int main() {
-    vector<vector<double>> first = {{10, 10, 10, -8}, {30, -100, 40, 100}};
+    vector<double> first = {10, 10, 10, -8};
+    vector<double> first1 = {30, -100, 40, 100};
     vector<vector<double>> second = {{-10, -20, -30, -40}, {-100, 6, 0, 0}};
     vector<vector<string>> strings2 = {{"f", "l"}, {"m", "a"}, {"as", "ssd"}};
     vector<string> string_col = {"u", "u", "z", "second"};
-    vector<string> col_names = {"first_col", "second_col"};
-    vector<string> col_names2 = {"first_col", "second_col", "third_col"};
+    vector<string> col_names = {"first_col"};
+    vector<string> col_names2 = {"first_col", "second_col"};
     vector<string> idx_names = {"1", "2", "4", "5"};
     vector<string> idx_names2 = {"3", "1"};
-    DataFrame df2 = DataFrame(idx_names, col_names, first);
-    DataFrame df1 = DataFrame(idx_names, col_names, second);
+    Index idx = Index(idx_names);
+    DataFrame df2 = DataFrame(Index(idx_names), col_names, first);
+    DataFrame df1 = DataFrame(idx, col_names, first, first1);
     df2["test_col"] = string_col;
     std::cout << df2 << std::endl;
     DataFrame::const_iterator<double> b = df2.cbegin<double>("first_col");
@@ -67,7 +69,11 @@ int main() {
     DataFrame::iterator<double> itb = df2.begin<double>("first_col");
     DataFrame::iterator<double> ite = df2.end<double>("first_col");
     vector<double>res(itb, ite);
-    std::replace(itb, ite, 10, 100);
+    vector<double>new_vec;
+    //std::random_shuffle(itb, ite);
+    std::cout << df2 << std::endl;
+    for (auto const v : new_vec)
+        std::cout << v << std::endl;
     std::cout << df2 << std::endl;
 
     //if (it != ite)

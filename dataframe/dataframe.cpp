@@ -122,28 +122,6 @@ void DataFrame::append_column(const string& name, const SharedCol& col) {
     column_names[name] = column_names.size();
 }
 
-template <typename T>
-DataFrame::DataFrame(const vector<string>& idx, const vector<string>& n,
-                     const vector<vector<T>>& cols) {
-    if (n.size() != cols.size()) {
-        string s("#of Input vector differs from # of colum names, in: ");
-        throw std::invalid_argument(s + __PRETTY_FUNCTION__);
-    }
-    for (size_t i = 0; i < n.size(); ++i) {
-        if (idx.size() != cols[i].size())
-            throw std::invalid_argument("Data and index has different length");
-        columns.push_back(make_shared<Column>(cols[i]));
-        column_names[n[i]] = i;
-    }
-    index.append_index(idx);
-}
-template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
-                              const vector<vector<double>>&);
-template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
-                              const vector<vector<string>>&);
-template DataFrame::DataFrame(const vector<string>&, const vector<string>&,
-                              const vector<vector<bool>>&);
-
 DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
     : columns(), index(df.theDataFrame.index), column_names() {
     try {

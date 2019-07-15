@@ -24,8 +24,6 @@ class DataFrame {
     template <class T>
     class iterator;
     class DataFrameProxy;
-    //template <typename T>
-    //using iter = typename DataFrame::iterator<T>;
     typedef std::shared_ptr<Column> SharedCol;
 
     template <class... T>
@@ -67,15 +65,11 @@ class DataFrame {
      * @brief Create a new dataframe by reading from an file-stream
      */
     explicit DataFrame(std::ifstream&);
-    // I SHOUD REMOVE THE REDUNDANT CONSTRUCTORS!!!
-    template <typename T>
-    DataFrame(const std::vector<std::string>&, const std::vector<std::string>&,
-              const std::vector<std::vector<T>>&);
-    template <typename T>
-    DataFrame(const Index&, const std::vector<std::string>&,
-              const std::vector<std::vector<T>>&);
     template <typename T1, typename... T>
-    DataFrame(const std::initializer_list<std::string>&, const std::vector<T1>&,
+    DataFrame(const Index&,  const std::vector<std::string>&,
+              const std::vector<T1>&, const std::vector<T>&...);
+    template <typename T1, typename... T>
+    DataFrame(const std::vector<std::string>&, const std::vector<T1>&,
               const std::vector<T>&...);
     DataFrame& operator=(const DataFrame&);
 
@@ -315,23 +309,6 @@ void append_missing_rows(DataFrame&, const DataFrame&);
  */
 void append_missing_cols(DataFrame&, const DataFrame&);
 
-// template functions //
-template <typename T>
-DataFrame::DataFrame(const Index& idx, const std::vector<std::string>& n,
-                     const std::vector<std::vector<T>>& cols) {
-    if (n.size() != cols.size()) {
-        std::string s("#of Input vector differs from # of colum names, in: ");
-        throw std::invalid_argument(s + __PRETTY_FUNCTION__);
-    }
-    for (size_t i = 0; i < n.size(); ++i) {
-        if (idx.size() != cols[i].size())
-            throw std::invalid_argument("Data and index has different length");
-        columns.push_back(std::make_shared<Column>(cols[i]));
-        column_names[n[i]] = i;
-    }
-    index = idx;
-}
-
 template <typename T1>
 void DataFrame::append_column(const std::vector<std::string>& names, int pos,
                               const std::vector<T1>& v1) {
@@ -347,14 +324,30 @@ void DataFrame::append_column(const std::vector<std::string>& names, int pos,
 }
 
 template <typename T1, typename... T>
-DataFrame::DataFrame(const std::initializer_list<std::string>& names,
+DataFrame::DataFrame(const Index& idx,
+                     const std::vector<std::string>& names,
+                     const std::vector<T1>& v1, const std::vector<T>&... v) {
+    int nNames = names.size();
+    int nCols = sizeof...(T) + 1;
+    if (nCols != nNames) {
+        std::string s("Number of columns: " +  std::to_string(nCols) + " but "
+                       + std::to_string(nNames) + " column names. In:\n");
+        throw std::invalid_argument(s + __PRETTY_FUNCTION__);
+    }
+    index = idx;
+    append_column(names[0], std::make_shared<Column>(v1));
+    if constexpr (sizeof...(T) > 0) append_column<T...>(names, 1, v...);
+}
+
+template <typename T1, typename... T>
+DataFrame::DataFrame(const std::vector<std::string>& names,
                      const std::vector<T1>& v1, const std::vector<T>&... cols)
 {
     std::vector<int> idx;
     for (size_t i = 0; i < v1.size(); i++) idx.push_back(i);
+    std::cout << "inside the other function\n";
     index = Index(idx);
-    std::vector<std::string> names_vec(names.begin(), names.end());
-    append_column(names_vec[0], std::make_shared<Column>(v1));
-    if constexpr (sizeof...(T) > 0) append_column<T...>(names_vec, 1, cols...);
+    append_column(names[0], std::make_shared<Column>(v1));
+    if constexpr (sizeof...(T) > 0) append_column<T...>(names, 1, cols...);
 }
 #endif

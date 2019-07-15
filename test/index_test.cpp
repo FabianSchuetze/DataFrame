@@ -12,11 +12,12 @@
 using std::vector;
 using std::string;
 int main() {
-    vector<vector<double>> first = {{10, 10, -10, -8}, {30, -100, 40, 100}};
+    //vector<vector<double>> first = {{10, 10, -10, -8}, {30, -100, 40, 100}};
+    vector<double> first = {10, 10, -10, -8};
     vector<int> idx1 = {-10, -20, -30, -40};
     vector<string> idx2 = {"1", "2", "4", "5"};
     Index idx = Index(idx1, idx2);
     vector<string> col_names = {"first_col", "second_col"};
-    DataFrame df1 = DataFrame(idx, col_names, first);
+    DataFrame df1 = DataFrame(idx, col_names, first, idx2);
     std::cout << df1 << std::endl;
 }

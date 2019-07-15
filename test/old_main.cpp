@@ -39,15 +39,14 @@ void fill_df(DataFrame& df) {
 
 int main() {
     typedef std::numeric_limits<double> nan;
-    vector<vector<double>> first = {{10, 10, -10, -8}, {30, -100, 40, 100}};
-    vector<vector<double>> second = {{-10, -20}, {-30, -40}, {-100, 6}};
     vector<vector<string>> strings2 = {{"f", "l"}, {"m", "a"}, {"as", "ssd"}};
+    vector<double> first1 = {30, -100, 40, 100};
     vector<string> string_col = {"u ", "NA", "new_test", "second"};
     vector<string> col_names = {"first_col", "second_col"};
     vector<string> col_names2 = {"first_col", "second_col", "third_col"};
     vector<string> idx_names = {"1", "2", "4", "5"};
     vector<string> idx_names2 = {"3", "1"};
-    DataFrame df2 = DataFrame(idx_names, col_names, first);
+    DataFrame df2 = DataFrame(Index(idx_names), col_names, first1);
     DataFrame df1 = df2;
     df2["test_col"] = string_col;
     std::cout << df2 << std::endl;
