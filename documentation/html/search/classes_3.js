@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['mean',['mean',['../classmean.html',1,'']]]
+  ['index',['Index',['../classIndex.html',1,'']]],
+  ['iterator',['iterator',['../classDataFrame_1_1iterator.html',1,'DataFrame']]]
 ];

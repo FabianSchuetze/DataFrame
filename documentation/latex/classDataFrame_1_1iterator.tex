@@ -1,0 +1,89 @@
+\hypertarget{classDataFrame_1_1iterator}{}\section{Data\+Frame\+:\+:iterator$<$ T $>$ Class Template Reference}
+\label{classDataFrame_1_1iterator}\index{Data\+Frame\+::iterator$<$ T $>$@{Data\+Frame\+::iterator$<$ T $>$}}
+
+
+Collaboration diagram for Data\+Frame\+:\+:iterator$<$ T $>$\+:
+% FIG 0
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_ab72b480713010aa587b24a65660faec7}\label{classDataFrame_1_1iterator_ab72b480713010aa587b24a65660faec7}} 
+typedef std\+::bidirectional\+\_\+iterator\+\_\+tag {\bfseries iterator\+\_\+category}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_a4590d331b7a7cbb7037fd6e0cd9e2bd3}\label{classDataFrame_1_1iterator_a4590d331b7a7cbb7037fd6e0cd9e2bd3}} 
+typedef T {\bfseries value\+\_\+type}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_a5268259f062c85e6a0630600d79c8c4f}\label{classDataFrame_1_1iterator_a5268259f062c85e6a0630600d79c8c4f}} 
+typedef std\+::ptrdiff\+\_\+t {\bfseries difference\+\_\+type}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_ae31b1f442558e777d9b5a88e740e0309}\label{classDataFrame_1_1iterator_ae31b1f442558e777d9b5a88e740e0309}} 
+typedef T $\ast$ {\bfseries pointer}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_aa62587b9a0a1a2c5ff79a573a92ddbbf}\label{classDataFrame_1_1iterator_aa62587b9a0a1a2c5ff79a573a92ddbbf}} 
+typedef T \& {\bfseries reference}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_a627152ab35bbd9d1a8c389dd17077b6b}\label{classDataFrame_1_1iterator_a627152ab35bbd9d1a8c389dd17077b6b}} 
+{\bfseries iterator} (\hyperlink{classDataFrame}{Data\+Frame} \&a, std\+::string \+\_\+name, size\+\_\+t sz=0)
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_a5f4ac677abe570ec5548c82e83386e53}\label{classDataFrame_1_1iterator_a5f4ac677abe570ec5548c82e83386e53}} 
+T \& {\bfseries operator$\ast$} () const
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_ace9903873ac70b559b0a49b3b45fc652}\label{classDataFrame_1_1iterator_ace9903873ac70b559b0a49b3b45fc652}} 
+T \& {\bfseries operator\mbox{[}$\,$\mbox{]}} (int)
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_a6d0d68df5392b13e8806ab7cbd73bcb9}\label{classDataFrame_1_1iterator_a6d0d68df5392b13e8806ab7cbd73bcb9}} 
+\hyperlink{classDataFrame_1_1iterator}{iterator} \& {\bfseries operator++} ()
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_a1b32fef37570ff0f6eff4b382efed79a}\label{classDataFrame_1_1iterator_a1b32fef37570ff0f6eff4b382efed79a}} 
+\hyperlink{classDataFrame_1_1iterator}{iterator} {\bfseries operator++} (int)
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_aff4a1dca317079a6018984d881ad5ab8}\label{classDataFrame_1_1iterator_aff4a1dca317079a6018984d881ad5ab8}} 
+\hyperlink{classDataFrame_1_1iterator}{iterator} \& {\bfseries operator-\/-\/} ()
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_ab5d38e9c2805e99d3b6e1321311a213b}\label{classDataFrame_1_1iterator_ab5d38e9c2805e99d3b6e1321311a213b}} 
+\hyperlink{classDataFrame_1_1iterator}{iterator} {\bfseries operator-\/-\/} (int)
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_aff9d9adb908ded766a554a7189e6b095}\label{classDataFrame_1_1iterator_aff9d9adb908ded766a554a7189e6b095}} 
+bool {\bfseries operator==} (const \hyperlink{classDataFrame_1_1iterator}{iterator} \&b) const
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_a8aa5d5575c247f7d27ae0bcbc43da16b}\label{classDataFrame_1_1iterator_a8aa5d5575c247f7d27ae0bcbc43da16b}} 
+bool {\bfseries operator!=} (const \hyperlink{classDataFrame_1_1iterator}{iterator} \&b) const
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_adb9192f797a6d3da1c2860d0a48d6984}\label{classDataFrame_1_1iterator_adb9192f797a6d3da1c2860d0a48d6984}} 
+const T $\ast$ {\bfseries operator-\/$>$} () const
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_a8a13fe0c1be635f4ace1c6a2106c9b71}\label{classDataFrame_1_1iterator_a8a13fe0c1be635f4ace1c6a2106c9b71}} 
+std\+::string {\bfseries return\+\_\+name} ()
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_a29b9ba18adef4b06b7826af22adf321c}\label{classDataFrame_1_1iterator_a29b9ba18adef4b06b7826af22adf321c}} 
+std\+::shared\+\_\+ptr$<$ \hyperlink{classColumn}{Column} $>$ {\bfseries check} (std\+::size\+\_\+t, const std\+::string \&) const
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_a8ed80eba022ee261d67cd3b15ee000a4}\label{classDataFrame_1_1iterator_a8ed80eba022ee261d67cd3b15ee000a4}} 
+\hyperlink{classDataFrame}{Data\+Frame} \& {\bfseries the\+Data\+Frame}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_a4ff96a40bb490d99900a75df1ad10755}\label{classDataFrame_1_1iterator_a4ff96a40bb490d99900a75df1ad10755}} 
+std\+::weak\+\_\+ptr$<$ \hyperlink{classColumn}{Column} $>$ {\bfseries wptr}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_a558ebc6ee5d599a37feacebc604c740e}\label{classDataFrame_1_1iterator_a558ebc6ee5d599a37feacebc604c740e}} 
+std\+::size\+\_\+t {\bfseries curr}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_a58c24bc5f769bf152fd960072372d92d}\label{classDataFrame_1_1iterator_a58c24bc5f769bf152fd960072372d92d}} 
+std\+::deque$<$ int $>$ {\bfseries iteration\+\_\+order}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1iterator_a53571d52ed09acbda0be89938f39e373}\label{classDataFrame_1_1iterator_a53571d52ed09acbda0be89938f39e373}} 
+std\+::string {\bfseries name}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+dataframe/Column\+Iterator.\+h\end{DoxyCompactItemize}

@@ -4,6 +4,7 @@
 #include <fstream>
 #include <map>
 #include <memory>
+#include <numeric>
 #include <string>
 #include <utility>
 #include <vector>
@@ -34,8 +35,8 @@ class DataFrame {
     friend class iterator;
     friend DataFrame deep_copy(const DataFrame& lhs);
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
-    friend std::deque<std::pair<int, int>> correspondence_position(
-        const DataFrame&, const DataFrame&);
+    //friend std::deque<std::pair<int, int>> correspondence_position(
+        //const DataFrame&, const DataFrame&);
     friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
     friend DataFrame operator+(const DataFrameProxy&, const DataFrameProxy&);
     friend DataFrame operator+(const DataFrame&, const DataFrameProxy&);
@@ -59,19 +60,51 @@ class DataFrame {
     }
 
     // Functions
+    /**
+     * @brief Default Constructor
+     */
     DataFrame();
+    /**
+     * @brief converts a ProxyClass into the parent DataFrame
+     *
+     * When selecting a subset of columns of a DataFrame based on the subscript
+     * operator, a ProxyClass is created. This ProxyClass faciliates either
+     * adding new columns to the dataframe or reading columns from the subset.
+     */
     DataFrame(const DataFrameProxy&);  // allow implicit conversion;
     /**
-     * @brief Create a new dataframe by reading from an file-stream
+     * @brief Create a new dataframe by reading from an file-stream based on a
+     * schema.
      */
+    // DO THAT!!!!
     explicit DataFrame(std::ifstream&);
+    /**
+     * @brief Create dataframe with an index, the column names and vector of
+     * different datatype
+     */
     template <typename T1, typename... T>
-    DataFrame(const Index&,  const std::vector<std::string>&,
+    DataFrame(const Index&, const std::vector<std::string>&,
               const std::vector<T1>&, const std::vector<T>&...);
+    /**
+     * @brief Create dataframe without index, the column names and vector of
+     * different datatype.
+     *
+     * As no index is passed, a default index will be created. The default
+     * index are integers from 0 to the number of lines passed.
+     */
     template <typename T1, typename... T>
     DataFrame(const std::vector<std::string>&, const std::vector<T1>&,
               const std::vector<T>&...);
-    DataFrame& operator=(const DataFrame&);
+    /**
+     * @brief Copy assignment operator
+     *
+     * The copy assignment operator makes a copy of the dataframe. The index
+     * and column names are a deep-copy. The data is shared between the two
+     * dataframes. When attempting to modify a column in a dataframe,
+     * copy-on-write is used. This technique avoids having to rely on defensive
+     * copying.
+     */
+    DataFrame& operator=(const DataFrame&) = default;
 
     /**
      * @brief Returns a shared pointer to a new version of an Column named s
@@ -86,28 +119,43 @@ class DataFrame {
     SharedCol get_unique(const std::string&) const;
     /**
      * @brief Returns the new column for the subset of indices marked by the
-     * vector<int>
+     * deque<int>.
      */
     SharedCol get_unique(const std::string&, const std::deque<int>&) const;
     /**
      * @brief The overloaded compound-assignment operator
      *
      * If a colum or row or the rhs is not present in the lhs, a new column or
-     * row is created in the lhs dataframe contains nas.
+     * row is created in the lhs dataframe containing nas.
      */
     DataFrame& operator+=(const DataFrame& rhs);
+    /**
+     * @brief Componound assignment operator assing object of type double, int
+     * or string to the dataframe
+     */
+    // WHAT HAPPENS WITH COLUMNS THAT ARE NOT OF THIS TYPE?
     template <typename T>
     DataFrame& operator+=(const T&);
+    /**
+     * @brief A bidirectional-iterator over the columns
+     *
+     * Asking for the iterator (instead of the constant iterator) can generate
+     * a new vector with the original column elements when more than one
+     * dataframe reference the column (A copy-on-write is assumed.)
+     */
     template <class T>
     iterator<T> begin(const std::string&);
     /**
-     * @brief A constant iterator over the columns achored to the beginning of
-     * the column
+     * @brief A constant bidirectional-iterator over the columns
+     * achored to the beginning of the column
      *
      * THe template arguments needs to equal the datatype of the column
      */
     template <class T>
     const_iterator<T> cbegin(const std::string&);
+    /**
+     * @brief Reference the last element in the column
+     */
     template <class T>
     iterator<T> end(const std::string&);
     /**
@@ -120,16 +168,30 @@ class DataFrame {
     const_iterator<T> cend(const std::string&);
     /**
      * @brief drops rows which contain na from the dataframe
+     *
+     * In case the column is of type double or int, nan are unambigious. For
+     * columns of string type, na are pressumed to be 'NA'.
      */
     void dropna();
-    // void drop_row(const std::vector<std::deque<Index::ele>>&);
+    /**
+     * @brief Drops rows based on the index of the dataframe
+     *
+     * Given the vector of indices of the dataframe, the rows of the dataframe
+     * are dropped
+     */
+    // MAJOR THINGS:
+    // 1. I NEED TO TEST THIS AGAIN
+    // 2. I NEED TO ADD A FEW CHECKS IN THE BEGINNING TO AVOID HAVING TO LOOK
+    // FOR ARGUMENTS THAT ARE NOT IN THE DATAFRAME!!!
+    void drop_row(std::vector<std::deque<Index::ele>>);
     /**
      * @brief drops a row from the dataframe
      */
-    // void drop_row(const std::deque<Index::ele>&);
+    void drop_row(std::deque<Index::ele>);
     /**
      * @brief drops a column from the dataframe
      */
+    // MAKE THIS MORE GENERAL TO INCLUDE A INITIALIZER LIST!!!
     void drop_column(const std::string&);
     /**
      * @brief Sort the dataframe by its index
@@ -198,11 +260,32 @@ class DataFrame {
     Grouper<T...> groupby(DataFrame::const_iterator<T>...);
 
    private:
+    // Data Memebers
     std::vector<std::shared_ptr<Column>> columns;
     Index index;
     std::map<std::string, int> column_names;
-    void append_duplicate_rows(std::deque<std::pair<int, int>>&);
-    void append_duplicate_rows(int);
+
+    // Functions
+    /**
+     * @brief If some indices occur more than once in correspondence, new rows
+     * are append to the dataset
+     *
+     * The function is used in the compound assignment operator. When the rhs
+     * has a index which appears multiple times but it appears only once at the
+     * left hand side, the a new row in the lhs is created so that the addition
+     * can proceed.
+     */
+    void duplicate_rows(std::deque<std::pair<int, int>>& correspondence);
+    /**
+     * @brief If some indices occur more than once in correspondence, new rows
+     * are append to the dataset
+     *
+     * The function is used in the compound assignment operator. When the rhs
+     * has a index which appears multiple times but it appears only once at the
+     * left hand side, the a new row in the lhs is created so that the addition
+     * can proceed.
+     */
+    void duplicate_rows(int);
     void copy_row(int);
     void make_unique_if(const std::string&);
     void make_unique_if(const std::vector<std::string>&);
@@ -291,8 +374,8 @@ template <typename T>
 DataFrame operator>(const DataFrame&, const T&);
 DataFrame deep_copy(const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
-std::deque<std::pair<int, int>> correspondence_position(const DataFrame&,
-                                                        const DataFrame&);
+//std::deque<std::pair<int, int>> correspondence_position(const DataFrame&,
+                                                        //const DataFrame&);
 /**
  * @brief creates nan rows in the lhs if rhs cols are not present in the lhs
  *
@@ -324,14 +407,13 @@ void DataFrame::append_column(const std::vector<std::string>& names, int pos,
 }
 
 template <typename T1, typename... T>
-DataFrame::DataFrame(const Index& idx,
-                     const std::vector<std::string>& names,
+DataFrame::DataFrame(const Index& idx, const std::vector<std::string>& names,
                      const std::vector<T1>& v1, const std::vector<T>&... v) {
     int nNames = names.size();
     int nCols = sizeof...(T) + 1;
     if (nCols != nNames) {
-        std::string s("Number of columns: " +  std::to_string(nCols) + " but "
-                       + std::to_string(nNames) + " column names. In:\n");
+        std::string s("Number of columns: " + std::to_string(nCols) + " but " +
+                      std::to_string(nNames) + " column names. In:\n");
         throw std::invalid_argument(s + __PRETTY_FUNCTION__);
     }
     index = idx;
@@ -341,11 +423,10 @@ DataFrame::DataFrame(const Index& idx,
 
 template <typename T1, typename... T>
 DataFrame::DataFrame(const std::vector<std::string>& names,
-                     const std::vector<T1>& v1, const std::vector<T>&... cols)
-{
-    std::vector<int> idx;
-    for (size_t i = 0; i < v1.size(); i++) idx.push_back(i);
-    std::cout << "inside the other function\n";
+                     const std::vector<T1>& v1, const std::vector<T>&... cols) {
+    std::vector<int> idx(v1.size());
+    std::iota(idx.begin(), idx.end(), 0);
+    // for (size_t i = 0; i < v1.size(); i++) idx.push_back(i);
     index = Index(idx);
     append_column(names[0], std::make_shared<Column>(v1));
     if constexpr (sizeof...(T) > 0) append_column<T...>(names, 1, cols...);

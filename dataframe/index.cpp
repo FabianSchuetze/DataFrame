@@ -109,3 +109,23 @@ vector<string> Index::get_index_as_string() const {
 std::vector<std::string> Index::get_index_as_string() {
     return static_cast<const Index&>(*this).get_index_as_string();
 }
+
+void carthesian_product(deque<int>& lhs, deque<int>& rhs,
+                        deque<std::pair<int, int>>& inp) {
+    if (rhs.empty()) rhs.push_back(-1);
+    for (const int& a : lhs)
+        for (const int& b : rhs) inp.push_back(std::make_pair(a, b));
+}
+deque<std::pair<int, int>> Index::index_correspondence(const Index& rhs) const {
+    deque<std::pair<int, int>> res;
+    for (auto const& e : unique_elements()) {
+        deque<int> lhsIdx = find_index_position(e);
+        deque<int> rhsIdx = rhs.find_index_position(e);
+        carthesian_product(lhsIdx, rhsIdx, res);
+    }
+    return res;
+}
+
+deque<std::pair<int, int>> Index::index_correspondence(const Index& rhs) { 
+    return static_cast<const Index&>(*this).index_correspondence(rhs);
+}

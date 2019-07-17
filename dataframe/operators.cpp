@@ -9,6 +9,7 @@ using std::shared_ptr;
 using std::string;
 using std::transform;
 using std::vector;
+using std::deque;
 
 DataFrame::DataFrameProxy DataFrame::operator[](const vector<string>& names) {
     return DataFrameProxy(*this, names);
@@ -77,15 +78,18 @@ void DataFrame::DataFrameProxy::insert_column(const vector<string>& rhsNames,
     }
 }
 
-DataFrame& DataFrame::operator=(const DataFrame& rhs) {
-    if (this != &rhs) {
-        columns = rhs.columns;
-        index.index_names = rhs.index.index_names;
-        index.index_positions = rhs.index.index_positions;
-        column_names = rhs.column_names;
-    }
-    return *this;
-}
+
+// CAN'T I PUT ALL THESE COLUMNS INTO DATAFRAME PROXY?
+
+//DataFrame& DataFrame::operator=(const DataFrame& rhs) {
+    //if (this != &rhs) {
+        //columns = rhs.columns;
+        //index.index_names = rhs.index.index_names;
+        //index.index_positions = rhs.index.index_positions;
+        //column_names = rhs.column_names;
+    //}
+    //return *this;
+//}
 
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const DataFrameProxy& rhs) {
@@ -112,6 +116,7 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     return *this;
 }
 
+// NEEDS TO BE CHANGED BIG TIME!!!
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<vector<double>>& others) {
     check_col_width(others.size(), string{"passed number of vectors != columns"});
@@ -130,6 +135,7 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     insert_column(colNames[0], other_col);
     return *this;
 }
+
 template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<double>& other_col);
 template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
@@ -138,8 +144,8 @@ template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<bool>& other_col);
 
 DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
-    std::deque<pair<int, int>> indices = correspondence_position(*this, rhs);
-    append_duplicate_rows(indices);
+    deque<pair<int, int>> indices = index.index_correspondence(rhs.index);
+    duplicate_rows(indices);
     for (auto& x : column_names) {
         make_unique_if(x.first);
         try {

@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['size',['size',['../classColumn.html#a4bbf8fcd3b445bf8f11bb1f03f76e747',1,'Column::size()'],['../classDataFrame.html#a02cb54422bd4ac0b2cae6f6a811b0f93',1,'DataFrame::size()']]],
-  ['sort_5fby_5fcolumn',['sort_by_column',['../classDataFrame.html#a09c79a451ef2d4ff909e1d01d4788f22',1,'DataFrame']]],
-  ['sort_5fby_5findex',['sort_by_index',['../classDataFrame.html#ae9eb64b2d0c072459f85a4b840978060',1,'DataFrame']]],
-  ['statistic',['Statistic',['../classStatistic.html',1,'']]]
+  ['make_5fcontigious',['make_contigious',['../classDataFrame.html#a7a1b7c79f2b98e18ed5cda2852dd5341',1,'DataFrame']]],
+  ['mean',['mean',['../classmean.html',1,'']]]
 ];

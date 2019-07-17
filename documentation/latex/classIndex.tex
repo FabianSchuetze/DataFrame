@@ -1,0 +1,153 @@
+\hypertarget{classIndex}{}\section{Index Class Reference}
+\label{classIndex}\index{Index@{Index}}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classIndex_a4d83bd317170e3fa02077e3762cc5550}\label{classIndex_a4d83bd317170e3fa02077e3762cc5550}} 
+typedef std\+::variant$<$ int, std\+::string, double $>$ {\bfseries ele}
+\item 
+\mbox{\Hypertarget{classIndex_a53740ec6f7dfb1d2a1bb84f558e23384}\label{classIndex_a53740ec6f7dfb1d2a1bb84f558e23384}} 
+typedef std\+::map$<$ std\+::deque$<$ ele $>$, std\+::deque$<$ int $>$ $>$ {\bfseries index\+\_\+map\+\_\+type}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classIndex_a35f4948aa1ed7b87dc285cd56a64d24c}\label{classIndex_a35f4948aa1ed7b87dc285cd56a64d24c}} 
+{\footnotesize template$<$typename T1 , typename... T$>$ }\\{\bfseries Index} (const std\+::vector$<$ T1 $>$ \&, const std\+::vector$<$ T $>$ \&...)
+\item 
+\mbox{\Hypertarget{classIndex_adc750ff9ab90e7fac9d411d1ebea4c86}\label{classIndex_adc750ff9ab90e7fac9d411d1ebea4c86}} 
+{\footnotesize template$<$typename T1 , typename... T$>$ }\\{\bfseries Index} (const std\+::deque$<$ int $>$ \&, const std\+::vector$<$ T1 $>$ \&, const std\+::vector$<$ T $>$ \&...)
+\item 
+\mbox{\Hypertarget{classIndex_ab7e3d65b24ab12baad98db7491b65c74}\label{classIndex_ab7e3d65b24ab12baad98db7491b65c74}} 
+void {\bfseries append\+\_\+index} (const std\+::vector$<$ std\+::deque$<$ ele $>$$>$ \&)
+\item 
+\mbox{\Hypertarget{classIndex_a847fbc1e3793b8a56d6d28c57d6c48b7}\label{classIndex_a847fbc1e3793b8a56d6d28c57d6c48b7}} 
+void {\bfseries append\+\_\+index} (const std\+::deque$<$ ele $>$ \&)
+\item 
+\mbox{\Hypertarget{classIndex_a943238b23183e406b3aa087545c20d49}\label{classIndex_a943238b23183e406b3aa087545c20d49}} 
+void {\bfseries append\+\_\+index} (const std\+::deque$<$ ele $>$ \&, int)
+\item 
+\mbox{\Hypertarget{classIndex_af2ba3a1d2da53657241e91ed79b0f3ff}\label{classIndex_af2ba3a1d2da53657241e91ed79b0f3ff}} 
+{\footnotesize template$<$typename T $>$ }\\void \hyperlink{classIndex_af2ba3a1d2da53657241e91ed79b0f3ff}{append\+\_\+index} (const std\+::vector$<$ T $>$ \&)
+\begin{DoxyCompactList}\small\item\em Appends a vector of type int or string to the index. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classIndex_a201753361d8aa61356949b2e3b4e795c}\label{classIndex_a201753361d8aa61356949b2e3b4e795c}} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries append\+\_\+index} (const T \&)
+\item 
+\mbox{\Hypertarget{classIndex_a2a9d2989ac8fb252b8709262f0cc8d70}\label{classIndex_a2a9d2989ac8fb252b8709262f0cc8d70}} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries append\+\_\+index} (const std\+::vector$<$ T $>$ \&, const std\+::deque$<$ int $>$ \&)
+\item 
+\mbox{\Hypertarget{classIndex_a034de3af8b53d20c0d8bce2e08aeb6b6}\label{classIndex_a034de3af8b53d20c0d8bce2e08aeb6b6}} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries append\+\_\+index} (const T \&, int)
+\item 
+void \hyperlink{classIndex_ac3789b237b8cebc11d67e255cb25d6c6}{append\+\_\+row} (const std\+::deque$<$ ele $>$ \&)
+\item 
+\mbox{\Hypertarget{classIndex_a5c2c70261be43e85f7297f6134d46098}\label{classIndex_a5c2c70261be43e85f7297f6134d46098}} 
+{\footnotesize template$<$typename T $>$ }\\void \hyperlink{classIndex_a5c2c70261be43e85f7297f6134d46098}{append\+\_\+index\+\_\+column} (const std\+::vector$<$ T $>$ \&inp)
+\begin{DoxyCompactList}\small\item\em Puts the input vector at the end of the existing index. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classIndex_a2f8b9698a6ba11b35b6de42fb096b3d7}\label{classIndex_a2f8b9698a6ba11b35b6de42fb096b3d7}} 
+void \hyperlink{classIndex_a2f8b9698a6ba11b35b6de42fb096b3d7}{drop\+\_\+index} (size\+\_\+t)
+\begin{DoxyCompactList}\small\item\em Drops the all index values at position pos inplace. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classIndex_aecbb6761b8f0e47aa4d89ce98ef4466c}\label{classIndex_aecbb6761b8f0e47aa4d89ce98ef4466c}} 
+std\+::deque$<$ int $>$ \hyperlink{classIndex_aecbb6761b8f0e47aa4d89ce98ef4466c}{find\+\_\+index\+\_\+position} (const std\+::deque$<$ ele $>$ \&)
+\begin{DoxyCompactList}\small\item\em Returns the corresponding index position given the input element. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classIndex_ac7c3bafacd31495c312071b5282c7b7e}\label{classIndex_ac7c3bafacd31495c312071b5282c7b7e}} 
+std\+::deque$<$ int $>$ {\bfseries find\+\_\+index\+\_\+position} (const std\+::deque$<$ ele $>$ \&) const
+\item 
+\mbox{\Hypertarget{classIndex_a32398a5885c78cd4a3a55943ba007ed0}\label{classIndex_a32398a5885c78cd4a3a55943ba007ed0}} 
+std\+::deque$<$ int $>$ {\bfseries find\+\_\+index\+\_\+position} ()
+\item 
+\mbox{\Hypertarget{classIndex_aceb6e87e99dba1427cca1255363b15e0}\label{classIndex_aceb6e87e99dba1427cca1255363b15e0}} 
+std\+::deque$<$ int $>$ {\bfseries find\+\_\+index\+\_\+position} () const
+\item 
+\mbox{\Hypertarget{classIndex_a00937853b60b1b5af2377765c35d6461}\label{classIndex_a00937853b60b1b5af2377765c35d6461}} 
+std\+::vector$<$ std\+::deque$<$ ele $>$ $>$ {\bfseries get\+\_\+index\+\_\+names} ()
+\item 
+\mbox{\Hypertarget{classIndex_ab47e098ed24b424691473afb9039d4ba}\label{classIndex_ab47e098ed24b424691473afb9039d4ba}} 
+std\+::vector$<$ std\+::deque$<$ ele $>$ $>$ {\bfseries get\+\_\+index\+\_\+names} () const
+\item 
+\mbox{\Hypertarget{classIndex_a37e45ab569ed99bbac2530127f4c9145}\label{classIndex_a37e45ab569ed99bbac2530127f4c9145}} 
+std\+::vector$<$ std\+::string $>$ {\bfseries get\+\_\+index\+\_\+as\+\_\+string} () const
+\item 
+\mbox{\Hypertarget{classIndex_a19c3587884d9386e263004a178625358}\label{classIndex_a19c3587884d9386e263004a178625358}} 
+std\+::vector$<$ std\+::string $>$ {\bfseries get\+\_\+index\+\_\+as\+\_\+string} ()
+\item 
+\mbox{\Hypertarget{classIndex_af1db750da1737e7e8a7c87a4cfad9d8a}\label{classIndex_af1db750da1737e7e8a7c87a4cfad9d8a}} 
+int {\bfseries size} ()
+\item 
+\mbox{\Hypertarget{classIndex_a1d7170f9bdadd16f8db0b0905fdc1323}\label{classIndex_a1d7170f9bdadd16f8db0b0905fdc1323}} 
+int {\bfseries size} () const
+\item 
+\mbox{\Hypertarget{classIndex_ac6932f58a957af8f2e865c7079448740}\label{classIndex_ac6932f58a957af8f2e865c7079448740}} 
+std\+::set$<$ std\+::deque$<$ ele $>$ $>$ {\bfseries unique\+\_\+elements} ()
+\item 
+\mbox{\Hypertarget{classIndex_ab1e3121db131d822e363fd1e1c830743}\label{classIndex_ab1e3121db131d822e363fd1e1c830743}} 
+std\+::set$<$ std\+::deque$<$ ele $>$ $>$ {\bfseries unique\+\_\+elements} () const
+\item 
+\mbox{\Hypertarget{classIndex_ac1bfeb6926de41bcb59e6205304707c8}\label{classIndex_ac1bfeb6926de41bcb59e6205304707c8}} 
+{\footnotesize template$<$typename T1 , typename... T$>$ }\\void {\bfseries expand\+\_\+index} (const std\+::vector$<$ T1 $>$ \&v1, const std\+::vector$<$ T $>$ \&... v2)
+\item 
+\mbox{\Hypertarget{classIndex_ae179c9ac6d79946be6d0f96d888ab99e}\label{classIndex_ae179c9ac6d79946be6d0f96d888ab99e}} 
+{\footnotesize template$<$typename T1 , typename... T$>$ }\\{\bfseries Index} (const std\+::vector$<$ T1 $>$ \&v1, const std\+::vector$<$ T $>$ \&... v2)
+\item 
+\mbox{\Hypertarget{classIndex_a53cb233005236d51b00902cf49d0216c}\label{classIndex_a53cb233005236d51b00902cf49d0216c}} 
+{\footnotesize template$<$typename T1 , typename... T$>$ }\\{\bfseries Index} (const std\+::deque$<$ int $>$ \&pos, const std\+::vector$<$ T1 $>$ \&v1, const std\+::vector$<$ T $>$ \&...v2)
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classIndex_aa9a4aad39f0d19334fd2a144092b8004}{remove\+\_\+value} (size\+\_\+t pos, std\+::deque$<$ ele $>$ \&t)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \hyperlink{classIndex_a5089996517fe6b536d141ffa46436a11}{expand\+\_\+value} (const T \&t, std\+::deque$<$ ele $>$ \&set)
+\item 
+\mbox{\Hypertarget{classIndex_a886318c930bbfa28add1308033c9933e}\label{classIndex_a886318c930bbfa28add1308033c9933e}} 
+{\footnotesize template$<$typename T1 $>$ }\\void {\bfseries expand\+\_\+index} (const std\+::vector$<$ T1 $>$ \&)
+\item 
+\mbox{\Hypertarget{classIndex_abd2ed9c0f2afb1de7f8fe2dbdc70bb8e}\label{classIndex_abd2ed9c0f2afb1de7f8fe2dbdc70bb8e}} 
+{\footnotesize template$<$typename T1 , typename... T$>$ }\\void {\bfseries expand\+\_\+index} (const std\+::vector$<$ T1 $>$ \&, const std\+::vector$<$ T $>$ \&...)
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classIndex_a4aa36b9f2dca23c4525b30997515071c}\label{classIndex_a4aa36b9f2dca23c4525b30997515071c}} 
+std\+::vector$<$ std\+::deque$<$ ele $>$ $>$ {\bfseries index\+\_\+positions}
+\item 
+\mbox{\Hypertarget{classIndex_a8a1accb57950f7b0dc9fc4c5d3c33493}\label{classIndex_a8a1accb57950f7b0dc9fc4c5d3c33493}} 
+index\+\_\+map\+\_\+type {\bfseries index\+\_\+names}
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classIndex_ac3cf826bc43b8ab4740915b5c60e7166}\label{classIndex_ac3cf826bc43b8ab4740915b5c60e7166}} 
+class {\bfseries Data\+Frame}
+\item 
+\mbox{\Hypertarget{classIndex_ac665e1df1c1d41e0d0c5afcdfb827a74}\label{classIndex_ac665e1df1c1d41e0d0c5afcdfb827a74}} 
+\hyperlink{classDataFrame}{Data\+Frame} {\bfseries deep\+\_\+copy} (const \hyperlink{classDataFrame}{Data\+Frame} \&lhs)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classIndex_ac3789b237b8cebc11d67e255cb25d6c6}\label{classIndex_ac3789b237b8cebc11d67e255cb25d6c6}} 
+\index{Index@{Index}!append\+\_\+row@{append\+\_\+row}}
+\index{append\+\_\+row@{append\+\_\+row}!Index@{Index}}
+\subsubsection{\texorpdfstring{append\+\_\+row()}{append\_row()}}
+{\footnotesize\ttfamily void Index\+::append\+\_\+row (\begin{DoxyParamCaption}\item[{const std\+::deque$<$ ele $>$ \&}]{ }\end{DoxyParamCaption})}
+
+Appends the input to the end of the index \mbox{\Hypertarget{classIndex_a5089996517fe6b536d141ffa46436a11}\label{classIndex_a5089996517fe6b536d141ffa46436a11}} 
+\index{Index@{Index}!expand\+\_\+value@{expand\+\_\+value}}
+\index{expand\+\_\+value@{expand\+\_\+value}!Index@{Index}}
+\subsubsection{\texorpdfstring{expand\+\_\+value()}{expand\_value()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Index\+::expand\+\_\+value (\begin{DoxyParamCaption}\item[{const T \&}]{t,  }\item[{std\+::deque$<$ ele $>$ \&}]{set }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+Given the input deque, the function appends inplace the element at the desired position. \mbox{\Hypertarget{classIndex_aa9a4aad39f0d19334fd2a144092b8004}\label{classIndex_aa9a4aad39f0d19334fd2a144092b8004}} 
+\index{Index@{Index}!remove\+\_\+value@{remove\+\_\+value}}
+\index{remove\+\_\+value@{remove\+\_\+value}!Index@{Index}}
+\subsubsection{\texorpdfstring{remove\+\_\+value()}{remove\_value()}}
+{\footnotesize\ttfamily void Index\+::remove\+\_\+value (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{pos,  }\item[{std\+::deque$<$ ele $>$ \&}]{t }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+Given the input deque, the function inplace removes inplace the element at the desired position 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+dataframe/index.\+h\item 
+dataframe/index.\+cpp\end{DoxyCompactItemize}

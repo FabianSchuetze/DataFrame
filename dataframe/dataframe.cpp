@@ -147,44 +147,42 @@ int DataFrame::use_count(const string& name) {
     return columns[pos].use_count();
 }
 
-void carthesian_product(deque<int>& lhs, deque<int>& rhs,
-                        deque<pair<int, int>>& inp) {
-    if (rhs.empty()) rhs.push_back(-1);
-    for (const int& a : lhs)
-        for (const int& b : rhs) inp.push_back(make_pair(a, b));
-}
+//void carthesian_product(deque<int>& lhs, deque<int>& rhs,
+                        //deque<pair<int, int>>& inp) {
+    //if (rhs.empty()) rhs.push_back(-1);
+    //for (const int& a : lhs)
+        //for (const int& b : rhs) inp.push_back(make_pair(a, b));
+//}
 
-deque<pair<int, int>> correspondence_position(const DataFrame& lhs,
-                                              const DataFrame& other) {
-    deque<pair<int, int>> res;
-    for (auto const& e : lhs.index.unique_elements()) {
-        deque<int> lhsIdx = lhs.index.find_index_position(e);
-        deque<int> rhsIdx = other.index.find_index_position(e);
-        carthesian_product(lhsIdx, rhsIdx, res);
-    }
-    return res;
-}
+//deque<pair<int, int>> correspondence_position(const DataFrame& lhs,
+                                              //const DataFrame& other) {
+    //deque<pair<int, int>> res;
+    //for (auto const& e : lhs.index.unique_elements()) {
+        //deque<int> lhsIdx = lhs.index.find_index_position(e);
+        //deque<int> rhsIdx = other.index.find_index_position(e);
+        //carthesian_product(lhsIdx, rhsIdx, res);
+    //}
+    //return res;
+//}
 
 void DataFrame::copy_row(int pos) {
-    for (auto const x : column_names) {
-        std::cout << x.first << std::endl;
+    for (auto const x : column_names)
         columns[x.second]->copy_row(pos);
-    }
 }
 
-void DataFrame::append_duplicate_rows(int pos) {
+void DataFrame::duplicate_rows(int pos) {
     index.append_index(index.index_positions[pos]);
     copy_row(pos);
 }
 
-void DataFrame::append_duplicate_rows(deque<pair<int, int>>& indices) {
-    std::unordered_set<int> s;
+void DataFrame::duplicate_rows(deque<pair<int, int>>& indices) {
+    std::set<int> s;
     for (auto& pair : indices) {
         if (s.count(pair.first)) {
-            append_duplicate_rows(pair.first);
-            pair.first = index.index_positions.size() - 1;
-        }
-        s.insert(pair.first);
+            duplicate_rows(pair.first);
+            //pair.first = index.index_positions.size() - 1;
+        } else
+            s.insert(pair.first);
     }
 }
 
@@ -237,21 +235,21 @@ void DataFrame::make_unique_if(const vector<string>& c) {
     for (const string& s : c) make_unique_if(s);
 }
 
-//void DataFrame::drop_row(std::deque<Index::ele>& e) {
-    //vector<deque<Index::ele>> tmp{e};
-    //return drop_row(tmp);
-//}
+void DataFrame::drop_row(std::deque<Index::ele> e) {
+    vector<deque<Index::ele>> tmp{e};
+    return drop_row(tmp);
+}
 
-//void DataFrame::drop_row(vector<deque<Index::ele>>& vec) {
-    //std::sort(vec.begin(), vec.end());
-    //auto fun = [&](const auto& val) {
-        //return !std::binary_search(vec.begin(), vec.end(), val);
-    //};
-    //auto it = std::stable_partition(index.index_positions.begin(),
-                                    //index.index_positions.end(), fun);
-    //index.index_positions.erase(it, index.index_positions.end());
-    //for (auto& v : vec) index.index_names.erase(v);
-//}
+void DataFrame::drop_row(vector<deque<Index::ele>> vec) {
+    std::sort(vec.begin(), vec.end());
+    auto fun = [&](const auto& val) {
+        return !std::binary_search(vec.begin(), vec.end(), val);
+    };
+    auto it = std::stable_partition(index.index_positions.begin(),
+                                    index.index_positions.end(), fun);
+    index.index_positions.erase(it, index.index_positions.end());
+    for (auto& v : vec) index.index_names.erase(v);
+}
 
 void DataFrame::dropna() {
     vector<int> count = contains_null();
@@ -311,7 +309,7 @@ DataFrame::DataFrame(std::ifstream& file)
 }
 
 void DataFrame::append_missing_rows(const DataFrame& rhs) {
-    std::deque<pair<int, int>> pairs = correspondence_position(rhs, *this);
+    deque<pair<int, int>> pairs = rhs.index.index_correspondence(this->index);
     for (auto const& pair : pairs) {
         if (pair.second == -1) {
             append_nan_rows();

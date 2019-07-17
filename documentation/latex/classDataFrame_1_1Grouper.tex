@@ -10,16 +10,22 @@ Collaboration diagram for Data\+Frame\+:\+:Grouper$<$ T $>$\+:
 \mbox{\Hypertarget{classDataFrame_1_1Grouper_a474177da006d9ba18bd4bf2fd3809dd4}\label{classDataFrame_1_1Grouper_a474177da006d9ba18bd4bf2fd3809dd4}} 
 {\bfseries Grouper} (\hyperlink{classDataFrame}{Data\+Frame} \&)
 \item 
-\mbox{\Hypertarget{classDataFrame_1_1Grouper_aaf8d3173c0d890c3ac082adf2bb1f400}\label{classDataFrame_1_1Grouper_aaf8d3173c0d890c3ac082adf2bb1f400}} 
-{\bfseries Grouper} (\hyperlink{classDataFrame}{Data\+Frame} \&, const std\+::string \&)
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_a007f10e0f9d08889544ad2f826862bbe}\label{classDataFrame_1_1Grouper_a007f10e0f9d08889544ad2f826862bbe}} 
+{\bfseries Grouper} (\hyperlink{classDataFrame}{Data\+Frame} \&, \hyperlink{classDataFrame_1_1const__iterator}{Data\+Frame\+::const\+\_\+iterator}$<$ T $>$ \&...)
 \item 
-\mbox{\Hypertarget{classDataFrame_1_1Grouper_a364e765427d5268d8ab515341dcb02b1}\label{classDataFrame_1_1Grouper_a364e765427d5268d8ab515341dcb02b1}} 
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_a3347426a8a949290a7ab25235b7877a6}\label{classDataFrame_1_1Grouper_a3347426a8a949290a7ab25235b7877a6}} 
 \hyperlink{classDataFrame}{Data\+Frame} {\bfseries summarize} (\hyperlink{classStatistic}{Statistic} $\ast$)
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_a65232400969fd8e6ee3b72a1e8caa561}\label{classDataFrame_1_1Grouper_a65232400969fd8e6ee3b72a1e8caa561}} 
+\hyperlink{classDataFrame}{Data\+Frame} {\bfseries summarize} (\hyperlink{classStatistic}{Statistic} $\ast$, const std\+::initializer\+\_\+list$<$ std\+::string $>$ \&)
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_a2c51fb8faf10ba8a3d9f351003d01383}\label{classDataFrame_1_1Grouper_a2c51fb8faf10ba8a3d9f351003d01383}} 
+\hyperlink{classDataFrame}{Data\+Frame} {\bfseries calculate\+\_\+statistic} (\hyperlink{classStatistic}{Statistic} $\ast$, const std\+::vector$<$ std\+::string $>$ \&)
 \end{DoxyCompactItemize}
 \subsection*{Private Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classDataFrame_1_1Grouper_a2e806e00d5c98346dfdfb01a61651ae6}\label{classDataFrame_1_1Grouper_a2e806e00d5c98346dfdfb01a61651ae6}} 
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_a1a43e23644f25b50984fe9f960561190}\label{classDataFrame_1_1Grouper_a1a43e23644f25b50984fe9f960561190}} 
 std\+::vector$<$ std\+::string $>$ {\bfseries elegible\+\_\+types} (const std\+::string \&)
 \item 
 \mbox{\Hypertarget{classDataFrame_1_1Grouper_aa8519a3b8eb2c8fa471a2de09516ba9e}\label{classDataFrame_1_1Grouper_aa8519a3b8eb2c8fa471a2de09516ba9e}} 
@@ -28,22 +34,18 @@ void {\bfseries make\+\_\+index\+\_\+unique} ()
 \subsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classDataFrame_1_1Grouper_a145dbdc7827d0d4ccdbbcf5ed7efb413}\label{classDataFrame_1_1Grouper_a145dbdc7827d0d4ccdbbcf5ed7efb413}} 
-\hyperlink{classDataFrame}{Data\+Frame} \& {\bfseries the\+Data\+Frame}
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_a5198033bdc8e86d981d5224d6b74b188}\label{classDataFrame_1_1Grouper_a5198033bdc8e86d981d5224d6b74b188}} 
+std\+::vector$<$ Shared\+Col $>$ {\bfseries columns}
 \item 
-\mbox{\Hypertarget{classDataFrame_1_1Grouper_a1b17c37868718cfbbf5f1f24a35b6b77}\label{classDataFrame_1_1Grouper_a1b17c37868718cfbbf5f1f24a35b6b77}} 
-std\+::unordered\+\_\+map$<$ std\+::string, std\+::deque$<$ int $>$ $>$ {\bfseries old\+\_\+index\+\_\+names}
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_a4168b1377cc1d6453b90398911f39f15}\label{classDataFrame_1_1Grouper_a4168b1377cc1d6453b90398911f39f15}} 
+\hyperlink{classIndex}{Index} {\bfseries group\+\_\+index}
 \item 
-\mbox{\Hypertarget{classDataFrame_1_1Grouper_a87e56749cb1af1156a905dde5cc76f63}\label{classDataFrame_1_1Grouper_a87e56749cb1af1156a905dde5cc76f63}} 
-std\+::vector$<$ std\+::string $>$ {\bfseries index\+\_\+positions}
-\item 
-\mbox{\Hypertarget{classDataFrame_1_1Grouper_a1234cff8d2ca6a76c52e6390216215d1}\label{classDataFrame_1_1Grouper_a1234cff8d2ca6a76c52e6390216215d1}} 
-std\+::map$<$ std\+::string, int $>$ {\bfseries column\+\_\+names}
+\mbox{\Hypertarget{classDataFrame_1_1Grouper_a3cdb08226e82c7f54b14ebc1b0609684}\label{classDataFrame_1_1Grouper_a3cdb08226e82c7f54b14ebc1b0609684}} 
+std\+::map$<$ std\+::string, int $>$ {\bfseries group\+\_\+column\+\_\+names}
 \end{DoxyCompactItemize}
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
 dataframe/dataframe.\+h\item 
-dataframe/grouper.\+h\item 
-dataframe/grouper.\+cpp\end{DoxyCompactItemize}
+dataframe/grouper.\+h\end{DoxyCompactItemize}

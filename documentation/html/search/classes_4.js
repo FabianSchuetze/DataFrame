@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['statistic',['Statistic',['../classStatistic.html',1,'']]]
+  ['mean',['mean',['../classmean.html',1,'']]]
 ];

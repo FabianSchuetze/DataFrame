@@ -65,6 +65,8 @@ class Index {
     int size() const { return index_positions.size(); }
     std::set<std::deque<ele>> unique_elements();
     std::set<std::deque<ele>> unique_elements() const;
+    std::deque<std::pair<int, int>> index_correspondence(const Index&) const;
+    std::deque<std::pair<int, int>> index_correspondence(const Index&);
 
    private:
     std::vector<std::deque<ele>> index_positions; //deque: multiindex

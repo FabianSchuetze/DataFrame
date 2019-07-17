@@ -2,18 +2,18 @@
 \label{classDataFrame}\index{Data\+Frame@{Data\+Frame}}
 
 
-{\ttfamily \#include $<$dataframe.\+h$>$}
-
+Collaboration diagram for Data\+Frame\+:
+% FIG 0
 \subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
-class \hyperlink{classDataFrame_1_1ColumnIterator}{Column\+Iterator}
-\item 
-class \hyperlink{classDataFrame_1_1ConstColumnIterator}{Const\+Column\+Iterator}
+class \hyperlink{classDataFrame_1_1const__iterator}{const\+\_\+iterator}
 \item 
 class \hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy}
 \item 
 class \hyperlink{classDataFrame_1_1Grouper}{Grouper}
+\item 
+class \hyperlink{classDataFrame_1_1iterator}{iterator}
 \end{DoxyCompactItemize}
 \subsection*{Public Types}
 \begin{DoxyCompactItemize}
@@ -21,30 +21,27 @@ class \hyperlink{classDataFrame_1_1Grouper}{Grouper}
 \mbox{\Hypertarget{classDataFrame_ad93eb4d37be97ccfb877d55492e7c466}\label{classDataFrame_ad93eb4d37be97ccfb877d55492e7c466}} 
 typedef std\+::pair$<$ std\+::string, int $>$ {\bfseries index\+\_\+pair}
 \item 
-\mbox{\Hypertarget{classDataFrame_ac671e117f490645e57260a411588259b}\label{classDataFrame_ac671e117f490645e57260a411588259b}} 
-{\footnotesize template$<$typename T $>$ }\\using {\bfseries const\+\_\+iter} = typename \hyperlink{classDataFrame_1_1ConstColumnIterator}{Data\+Frame\+::\+Const\+Column\+Iterator}$<$ T $>$
-\item 
-\mbox{\Hypertarget{classDataFrame_ae7adc59ee324161ae3717b1d27ea52f5}\label{classDataFrame_ae7adc59ee324161ae3717b1d27ea52f5}} 
-{\footnotesize template$<$typename T $>$ }\\using {\bfseries iter} = typename \hyperlink{classDataFrame_1_1ColumnIterator}{Data\+Frame\+::\+Column\+Iterator}$<$ T $>$
-\item 
 \mbox{\Hypertarget{classDataFrame_ab4b83782ba7a3ce010fae4f73480c26f}\label{classDataFrame_ab4b83782ba7a3ce010fae4f73480c26f}} 
 typedef std\+::shared\+\_\+ptr$<$ \hyperlink{classColumn}{Column} $>$ {\bfseries Shared\+Col}
 \end{DoxyCompactItemize}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classDataFrame_a1f727e3248f4a7cc83f1fbcc10246302}\label{classDataFrame_a1f727e3248f4a7cc83f1fbcc10246302}} 
-{\bfseries Data\+Frame} (const \hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} \&)
-\item 
+\mbox{\Hypertarget{classDataFrame_a69a9dc47b7506b8062fd34aedacbf579}\label{classDataFrame_a69a9dc47b7506b8062fd34aedacbf579}} 
+\hyperlink{classDataFrame_a69a9dc47b7506b8062fd34aedacbf579}{Data\+Frame} ()
+\begin{DoxyCompactList}\small\item\em Default Constructor. \end{DoxyCompactList}\item 
+\hyperlink{classDataFrame_a1f727e3248f4a7cc83f1fbcc10246302}{Data\+Frame} (const \hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} \&)
+\begin{DoxyCompactList}\small\item\em converts a Proxy\+Class into the parent \hyperlink{classDataFrame}{Data\+Frame} \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classDataFrame_a31eb9b2eb2874c02156bcdad43ab2784}\label{classDataFrame_a31eb9b2eb2874c02156bcdad43ab2784}} 
 \hyperlink{classDataFrame_a31eb9b2eb2874c02156bcdad43ab2784}{Data\+Frame} (std\+::ifstream \&)
-\begin{DoxyCompactList}\small\item\em Create a new dataframe by reading from an file-\/stream. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classDataFrame_a8be8d03b97170a3fcca49dff7e4b7f16}\label{classDataFrame_a8be8d03b97170a3fcca49dff7e4b7f16}} 
-{\footnotesize template$<$typename T $>$ }\\{\bfseries Data\+Frame} (const std\+::vector$<$ std\+::string $>$ \&, const std\+::vector$<$ std\+::string $>$ \&, const std\+::vector$<$ std\+::vector$<$ T $>$$>$ \&)
-\item 
-\mbox{\Hypertarget{classDataFrame_a8bd3fc8f384de88dbb35347c220f2d94}\label{classDataFrame_a8bd3fc8f384de88dbb35347c220f2d94}} 
-\hyperlink{classDataFrame}{Data\+Frame} \& {\bfseries operator=} (const \hyperlink{classDataFrame}{Data\+Frame} \&)
-\item 
+\begin{DoxyCompactList}\small\item\em Create a new dataframe by reading from an file-\/stream based on a schema. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classDataFrame_a6755d053118673ebf32e9f602ce18669}\label{classDataFrame_a6755d053118673ebf32e9f602ce18669}} 
+{\footnotesize template$<$typename T1 , typename... T$>$ }\\\hyperlink{classDataFrame_a6755d053118673ebf32e9f602ce18669}{Data\+Frame} (const \hyperlink{classIndex}{Index} \&, const std\+::vector$<$ std\+::string $>$ \&, const std\+::vector$<$ T1 $>$ \&, const std\+::vector$<$ T $>$ \&...)
+\begin{DoxyCompactList}\small\item\em Create dataframe with an index, the column names and vector of different datatype. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T1 , typename... T$>$ }\\\hyperlink{classDataFrame_a825048ac830a240d198c7096e86425fb}{Data\+Frame} (const std\+::vector$<$ std\+::string $>$ \&, const std\+::vector$<$ T1 $>$ \&, const std\+::vector$<$ T $>$ \&...)
+\begin{DoxyCompactList}\small\item\em Create dataframe without index, the column names and vector of different datatype. \end{DoxyCompactList}\item 
+\hyperlink{classDataFrame}{Data\+Frame} \& \hyperlink{classDataFrame_a26164d4d8119ea34da73eb0c48bd3972}{operator=} (const \hyperlink{classDataFrame}{Data\+Frame} \&)=default
+\begin{DoxyCompactList}\small\item\em Copy assignment operator. \end{DoxyCompactList}\item 
 Shared\+Col \hyperlink{classDataFrame_a5909652f24e66c22922b4b4c910f2b09}{get\+\_\+unique} (const std\+::string \&)
 \begin{DoxyCompactList}\small\item\em Returns a shared pointer to a new version of an \hyperlink{classColumn}{Column} named s. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classDataFrame_afa835fbc006732850a6483ba8635db2e}\label{classDataFrame_afa835fbc006732850a6483ba8635db2e}} 
@@ -52,30 +49,27 @@ Shared\+Col \hyperlink{classDataFrame_afa835fbc006732850a6483ba8635db2e}{get\+\_
 \begin{DoxyCompactList}\small\item\em for constant members \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classDataFrame_a4dac2312a688462087cd8c9cbef1c6bb}\label{classDataFrame_a4dac2312a688462087cd8c9cbef1c6bb}} 
 Shared\+Col \hyperlink{classDataFrame_a4dac2312a688462087cd8c9cbef1c6bb}{get\+\_\+unique} (const std\+::string \&, const std\+::deque$<$ int $>$ \&) const
-\begin{DoxyCompactList}\small\item\em Returns the new column for the subset of indices marked by the vector$<$int$>$ \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Returns the new column for the subset of indices marked by the deque$<$int$>$. \end{DoxyCompactList}\item 
 \hyperlink{classDataFrame}{Data\+Frame} \& \hyperlink{classDataFrame_a61f3301cc72548b4b3536c0844fb156d}{operator+=} (const \hyperlink{classDataFrame}{Data\+Frame} \&rhs)
 \begin{DoxyCompactList}\small\item\em The overloaded compound-\/assignment operator. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classDataFrame_aa612c8755b333027d3cddc30a8e62386}\label{classDataFrame_aa612c8755b333027d3cddc30a8e62386}} 
-{\footnotesize template$<$typename T $>$ }\\\hyperlink{classDataFrame}{Data\+Frame} \& {\bfseries operator+=} (const T \&)
-\item 
-\mbox{\Hypertarget{classDataFrame_a33a400a50b6882d4e607f0896dc709e1}\label{classDataFrame_a33a400a50b6882d4e607f0896dc709e1}} 
-{\footnotesize template$<$class T $>$ }\\iter$<$ T $>$ {\bfseries begin} (const std\+::string \&)
-\item 
-{\footnotesize template$<$class T $>$ }\\const\+\_\+iter$<$ T $>$ \hyperlink{classDataFrame_a857dadee258495743462244022a2dcce}{cbegin} (const std\+::string \&)
-\begin{DoxyCompactList}\small\item\em A constant iterator over the columns achored to the beginning of the column. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classDataFrame_a91d8ea8c537360d8bda0902fa620e874}\label{classDataFrame_a91d8ea8c537360d8bda0902fa620e874}} 
-{\footnotesize template$<$class T $>$ }\\iter$<$ T $>$ {\bfseries end} (const std\+::string \&)
-\item 
-{\footnotesize template$<$class T $>$ }\\const\+\_\+iter$<$ T $>$ \hyperlink{classDataFrame_a895c45b1be67d772aed3fa10169a1038}{cend} (const std\+::string \&)
+{\footnotesize template$<$typename T $>$ }\\\hyperlink{classDataFrame}{Data\+Frame} \& \hyperlink{classDataFrame_aa612c8755b333027d3cddc30a8e62386}{operator+=} (const T \&)
+\begin{DoxyCompactList}\small\item\em Componound assignment operator assing object of type double, int or string to the dataframe. \end{DoxyCompactList}\item 
+{\footnotesize template$<$class T $>$ }\\\hyperlink{classDataFrame_1_1iterator}{iterator}$<$ T $>$ \hyperlink{classDataFrame_abc7986e45f6c9fc145156965bcfd8e7f}{begin} (const std\+::string \&)
+\begin{DoxyCompactList}\small\item\em A bidirectional-\/iterator over the columns. \end{DoxyCompactList}\item 
+{\footnotesize template$<$class T $>$ }\\\hyperlink{classDataFrame_1_1const__iterator}{const\+\_\+iterator}$<$ T $>$ \hyperlink{classDataFrame_a2c869adf1441f604eaa1e629e7e8c8f4}{cbegin} (const std\+::string \&)
+\begin{DoxyCompactList}\small\item\em A constant bidirectional-\/iterator over the columns achored to the beginning of the column. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classDataFrame_a925a16eff1840c7711c5342a4fdfab0d}\label{classDataFrame_a925a16eff1840c7711c5342a4fdfab0d}} 
+{\footnotesize template$<$class T $>$ }\\\hyperlink{classDataFrame_1_1iterator}{iterator}$<$ T $>$ \hyperlink{classDataFrame_a925a16eff1840c7711c5342a4fdfab0d}{end} (const std\+::string \&)
+\begin{DoxyCompactList}\small\item\em Reference the last element in the column. \end{DoxyCompactList}\item 
+{\footnotesize template$<$class T $>$ }\\\hyperlink{classDataFrame_1_1const__iterator}{const\+\_\+iterator}$<$ T $>$ \hyperlink{classDataFrame_a89d6883d335d9a92682b88a995fd3547}{cend} (const std\+::string \&)
 \begin{DoxyCompactList}\small\item\em A constant iterator over the columns anchored to the end of the column. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classDataFrame_a6abc672ac4c439e3e785bd3f84c8da15}\label{classDataFrame_a6abc672ac4c439e3e785bd3f84c8da15}} 
 void \hyperlink{classDataFrame_a6abc672ac4c439e3e785bd3f84c8da15}{dropna} ()
 \begin{DoxyCompactList}\small\item\em drops rows which contain na from the dataframe \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classDataFrame_a0b5f5743f485c3f8c185abb59e9038a9}\label{classDataFrame_a0b5f5743f485c3f8c185abb59e9038a9}} 
-void {\bfseries drop\+\_\+row} (std\+::vector$<$ std\+::string $>$)
-\item 
-\mbox{\Hypertarget{classDataFrame_a337c8f36b774778364dcde54b398fb5a}\label{classDataFrame_a337c8f36b774778364dcde54b398fb5a}} 
-void \hyperlink{classDataFrame_a337c8f36b774778364dcde54b398fb5a}{drop\+\_\+row} (const std\+::string \&)
+void \hyperlink{classDataFrame_a4b4198c63e6ed421968303e872beb807}{drop\+\_\+row} (std\+::vector$<$ std\+::deque$<$ Index\+::ele $>$$>$)
+\begin{DoxyCompactList}\small\item\em Drops rows based on the index of the dataframe. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classDataFrame_a644965d62c039b88a940c2cb83a29fbc}\label{classDataFrame_a644965d62c039b88a940c2cb83a29fbc}} 
+void \hyperlink{classDataFrame_a644965d62c039b88a940c2cb83a29fbc}{drop\+\_\+row} (std\+::deque$<$ Index\+::ele $>$)
 \begin{DoxyCompactList}\small\item\em drops a row from the dataframe \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classDataFrame_afa6fd73a62f0d45b03e5df738a575693}\label{classDataFrame_afa6fd73a62f0d45b03e5df738a575693}} 
 void \hyperlink{classDataFrame_afa6fd73a62f0d45b03e5df738a575693}{drop\+\_\+column} (const std\+::string \&)
@@ -83,8 +77,8 @@ void \hyperlink{classDataFrame_afa6fd73a62f0d45b03e5df738a575693}{drop\+\_\+colu
 \mbox{\Hypertarget{classDataFrame_ae9eb64b2d0c072459f85a4b840978060}\label{classDataFrame_ae9eb64b2d0c072459f85a4b840978060}} 
 void \hyperlink{classDataFrame_ae9eb64b2d0c072459f85a4b840978060}{sort\+\_\+by\+\_\+index} ()
 \begin{DoxyCompactList}\small\item\em Sort the dataframe by its index. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classDataFrame_a09c79a451ef2d4ff909e1d01d4788f22}\label{classDataFrame_a09c79a451ef2d4ff909e1d01d4788f22}} 
-void \hyperlink{classDataFrame_a09c79a451ef2d4ff909e1d01d4788f22}{sort\+\_\+by\+\_\+column} (const std\+::string \&)
+\mbox{\Hypertarget{classDataFrame_afd7ed39033d1ad707688df66b860ff1a}\label{classDataFrame_afd7ed39033d1ad707688df66b860ff1a}} 
+{\footnotesize template$<$typename T1 , typename... T2$>$ }\\void \hyperlink{classDataFrame_afd7ed39033d1ad707688df66b860ff1a}{sort\+\_\+by\+\_\+column} (\hyperlink{classDataFrame_1_1const__iterator}{const\+\_\+iterator}$<$ T1 $>$, \hyperlink{classDataFrame_1_1const__iterator}{const\+\_\+iterator}$<$ T2 $>$...)
 \begin{DoxyCompactList}\small\item\em Sorts the dataframe by column named s. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classDataFrame_acf8a589cf1c78e72fdd92c3107550ea4}\label{classDataFrame_acf8a589cf1c78e72fdd92c3107550ea4}} 
 \hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} {\bfseries operator\mbox{[}$\,$\mbox{]}} (const std\+::string \&)
@@ -92,20 +86,11 @@ void \hyperlink{classDataFrame_a09c79a451ef2d4ff909e1d01d4788f22}{sort\+\_\+by\+
 \mbox{\Hypertarget{classDataFrame_acbf34b3d66e35c0208adc0623db4c1b9}\label{classDataFrame_acbf34b3d66e35c0208adc0623db4c1b9}} 
 \hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} {\bfseries operator\mbox{[}$\,$\mbox{]}} (const std\+::vector$<$ std\+::string $>$ \&col\+\_\+name)
 \item 
-\mbox{\Hypertarget{classDataFrame_a37f80aab3a99033296b4ede466ef1eca}\label{classDataFrame_a37f80aab3a99033296b4ede466ef1eca}} 
-\hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} {\bfseries loc} (const std\+::string \&)
-\item 
 \mbox{\Hypertarget{classDataFrame_a02cb54422bd4ac0b2cae6f6a811b0f93}\label{classDataFrame_a02cb54422bd4ac0b2cae6f6a811b0f93}} 
 std\+::pair$<$ size\+\_\+t, size\+\_\+t $>$ \hyperlink{classDataFrame_a02cb54422bd4ac0b2cae6f6a811b0f93}{size} () const
 \begin{DoxyCompactList}\small\item\em Returns a pair with the row (first) and column (second) numbers. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classDataFrame_a9bf1cbdc2dfa37b612c74701e6cdfa04}\label{classDataFrame_a9bf1cbdc2dfa37b612c74701e6cdfa04}} 
 int {\bfseries use\+\_\+count} (const std\+::string \&)
-\item 
-\mbox{\Hypertarget{classDataFrame_a3ca5aa9bbea320f7b2290213ff895a75}\label{classDataFrame_a3ca5aa9bbea320f7b2290213ff895a75}} 
-std\+::vector$<$ std\+::string $>$ {\bfseries get\+\_\+index\+\_\+names} ()
-\item 
-\mbox{\Hypertarget{classDataFrame_afbcd88c63518ff6f9d7ebcd9ba86b401}\label{classDataFrame_afbcd88c63518ff6f9d7ebcd9ba86b401}} 
-std\+::vector$<$ std\+::string $>$ {\bfseries get\+\_\+index\+\_\+names} () const
 \item 
 \mbox{\Hypertarget{classDataFrame_aab55ce0761d3bbb1e19d43207a782974}\label{classDataFrame_aab55ce0761d3bbb1e19d43207a782974}} 
 {\footnotesize template$<$typename T $>$ }\\void {\bfseries fill\+\_\+na} (std\+::string, T)
@@ -126,38 +111,28 @@ void \hyperlink{classDataFrame_a7a1b7c79f2b98e18ed5cda2852dd5341}{make\+\_\+cont
 \mbox{\Hypertarget{classDataFrame_ae97d60f192876309e2615abffb544cbe}\label{classDataFrame_ae97d60f192876309e2615abffb544cbe}} 
 void \hyperlink{classDataFrame_ae97d60f192876309e2615abffb544cbe}{convert\+\_\+bool\+\_\+to\+\_\+double} (const std\+::string \&)
 \begin{DoxyCompactList}\small\item\em Convert the boolean column name s to a double type. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classDataFrame_ab6d432f93870f784d951ac3935d76d34}\label{classDataFrame_ab6d432f93870f784d951ac3935d76d34}} 
-{\footnotesize template$<$class T $>$ }\\\hyperlink{classDataFrame_1_1Grouper}{Grouper}$<$ T $>$ {\bfseries groupby} ()
-\item 
-\mbox{\Hypertarget{classDataFrame_a8d0d8eb77e1d4a102bf20cbceb61c7c5}\label{classDataFrame_a8d0d8eb77e1d4a102bf20cbceb61c7c5}} 
-{\footnotesize template$<$class T $>$ }\\\hyperlink{classDataFrame_1_1Grouper}{Grouper}$<$ T $>$ {\bfseries groupby} (const std\+::string \&)
-\item 
-\mbox{\Hypertarget{classDataFrame_a655cecea781fb9cbcbd57b2c33577ede}\label{classDataFrame_a655cecea781fb9cbcbd57b2c33577ede}} 
-{\footnotesize template$<$class T $>$ }\\\hyperlink{classDataFrame_1_1ColumnIterator}{Data\+Frame\+::\+Column\+Iterator}$<$ T $>$ {\bfseries begin} (const std\+::string \&s)
-\item 
-\mbox{\Hypertarget{classDataFrame_a61af0f8483c56afa9db7d8bb1bc09ee2}\label{classDataFrame_a61af0f8483c56afa9db7d8bb1bc09ee2}} 
-{\footnotesize template$<$class T $>$ }\\\hyperlink{classDataFrame_1_1ColumnIterator}{Data\+Frame\+::\+Column\+Iterator}$<$ T $>$ {\bfseries end} (const std\+::string \&s)
-\item 
-\mbox{\Hypertarget{classDataFrame_ae3450013cf1337c4be12c926a5504d06}\label{classDataFrame_ae3450013cf1337c4be12c926a5504d06}} 
-{\footnotesize template$<$class T $>$ }\\\hyperlink{classDataFrame_1_1ConstColumnIterator}{Data\+Frame\+::\+Const\+Column\+Iterator}$<$ T $>$ {\bfseries cbegin} (const std\+::string \&s)
-\item 
-\mbox{\Hypertarget{classDataFrame_a3c66471e50b77318f80c444f34a4f323}\label{classDataFrame_a3c66471e50b77318f80c444f34a4f323}} 
-{\footnotesize template$<$class T $>$ }\\\hyperlink{classDataFrame_1_1ConstColumnIterator}{Data\+Frame\+::\+Const\+Column\+Iterator}$<$ T $>$ {\bfseries cend} (const std\+::string \&s)
-\item 
-\mbox{\Hypertarget{classDataFrame_a6b2ef86b9b9cf28287c98fd806f67c2c}\label{classDataFrame_a6b2ef86b9b9cf28287c98fd806f67c2c}} 
-{\footnotesize template$<$typename T $>$ }\\{\bfseries Data\+Frame} (const vector$<$ string $>$ \&idx, const vector$<$ string $>$ \&n, const vector$<$ vector$<$ T $>$$>$ \&cols)
-\item 
-\mbox{\Hypertarget{classDataFrame_a2371f05dbcaa1a6e503ec0ab4e1e7099}\label{classDataFrame_a2371f05dbcaa1a6e503ec0ab4e1e7099}} 
-{\footnotesize template$<$typename T $>$ }\\vector$<$ string $>$ {\bfseries get\+\_\+column\+\_\+names} ()
-\item 
-\mbox{\Hypertarget{classDataFrame_a413a01311375ca843576552805762b62}\label{classDataFrame_a413a01311375ca843576552805762b62}} 
-{\footnotesize template$<$typename T $>$ }\\void {\bfseries sort\+\_\+by\+\_\+column\+\_\+template} (const string \&s)
+{\footnotesize template$<$class... T$>$ }\\\hyperlink{classDataFrame_1_1Grouper}{Grouper}$<$ T... $>$ \hyperlink{classDataFrame_a136e725d1f8945c90914b66276b476c0}{groupby} (\hyperlink{classDataFrame_1_1const__iterator}{Data\+Frame\+::const\+\_\+iterator}$<$ T $>$...)
+\begin{DoxyCompactList}\small\item\em Groups the dataframe by index and return a grouper object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classDataFrame_a05e0e4eaae443a02cbe67e9e73a3e935}\label{classDataFrame_a05e0e4eaae443a02cbe67e9e73a3e935}} 
+{\footnotesize template$<$typename T1 , typename... T2$>$ }\\void {\bfseries sort\+\_\+by\+\_\+column} (\hyperlink{classDataFrame_1_1const__iterator}{const\+\_\+iterator}$<$ T1 $>$ v, \hyperlink{classDataFrame_1_1const__iterator}{const\+\_\+iterator}$<$ T2 $>$... v2)
 \item 
 \mbox{\Hypertarget{classDataFrame_a6ebe3553cef68aeb5c4a2ce85497f20d}\label{classDataFrame_a6ebe3553cef68aeb5c4a2ce85497f20d}} 
 {\footnotesize template$<$typename T $>$ }\\void {\bfseries initialize\+\_\+column} (const string \&s)
 \item 
-\mbox{\Hypertarget{classDataFrame_ac7d9c37adc8d03f4bd920a113f55c625}\label{classDataFrame_ac7d9c37adc8d03f4bd920a113f55c625}} 
-{\footnotesize template$<$class T $>$ }\\\hyperlink{classDataFrame_1_1Grouper}{Data\+Frame\+::\+Grouper}$<$ T $>$ {\bfseries groupby} (const string \&s)
+\mbox{\Hypertarget{classDataFrame_a2371f05dbcaa1a6e503ec0ab4e1e7099}\label{classDataFrame_a2371f05dbcaa1a6e503ec0ab4e1e7099}} 
+{\footnotesize template$<$typename T $>$ }\\vector$<$ string $>$ {\bfseries get\+\_\+column\+\_\+names} ()
+\item 
+\mbox{\Hypertarget{classDataFrame_aacffa9ac2193fc120892c28c1645dd0b}\label{classDataFrame_aacffa9ac2193fc120892c28c1645dd0b}} 
+{\footnotesize template$<$typename T1 , typename... T$>$ }\\void {\bfseries append\+\_\+column} (const std\+::vector$<$ std\+::string $>$ \&names, int pos, const std\+::vector$<$ T1 $>$ \&v1, const std\+::vector$<$ T $>$ \&... v2)
+\item 
+\mbox{\Hypertarget{classDataFrame_aaeb96b096f856063dea8bb8355b6ac2c}\label{classDataFrame_aaeb96b096f856063dea8bb8355b6ac2c}} 
+{\footnotesize template$<$typename T1 , typename... T$>$ }\\{\bfseries Data\+Frame} (const \hyperlink{classIndex}{Index} \&idx, const std\+::vector$<$ std\+::string $>$ \&names, const std\+::vector$<$ T1 $>$ \&v1, const std\+::vector$<$ T $>$ \&... v)
+\item 
+\mbox{\Hypertarget{classDataFrame_ad8ab0dbbcedd5af5039cf5670227fc34}\label{classDataFrame_ad8ab0dbbcedd5af5039cf5670227fc34}} 
+{\footnotesize template$<$typename T1 , typename... T$>$ }\\{\bfseries Data\+Frame} (const std\+::vector$<$ std\+::string $>$ \&names, const std\+::vector$<$ T1 $>$ \&v1, const std\+::vector$<$ T $>$ \&... cols)
+\item 
+\mbox{\Hypertarget{classDataFrame_ae7c489cb2413ca85d13076b8691f4590}\label{classDataFrame_ae7c489cb2413ca85d13076b8691f4590}} 
+{\footnotesize template$<$typename... T$>$ }\\\hyperlink{classDataFrame_1_1Grouper}{Data\+Frame\+::\+Grouper}$<$ T... $>$ {\bfseries groupby} (\hyperlink{classDataFrame_1_1const__iterator}{Data\+Frame\+::const\+\_\+iterator}$<$ T $>$... it)
 \end{DoxyCompactItemize}
 \subsection*{Private Member Functions}
 \begin{DoxyCompactItemize}
@@ -189,18 +164,18 @@ void {\bfseries append\+\_\+missing\+\_\+rows} (const \hyperlink{classDataFrame}
 \mbox{\Hypertarget{classDataFrame_a8f22d43916f61216b13a36843941d1a6}\label{classDataFrame_a8f22d43916f61216b13a36843941d1a6}} 
 void {\bfseries append\+\_\+nan\+\_\+rows} ()
 \item 
+\mbox{\Hypertarget{classDataFrame_ac96e8f862aa623c8ab1cf057567908f7}\label{classDataFrame_ac96e8f862aa623c8ab1cf057567908f7}} 
+{\footnotesize template$<$typename T1 , typename... T$>$ }\\void {\bfseries append\+\_\+column} (const std\+::vector$<$ std\+::string $>$ \&, int pos, const std\+::vector$<$ T1 $>$ \&, const std\+::vector$<$ T $>$ \&...)
+\item 
+\mbox{\Hypertarget{classDataFrame_a52b2be4f35b91163d915f593d3b3dbd6}\label{classDataFrame_a52b2be4f35b91163d915f593d3b3dbd6}} 
+{\footnotesize template$<$typename T1 $>$ }\\void {\bfseries append\+\_\+column} (const std\+::vector$<$ std\+::string $>$ \&, int, const std\+::vector$<$ T1 $>$ \&)
+\item 
 \mbox{\Hypertarget{classDataFrame_aec1676a627594d227b776cf78fad9825}\label{classDataFrame_aec1676a627594d227b776cf78fad9825}} 
 void \hyperlink{classDataFrame_aec1676a627594d227b776cf78fad9825}{append\+\_\+column} (const std\+::string \&, const Shared\+Col \&)
 \begin{DoxyCompactList}\small\item\em Appends the string to the end of index\+\_\+positions and adds it to the hash function index\+\_\+names. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classDataFrame_afd67ba56aa6bbe5f0c8112953a83cf83}\label{classDataFrame_afd67ba56aa6bbe5f0c8112953a83cf83}} 
-void {\bfseries append\+\_\+index} (const std\+::string \&)
-\item 
-\mbox{\Hypertarget{classDataFrame_a4563aac177df2d5d5f517b08e69f2e29}\label{classDataFrame_a4563aac177df2d5d5f517b08e69f2e29}} 
-void \hyperlink{classDataFrame_a4563aac177df2d5d5f517b08e69f2e29}{append\+\_\+index} (const std\+::vector$<$ std\+::string $>$ \&)
-\begin{DoxyCompactList}\small\item\em Uses the other function as helper function. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classDataFrame_aebbbb689141a2ad10a3f4d5c671a3af6}\label{classDataFrame_aebbbb689141a2ad10a3f4d5c671a3af6}} 
-std\+::vector$<$ std\+::string $>$ {\bfseries frame} (\hyperlink{classColumn}{Column} \&c)
-\item 
+std\+::vector$<$ std\+::string $>$ \hyperlink{classDataFrame_aebbbb689141a2ad10a3f4d5c671a3af6}{frame} (\hyperlink{classColumn}{Column} \&c)
+\begin{DoxyCompactList}\small\item\em Uses the other function as helper function. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classDataFrame_a0c07e473d7fcb446ae4b4313d24b6076}\label{classDataFrame_a0c07e473d7fcb446ae4b4313d24b6076}} 
 std\+::vector$<$ int $>$ {\bfseries contains\+\_\+null} ()
 \item 
@@ -210,28 +185,13 @@ void {\bfseries make\+\_\+unique} (const std\+::string \&)
 \mbox{\Hypertarget{classDataFrame_a428feca8859bed363d7c9b774f997551}\label{classDataFrame_a428feca8859bed363d7c9b774f997551}} 
 void {\bfseries make\+\_\+unique} (const std\+::vector$<$ std\+::string $>$ \&)
 \item 
-\mbox{\Hypertarget{classDataFrame_af53a20136b2c32d204eec54befc037df}\label{classDataFrame_af53a20136b2c32d204eec54befc037df}} 
-{\footnotesize template$<$class T $>$ }\\std\+::vector$<$ int $>$ {\bfseries permutation\+\_\+index} (const std\+::string \&s)
-\item 
 int \hyperlink{classDataFrame_a24a13f1ad2e723ad048e1486d335191a}{find\+\_\+column\+\_\+position} (const std\+::string \&)
 \begin{DoxyCompactList}\small\item\em Returns an index number for the column named s. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classDataFrame_aac3a4ba8206956423c19ce509fbfae28}\label{classDataFrame_aac3a4ba8206956423c19ce509fbfae28}} 
 int {\bfseries find\+\_\+column\+\_\+position} (const std\+::string \&) const
 \item 
-\mbox{\Hypertarget{classDataFrame_a68776b65e4afee1c4625a4d5e408a61d}\label{classDataFrame_a68776b65e4afee1c4625a4d5e408a61d}} 
-std\+::deque$<$ int $>$ {\bfseries find\+\_\+index\+\_\+position} () const
-\item 
-\mbox{\Hypertarget{classDataFrame_a459d2c98348161b29fa508d99c7ebbd1}\label{classDataFrame_a459d2c98348161b29fa508d99c7ebbd1}} 
-std\+::deque$<$ int $>$ {\bfseries find\+\_\+index\+\_\+position} ()
-\item 
-\mbox{\Hypertarget{classDataFrame_a57273cc4f056db6147802610cc7f56fe}\label{classDataFrame_a57273cc4f056db6147802610cc7f56fe}} 
-std\+::deque$<$ int $>$ \hyperlink{classDataFrame_a57273cc4f056db6147802610cc7f56fe}{find\+\_\+index\+\_\+position} (const std\+::string \&) const
-\begin{DoxyCompactList}\small\item\em finds the rows number for the index name given as input \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classDataFrame_ab2f6c3d944ea8cc7b7ca1b24a435a59d}\label{classDataFrame_ab2f6c3d944ea8cc7b7ca1b24a435a59d}} 
-std\+::deque$<$ int $>$ {\bfseries find\+\_\+index\+\_\+position} (const std\+::string \&)
-\item 
 Shared\+Col \hyperlink{classDataFrame_a6386fb76796f1f414311486aa5f253be}{get\+\_\+shared\+\_\+copy} (const std\+::string \&)
-\item 
+\begin{DoxyCompactList}\small\item\em finds the rows number for the index name given as input \end{DoxyCompactList}\item 
 Shared\+Col \hyperlink{classDataFrame_a97842254d757876650ea5bada057855e}{get\+\_\+shared\+\_\+copy} (const std\+::string \&) const
 \item 
 \mbox{\Hypertarget{classDataFrame_ad65521a6929933f95823efa3e5a095e9}\label{classDataFrame_ad65521a6929933f95823efa3e5a095e9}} 
@@ -244,9 +204,6 @@ void \hyperlink{classDataFrame_a207e76c73a757f4a2ba9013de8beaec5}{initialize\+\_
 \item 
 \mbox{\Hypertarget{classDataFrame_a49d3f1a316e52031660658e9cfd8a78f}\label{classDataFrame_a49d3f1a316e52031660658e9cfd8a78f}} 
 void {\bfseries insert\+\_\+data} (std\+::ifstream \&, const std\+::vector$<$ std\+::string $>$ \&)
-\item 
-\mbox{\Hypertarget{classDataFrame_af541608659c0b46139244a62a23d1c18}\label{classDataFrame_af541608659c0b46139244a62a23d1c18}} 
-{\footnotesize template$<$typename T $>$ }\\void {\bfseries sort\+\_\+by\+\_\+column\+\_\+template} (const std\+::string \&)
 \end{DoxyCompactItemize}
 \subsection*{Private Attributes}
 \begin{DoxyCompactItemize}
@@ -254,11 +211,8 @@ void {\bfseries insert\+\_\+data} (std\+::ifstream \&, const std\+::vector$<$ st
 \mbox{\Hypertarget{classDataFrame_a9c466c6766286ba229148f45e3a8eb87}\label{classDataFrame_a9c466c6766286ba229148f45e3a8eb87}} 
 std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \hyperlink{classColumn}{Column} $>$ $>$ {\bfseries columns}
 \item 
-\mbox{\Hypertarget{classDataFrame_ab56d022d939cc754f7bdb702de68c40a}\label{classDataFrame_ab56d022d939cc754f7bdb702de68c40a}} 
-std\+::unordered\+\_\+map$<$ std\+::string, std\+::deque$<$ int $>$ $>$ {\bfseries index\+\_\+names}
-\item 
-\mbox{\Hypertarget{classDataFrame_abfc7eae69ff9b9e260a186200507e4d6}\label{classDataFrame_abfc7eae69ff9b9e260a186200507e4d6}} 
-std\+::vector$<$ std\+::string $>$ {\bfseries index\+\_\+positions}
+\mbox{\Hypertarget{classDataFrame_ad7cc010c9b8cf5460ffd889c08feed32}\label{classDataFrame_ad7cc010c9b8cf5460ffd889c08feed32}} 
+\hyperlink{classIndex}{Index} {\bfseries index}
 \item 
 \mbox{\Hypertarget{classDataFrame_ae655c8a49567c2acd61bd2f05276779a}\label{classDataFrame_ae655c8a49567c2acd61bd2f05276779a}} 
 std\+::map$<$ std\+::string, int $>$ {\bfseries column\+\_\+names}
@@ -267,13 +221,13 @@ std\+::map$<$ std\+::string, int $>$ {\bfseries column\+\_\+names}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{classDataFrame_a6d45f85447b7949ec8832150ebaf26cc}\label{classDataFrame_a6d45f85447b7949ec8832150ebaf26cc}} 
-{\footnotesize template$<$class T $>$ }\\class {\bfseries Grouper}
+{\footnotesize template$<$class... T$>$ }\\class {\bfseries Grouper}
 \item 
-\mbox{\Hypertarget{classDataFrame_a323c4435dd5a1b8a480b46dd8f16c77c}\label{classDataFrame_a323c4435dd5a1b8a480b46dd8f16c77c}} 
-{\footnotesize template$<$class T $>$ }\\class {\bfseries Const\+Column\+Iterator}
+\mbox{\Hypertarget{classDataFrame_ada44a7c9690829a06c00c22a3ea6fba1}\label{classDataFrame_ada44a7c9690829a06c00c22a3ea6fba1}} 
+{\footnotesize template$<$class T $>$ }\\class {\bfseries const\+\_\+iterator}
 \item 
-\mbox{\Hypertarget{classDataFrame_a59406b6236833847c91e20e36a3983c9}\label{classDataFrame_a59406b6236833847c91e20e36a3983c9}} 
-{\footnotesize template$<$class T $>$ }\\class {\bfseries Column\+Iterator}
+\mbox{\Hypertarget{classDataFrame_af4b62491a63a70a7f86bb7425fb5b484}\label{classDataFrame_af4b62491a63a70a7f86bb7425fb5b484}} 
+{\footnotesize template$<$class T $>$ }\\class {\bfseries iterator}
 \item 
 \mbox{\Hypertarget{classDataFrame_ac665e1df1c1d41e0d0c5afcdfb827a74}\label{classDataFrame_ac665e1df1c1d41e0d0c5afcdfb827a74}} 
 \hyperlink{classDataFrame}{Data\+Frame} {\bfseries deep\+\_\+copy} (const \hyperlink{classDataFrame}{Data\+Frame} \&lhs)
@@ -302,33 +256,85 @@ std\+::deque$<$ std\+::pair$<$ int, int $>$ $>$ {\bfseries correspondence\+\_\+p
 \begin{DoxyCompactList}\small\item\em adds a value of type T to the dataframe. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
-\subsection{Detailed Description}
-A test class. A more elaborate class description. 
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classDataFrame_a1f727e3248f4a7cc83f1fbcc10246302}\label{classDataFrame_a1f727e3248f4a7cc83f1fbcc10246302}} 
+\index{Data\+Frame@{Data\+Frame}!Data\+Frame@{Data\+Frame}}
+\index{Data\+Frame@{Data\+Frame}!Data\+Frame@{Data\+Frame}}
+\subsubsection{\texorpdfstring{Data\+Frame()}{DataFrame()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Data\+Frame\+::\+Data\+Frame (\begin{DoxyParamCaption}\item[{const \hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} \&}]{df }\end{DoxyParamCaption})}
+
+
+
+converts a Proxy\+Class into the parent \hyperlink{classDataFrame}{Data\+Frame} 
+
+When selecting a subset of columns of a \hyperlink{classDataFrame}{Data\+Frame} based on the subscript operator, a Proxy\+Class is created. This Proxy\+Class faciliates either adding new columns to the dataframe or reading columns from the subset. \mbox{\Hypertarget{classDataFrame_a825048ac830a240d198c7096e86425fb}\label{classDataFrame_a825048ac830a240d198c7096e86425fb}} 
+\index{Data\+Frame@{Data\+Frame}!Data\+Frame@{Data\+Frame}}
+\index{Data\+Frame@{Data\+Frame}!Data\+Frame@{Data\+Frame}}
+\subsubsection{\texorpdfstring{Data\+Frame()}{DataFrame()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T1 , typename... T$>$ \\
+Data\+Frame\+::\+Data\+Frame (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::string $>$ \&}]{,  }\item[{const std\+::vector$<$ T1 $>$ \&}]{,  }\item[{const std\+::vector$<$ T $>$ \&}]{... }\end{DoxyParamCaption})}
+
+
+
+Create dataframe without index, the column names and vector of different datatype. 
+
+As no index is passed, a default index will be created. The default index are integers from 0 to the number of lines passed. 
 
 \subsection{Member Function Documentation}
-\mbox{\Hypertarget{classDataFrame_a857dadee258495743462244022a2dcce}\label{classDataFrame_a857dadee258495743462244022a2dcce}} 
+\mbox{\Hypertarget{classDataFrame_abc7986e45f6c9fc145156965bcfd8e7f}\label{classDataFrame_abc7986e45f6c9fc145156965bcfd8e7f}} 
+\index{Data\+Frame@{Data\+Frame}!begin@{begin}}
+\index{begin@{begin}!Data\+Frame@{Data\+Frame}}
+\subsubsection{\texorpdfstring{begin()}{begin()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\hyperlink{classDataFrame_1_1iterator}{Data\+Frame\+::iterator}$<$ T $>$ Data\+Frame\+::begin (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s }\end{DoxyParamCaption})}
+
+
+
+A bidirectional-\/iterator over the columns. 
+
+Asking for the iterator (instead of the constant iterator) can generate a new vector with the original column elements when more than one dataframe reference the column (A copy-\/on-\/write is assumed.) \mbox{\Hypertarget{classDataFrame_a2c869adf1441f604eaa1e629e7e8c8f4}\label{classDataFrame_a2c869adf1441f604eaa1e629e7e8c8f4}} 
 \index{Data\+Frame@{Data\+Frame}!cbegin@{cbegin}}
 \index{cbegin@{cbegin}!Data\+Frame@{Data\+Frame}}
 \subsubsection{\texorpdfstring{cbegin()}{cbegin()}}
 {\footnotesize\ttfamily template$<$class T $>$ \\
-const\+\_\+iter$<$T$>$ Data\+Frame\+::cbegin (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{ }\end{DoxyParamCaption})}
+\hyperlink{classDataFrame_1_1const__iterator}{Data\+Frame\+::const\+\_\+iterator}$<$ T $>$ Data\+Frame\+::cbegin (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s }\end{DoxyParamCaption})}
 
 
 
-A constant iterator over the columns achored to the beginning of the column. 
+A constant bidirectional-\/iterator over the columns achored to the beginning of the column. 
 
-T\+He template arguments needs to equal the datatype of the column \mbox{\Hypertarget{classDataFrame_a895c45b1be67d772aed3fa10169a1038}\label{classDataFrame_a895c45b1be67d772aed3fa10169a1038}} 
+T\+He template arguments needs to equal the datatype of the column \mbox{\Hypertarget{classDataFrame_a89d6883d335d9a92682b88a995fd3547}\label{classDataFrame_a89d6883d335d9a92682b88a995fd3547}} 
 \index{Data\+Frame@{Data\+Frame}!cend@{cend}}
 \index{cend@{cend}!Data\+Frame@{Data\+Frame}}
 \subsubsection{\texorpdfstring{cend()}{cend()}}
 {\footnotesize\ttfamily template$<$class T $>$ \\
-const\+\_\+iter$<$T$>$ Data\+Frame\+::cend (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{ }\end{DoxyParamCaption})}
+\hyperlink{classDataFrame_1_1const__iterator}{Data\+Frame\+::const\+\_\+iterator}$<$ T $>$ Data\+Frame\+::cend (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s }\end{DoxyParamCaption})}
 
 
 
 A constant iterator over the columns anchored to the end of the column. 
 
-T\+He template arguments needs to equal the datatype of the column \mbox{\Hypertarget{classDataFrame_a24a13f1ad2e723ad048e1486d335191a}\label{classDataFrame_a24a13f1ad2e723ad048e1486d335191a}} 
+T\+He template arguments needs to equal the datatype of the column \mbox{\Hypertarget{classDataFrame_a4b4198c63e6ed421968303e872beb807}\label{classDataFrame_a4b4198c63e6ed421968303e872beb807}} 
+\index{Data\+Frame@{Data\+Frame}!drop\+\_\+row@{drop\+\_\+row}}
+\index{drop\+\_\+row@{drop\+\_\+row}!Data\+Frame@{Data\+Frame}}
+\subsubsection{\texorpdfstring{drop\+\_\+row()}{drop\_row()}}
+{\footnotesize\ttfamily void Data\+Frame\+::drop\+\_\+row (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::deque$<$ Index\+::ele $>$$>$}]{ }\end{DoxyParamCaption})}
+
+
+
+Drops rows based on the index of the dataframe. 
+
+Given the vector of indices of the dataframe, the rows of the dataframe are dropped \mbox{\Hypertarget{classDataFrame_a6abc672ac4c439e3e785bd3f84c8da15}\label{classDataFrame_a6abc672ac4c439e3e785bd3f84c8da15}} 
+\index{Data\+Frame@{Data\+Frame}!dropna@{dropna}}
+\index{dropna@{dropna}!Data\+Frame@{Data\+Frame}}
+\subsubsection{\texorpdfstring{dropna()}{dropna()}}
+{\footnotesize\ttfamily void Data\+Frame\+::dropna (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+drops rows which contain na from the dataframe 
+
+In case the column is of type double or int, nan are unambigious. For columns of string type, na are pressumed to be \textquotesingle{}NA\textquotesingle{}. \mbox{\Hypertarget{classDataFrame_a24a13f1ad2e723ad048e1486d335191a}\label{classDataFrame_a24a13f1ad2e723ad048e1486d335191a}} 
 \index{Data\+Frame@{Data\+Frame}!find\+\_\+column\+\_\+position@{find\+\_\+column\+\_\+position}}
 \index{find\+\_\+column\+\_\+position@{find\+\_\+column\+\_\+position}!Data\+Frame@{Data\+Frame}}
 \subsubsection{\texorpdfstring{find\+\_\+column\+\_\+position()}{find\_column\_position()}}
@@ -349,6 +355,10 @@ Returns an index number for the column named s.
 \subsubsection{\texorpdfstring{get\+\_\+shared\+\_\+copy()}{get\_shared\_copy()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \hyperlink{classColumn}{Column} $>$ Data\+Frame\+::get\+\_\+shared\+\_\+copy (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
+
+
+finds the rows number for the index name given as input 
+
 a shared\+\_\+ptr to the column named s \mbox{\Hypertarget{classDataFrame_a97842254d757876650ea5bada057855e}\label{classDataFrame_a97842254d757876650ea5bada057855e}} 
 \index{Data\+Frame@{Data\+Frame}!get\+\_\+shared\+\_\+copy@{get\+\_\+shared\+\_\+copy}}
 \index{get\+\_\+shared\+\_\+copy@{get\+\_\+shared\+\_\+copy}!Data\+Frame@{Data\+Frame}}
@@ -365,7 +375,18 @@ a shared\+\_\+ptr to the column named s for a const-\/dataframe \mbox{\Hypertarg
 
 Returns a shared pointer to a new version of an \hyperlink{classColumn}{Column} named s. 
 
-The newed unique column has a use\+\_\+count() of 1. The function is, for example used to deep\+\_\+copy a dataframe. \mbox{\Hypertarget{classDataFrame_a133bc6ff5a8d26e77deb65ec005f32a7}\label{classDataFrame_a133bc6ff5a8d26e77deb65ec005f32a7}} 
+The newed unique column has a use\+\_\+count() of 1. The function is, for example used to deep\+\_\+copy a dataframe. \mbox{\Hypertarget{classDataFrame_a136e725d1f8945c90914b66276b476c0}\label{classDataFrame_a136e725d1f8945c90914b66276b476c0}} 
+\index{Data\+Frame@{Data\+Frame}!groupby@{groupby}}
+\index{groupby@{groupby}!Data\+Frame@{Data\+Frame}}
+\subsubsection{\texorpdfstring{groupby()}{groupby()}}
+{\footnotesize\ttfamily template$<$class... T$>$ \\
+\hyperlink{classDataFrame_1_1Grouper}{Grouper}$<$T...$>$ Data\+Frame\+::groupby (\begin{DoxyParamCaption}\item[{\hyperlink{classDataFrame_1_1const__iterator}{Data\+Frame\+::const\+\_\+iterator}$<$ T $>$}]{... }\end{DoxyParamCaption})}
+
+
+
+Groups the dataframe by index and return a grouper object. 
+
+groups the dataframe by column s and return a grouper object \mbox{\Hypertarget{classDataFrame_a133bc6ff5a8d26e77deb65ec005f32a7}\label{classDataFrame_a133bc6ff5a8d26e77deb65ec005f32a7}} 
 \index{Data\+Frame@{Data\+Frame}!initialize\+\_\+column@{initialize\+\_\+column}}
 \index{initialize\+\_\+column@{initialize\+\_\+column}!Data\+Frame@{Data\+Frame}}
 \subsubsection{\texorpdfstring{initialize\+\_\+column()}{initialize\_column()}}
@@ -402,7 +423,17 @@ After the make\+\_\+contiguous operation, the interface did not change but the p
 
 The overloaded compound-\/assignment operator. 
 
-If a colum or row or the rhs is not present in the lhs, a new column or row is created in the lhs dataframe contains nas. 
+If a colum or row or the rhs is not present in the lhs, a new column or row is created in the lhs dataframe containing nas. \mbox{\Hypertarget{classDataFrame_a26164d4d8119ea34da73eb0c48bd3972}\label{classDataFrame_a26164d4d8119ea34da73eb0c48bd3972}} 
+\index{Data\+Frame@{Data\+Frame}!operator=@{operator=}}
+\index{operator=@{operator=}!Data\+Frame@{Data\+Frame}}
+\subsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \hyperlink{classDataFrame}{Data\+Frame}\& Data\+Frame\+::operator= (\begin{DoxyParamCaption}\item[{const \hyperlink{classDataFrame}{Data\+Frame} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+Copy assignment operator. 
+
+The copy assignment operator makes a copy of the dataframe. The index and column names are a deep-\/copy. The data is shared between the two dataframes. When attempting to modify a column in a dataframe, copy-\/on-\/write is used. This technique avoids having to rely on defensive copying. 
 
 \subsection{Friends And Related Function Documentation}
 \mbox{\Hypertarget{classDataFrame_af0bd28935e605ba646d407b02e0a5850}\label{classDataFrame_af0bd28935e605ba646d407b02e0a5850}} 
@@ -439,6 +470,7 @@ The documentation for this class was generated from the following files\+:\begin
 dataframe/dataframe.\+h\item 
 dataframe/Column\+Iterator.\+h\item 
 dataframe/Const\+Column\+Iterator.\+h\item 
+dataframe/csv\+\_\+reader.\+cpp\item 
 dataframe/dataframe.\+cpp\item 
-dataframe/grouper.\+cpp\item 
+dataframe/grouper.\+h\item 
 dataframe/operators.\+cpp\end{DoxyCompactItemize}
