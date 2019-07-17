@@ -54,5 +54,5 @@ file(COPY amits_example.csv DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 enable_testing()
 add_test(NAME my_test
          COMMAND my_test)
-add_test(NAME additions
-         COMMAND additions)
+add_test(NAME test_additions
+         COMMAND test_additions)
