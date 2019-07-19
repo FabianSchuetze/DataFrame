@@ -49,8 +49,10 @@ int main() {
     vector<string> idx_names = {"1", "2", "4", "5"};
     vector<string> idx_names2 = {"3", "1"};
     Index idx = Index(idx_names);
-    DataFrame df2 = DataFrame(Index(idx_names), col_names, first);
-    DataFrame df1 = DataFrame(idx, col_names, first, first1);
+    DataFrame df2 = DataFrame(Index(idx_names, idx_names), col_names, first);
+    DataFrame df1 = DataFrame(idx, col_names2, first, first1);
+    DataFrame df3 = df2;
+    std::cout << df3 << std::endl;
     df2["test_col"] = string_col;
     std::cout << df2 << std::endl;
     DataFrame::const_iterator<double> b = df2.cbegin<double>("first_col");
@@ -74,7 +76,17 @@ int main() {
     std::cout << df2 << std::endl;
     for (auto const v : new_vec)
         std::cout << v << std::endl;
-    std::cout << df2 << std::endl;
+    DataFrame df10 = df2["first_col"];
+    std::cout << df10 << std::endl;
+    //DataFrame::DataFrameProxy test = test2["first_col"];
+    //std::deque<Index::ele> huhu({"5"});
+    //double doesnotwork = df2["first_col"];
+    DataFrame::DataFrameProxy huhh = df2.loc({"5", "5"}, "first_col");
+    DataFrame::DataFrameProxy hu = df2.loc({{"5", "5"}, {"1", "1"}}, {"first_col"});
+    std::cout << "the new dataframe is" << std::endl;
+    std::cout << DataFrame(hu) << std::endl;
+    //double works = df2.loc({"1", "5"}, "first_col");
+    //std::cout << "the proxy returned: " << (works == -8) << std::endl;
 
     //if (it != ite)
         //std::cout << *it << std::endl;
