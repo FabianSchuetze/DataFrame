@@ -19,11 +19,6 @@ DataFrame::DataFrameProxy DataFrame::operator[](const string& name) {
     return operator[](vector<string>{name});
 }
 
-//DataFrame::DataFrameProxy DataFrame::loc(const string& s) {
-    //return DataFrameProxy(*this, vector<std::deque<Index::ele>>{{s}},
-                          //get_column_names());
-//}
-
 bool maybe_add(const string& name, std::map<string, int>& columns) {
     try {
         columns.at(name);

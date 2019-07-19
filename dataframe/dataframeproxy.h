@@ -9,6 +9,8 @@ class DataFrame::DataFrameProxy {
     DataFrameProxy();
     DataFrameProxy(DataFrame&, const std::string&);
     DataFrameProxy(DataFrame&, const std::vector<std::string>&);
+    DataFrameProxy(DataFrame&, const std::deque<Index::ele>&, 
+                   const std::string&);
     DataFrameProxy& operator=(const DataFrameProxy&);
     DataFrameProxy& operator=(const DataFrame&);
     DataFrameProxy& operator=(const std::vector<std::vector<double>>&);
@@ -28,13 +30,13 @@ class DataFrame::DataFrameProxy {
         // I DO COPY THAT STUFF TWICE!!!
         return copy > t;
     }
-    //template <class T>
-    //Grouper<T> groupby(const std::string&);
-
-
+    operator double() const;
+    operator std::string() const;
    private:
     DataFrame& theDataFrame;
     std::vector<std::string> colNames;
+    Index proxy_index;
+    void check_compatability(const char*) const;
     void add_column(const std::shared_ptr<Column>&);
     void replace_column(int, const std::shared_ptr<Column>&);
     void check_col_width(size_t, std::string);

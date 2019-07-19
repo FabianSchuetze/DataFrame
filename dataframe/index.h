@@ -17,8 +17,21 @@ class Index {
     typedef std::variant<int, std::string, double> ele;
     typedef std::map<std::deque<ele>, std::deque<int>> index_map_type;
     Index() : index_positions(), index_names(){};
+    /**
+     * @brief create a index with keys as in the input vectors
+     *
+     * A new index is created. The index keys (its values) are the entries
+     * given in the input vectors. The values are created in ascending order
+     */
     template <typename T1, typename... T>
     Index(const std::vector<T1>&, const std::vector<T>&...);
+    /**
+     * @brief create a index with keys as in the input vectors, and the
+     * corresponsing values are given in the deque input.
+     *
+     * A new index is created. The index keys (its values) are the entries
+     * given in the input vectors. The values are created from the input deque.
+     */
     template <typename T1, typename... T>
     Index(const std::deque<int>&, const std::vector<T1>&,
           const std::vector<T>&...);
@@ -52,17 +65,20 @@ class Index {
     void drop_index(size_t);
     /**
      * @brief Returns the corresponding index position given the input element
+     * @throws nothrow, but if no value is found empty index is returned
      */
     std::deque<int> find_index_position(const std::deque<ele>&);
     std::deque<int> find_index_position(const std::deque<ele>&) const;
     std::deque<int> find_index_position();
     std::deque<int> find_index_position() const;
+    std::pair<size_t, size_t> size();
+    std::pair<size_t, size_t> size() const;
     std::vector<std::deque<ele>> get_index_names();
     std::vector<std::deque<ele>> get_index_names() const;
     std::vector<std::string> get_index_as_string() const;
     std::vector<std::string> get_index_as_string();
-    int size() { return index_positions.size(); }
-    int size() const { return index_positions.size(); }
+    //int size() { return index_positions.size(); }
+    //int size() const { return index_positions.size(); }
     std::set<std::deque<ele>> unique_elements();
     std::set<std::deque<ele>> unique_elements() const;
     std::deque<std::pair<int, int>> index_correspondence(const Index&) const;

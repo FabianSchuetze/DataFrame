@@ -10,11 +10,13 @@
 #include <vector>
 #include "column.h"
 #include "index.h"
+//#include "GroupbyFunctions.h"
 
 /**
  *  A test class. A more elaborate class description.
  */
 class Index;
+class Statistic;
 class DataFrame {
    public:
     typedef std::pair<std::string, int> index_pair;
@@ -128,6 +130,10 @@ class DataFrame {
      * If a colum or row or the rhs is not present in the lhs, a new column or
      * row is created in the lhs dataframe containing nas.
      */
+    /**
+     *
+     */
+    DataFrame summarize(Statistic* f);
     DataFrame& operator+=(const DataFrame& rhs);
     /**
      * @brief Componound assignment operator assing object of type double, int
@@ -167,6 +173,9 @@ class DataFrame {
     template <class T>
     const_iterator<T> cend(const std::string&);
     /**
+     * @brief Returns a copy of the particular element requested
+     */
+    /**
      * @brief drops rows which contain na from the dataframe
      *
      * In case the column is of type double or int, nan are unambigious. For
@@ -203,8 +212,9 @@ class DataFrame {
     template <typename T1, typename... T2>
     void sort_by_column(const_iterator<T1>, const_iterator<T2>...);
     DataFrameProxy operator[](const std::string&);
-    DataFrameProxy operator[](const std::vector<std::string>& col_name);
-    // DataFrameProxy loc(const std::string&);
+    DataFrameProxy operator[](const std::vector<std::string>&);
+    DataFrameProxy loc(const std::deque<Index::ele>&, const std::string&);
+     //DataFrameProxy loc(const std::deque<Index::ele>&, const std::string&);
     /**
      * @brief Returns a pair with the row (first) and column (second) numbers
      */

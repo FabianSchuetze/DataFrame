@@ -59,7 +59,7 @@ template <class T>
 DataFrame::iterator<T> DataFrame::end(const std::string& s) {
     try {
         make_unique_if(s);
-        return iterator<T>(*this, s, index.size());
+        return iterator<T>(*this, s, index.size().first);
     } catch (std::out_of_range& e) {
         std::string m = "Column " + s + " not found, in\n:";
         throw std::out_of_range(m + __PRETTY_FUNCTION__);

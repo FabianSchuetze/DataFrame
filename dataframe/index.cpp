@@ -129,3 +129,10 @@ deque<std::pair<int, int>> Index::index_correspondence(const Index& rhs) const {
 deque<std::pair<int, int>> Index::index_correspondence(const Index& rhs) { 
     return static_cast<const Index&>(*this).index_correspondence(rhs);
 }
+
+std::pair<size_t, size_t> Index::size() {
+    return static_cast<const Index&>(*this).size();
+}
+std::pair<size_t, size_t> Index::size() const {
+    return std::make_pair(index_positions.size(), index_positions[0].size());
+}

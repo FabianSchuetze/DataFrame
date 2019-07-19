@@ -21,5 +21,21 @@ TEST_CASE( "DataFrame unique", "[unique]" ) {
     //std::cout << df2 << std::endl;
     //std::cout << df3 << std::endl;
     REQUIRE( df3.size().first == df1.size().first);
+    REQUIRE( df3.size().first == df1.size().first); // I NEED LOC HERE!!!
+}
+
+TEST_CASE( "DataFrame col_different", "[col_different]" ) {
+    std::vector<double> first = {10, 10, 10, -8};
+    std::vector<double> second = {30, -100, 40, 100};
+    std::vector<std::string> idx = {"1", "2", "4", "5"};
+    std::vector<std::string> col_names = {"first_col"};
+    std::vector<std::string> col_names2 = {"second_col"};
+    DataFrame df1(Index(idx), col_names, first);
+    DataFrame df2(Index(idx), col_names2, second);
+    DataFrame df3 = df1 + df2;
+    //std::cout << df1 << std::endl;
+    //std::cout << df2 << std::endl;
+    //std::cout << df3 << std::endl;
+    REQUIRE( df3.size().second == 2);
 }
 

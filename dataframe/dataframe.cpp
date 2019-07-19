@@ -9,7 +9,8 @@
 #include <unordered_set>
 #include "ConstColumnIterator.h"
 #include "dataframeproxy.h"
-#include "grouper.h"
+//#include "GroupbyFunctions.h"
+//#include "grouper.h"
 class ColumnIterator;
 using std::deque;
 using std::make_pair;
@@ -139,7 +140,7 @@ DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
 }
 
 std::pair<size_t, size_t> DataFrame::size() const {
-    return make_pair(index.size(), columns.size());
+    return make_pair(index.size().first, columns.size());
 }
 
 int DataFrame::use_count(const string& name) {
@@ -340,4 +341,8 @@ void DataFrame::append_missing_cols(const DataFrame& rhs) {
             columns.push_back(empty_Column(len, type));
         }
     }
+}
+DataFrame::DataFrameProxy DataFrame::loc(const std::deque<Index::ele>& idx,
+                                         const std::string& s) {
+    return DataFrameProxy(*this, idx, s);
 }

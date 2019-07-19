@@ -65,7 +65,7 @@ DataFrame::const_iterator<T> DataFrame::cbegin(const std::string& s) {
 template <class T>
 DataFrame::const_iterator<T> DataFrame::cend(const std::string& s) {
     try {
-        return const_iterator<T>(*this, s, index.size());
+        return const_iterator<T>(*this, s, index.size().first);
     } catch (std::out_of_range& e) {
         std::string m = "Column " + s + " not found, in\n:";
         throw std::out_of_range(m + __PRETTY_FUNCTION__);

@@ -6,6 +6,7 @@
 #include "GroupbyFunctions.h"
 #include "dataframe.h"
 #include "dataframeproxy.h"
+#include <cxxabi.h>
 
 template <class... T>
 class DataFrame::Grouper {
@@ -17,7 +18,7 @@ class DataFrame::Grouper {
     DataFrame calculate_statistic(Statistic*, const std::vector<std::string>&);
 
    private:
-    std::vector<std::string> elegible_types(const std::string&);
+    //std::vector<std::string> elegible_types(const std::string&);
     std::vector<SharedCol> columns;
     Index group_index;
     std::map<std::string, int> group_column_names;
@@ -62,15 +63,16 @@ DataFrame::Grouper<T...> DataFrame::groupby(
     Grouper<T...> grouper(df_copy, it...);
     return grouper;
 }
-template <class... T>
-std::vector<std::string> DataFrame::Grouper<T...>::elegible_types(
-    const std::string& s) {
+
+std::vector<std::string> elegible_types(
+    const std::map<std::string, int>& names, const std::string& s,
+    const std::vector<DataFrame::SharedCol>& cols) {
     std::vector<std::string> elegible;
     if (s == "string")
-        for (auto const n : group_column_names) elegible.push_back(n.first);
+        for (auto const n : names) elegible.push_back(n.first);
     else {
-        for (auto const n : group_column_names) {
-            if (columns[n.second]->type_name() == s)
+        for (auto const n : names) {
+            if (cols[n.second]->type_name() == s)
                 elegible.push_back(n.first);
         }
     }
@@ -101,10 +103,32 @@ DataFrame DataFrame::Grouper<T...>::calculate_statistic(
     res.assert_same_column_length(__PRETTY_FUNCTION__);
     return res;
 }
+DataFrame DataFrame::summarize(Statistic* f) {
+    DataFrame res;
+    std::string name(abi::__cxa_demangle(typeid(*f).name(), 0, 0, 0));
+    std::vector<std::string> new_index;
+    new_index.push_back(name);
+    res.index = Index(new_index);
+    std::vector<std::string> elegible = 
+        elegible_types(column_names, f->get_name(), columns);
+    for (const auto& s : elegible) {
+        std::vector<double> tmp;
+        SharedCol& col = columns[column_names.at(s)];
+        try {
+            tmp.push_back(f->func(index.find_index_position(), col));
+        } catch (const std::out_of_range& e) {
+            std::cout << "here\n\n";
+        }
+        res.append_column(s, std::make_shared<Column>(Column(tmp)));
+    }
+    return res;
+}
 
 template <class... T>
 DataFrame DataFrame::Grouper<T...>::summarize(Statistic* f) {
-    return calculate_statistic(f, elegible_types(f->get_name()));
+    std::vector<std::string> elegible;
+    elegible = elegible_types(group_column_names, f->get_name(), columns);
+    return calculate_statistic(f, elegible);
 }
 
 template <class... T>

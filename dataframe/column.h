@@ -48,7 +48,8 @@ class Column {
      * @breif Returns the type of the stored data as a string
      */
     std::string type_name();
-    template <class T> T& get_value(int i) {
+    template <class T> 
+    T& get_value(int i) {
         if (std::holds_alternative<std::vector<T>>(col))
             return std::get<std::vector<T>>(col)[i];
         else {

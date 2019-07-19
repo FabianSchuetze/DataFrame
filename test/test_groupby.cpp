@@ -36,4 +36,5 @@ int main() {
     mean t;
     Statistic *p = &t;
     std::cout <<  grouper.summarize(p, {"data1"}) << std::endl;
+    std::cout << df.summarize(p) << std::endl;
 }
