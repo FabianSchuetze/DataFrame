@@ -152,7 +152,17 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
     return *this;
 }
 
+void compare_both_indices(const Index& a, const Index &b, const char* caller) {
+    std::pair<size_t, size_t> s_a = a.size();
+    std::pair<size_t, size_t> s_b = b.size();
+    if ((s_a.first != 0) & (s_b.first != 0) & (s_a.second != s_b.second)) {
+            std::string m("Indices have different depth, in:\n");
+            throw std::invalid_argument(m + caller);
+        }
+}
+
 DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs) {
+    compare_both_indices(lhs.index, rhs.index, __PRETTY_FUNCTION__);
     DataFrame sum = deep_copy(lhs);
     sum.append_missing_cols(rhs);
     sum.append_missing_rows(rhs);

@@ -3,6 +3,7 @@
 using std::deque;
 using std::string;
 using std::vector;
+using std::make_pair;
 
 void Index::append_row(const deque<ele>& row) {
     index_names[row].push_back(index_positions.size());
@@ -134,5 +135,9 @@ std::pair<size_t, size_t> Index::size() {
     return static_cast<const Index&>(*this).size();
 }
 std::pair<size_t, size_t> Index::size() const {
-    return std::make_pair(index_positions.size(), index_positions[0].size());
+    if (index_positions.size() > 0)
+        return make_pair(index_positions.size(), index_positions[0].size());
+    else
+        return make_pair(0, 0);
+
 }

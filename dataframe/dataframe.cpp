@@ -184,9 +184,7 @@ void DataFrame::duplicate_rows(deque<pair<int, int>>& indices) {
 
 void DataFrame::append_nan_rows() {
     for (auto& x : column_names) {
-        std::cout << "before: " << columns[x.second]->size() << std::endl;
         columns[x.second]->push_back_nan();
-        std::cout << "after: " << columns[x.second]->size() << std::endl;
     }
     assert_same_column_length(__PRETTY_FUNCTION__);
 }
@@ -331,7 +329,7 @@ std::shared_ptr<Column> empty_Column(size_t sz, string type) {
 void DataFrame::append_missing_cols(const DataFrame& rhs) {
     for (auto const& x : rhs.column_names) {
         if (maybe_add(x.first, column_names)) {
-            size_t len = columns[0]->size();
+            size_t len = size().first;
             string type = rhs.columns[x.second]->type_name();
             columns.push_back(empty_Column(len, type));
         }

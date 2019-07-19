@@ -13,6 +13,7 @@ class Index {
    public:
     friend class DataFrame;
     friend DataFrame deep_copy(const DataFrame& lhs);
+    //void friend compare_both_indices(Index&, Index &b, const char*);
     // NEED TO ADD DOUBLE!
     typedef std::variant<int, std::string, double> ele;
     typedef std::map<std::deque<ele>, std::deque<int>> index_map_type;

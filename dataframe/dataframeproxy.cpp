@@ -54,11 +54,11 @@ DataFrame::DataFrameProxy::DataFrameProxy(
 
 void DataFrame::DataFrameProxy::check_compatability(const char* parent) const {
     if (colNames.size() > 1) {
-        string m("More than one column, in:\n");
+        string m("Trying to convert more than one column, in:\n");
         throw std::runtime_error(m + parent);
     }
     if (proxy_index.index_positions.size() > 1) {
-        string m("More than one row, in:\n");
+        string m("Trying to convert more than one row, in:\n");
         throw std::runtime_error(m + parent);
     }
 }

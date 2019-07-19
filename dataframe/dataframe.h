@@ -315,8 +315,24 @@ class DataFrame {
     void make_unique_if(const std::string&);
     void make_unique_if(const std::vector<std::string>&);
     void assert_same_column_length(const char*);
-    void append_missing_cols(const DataFrame&);
+    /**
+     * @brief Expands the dataframe by the columns that are in other but not in
+     * self
+     * @param other The other dataframe whose columns used as comparison
+     */
+    void append_missing_cols(const DataFrame& other);
+    /**
+     * @brief Expends the rows of the dataframe by the rows that ar in other
+     * but not in self
+     * @param other The othe dataframge whose rows are used as comparison
+     */
     void append_missing_rows(const DataFrame&);
+    /**
+     * @brief Appends an nan value to the all column in the dataframe.
+     *
+     * The dataframe must have at least one element, otherwise it doesn't
+     * work?!?
+     */
     void append_nan_rows();
     template <typename T1, typename... T>
     void append_column(const std::vector<std::string>&, int pos,
