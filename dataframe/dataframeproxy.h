@@ -11,6 +11,8 @@ class DataFrame::DataFrameProxy {
     DataFrameProxy(DataFrame&, const std::vector<std::string>&);
     DataFrameProxy(DataFrame&, const std::deque<Index::ele>&, 
                    const std::string&);
+    DataFrameProxy(DataFrame&, const std::vector<std::deque<Index::ele>>&, 
+                   const std::vector<std::string>&);
     DataFrameProxy& operator=(const DataFrameProxy&);
     DataFrameProxy& operator=(const DataFrame&);
     DataFrameProxy& operator=(const std::vector<std::vector<double>>&);
@@ -45,6 +47,7 @@ class DataFrame::DataFrameProxy {
     template <typename T>
     void insert_column(const std::string&, const std::vector<T>&);
     void insert_column(const std::vector<std::string>&, const DataFrame&);
+    void append_index(const std::deque<Index::ele>&, const char*);
 };
 
 DataFrame operator+(const DataFrame::DataFrameProxy&,

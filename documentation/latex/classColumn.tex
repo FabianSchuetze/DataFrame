@@ -129,8 +129,8 @@ std\+::string\+::size\+\_\+type {\bfseries width} (const \hyperlink{classColumn}
 {\footnotesize template$<$typename T $>$ }\\\hyperlink{classDataFrame}{Data\+Frame} \hyperlink{classColumn_a92ccb0425c54a5b5cd6f78ed1bb4c3ff}{operator$<$} (const \hyperlink{classDataFrame}{Data\+Frame} \&, const T \&)
 \begin{DoxyCompactList}\small\item\em deep copy of a \hyperlink{classDataFrame}{Data\+Frame} \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classColumn_acd17a18489660c217522c8b39ed04867}\label{classColumn_acd17a18489660c217522c8b39ed04867}} 
-{\footnotesize template$<$typename T $>$ }\\\hyperlink{classDataFrame}{Data\+Frame} {\bfseries operator$>$} (const \hyperlink{classDataFrame}{Data\+Frame} \&, const T \&)
-\end{DoxyCompactItemize}
+{\footnotesize template$<$typename T $>$ }\\\hyperlink{classDataFrame}{Data\+Frame} \hyperlink{classColumn_acd17a18489660c217522c8b39ed04867}{operator$>$} (const \hyperlink{classDataFrame}{Data\+Frame} \&, const T \&)
+\begin{DoxyCompactList}\small\item\em Compares a dataframe with a elemary values emelemt-\/wise and returns a new dataframe with boolean values. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Member Function Documentation}
@@ -164,11 +164,13 @@ When adding two dataframes columns that are not present in both dataframes gener
 \index{operator$<$@{operator$<$}!Column@{Column}}
 \subsubsection{\texorpdfstring{operator$<$}{operator<}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-\hyperlink{classDataFrame}{Data\+Frame} operator$<$ (\begin{DoxyParamCaption}\item[{const \hyperlink{classDataFrame}{Data\+Frame} \&}]{,  }\item[{const T \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+\hyperlink{classDataFrame}{Data\+Frame} operator$<$ (\begin{DoxyParamCaption}\item[{const \hyperlink{classDataFrame}{Data\+Frame} \&}]{lhs,  }\item[{const T \&}]{t }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
 
 
 
 deep copy of a \hyperlink{classDataFrame}{Data\+Frame} 
+
+Compares a dataframe with a elemary values emelemt-\/wise and returns a new dataframe with boolean values.
 
 Create new instances of all the member columns. The functions is, for example, used in the overloaed + operator. 
 

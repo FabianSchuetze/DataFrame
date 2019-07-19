@@ -50,8 +50,11 @@ Shared\+Col \hyperlink{classDataFrame_afa835fbc006732850a6483ba8635db2e}{get\+\_
 \mbox{\Hypertarget{classDataFrame_a4dac2312a688462087cd8c9cbef1c6bb}\label{classDataFrame_a4dac2312a688462087cd8c9cbef1c6bb}} 
 Shared\+Col \hyperlink{classDataFrame_a4dac2312a688462087cd8c9cbef1c6bb}{get\+\_\+unique} (const std\+::string \&, const std\+::deque$<$ int $>$ \&) const
 \begin{DoxyCompactList}\small\item\em Returns the new column for the subset of indices marked by the deque$<$int$>$. \end{DoxyCompactList}\item 
-\hyperlink{classDataFrame}{Data\+Frame} \& \hyperlink{classDataFrame_a61f3301cc72548b4b3536c0844fb156d}{operator+=} (const \hyperlink{classDataFrame}{Data\+Frame} \&rhs)
+\hyperlink{classDataFrame}{Data\+Frame} \hyperlink{classDataFrame_aa701d85cc361dca2ebdd13d4c6d3d4fd}{summarize} (\hyperlink{classStatistic}{Statistic} $\ast$f)
 \begin{DoxyCompactList}\small\item\em The overloaded compound-\/assignment operator. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classDataFrame_a61f3301cc72548b4b3536c0844fb156d}\label{classDataFrame_a61f3301cc72548b4b3536c0844fb156d}} 
+\hyperlink{classDataFrame}{Data\+Frame} \& {\bfseries operator+=} (const \hyperlink{classDataFrame}{Data\+Frame} \&rhs)
+\item 
 \mbox{\Hypertarget{classDataFrame_aa612c8755b333027d3cddc30a8e62386}\label{classDataFrame_aa612c8755b333027d3cddc30a8e62386}} 
 {\footnotesize template$<$typename T $>$ }\\\hyperlink{classDataFrame}{Data\+Frame} \& \hyperlink{classDataFrame_aa612c8755b333027d3cddc30a8e62386}{operator+=} (const T \&)
 \begin{DoxyCompactList}\small\item\em Componound assignment operator assing object of type double, int or string to the dataframe. \end{DoxyCompactList}\item 
@@ -65,7 +68,7 @@ Shared\+Col \hyperlink{classDataFrame_a4dac2312a688462087cd8c9cbef1c6bb}{get\+\_
 {\footnotesize template$<$class T $>$ }\\\hyperlink{classDataFrame_1_1const__iterator}{const\+\_\+iterator}$<$ T $>$ \hyperlink{classDataFrame_a89d6883d335d9a92682b88a995fd3547}{cend} (const std\+::string \&)
 \begin{DoxyCompactList}\small\item\em A constant iterator over the columns anchored to the end of the column. \end{DoxyCompactList}\item 
 void \hyperlink{classDataFrame_a6abc672ac4c439e3e785bd3f84c8da15}{dropna} ()
-\begin{DoxyCompactList}\small\item\em drops rows which contain na from the dataframe \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Returns a copy of the particular element requested. \end{DoxyCompactList}\item 
 void \hyperlink{classDataFrame_a4b4198c63e6ed421968303e872beb807}{drop\+\_\+row} (std\+::vector$<$ std\+::deque$<$ Index\+::ele $>$$>$)
 \begin{DoxyCompactList}\small\item\em Drops rows based on the index of the dataframe. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classDataFrame_a644965d62c039b88a940c2cb83a29fbc}\label{classDataFrame_a644965d62c039b88a940c2cb83a29fbc}} 
@@ -83,8 +86,11 @@ void \hyperlink{classDataFrame_ae9eb64b2d0c072459f85a4b840978060}{sort\+\_\+by\+
 \mbox{\Hypertarget{classDataFrame_acf8a589cf1c78e72fdd92c3107550ea4}\label{classDataFrame_acf8a589cf1c78e72fdd92c3107550ea4}} 
 \hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} {\bfseries operator\mbox{[}$\,$\mbox{]}} (const std\+::string \&)
 \item 
-\mbox{\Hypertarget{classDataFrame_acbf34b3d66e35c0208adc0623db4c1b9}\label{classDataFrame_acbf34b3d66e35c0208adc0623db4c1b9}} 
-\hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} {\bfseries operator\mbox{[}$\,$\mbox{]}} (const std\+::vector$<$ std\+::string $>$ \&col\+\_\+name)
+\mbox{\Hypertarget{classDataFrame_a7c358bc0a8413363d04779eed1847b0e}\label{classDataFrame_a7c358bc0a8413363d04779eed1847b0e}} 
+\hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} {\bfseries operator\mbox{[}$\,$\mbox{]}} (const std\+::vector$<$ std\+::string $>$ \&)
+\item 
+\mbox{\Hypertarget{classDataFrame_a5bdbf0130e68e867fcdceb77cbe6fdd9}\label{classDataFrame_a5bdbf0130e68e867fcdceb77cbe6fdd9}} 
+\hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} {\bfseries loc} (const std\+::deque$<$ Index\+::ele $>$ \&, const std\+::string \&)
 \item 
 \mbox{\Hypertarget{classDataFrame_a02cb54422bd4ac0b2cae6f6a811b0f93}\label{classDataFrame_a02cb54422bd4ac0b2cae6f6a811b0f93}} 
 std\+::pair$<$ size\+\_\+t, size\+\_\+t $>$ \hyperlink{classDataFrame_a02cb54422bd4ac0b2cae6f6a811b0f93}{size} () const
@@ -137,12 +143,10 @@ void \hyperlink{classDataFrame_ae97d60f192876309e2615abffb544cbe}{convert\+\_\+b
 \subsection*{Private Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classDataFrame_a7c3a5ee79678ae22cdfaf51d6a02e536}\label{classDataFrame_a7c3a5ee79678ae22cdfaf51d6a02e536}} 
-void {\bfseries append\+\_\+duplicate\+\_\+rows} (std\+::deque$<$ std\+::pair$<$ int, int $>$$>$ \&)
-\item 
-\mbox{\Hypertarget{classDataFrame_aee52488afb8455d8b49786a3b8629249}\label{classDataFrame_aee52488afb8455d8b49786a3b8629249}} 
-void {\bfseries append\+\_\+duplicate\+\_\+rows} (int)
-\item 
+void \hyperlink{classDataFrame_a6c62eeccda5f10832a286906482263f7}{duplicate\+\_\+rows} (std\+::deque$<$ std\+::pair$<$ int, int $>$$>$ \&correspondence)
+\begin{DoxyCompactList}\small\item\em If some indices occur more than once in correspondence, new rows are append to the dataset. \end{DoxyCompactList}\item 
+void \hyperlink{classDataFrame_ae4b43ae157eb9bba9c85bfc86f4679f7}{duplicate\+\_\+rows} (int)
+\begin{DoxyCompactList}\small\item\em If some indices occur more than once in correspondence, new rows are append to the dataset. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classDataFrame_ad44e1c50bc67dc453a02bbcdf7b13a98}\label{classDataFrame_ad44e1c50bc67dc453a02bbcdf7b13a98}} 
 void {\bfseries copy\+\_\+row} (int)
 \item 
@@ -235,9 +239,6 @@ std\+::map$<$ std\+::string, int $>$ {\bfseries column\+\_\+names}
 \mbox{\Hypertarget{classDataFrame_a7372e1909f73624de2939188c8b407bd}\label{classDataFrame_a7372e1909f73624de2939188c8b407bd}} 
 std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&, const \hyperlink{classDataFrame}{Data\+Frame} \&)
 \item 
-\mbox{\Hypertarget{classDataFrame_a9eddb94ec11871497eb1ecbd4b9d781d}\label{classDataFrame_a9eddb94ec11871497eb1ecbd4b9d781d}} 
-std\+::deque$<$ std\+::pair$<$ int, int $>$ $>$ {\bfseries correspondence\+\_\+position} (const \hyperlink{classDataFrame}{Data\+Frame} \&, const \hyperlink{classDataFrame}{Data\+Frame} \&)
-\item 
 \mbox{\Hypertarget{classDataFrame_a1b618c630383343b0476d4b2ee3892ba}\label{classDataFrame_a1b618c630383343b0476d4b2ee3892ba}} 
 \hyperlink{classDataFrame}{Data\+Frame} {\bfseries operator+} (const \hyperlink{classDataFrame}{Data\+Frame} \&lhs, const \hyperlink{classDataFrame}{Data\+Frame} \&rhs)
 \item 
@@ -250,8 +251,8 @@ std\+::deque$<$ std\+::pair$<$ int, int $>$ $>$ {\bfseries correspondence\+\_\+p
 {\footnotesize template$<$typename T $>$ }\\\hyperlink{classDataFrame}{Data\+Frame} \hyperlink{classDataFrame_a8c08b940f5d6a095ac079ef277133c1a}{operator$<$} (const \hyperlink{classDataFrame}{Data\+Frame} \&lhs, const T \&t)
 \begin{DoxyCompactList}\small\item\em deep copy of a \hyperlink{classDataFrame}{Data\+Frame} \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classDataFrame_a2f57f70e3f2a2ad34bddef16fcc2cf82}\label{classDataFrame_a2f57f70e3f2a2ad34bddef16fcc2cf82}} 
-{\footnotesize template$<$typename T $>$ }\\\hyperlink{classDataFrame}{Data\+Frame} {\bfseries operator$>$} (const \hyperlink{classDataFrame}{Data\+Frame} \&lhs, const T \&t)
-\item 
+{\footnotesize template$<$typename T $>$ }\\\hyperlink{classDataFrame}{Data\+Frame} \hyperlink{classDataFrame_a2f57f70e3f2a2ad34bddef16fcc2cf82}{operator$>$} (const \hyperlink{classDataFrame}{Data\+Frame} \&lhs, const T \&t)
+\begin{DoxyCompactList}\small\item\em Compares a dataframe with a elemary values emelemt-\/wise and returns a new dataframe with boolean values. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename T $>$ }\\\hyperlink{classDataFrame}{Data\+Frame} \hyperlink{classDataFrame_af0bd28935e605ba646d407b02e0a5850}{operator+} (const \hyperlink{classDataFrame}{Data\+Frame} \&lhs, const T \&t)
 \begin{DoxyCompactList}\small\item\em adds a value of type T to the dataframe. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
@@ -332,9 +333,31 @@ Given the vector of indices of the dataframe, the rows of the dataframe are drop
 
 
 
-drops rows which contain na from the dataframe 
+Returns a copy of the particular element requested. 
 
-In case the column is of type double or int, nan are unambigious. For columns of string type, na are pressumed to be \textquotesingle{}NA\textquotesingle{}. \mbox{\Hypertarget{classDataFrame_a24a13f1ad2e723ad048e1486d335191a}\label{classDataFrame_a24a13f1ad2e723ad048e1486d335191a}} 
+drops rows which contain na from the dataframe
+
+In case the column is of type double or int, nan are unambigious. For columns of string type, na are pressumed to be \textquotesingle{}NA\textquotesingle{}. \mbox{\Hypertarget{classDataFrame_a6c62eeccda5f10832a286906482263f7}\label{classDataFrame_a6c62eeccda5f10832a286906482263f7}} 
+\index{Data\+Frame@{Data\+Frame}!duplicate\+\_\+rows@{duplicate\+\_\+rows}}
+\index{duplicate\+\_\+rows@{duplicate\+\_\+rows}!Data\+Frame@{Data\+Frame}}
+\subsubsection{\texorpdfstring{duplicate\+\_\+rows()}{duplicate\_rows()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Data\+Frame\+::duplicate\+\_\+rows (\begin{DoxyParamCaption}\item[{std\+::deque$<$ std\+::pair$<$ int, int $>$$>$ \&}]{correspondence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+If some indices occur more than once in correspondence, new rows are append to the dataset. 
+
+The function is used in the compound assignment operator. When the rhs has a index which appears multiple times but it appears only once at the left hand side, the a new row in the lhs is created so that the addition can proceed. \mbox{\Hypertarget{classDataFrame_ae4b43ae157eb9bba9c85bfc86f4679f7}\label{classDataFrame_ae4b43ae157eb9bba9c85bfc86f4679f7}} 
+\index{Data\+Frame@{Data\+Frame}!duplicate\+\_\+rows@{duplicate\+\_\+rows}}
+\index{duplicate\+\_\+rows@{duplicate\+\_\+rows}!Data\+Frame@{Data\+Frame}}
+\subsubsection{\texorpdfstring{duplicate\+\_\+rows()}{duplicate\_rows()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Data\+Frame\+::duplicate\+\_\+rows (\begin{DoxyParamCaption}\item[{int}]{pos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+If some indices occur more than once in correspondence, new rows are append to the dataset. 
+
+The function is used in the compound assignment operator. When the rhs has a index which appears multiple times but it appears only once at the left hand side, the a new row in the lhs is created so that the addition can proceed. \mbox{\Hypertarget{classDataFrame_a24a13f1ad2e723ad048e1486d335191a}\label{classDataFrame_a24a13f1ad2e723ad048e1486d335191a}} 
 \index{Data\+Frame@{Data\+Frame}!find\+\_\+column\+\_\+position@{find\+\_\+column\+\_\+position}}
 \index{find\+\_\+column\+\_\+position@{find\+\_\+column\+\_\+position}!Data\+Frame@{Data\+Frame}}
 \subsubsection{\texorpdfstring{find\+\_\+column\+\_\+position()}{find\_column\_position()}}
@@ -413,17 +436,7 @@ When the dataframe has been sorted or column have been dropped, the underlying s
 
 Rearanges to data in the rows of the columns to be in line with the index again. 
 
-After the make\+\_\+contiguous operation, the interface did not change but the position of the data in the columns is again in the same order as the index which might make processing the Dataframe and interating over it faster. \mbox{\Hypertarget{classDataFrame_a61f3301cc72548b4b3536c0844fb156d}\label{classDataFrame_a61f3301cc72548b4b3536c0844fb156d}} 
-\index{Data\+Frame@{Data\+Frame}!operator+=@{operator+=}}
-\index{operator+=@{operator+=}!Data\+Frame@{Data\+Frame}}
-\subsubsection{\texorpdfstring{operator+=()}{operator+=()}}
-{\footnotesize\ttfamily \hyperlink{classDataFrame}{Data\+Frame} \& Data\+Frame\+::operator+= (\begin{DoxyParamCaption}\item[{const \hyperlink{classDataFrame}{Data\+Frame} \&}]{rhs }\end{DoxyParamCaption})}
-
-
-
-The overloaded compound-\/assignment operator. 
-
-If a colum or row or the rhs is not present in the lhs, a new column or row is created in the lhs dataframe containing nas. \mbox{\Hypertarget{classDataFrame_a26164d4d8119ea34da73eb0c48bd3972}\label{classDataFrame_a26164d4d8119ea34da73eb0c48bd3972}} 
+After the make\+\_\+contiguous operation, the interface did not change but the position of the data in the columns is again in the same order as the index which might make processing the Dataframe and interating over it faster. \mbox{\Hypertarget{classDataFrame_a26164d4d8119ea34da73eb0c48bd3972}\label{classDataFrame_a26164d4d8119ea34da73eb0c48bd3972}} 
 \index{Data\+Frame@{Data\+Frame}!operator=@{operator=}}
 \index{operator=@{operator=}!Data\+Frame@{Data\+Frame}}
 \subsubsection{\texorpdfstring{operator=()}{operator=()}}
@@ -433,7 +446,17 @@ If a colum or row or the rhs is not present in the lhs, a new column or row is c
 
 Copy assignment operator. 
 
-The copy assignment operator makes a copy of the dataframe. The index and column names are a deep-\/copy. The data is shared between the two dataframes. When attempting to modify a column in a dataframe, copy-\/on-\/write is used. This technique avoids having to rely on defensive copying. 
+The copy assignment operator makes a copy of the dataframe. The index and column names are a deep-\/copy. The data is shared between the two dataframes. When attempting to modify a column in a dataframe, copy-\/on-\/write is used. This technique avoids having to rely on defensive copying. \mbox{\Hypertarget{classDataFrame_aa701d85cc361dca2ebdd13d4c6d3d4fd}\label{classDataFrame_aa701d85cc361dca2ebdd13d4c6d3d4fd}} 
+\index{Data\+Frame@{Data\+Frame}!summarize@{summarize}}
+\index{summarize@{summarize}!Data\+Frame@{Data\+Frame}}
+\subsubsection{\texorpdfstring{summarize()}{summarize()}}
+{\footnotesize\ttfamily \hyperlink{classDataFrame}{Data\+Frame} Data\+Frame\+::summarize (\begin{DoxyParamCaption}\item[{\hyperlink{classStatistic}{Statistic} $\ast$}]{f }\end{DoxyParamCaption})}
+
+
+
+The overloaded compound-\/assignment operator. 
+
+If a colum or row or the rhs is not present in the lhs, a new column or row is created in the lhs dataframe containing nas. 
 
 \subsection{Friends And Related Function Documentation}
 \mbox{\Hypertarget{classDataFrame_af0bd28935e605ba646d407b02e0a5850}\label{classDataFrame_af0bd28935e605ba646d407b02e0a5850}} 
@@ -462,6 +485,8 @@ adds a value of type T to the dataframe.
 
 
 deep copy of a \hyperlink{classDataFrame}{Data\+Frame} 
+
+Compares a dataframe with a elemary values emelemt-\/wise and returns a new dataframe with boolean values.
 
 Create new instances of all the member columns. The functions is, for example, used in the overloaed + operator. 
 

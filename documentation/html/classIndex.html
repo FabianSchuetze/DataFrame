@@ -81,13 +81,13 @@ typedef std::map&lt; std::deque&lt; ele &gt;, std::deque&lt; int &gt; &gt;&#160;
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a35f4948aa1ed7b87dc285cd56a64d24c"><td class="memTemplParams" colspan="2"><a id="a35f4948aa1ed7b87dc285cd56a64d24c"></a>
-template&lt;typename T1 , typename... T&gt; </td></tr>
-<tr class="memitem:a35f4948aa1ed7b87dc285cd56a64d24c"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Index</b> (const std::vector&lt; T1 &gt; &amp;, const std::vector&lt; T &gt; &amp;...)</td></tr>
+<tr class="memitem:a35f4948aa1ed7b87dc285cd56a64d24c"><td class="memTemplParams" colspan="2">template&lt;typename T1 , typename... T&gt; </td></tr>
+<tr class="memitem:a35f4948aa1ed7b87dc285cd56a64d24c"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classIndex.html#a35f4948aa1ed7b87dc285cd56a64d24c">Index</a> (const std::vector&lt; T1 &gt; &amp;, const std::vector&lt; T &gt; &amp;...)</td></tr>
+<tr class="memdesc:a35f4948aa1ed7b87dc285cd56a64d24c"><td class="mdescLeft">&#160;</td><td class="mdescRight">create a index with keys as in the input vectors  <a href="#a35f4948aa1ed7b87dc285cd56a64d24c">More...</a><br /></td></tr>
 <tr class="separator:a35f4948aa1ed7b87dc285cd56a64d24c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc750ff9ab90e7fac9d411d1ebea4c86"><td class="memTemplParams" colspan="2"><a id="adc750ff9ab90e7fac9d411d1ebea4c86"></a>
-template&lt;typename T1 , typename... T&gt; </td></tr>
-<tr class="memitem:adc750ff9ab90e7fac9d411d1ebea4c86"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Index</b> (const std::deque&lt; int &gt; &amp;, const std::vector&lt; T1 &gt; &amp;, const std::vector&lt; T &gt; &amp;...)</td></tr>
+<tr class="memitem:adc750ff9ab90e7fac9d411d1ebea4c86"><td class="memTemplParams" colspan="2">template&lt;typename T1 , typename... T&gt; </td></tr>
+<tr class="memitem:adc750ff9ab90e7fac9d411d1ebea4c86"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classIndex.html#adc750ff9ab90e7fac9d411d1ebea4c86">Index</a> (const std::deque&lt; int &gt; &amp;, const std::vector&lt; T1 &gt; &amp;, const std::vector&lt; T &gt; &amp;...)</td></tr>
+<tr class="memdesc:adc750ff9ab90e7fac9d411d1ebea4c86"><td class="mdescLeft">&#160;</td><td class="mdescRight">create a index with keys as in the input vectors, and the corresponsing values are given in the deque input.  <a href="#adc750ff9ab90e7fac9d411d1ebea4c86">More...</a><br /></td></tr>
 <tr class="separator:adc750ff9ab90e7fac9d411d1ebea4c86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7e3d65b24ab12baad98db7491b65c74"><td class="memItemLeft" align="right" valign="top"><a id="ab7e3d65b24ab12baad98db7491b65c74"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>append_index</b> (const std::vector&lt; std::deque&lt; ele &gt;&gt; &amp;)</td></tr>
@@ -126,9 +126,8 @@ template&lt;typename T &gt; </td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIndex.html#a2f8b9698a6ba11b35b6de42fb096b3d7">drop_index</a> (size_t)</td></tr>
 <tr class="memdesc:a2f8b9698a6ba11b35b6de42fb096b3d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Drops the all index values at position pos inplace. <br /></td></tr>
 <tr class="separator:a2f8b9698a6ba11b35b6de42fb096b3d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aecbb6761b8f0e47aa4d89ce98ef4466c"><td class="memItemLeft" align="right" valign="top"><a id="aecbb6761b8f0e47aa4d89ce98ef4466c"></a>
-std::deque&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIndex.html#aecbb6761b8f0e47aa4d89ce98ef4466c">find_index_position</a> (const std::deque&lt; ele &gt; &amp;)</td></tr>
-<tr class="memdesc:aecbb6761b8f0e47aa4d89ce98ef4466c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the corresponding index position given the input element. <br /></td></tr>
+<tr class="memitem:aecbb6761b8f0e47aa4d89ce98ef4466c"><td class="memItemLeft" align="right" valign="top">std::deque&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIndex.html#aecbb6761b8f0e47aa4d89ce98ef4466c">find_index_position</a> (const std::deque&lt; ele &gt; &amp;)</td></tr>
+<tr class="memdesc:aecbb6761b8f0e47aa4d89ce98ef4466c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the corresponding index position given the input element.  <a href="#aecbb6761b8f0e47aa4d89ce98ef4466c">More...</a><br /></td></tr>
 <tr class="separator:aecbb6761b8f0e47aa4d89ce98ef4466c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7c3bafacd31495c312071b5282c7b7e"><td class="memItemLeft" align="right" valign="top"><a id="ac7c3bafacd31495c312071b5282c7b7e"></a>
 std::deque&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>find_index_position</b> (const std::deque&lt; ele &gt; &amp;) const</td></tr>
@@ -139,6 +138,12 @@ std::deque&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>fi
 <tr class="memitem:aceb6e87e99dba1427cca1255363b15e0"><td class="memItemLeft" align="right" valign="top"><a id="aceb6e87e99dba1427cca1255363b15e0"></a>
 std::deque&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>find_index_position</b> () const</td></tr>
 <tr class="separator:aceb6e87e99dba1427cca1255363b15e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbb1f3e990f688541e6e8a0d67d4e315"><td class="memItemLeft" align="right" valign="top"><a id="afbb1f3e990f688541e6e8a0d67d4e315"></a>
+std::pair&lt; size_t, size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> ()</td></tr>
+<tr class="separator:afbb1f3e990f688541e6e8a0d67d4e315"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6f624a3c53643aa2e74b23bc90f64a2"><td class="memItemLeft" align="right" valign="top"><a id="aa6f624a3c53643aa2e74b23bc90f64a2"></a>
+std::pair&lt; size_t, size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
+<tr class="separator:aa6f624a3c53643aa2e74b23bc90f64a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00937853b60b1b5af2377765c35d6461"><td class="memItemLeft" align="right" valign="top"><a id="a00937853b60b1b5af2377765c35d6461"></a>
 std::vector&lt; std::deque&lt; ele &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>get_index_names</b> ()</td></tr>
 <tr class="separator:a00937853b60b1b5af2377765c35d6461"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -151,18 +156,18 @@ std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bott
 <tr class="memitem:a19c3587884d9386e263004a178625358"><td class="memItemLeft" align="right" valign="top"><a id="a19c3587884d9386e263004a178625358"></a>
 std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>get_index_as_string</b> ()</td></tr>
 <tr class="separator:a19c3587884d9386e263004a178625358"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1db750da1737e7e8a7c87a4cfad9d8a"><td class="memItemLeft" align="right" valign="top"><a id="af1db750da1737e7e8a7c87a4cfad9d8a"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> ()</td></tr>
-<tr class="separator:af1db750da1737e7e8a7c87a4cfad9d8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d7170f9bdadd16f8db0b0905fdc1323"><td class="memItemLeft" align="right" valign="top"><a id="a1d7170f9bdadd16f8db0b0905fdc1323"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
-<tr class="separator:a1d7170f9bdadd16f8db0b0905fdc1323"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6932f58a957af8f2e865c7079448740"><td class="memItemLeft" align="right" valign="top"><a id="ac6932f58a957af8f2e865c7079448740"></a>
 std::set&lt; std::deque&lt; ele &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>unique_elements</b> ()</td></tr>
 <tr class="separator:ac6932f58a957af8f2e865c7079448740"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1e3121db131d822e363fd1e1c830743"><td class="memItemLeft" align="right" valign="top"><a id="ab1e3121db131d822e363fd1e1c830743"></a>
 std::set&lt; std::deque&lt; ele &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>unique_elements</b> () const</td></tr>
 <tr class="separator:ab1e3121db131d822e363fd1e1c830743"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19082583bdb3f094097e033a68ba7d5d"><td class="memItemLeft" align="right" valign="top"><a id="a19082583bdb3f094097e033a68ba7d5d"></a>
+std::deque&lt; std::pair&lt; int, int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>index_correspondence</b> (const <a class="el" href="classIndex.html">Index</a> &amp;) const</td></tr>
+<tr class="separator:a19082583bdb3f094097e033a68ba7d5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4943a0bf596cb376288a0aa606bd904"><td class="memItemLeft" align="right" valign="top"><a id="ab4943a0bf596cb376288a0aa606bd904"></a>
+std::deque&lt; std::pair&lt; int, int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>index_correspondence</b> (const <a class="el" href="classIndex.html">Index</a> &amp;)</td></tr>
+<tr class="separator:ab4943a0bf596cb376288a0aa606bd904"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1bfeb6926de41bcb59e6205304707c8"><td class="memTemplParams" colspan="2"><a id="ac1bfeb6926de41bcb59e6205304707c8"></a>
 template&lt;typename T1 , typename... T&gt; </td></tr>
 <tr class="memitem:ac1bfeb6926de41bcb59e6205304707c8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>expand_index</b> (const std::vector&lt; T1 &gt; &amp;v1, const std::vector&lt; T &gt; &amp;... v2)</td></tr>
@@ -210,6 +215,79 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>DataFrame</b></td></
 <a class="el" href="classDataFrame.html">DataFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><b>deep_copy</b> (const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;lhs)</td></tr>
 <tr class="separator:ac665e1df1c1d41e0d0c5afcdfb827a74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a35f4948aa1ed7b87dc285cd56a64d24c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35f4948aa1ed7b87dc285cd56a64d24c">&#9670;&nbsp;</a></span>Index() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T1 , typename... T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">Index::Index </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; T1 &gt; &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>create a index with keys as in the input vectors </p>
+<p>A new index is created. The index keys (its values) are the entries given in the input vectors. The values are created in ascending order </p>
+
+</div>
+</div>
+<a id="adc750ff9ab90e7fac9d411d1ebea4c86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc750ff9ab90e7fac9d411d1ebea4c86">&#9670;&nbsp;</a></span>Index() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T1 , typename... T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">Index::Index </td>
+          <td>(</td>
+          <td class="paramtype">const std::deque&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; T1 &gt; &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>create a index with keys as in the input vectors, and the corresponsing values are given in the deque input. </p>
+<p>A new index is created. The index keys (its values) are the entries given in the input vectors. The values are created from the input deque. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="ac3789b237b8cebc11d67e255cb25d6c6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac3789b237b8cebc11d67e255cb25d6c6">&#9670;&nbsp;</a></span>append_row()</h2>
@@ -266,6 +344,32 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 <p>Given the input deque, the function appends inplace the element at the desired position. </p>
+
+</div>
+</div>
+<a id="aecbb6761b8f0e47aa4d89ce98ef4466c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aecbb6761b8f0e47aa4d89ce98ef4466c">&#9670;&nbsp;</a></span>find_index_position()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::deque&lt;int&gt; Index::find_index_position </td>
+          <td>(</td>
+          <td class="paramtype">const std::deque&lt; ele &gt; &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the corresponding index position given the input element. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">nothrow,but</td><td>if no value is found empty index is returned </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

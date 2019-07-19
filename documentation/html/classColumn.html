@@ -213,7 +213,8 @@ std::string::size_type&#160;</td><td class="memItemRight" valign="bottom"><b>wid
 <tr class="separator:a92ccb0425c54a5b5cd6f78ed1bb4c3ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd17a18489660c217522c8b39ed04867"><td class="memTemplParams" colspan="2"><a id="acd17a18489660c217522c8b39ed04867"></a>
 template&lt;typename T &gt; </td></tr>
-<tr class="memitem:acd17a18489660c217522c8b39ed04867"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classDataFrame.html">DataFrame</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&gt;</b> (const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;, const T &amp;)</td></tr>
+<tr class="memitem:acd17a18489660c217522c8b39ed04867"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classDataFrame.html">DataFrame</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classColumn.html#acd17a18489660c217522c8b39ed04867">operator&gt;</a> (const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;, const T &amp;)</td></tr>
+<tr class="memdesc:acd17a18489660c217522c8b39ed04867"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares a dataframe with a elemary values emelemt-wise and returns a new dataframe with boolean values. <br /></td></tr>
 <tr class="separator:acd17a18489660c217522c8b39ed04867"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -309,13 +310,13 @@ template&lt;typename T &gt; </div>
           <td class="memname"><a class="el" href="classDataFrame.html">DataFrame</a> operator&lt; </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>lhs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const T &amp;&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>t</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -331,6 +332,7 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 
 <p>deep copy of a <a class="el" href="classDataFrame.html">DataFrame</a> </p>
+<p>Compares a dataframe with a elemary values emelemt-wise and returns a new dataframe with boolean values.</p>
 <p>Create new instances of all the member columns. The functions is, for example, used in the overloaed + operator. </p>
 
 </div>

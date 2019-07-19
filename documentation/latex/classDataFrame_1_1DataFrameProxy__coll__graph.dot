@@ -1,0 +1,11 @@
+digraph "DataFrame::DataFrameProxy"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="DataFrame::DataFrameProxy",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" proxy_index" ];
+  Node2 [label="Index",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classIndex.html"];
+  Node3 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" theDataFrame" ];
+  Node3 [label="DataFrame",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classDataFrame.html"];
+  Node2 -> Node3 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" index" ];
+}

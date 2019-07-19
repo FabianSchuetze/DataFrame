@@ -133,8 +133,11 @@ SharedCol&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href=
 SharedCol&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a4dac2312a688462087cd8c9cbef1c6bb">get_unique</a> (const std::string &amp;, const std::deque&lt; int &gt; &amp;) const</td></tr>
 <tr class="memdesc:a4dac2312a688462087cd8c9cbef1c6bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the new column for the subset of indices marked by the deque&lt;int&gt;. <br /></td></tr>
 <tr class="separator:a4dac2312a688462087cd8c9cbef1c6bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61f3301cc72548b4b3536c0844fb156d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classDataFrame.html">DataFrame</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a61f3301cc72548b4b3536c0844fb156d">operator+=</a> (const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;rhs)</td></tr>
-<tr class="memdesc:a61f3301cc72548b4b3536c0844fb156d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The overloaded compound-assignment operator.  <a href="#a61f3301cc72548b4b3536c0844fb156d">More...</a><br /></td></tr>
+<tr class="memitem:aa701d85cc361dca2ebdd13d4c6d3d4fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classDataFrame.html">DataFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#aa701d85cc361dca2ebdd13d4c6d3d4fd">summarize</a> (<a class="el" href="classStatistic.html">Statistic</a> *f)</td></tr>
+<tr class="memdesc:aa701d85cc361dca2ebdd13d4c6d3d4fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The overloaded compound-assignment operator.  <a href="#aa701d85cc361dca2ebdd13d4c6d3d4fd">More...</a><br /></td></tr>
+<tr class="separator:aa701d85cc361dca2ebdd13d4c6d3d4fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61f3301cc72548b4b3536c0844fb156d"><td class="memItemLeft" align="right" valign="top"><a id="a61f3301cc72548b4b3536c0844fb156d"></a>
+<a class="el" href="classDataFrame.html">DataFrame</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator+=</b> (const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;rhs)</td></tr>
 <tr class="separator:a61f3301cc72548b4b3536c0844fb156d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa612c8755b333027d3cddc30a8e62386"><td class="memTemplParams" colspan="2"><a id="aa612c8755b333027d3cddc30a8e62386"></a>
 template&lt;typename T &gt; </td></tr>
@@ -159,7 +162,7 @@ template&lt;class T &gt; </td></tr>
 <tr class="memdesc:a89d6883d335d9a92682b88a995fd3547"><td class="mdescLeft">&#160;</td><td class="mdescRight">A constant iterator over the columns anchored to the end of the column.  <a href="#a89d6883d335d9a92682b88a995fd3547">More...</a><br /></td></tr>
 <tr class="separator:a89d6883d335d9a92682b88a995fd3547"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6abc672ac4c439e3e785bd3f84c8da15"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a6abc672ac4c439e3e785bd3f84c8da15">dropna</a> ()</td></tr>
-<tr class="memdesc:a6abc672ac4c439e3e785bd3f84c8da15"><td class="mdescLeft">&#160;</td><td class="mdescRight">drops rows which contain na from the dataframe  <a href="#a6abc672ac4c439e3e785bd3f84c8da15">More...</a><br /></td></tr>
+<tr class="memdesc:a6abc672ac4c439e3e785bd3f84c8da15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of the particular element requested.  <a href="#a6abc672ac4c439e3e785bd3f84c8da15">More...</a><br /></td></tr>
 <tr class="separator:a6abc672ac4c439e3e785bd3f84c8da15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b4198c63e6ed421968303e872beb807"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a4b4198c63e6ed421968303e872beb807">drop_row</a> (std::vector&lt; std::deque&lt; Index::ele &gt;&gt;)</td></tr>
 <tr class="memdesc:a4b4198c63e6ed421968303e872beb807"><td class="mdescLeft">&#160;</td><td class="mdescRight">Drops rows based on the index of the dataframe.  <a href="#a4b4198c63e6ed421968303e872beb807">More...</a><br /></td></tr>
@@ -184,9 +187,12 @@ template&lt;typename T1 , typename... T2&gt; </td></tr>
 <tr class="memitem:acf8a589cf1c78e72fdd92c3107550ea4"><td class="memItemLeft" align="right" valign="top"><a id="acf8a589cf1c78e72fdd92c3107550ea4"></a>
 <a class="el" href="classDataFrame_1_1DataFrameProxy.html">DataFrameProxy</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (const std::string &amp;)</td></tr>
 <tr class="separator:acf8a589cf1c78e72fdd92c3107550ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbf34b3d66e35c0208adc0623db4c1b9"><td class="memItemLeft" align="right" valign="top"><a id="acbf34b3d66e35c0208adc0623db4c1b9"></a>
-<a class="el" href="classDataFrame_1_1DataFrameProxy.html">DataFrameProxy</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (const std::vector&lt; std::string &gt; &amp;col_name)</td></tr>
-<tr class="separator:acbf34b3d66e35c0208adc0623db4c1b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c358bc0a8413363d04779eed1847b0e"><td class="memItemLeft" align="right" valign="top"><a id="a7c358bc0a8413363d04779eed1847b0e"></a>
+<a class="el" href="classDataFrame_1_1DataFrameProxy.html">DataFrameProxy</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (const std::vector&lt; std::string &gt; &amp;)</td></tr>
+<tr class="separator:a7c358bc0a8413363d04779eed1847b0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bdbf0130e68e867fcdceb77cbe6fdd9"><td class="memItemLeft" align="right" valign="top"><a id="a5bdbf0130e68e867fcdceb77cbe6fdd9"></a>
+<a class="el" href="classDataFrame_1_1DataFrameProxy.html">DataFrameProxy</a>&#160;</td><td class="memItemRight" valign="bottom"><b>loc</b> (const std::deque&lt; Index::ele &gt; &amp;, const std::string &amp;)</td></tr>
+<tr class="separator:a5bdbf0130e68e867fcdceb77cbe6fdd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02cb54422bd4ac0b2cae6f6a811b0f93"><td class="memItemLeft" align="right" valign="top"><a id="a02cb54422bd4ac0b2cae6f6a811b0f93"></a>
 std::pair&lt; size_t, size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a02cb54422bd4ac0b2cae6f6a811b0f93">size</a> () const</td></tr>
 <tr class="memdesc:a02cb54422bd4ac0b2cae6f6a811b0f93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pair with the row (first) and column (second) numbers. <br /></td></tr>
@@ -255,12 +261,12 @@ template&lt;typename... T&gt; </td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a7c3a5ee79678ae22cdfaf51d6a02e536"><td class="memItemLeft" align="right" valign="top"><a id="a7c3a5ee79678ae22cdfaf51d6a02e536"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>append_duplicate_rows</b> (std::deque&lt; std::pair&lt; int, int &gt;&gt; &amp;)</td></tr>
-<tr class="separator:a7c3a5ee79678ae22cdfaf51d6a02e536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee52488afb8455d8b49786a3b8629249"><td class="memItemLeft" align="right" valign="top"><a id="aee52488afb8455d8b49786a3b8629249"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>append_duplicate_rows</b> (int)</td></tr>
-<tr class="separator:aee52488afb8455d8b49786a3b8629249"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c62eeccda5f10832a286906482263f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a6c62eeccda5f10832a286906482263f7">duplicate_rows</a> (std::deque&lt; std::pair&lt; int, int &gt;&gt; &amp;correspondence)</td></tr>
+<tr class="memdesc:a6c62eeccda5f10832a286906482263f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">If some indices occur more than once in correspondence, new rows are append to the dataset.  <a href="#a6c62eeccda5f10832a286906482263f7">More...</a><br /></td></tr>
+<tr class="separator:a6c62eeccda5f10832a286906482263f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4b43ae157eb9bba9c85bfc86f4679f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDataFrame.html#ae4b43ae157eb9bba9c85bfc86f4679f7">duplicate_rows</a> (int)</td></tr>
+<tr class="memdesc:ae4b43ae157eb9bba9c85bfc86f4679f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">If some indices occur more than once in correspondence, new rows are append to the dataset.  <a href="#ae4b43ae157eb9bba9c85bfc86f4679f7">More...</a><br /></td></tr>
+<tr class="separator:ae4b43ae157eb9bba9c85bfc86f4679f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad44e1c50bc67dc453a02bbcdf7b13a98"><td class="memItemLeft" align="right" valign="top"><a id="ad44e1c50bc67dc453a02bbcdf7b13a98"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>copy_row</b> (int)</td></tr>
 <tr class="separator:ad44e1c50bc67dc453a02bbcdf7b13a98"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -365,9 +371,6 @@ template&lt;class T &gt; </td></tr>
 <tr class="memitem:a7372e1909f73624de2939188c8b407bd"><td class="memItemLeft" align="right" valign="top"><a id="a7372e1909f73624de2939188c8b407bd"></a>
 std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;, const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;)</td></tr>
 <tr class="separator:a7372e1909f73624de2939188c8b407bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9eddb94ec11871497eb1ecbd4b9d781d"><td class="memItemLeft" align="right" valign="top"><a id="a9eddb94ec11871497eb1ecbd4b9d781d"></a>
-std::deque&lt; std::pair&lt; int, int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>correspondence_position</b> (const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;, const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;)</td></tr>
-<tr class="separator:a9eddb94ec11871497eb1ecbd4b9d781d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b618c630383343b0476d4b2ee3892ba"><td class="memItemLeft" align="right" valign="top"><a id="a1b618c630383343b0476d4b2ee3892ba"></a>
 <a class="el" href="classDataFrame.html">DataFrame</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator+</b> (const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;lhs, const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;rhs)</td></tr>
 <tr class="separator:a1b618c630383343b0476d4b2ee3892ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -383,7 +386,8 @@ std::deque&lt; std::pair&lt; int, int &gt; &gt;&#160;</td><td class="memItemRigh
 <tr class="separator:a8c08b940f5d6a095ac079ef277133c1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f57f70e3f2a2ad34bddef16fcc2cf82"><td class="memTemplParams" colspan="2"><a id="a2f57f70e3f2a2ad34bddef16fcc2cf82"></a>
 template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a2f57f70e3f2a2ad34bddef16fcc2cf82"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classDataFrame.html">DataFrame</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&gt;</b> (const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;lhs, const T &amp;t)</td></tr>
+<tr class="memitem:a2f57f70e3f2a2ad34bddef16fcc2cf82"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classDataFrame.html">DataFrame</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classDataFrame.html#a2f57f70e3f2a2ad34bddef16fcc2cf82">operator&gt;</a> (const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;lhs, const T &amp;t)</td></tr>
+<tr class="memdesc:a2f57f70e3f2a2ad34bddef16fcc2cf82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares a dataframe with a elemary values emelemt-wise and returns a new dataframe with boolean values. <br /></td></tr>
 <tr class="separator:a2f57f70e3f2a2ad34bddef16fcc2cf82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0bd28935e605ba646d407b02e0a5850"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:af0bd28935e605ba646d407b02e0a5850"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classDataFrame.html">DataFrame</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classDataFrame.html#af0bd28935e605ba646d407b02e0a5850">operator+</a> (const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;lhs, const T &amp;t)</td></tr>
@@ -557,8 +561,67 @@ template&lt;class T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>drops rows which contain na from the dataframe </p>
+<p>Returns a copy of the particular element requested. </p>
+<p>drops rows which contain na from the dataframe</p>
 <p>In case the column is of type double or int, nan are unambigious. For columns of string type, na are pressumed to be 'NA'. </p>
+
+</div>
+</div>
+<a id="a6c62eeccda5f10832a286906482263f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c62eeccda5f10832a286906482263f7">&#9670;&nbsp;</a></span>duplicate_rows() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DataFrame::duplicate_rows </td>
+          <td>(</td>
+          <td class="paramtype">std::deque&lt; std::pair&lt; int, int &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>correspondence</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If some indices occur more than once in correspondence, new rows are append to the dataset. </p>
+<p>The function is used in the compound assignment operator. When the rhs has a index which appears multiple times but it appears only once at the left hand side, the a new row in the lhs is created so that the addition can proceed. </p>
+
+</div>
+</div>
+<a id="ae4b43ae157eb9bba9c85bfc86f4679f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4b43ae157eb9bba9c85bfc86f4679f7">&#9670;&nbsp;</a></span>duplicate_rows() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DataFrame::duplicate_rows </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>pos</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If some indices occur more than once in correspondence, new rows are append to the dataset. </p>
+<p>The function is used in the compound assignment operator. When the rhs has a index which appears multiple times but it appears only once at the left hand side, the a new row in the lhs is created so that the addition can proceed. </p>
 
 </div>
 </div>
@@ -765,27 +828,6 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a61f3301cc72548b4b3536c0844fb156d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a61f3301cc72548b4b3536c0844fb156d">&#9670;&nbsp;</a></span>operator+=()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classDataFrame.html">DataFrame</a> &amp; DataFrame::operator+= </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classDataFrame.html">DataFrame</a> &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>The overloaded compound-assignment operator. </p>
-<p>If a colum or row or the rhs is not present in the lhs, a new column or row is created in the lhs dataframe containing nas. </p>
-
-</div>
-</div>
 <a id="a26164d4d8119ea34da73eb0c48bd3972"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a26164d4d8119ea34da73eb0c48bd3972">&#9670;&nbsp;</a></span>operator=()</h2>
 
@@ -812,6 +854,27 @@ template&lt;typename T &gt; </div>
 
 <p>Copy assignment operator. </p>
 <p>The copy assignment operator makes a copy of the dataframe. The index and column names are a deep-copy. The data is shared between the two dataframes. When attempting to modify a column in a dataframe, copy-on-write is used. This technique avoids having to rely on defensive copying. </p>
+
+</div>
+</div>
+<a id="aa701d85cc361dca2ebdd13d4c6d3d4fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa701d85cc361dca2ebdd13d4c6d3d4fd">&#9670;&nbsp;</a></span>summarize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classDataFrame.html">DataFrame</a> DataFrame::summarize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classStatistic.html">Statistic</a> *&#160;</td>
+          <td class="paramname"><em>f</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The overloaded compound-assignment operator. </p>
+<p>If a colum or row or the rhs is not present in the lhs, a new column or row is created in the lhs dataframe containing nas. </p>
 
 </div>
 </div>
@@ -899,6 +962,7 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 
 <p>deep copy of a <a class="el" href="classDataFrame.html">DataFrame</a> </p>
+<p>Compares a dataframe with a elemary values emelemt-wise and returns a new dataframe with boolean values.</p>
 <p>Create new instances of all the member columns. The functions is, for example, used in the overloaed + operator. </p>
 
 </div>

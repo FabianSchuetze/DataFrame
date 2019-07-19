@@ -4,5 +4,6 @@ var searchData=
   ['drop_5fcolumn',['drop_column',['../classDataFrame.html#afa6fd73a62f0d45b03e5df738a575693',1,'DataFrame']]],
   ['drop_5findex',['drop_index',['../classIndex.html#a2f8b9698a6ba11b35b6de42fb096b3d7',1,'Index']]],
   ['drop_5frow',['drop_row',['../classDataFrame.html#a4b4198c63e6ed421968303e872beb807',1,'DataFrame::drop_row(std::vector&lt; std::deque&lt; Index::ele &gt;&gt;)'],['../classDataFrame.html#a644965d62c039b88a940c2cb83a29fbc',1,'DataFrame::drop_row(std::deque&lt; Index::ele &gt;)']]],
-  ['dropna',['dropna',['../classDataFrame.html#a6abc672ac4c439e3e785bd3f84c8da15',1,'DataFrame']]]
+  ['dropna',['dropna',['../classDataFrame.html#a6abc672ac4c439e3e785bd3f84c8da15',1,'DataFrame']]],
+  ['duplicate_5frows',['duplicate_rows',['../classDataFrame.html#a6c62eeccda5f10832a286906482263f7',1,'DataFrame::duplicate_rows(std::deque&lt; std::pair&lt; int, int &gt;&gt; &amp;correspondence)'],['../classDataFrame.html#ae4b43ae157eb9bba9c85bfc86f4679f7',1,'DataFrame::duplicate_rows(int)']]]
 ];

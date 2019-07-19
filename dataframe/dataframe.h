@@ -37,25 +37,13 @@ class DataFrame {
     friend class iterator;
     friend DataFrame deep_copy(const DataFrame& lhs);
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
-    //friend std::deque<std::pair<int, int>> correspondence_position(
-        //const DataFrame&, const DataFrame&);
     friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
     friend DataFrame operator+(const DataFrameProxy&, const DataFrameProxy&);
     friend DataFrame operator+(const DataFrame&, const DataFrameProxy&);
     template <typename T>
-    friend DataFrame operator<(const DataFrame& lhs, const T& t) {
-        DataFrame copy = deep_copy(lhs);
-        for (const auto& x : copy.column_names)
-            copy.columns[x.second]->is_smaller_than(t);
-        return copy;
-    }
+    friend DataFrame operator<(const DataFrame& lhs, const T& t);
     template <typename T>
-    friend DataFrame operator>(const DataFrame& lhs, const T& t) {
-        DataFrame copy = deep_copy(lhs);
-        for (const auto& x : copy.column_names)
-            copy.columns[x.second]->is_greater_than(t);
-        return copy;
-    }
+    friend DataFrame operator>(const DataFrame& lhs, const T& t);
     template <typename T>
     friend DataFrame operator+(const DataFrame& lhs, const T& t) {
         return deep_copy(lhs) += t;
@@ -211,10 +199,37 @@ class DataFrame {
      */
     template <typename T1, typename... T2>
     void sort_by_column(const_iterator<T1>, const_iterator<T2>...);
-    DataFrameProxy operator[](const std::string&);
-    DataFrameProxy operator[](const std::vector<std::string>&);
-    DataFrameProxy loc(const std::deque<Index::ele>&, const std::string&);
-     //DataFrameProxy loc(const std::deque<Index::ele>&, const std::string&);
+    /**
+     * @brief Returns a ProxyClass of the DataFrame which can then be used to
+     * overload functions upon the return value (see Scott Mayers, More
+     * Effective C++
+     * @param s A column name
+     */
+    DataFrameProxy operator[](const std::string& s);
+    /**
+     * @brief Returns a ProxyClass of the DataFrame which can then be used to
+     * overload functions upon the return value (see Scott Mayers, More
+     * Effective C++
+     * @param vec A vector of column names
+     */
+    DataFrameProxy operator[](const std::vector<std::string>& vec);
+    /**
+     * @brief Returns a ProxyClass of the DataFrame which can then be used to
+     * overload functions upon the return value (see Scott Mayers, More
+     * Effective C++
+     * @param idx One index (one row of the indices)
+     * @param s One column name
+     */
+    DataFrameProxy loc(const std::deque<Index::ele>& idx, const std::string& s);
+    /**
+     * @brief Returns a ProxyClass of the DataFrame which can then be used to
+     * overload functions upon the return value (see Scott Mayers, More
+     * Effective C++
+     * @param idx Several index elements given in a vector
+     * @param vec Several column names
+     */
+    DataFrameProxy loc(const std::vector<std::deque<Index::ele>>& idx,
+                       const std::vector<std::string>& vec);
     /**
      * @brief Returns a pair with the row (first) and column (second) numbers
      */
@@ -436,9 +451,31 @@ DataFrame::DataFrame(const std::vector<std::string>& names,
                      const std::vector<T1>& v1, const std::vector<T>&... cols) {
     std::vector<int> idx(v1.size());
     std::iota(idx.begin(), idx.end(), 0);
-    // for (size_t i = 0; i < v1.size(); i++) idx.push_back(i);
     index = Index(idx);
     append_column(names[0], std::make_shared<Column>(v1));
     if constexpr (sizeof...(T) > 0) append_column<T...>(names, 1, cols...);
+}
+
+/**
+ * @brief Compares a dataframe with a elemary values emelemt-wise and returns a
+ * new dataframe with boolean values
+ */
+template <typename T>
+DataFrame operator>(const DataFrame& lhs, const T& t) {
+        DataFrame copy = deep_copy(lhs);
+        for (const auto& x : copy.column_names)
+            copy.columns[x.second]->is_greater_than(t);
+        return copy;
+}
+/**
+ * @brief Compares a dataframe with a elemary values emelemt-wise and returns a
+ * new dataframe with boolean values
+ */
+template <typename T>
+DataFrame operator<(const DataFrame& lhs, const T& t) {
+    DataFrame copy = deep_copy(lhs);
+    for (const auto& x : copy.column_names)
+        copy.columns[x.second]->is_smaller_than(t);
+    return copy;
 }
 #endif

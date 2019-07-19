@@ -124,7 +124,7 @@ void DataFrame::append_column(const string& name, const SharedCol& col) {
 }
 
 DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
-    : columns(), index(df.theDataFrame.index), column_names() {
+    : columns(), index(df.proxy_index), column_names() {
     try {
         for (const string& name : df.colNames)
             append_column(name, df.theDataFrame.get_shared_copy(name));
@@ -132,11 +132,6 @@ DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
         string m = string("In\n") + __PRETTY_FUNCTION__ + ":\n" + e.what();
         throw std::out_of_range(m);
     }
-    //index.index_positions = df.idxElements;
-    //for (const auto& val : df.idxElements) {
-        //deque<int> pos = df.theDataFrame.index.find_index_position(val);
-        //index.index_names[val] = pos;
-    //}
 }
 
 std::pair<size_t, size_t> DataFrame::size() const {
@@ -345,4 +340,9 @@ void DataFrame::append_missing_cols(const DataFrame& rhs) {
 DataFrame::DataFrameProxy DataFrame::loc(const std::deque<Index::ele>& idx,
                                          const std::string& s) {
     return DataFrameProxy(*this, idx, s);
+}
+DataFrame::DataFrameProxy DataFrame::loc(
+        const std::vector<std::deque<Index::ele>>& idx,
+        const std::vector<std::string>& vec) {
+    return DataFrameProxy(*this, idx, vec);
 }

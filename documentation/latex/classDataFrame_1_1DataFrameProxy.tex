@@ -2,13 +2,8 @@
 \label{classDataFrame_1_1DataFrameProxy}\index{Data\+Frame\+::\+Data\+Frame\+Proxy@{Data\+Frame\+::\+Data\+Frame\+Proxy}}
 
 
-Collaboration diagram for Data\+Frame\+:\+:Data\+Frame\+Proxy\+:\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=226pt]{classDataFrame_1_1DataFrameProxy__coll__graph}
-\end{center}
-\end{figure}
+Collaboration diagram for Data\+Frame\+:\+:Data\+Frame\+Proxy\+:
+% FIG 0
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -17,6 +12,9 @@ Collaboration diagram for Data\+Frame\+:\+:Data\+Frame\+Proxy\+:\nopagebreak
 \item 
 \mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_ac7a390ace45f4ae0f4deaf0c7eedc90d}\label{classDataFrame_1_1DataFrameProxy_ac7a390ace45f4ae0f4deaf0c7eedc90d}} 
 {\bfseries Data\+Frame\+Proxy} (\hyperlink{classDataFrame}{Data\+Frame} \&, const std\+::vector$<$ std\+::string $>$ \&)
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_afc389928d0b951d43ab6bcb775db799b}\label{classDataFrame_1_1DataFrameProxy_afc389928d0b951d43ab6bcb775db799b}} 
+{\bfseries Data\+Frame\+Proxy} (\hyperlink{classDataFrame}{Data\+Frame} \&, const std\+::deque$<$ Index\+::ele $>$ \&, const std\+::string \&)
 \item 
 \mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a6d56fc9161384065db7812e513313731}\label{classDataFrame_1_1DataFrameProxy_a6d56fc9161384065db7812e513313731}} 
 \hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} \& {\bfseries operator=} (const \hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} \&)
@@ -30,6 +28,12 @@ Collaboration diagram for Data\+Frame\+:\+:Data\+Frame\+Proxy\+:\nopagebreak
 \mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a25774e44f4e4d36e5b640e7387d24361}\label{classDataFrame_1_1DataFrameProxy_a25774e44f4e4d36e5b640e7387d24361}} 
 {\footnotesize template$<$typename T $>$ }\\\hyperlink{classDataFrame_1_1DataFrameProxy}{Data\+Frame\+Proxy} \& {\bfseries operator=} (const std\+::vector$<$ T $>$ \&)
 \item 
+\mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a942013d9c0ab98e5bf30042f43b7271e}\label{classDataFrame_1_1DataFrameProxy_a942013d9c0ab98e5bf30042f43b7271e}} 
+{\bfseries operator double} () const
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_adaee50dab0cde6cb8e896440fca846dd}\label{classDataFrame_1_1DataFrameProxy_adaee50dab0cde6cb8e896440fca846dd}} 
+{\bfseries operator std\+::string} () const
+\item 
 \mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a74080fd3f0407cefdb332062ca91ecc9}\label{classDataFrame_1_1DataFrameProxy_a74080fd3f0407cefdb332062ca91ecc9}} 
 {\footnotesize template$<$typename T $>$ }\\void {\bfseries insert\+\_\+column} (const string \&name, const vector$<$ T $>$ \&inp)
 \item 
@@ -38,6 +42,9 @@ Collaboration diagram for Data\+Frame\+:\+:Data\+Frame\+Proxy\+:\nopagebreak
 \end{DoxyCompactItemize}
 \subsection*{Private Member Functions}
 \begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_ae3bf29a6c9548e39647f186edb68ccc7}\label{classDataFrame_1_1DataFrameProxy_ae3bf29a6c9548e39647f186edb68ccc7}} 
+void {\bfseries check\+\_\+compatability} (const char $\ast$) const
 \item 
 \mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a86f0a67b671260df875dd32d587d02c0}\label{classDataFrame_1_1DataFrameProxy_a86f0a67b671260df875dd32d587d02c0}} 
 void {\bfseries add\+\_\+column} (const std\+::shared\+\_\+ptr$<$ \hyperlink{classColumn}{Column} $>$ \&)
@@ -68,6 +75,9 @@ void {\bfseries insert\+\_\+column} (const std\+::vector$<$ std\+::string $>$ \&
 \item 
 \mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a0ba3f257ca6e7506dda6ec39a1db414d}\label{classDataFrame_1_1DataFrameProxy_a0ba3f257ca6e7506dda6ec39a1db414d}} 
 std\+::vector$<$ std\+::string $>$ {\bfseries col\+Names}
+\item 
+\mbox{\Hypertarget{classDataFrame_1_1DataFrameProxy_a7aad55925111854cefe0c67ace02659c}\label{classDataFrame_1_1DataFrameProxy_a7aad55925111854cefe0c67ace02659c}} 
+\hyperlink{classIndex}{Index} {\bfseries proxy\+\_\+index}
 \end{DoxyCompactItemize}
 \subsection*{Friends}
 \begin{DoxyCompactItemize}
@@ -92,4 +102,5 @@ class {\bfseries Data\+Frame}
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
 dataframe/dataframeproxy.\+h\item 
+dataframe/dataframeproxy.\+cpp\item 
 dataframe/operators.\+cpp\end{DoxyCompactItemize}
