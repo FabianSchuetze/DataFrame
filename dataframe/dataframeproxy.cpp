@@ -83,5 +83,4 @@ DataFrame::DataFrameProxy::operator std::string() const {
         string m("Incompatbile return type, in:\n");
         throw std::runtime_error(m + __PRETTY_FUNCTION__);
     }
-    return theDataFrame.columns[0]->get_value<std::string>(0);
 }

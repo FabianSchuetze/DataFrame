@@ -1,6 +1,7 @@
 A pandas like dataframe in c++
 
 
+
 Examples
 --------
 There are some examples what how the code can be used
@@ -8,6 +9,8 @@ There are some examples what how the code can be used
 
 Addition
 --------
+Addition relates the different column and indices of both DataFrames
+automatically:
 ```c++
 
 DataFrame dfa(Index(vector<int>({1, 1, 3})), {"colOne"},
@@ -22,7 +25,7 @@ std::cout << sum << std::endl;
  | 1 | 8.000000 |
  | 3 | nan      |
  ----------------
-
-puts markdown.to_html
 ```
+
+
 

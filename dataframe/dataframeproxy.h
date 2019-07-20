@@ -52,13 +52,4 @@ class DataFrame::DataFrameProxy {
 
 DataFrame operator+(const DataFrame::DataFrameProxy&,
                     const DataFrame::DataFrameProxy&);
-
-//template <typename T>
-//DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
-    //const std::vector<T>& other_col) {
-    //check_col_width(1, std::string{"must select one column"});
-    //check_col_len(other_col.size(), std::string{"len of vector num != colum"});
-    //insert_column(colNames[0], other_col);
-    //return *this;
-//}
 #endif
