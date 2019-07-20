@@ -113,13 +113,6 @@ void DataFrame::Grouper<T...>::make_index_unique() {
     group_index.index_positions.erase(it, group_index.index_positions.end());
 }
 
-void Index::make_index_unique() {
-    auto b = index_positions.begin();
-    auto e = index_positions.end();
-    auto it = std::unique(b, e);
-    index_positions.erase(it, index_positions.end());
-}
-
 std::vector<std::deque<int>> group_position(const Index& idx) {
     std::vector<std::deque<int>> groupings;
     for (const auto i : idx.get_index_names())
@@ -147,7 +140,7 @@ DataFrame::SharedCol col_summary(Statistic* f,
                                  const DataFrame::SharedCol& col) {
     Column new_col = provide_empty_column(f, col);
     for (const std::deque<int>& g : groupings)
-        new_col.push_back(f->func(g, col));
+        f->func(g, col, new_col);
     return std::make_shared<Column>(new_col);
 }
 
@@ -168,10 +161,8 @@ DataFrame DataFrame::Grouper<T...>::calc(
 
 DataFrame DataFrame::summarize(Statistic* f) {
     std::string name(abi::__cxa_demangle(typeid(*f).name(), 0, 0, 0));
-    std::vector<std::string> index_names(size().first, name);
     DataFrame res = DataFrame(Index(std::vector<std::string>({name})));
     std::vector<std::deque<int>> groupings({index.find_index_position()});
-    //groupings.push_back(index.find_index_position());
     for (auto& s : elegible_types(column_names, f->elegible_type(), columns)) {
         SharedCol& col = columns[column_names[s]];
         DataFrame::SharedCol summary = col_summary(f, groupings, col);
@@ -190,6 +181,14 @@ DataFrame DataFrame::Grouper<T...>::summarize(Statistic* f) {
 template <class... T>
 DataFrame DataFrame::Grouper<T...>::summarize(
     Statistic* f, const std::vector<std::string>& names) {
+    std::string valid(f->elegible_type());
+    for (const std::string& name : names) {
+        std::string col_type(columns[group_column_names[name]]->type_name());
+        if ((valid != "all") & (valid != col_type)) {
+            std::string m("The column " + name + " has invalid types, in:\n"); 
+            throw std::invalid_argument(m + __PRETTY_FUNCTION__);
+        }
+    }
     return calc(f, names);
 }
 #endif
