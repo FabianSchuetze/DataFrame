@@ -14,8 +14,6 @@ class Index {
    public:
     friend class DataFrame;
     friend DataFrame deep_copy(const DataFrame& lhs);
-    //friend DataFrame::SharedCol calculate_statistic(Statistic* f, 
-            //const Index& idx, const SharedCol&);
     //void friend compare_both_indices(Index&, Index &b, const char*);
     // NEED TO ADD DOUBLE!
     typedef std::variant<int, std::string, double> ele;
@@ -98,6 +96,7 @@ class Index {
     std::set<std::deque<ele>> unique_elements() const;
     std::deque<std::pair<int, int>> index_correspondence(const Index&) const;
     std::deque<std::pair<int, int>> index_correspondence(const Index&);
+    void make_index_unique();
 
    private:
     std::vector<std::deque<ele>> index_positions; //deque: multiindex

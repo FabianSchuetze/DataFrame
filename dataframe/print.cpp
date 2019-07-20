@@ -66,14 +66,16 @@ vector<string> frame_index(vector<string> inp) {
     return output;
 }
 
-vector<string> rhs_truncate(vector<string> inp) {
+// THE FUNCTION IS FAULTY!!! I NEED A GOOD TEST FOR THIS!!!
+vector<string> rhs_truncate(size_t lhs_size, vector<string> inp) {
     inp.insert(inp.begin(), string(""));
     std::fill(inp.begin(), inp.end(), "---");
     vector<string>::iterator end;
     if (inp.size() > 11)
         end = inp.begin() + 12;
     else 
-        end = inp.end();
+        end = inp.end() - 5;
+    int d = std::distance(inp.begin(), end);
     vector<string> output = frame(vector<string>(inp.begin(),end));
     return output;
 }
@@ -92,7 +94,7 @@ std::ostream& operator<<(std::ostream& os, const DataFrame& df) {
         vector<string> rhs = frame(tmp);
         hcat(output, rhs);
         if (output[1].size() > 50)  {
-            hcat(output, rhs_truncate(rhs));
+            hcat(output, rhs_truncate(output.size(), rhs));
             break;
         }
     }

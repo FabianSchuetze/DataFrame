@@ -34,8 +34,13 @@ int main() {
     DataFrame::Grouper<string> grouper =
         df.groupby<string>(df.cbegin<string>("key1"));
     //DataFrame::Grouper<string> grouper2 = df.groupby<string>(df2);
-    mean t;
+    count t;
     Statistic *p = &t;
+    DataFrame works = grouper.summarize(p, {"data1"});
+    DataFrame works2 = grouper.summarize(p);
+    DataFrame test = df.summarize(p);
+    std::cout << test << std::endl;
     std::cout <<  grouper.summarize(p, {"data1"}) << std::endl;
+    std::cout <<  grouper.summarize(p) << std::endl;
     std::cout << df.summarize(p) << std::endl;
 }
