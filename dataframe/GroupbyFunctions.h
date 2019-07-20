@@ -35,8 +35,20 @@ class count : public Statistic {
     count(std::string type = "string") { type_name = type; }
     double func(const std::deque<int>& pos,
                 const DataFrame::SharedCol& col) override {
+        (void)col; //avoid GCC unused paramter warining
         return pos.size();
     }
     std::string get_name() override { return type_name; }
 };
+
+//class head : public Statistic {
+   //public:
+    //count(std::string type = "string") { type_name = type; }
+    //double func(const std::deque<int>& pos,
+                //const DataFrame::SharedCol& col) override {
+        //(void)col; //avoid GCC unused paramter warining
+        //return pos.size();
+    //}
+    //std::string get_name() override { return type_name; }
+//};
 #endif

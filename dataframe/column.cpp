@@ -89,10 +89,10 @@ void Column::convert_and_push_back(const std::string& s) {
     }
 }
 
-template <class T>
-void Column::push_back(const T t) {
-    std::get<vector<T>>(col).push_back(t);
-}
+//template <class T>
+//void Column::push_back(const T t) {
+    //std::get<vector<T>>(col).push_back(t);
+//}
 
 size_t Column::size() { return static_cast<const Column&>(*this).size(); }
 

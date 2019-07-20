@@ -1,10 +1,13 @@
 #include "index.h"
 
 using std::deque;
+using std::make_pair;
 using std::string;
 using std::vector;
-using std::make_pair;
 
+Index::Index(const std::vector<deque<ele>>& inp) {
+    append_index(inp);
+}
 void Index::append_row(const deque<ele>& row) {
     index_names[row].push_back(index_positions.size());
     index_positions.push_back(row);
@@ -18,6 +21,7 @@ void Index::drop_index(size_t pos) {
     }
     index_names = new_index_names;
 }
+
 deque<int> Index::find_index_position(const deque<ele>& inp) const {
     try {
         return index_names.at(inp);
@@ -127,7 +131,7 @@ deque<std::pair<int, int>> Index::index_correspondence(const Index& rhs) const {
     return res;
 }
 
-deque<std::pair<int, int>> Index::index_correspondence(const Index& rhs) { 
+deque<std::pair<int, int>> Index::index_correspondence(const Index& rhs) {
     return static_cast<const Index&>(*this).index_correspondence(rhs);
 }
 
@@ -139,5 +143,4 @@ std::pair<size_t, size_t> Index::size() const {
         return make_pair(index_positions.size(), index_positions[0].size());
     else
         return make_pair(0, 0);
-
 }

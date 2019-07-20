@@ -1,10 +1,10 @@
 #ifndef GUARD_Column_h
 #define GUARD_Column_h
 #include <algorithm>
+#include <deque>
 #include <string>
 #include <variant>
 #include <vector>
-#include <deque>
 
 class DataFrame;
 class Column {
@@ -13,31 +13,35 @@ class Column {
     friend Column operator+(const Column&, const std::string&);
     friend class DataFrame;
     friend void append_missing_cols(DataFrame&, const DataFrame&);
-    friend std::string::size_type width(const Column&, std::vector<std::string>&);
+    friend std::string::size_type width(const Column&,
+                                        std::vector<std::string>&);
     template <typename T>
     friend DataFrame operator<(const DataFrame&, const T&);
     template <typename T>
     friend DataFrame operator>(const DataFrame&, const T&);
 
-    Column(): col() {};
-    //Column(const Column&, int); I THINK THIS CONSTRUCTOR IS NOT NEEDED?!?
+    Column() : col(){};
+    // Column(const Column&, int); I THINK THIS CONSTRUCTOR IS NOT NEEDED?!?
     /**
      * @brief Copy constructor for a new column, given an existing colum and a
      * vector<int> indicating which position shall be copied
      */
     Column(const Column&, const std::deque<int>&);
     /**
-     * @brief constructs a column form a existing vector. 
+     * @brief constructs a column form a existing vector.
      * The vector must contains types of either double, string or boolean
      */
     template <class T>
-    explicit Column(const std::vector<T>& t): col(t) {}
+    explicit Column(const std::vector<T>& t) : col(t) {}
     Column& plus(const Column&, const std::deque<std::pair<int, int>>&);
     /**
      * Pushes a value of type T into the column
      */
     void convert_and_push_back(const std::string&);
     template <class T>
+    /**
+     * @An element of type T is appended to the end of the column
+     */
     void push_back(const T);
     /**
      * @brief Returns the length of the column
@@ -48,15 +52,15 @@ class Column {
      * @breif Returns the type of the stored data as a string
      */
     std::string type_name();
-    template <class T> 
-    T& get_value(int i) {
-        if (std::holds_alternative<std::vector<T>>(col))
-            return std::get<std::vector<T>>(col)[i];
-        else {
-            std::string s = "incompatible template type in\n: ";
-            throw std::invalid_argument(s + __PRETTY_FUNCTION__);
-        }
-    }
+    template <class T>
+    T& get_value(int i);
+    // if (std::holds_alternative<std::vector<T>>(col))
+    // return std::get<std::vector<T>>(col)[i];
+    // else {
+    // std::string s = "incompatible template type in\n: ";
+    // throw std::invalid_argument(s + __PRETTY_FUNCTION__);
+    //}
+    //}
     template <typename T>
     void push_back_nan();
     void push_back_nan();
@@ -77,8 +81,9 @@ class Column {
     void replace_nan(int);
     void is_null(std::vector<int>&);
     bool is_null(size_t);
-    void add_to_double(const Column&,const  std::deque<std::pair<int, int>>&);
-    void add_to_string(const Column&,const  std::deque<std::pair<int, int>>&);
+    void add_to_double(const Column&, const std::deque<std::pair<int, int>>&);
+    void add_to_string(const Column&, const std::deque<std::pair<int, int>>&);
+    // CAN THEY BE TEMPLATES?
     void is_smaller_than(const double&);
     void is_smaller_than(const std::string&);
     void is_greater_than(const double&);
@@ -90,4 +95,24 @@ class Column {
 
 Column operator+(const Column&, double d);
 Column operator+(const Column&, const std::string& s);
+
+template <class T>
+T& Column::get_value(int i) {
+    if (std::holds_alternative<std::vector<T>>(col))
+        return std::get<std::vector<T>>(col)[i];
+    else {
+        std::string s = "incompatible template type in\n: ";
+        throw std::invalid_argument(s + __PRETTY_FUNCTION__);
+    }
+}
+
+template <class T>
+void Column::push_back(const T t) {
+    if (std::holds_alternative<std::vector<T>>(col))
+        std::get<std::vector<T>>(col).push_back(t);
+    else {
+        std::string s = "cannot push type into column, in\n: ";
+        throw std::invalid_argument(s + __PRETTY_FUNCTION__);
+    }
+}
 #endif

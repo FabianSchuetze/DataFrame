@@ -19,6 +19,11 @@ using std::pair;
 using std::shared_ptr;
 using std::string;
 using std::vector;
+
+DataFrame::DataFrame(const Index& idx) {
+    index = idx;
+}
+
 bool maybe_add(const string&, std::map<string, int>&);
 
 void missing_col_error(const char* what, string s) {
@@ -142,24 +147,6 @@ int DataFrame::use_count(const string& name) {
     int pos = find_column_position(name);
     return columns[pos].use_count();
 }
-
-//void carthesian_product(deque<int>& lhs, deque<int>& rhs,
-                        //deque<pair<int, int>>& inp) {
-    //if (rhs.empty()) rhs.push_back(-1);
-    //for (const int& a : lhs)
-        //for (const int& b : rhs) inp.push_back(make_pair(a, b));
-//}
-
-//deque<pair<int, int>> correspondence_position(const DataFrame& lhs,
-                                              //const DataFrame& other) {
-    //deque<pair<int, int>> res;
-    //for (auto const& e : lhs.index.unique_elements()) {
-        //deque<int> lhsIdx = lhs.index.find_index_position(e);
-        //deque<int> rhsIdx = other.index.find_index_position(e);
-        //carthesian_product(lhsIdx, rhsIdx, res);
-    //}
-    //return res;
-//}
 
 void DataFrame::copy_row(int pos) {
     for (auto const x : column_names)

@@ -9,15 +9,19 @@
 #include <vector>
 
 class DataFrame;
+class Statistic;
 class Index {
    public:
     friend class DataFrame;
     friend DataFrame deep_copy(const DataFrame& lhs);
+    //friend DataFrame::SharedCol calculate_statistic(Statistic* f, 
+            //const Index& idx, const SharedCol&);
     //void friend compare_both_indices(Index&, Index &b, const char*);
     // NEED TO ADD DOUBLE!
     typedef std::variant<int, std::string, double> ele;
     typedef std::map<std::deque<ele>, std::deque<int>> index_map_type;
     Index() : index_positions(), index_names(){};
+    Index(const std::vector<std::deque<ele>>&);
     /**
      * @brief create a index with keys as in the input vectors
      *
@@ -74,7 +78,17 @@ class Index {
     std::deque<int> find_index_position() const;
     std::pair<size_t, size_t> size();
     std::pair<size_t, size_t> size() const;
+    /**
+     * @brief Returns a vector with all the index names in the order as they
+     * are stored
+     *
+     * Makes the private implementation indx_positions accessible to the
+     * outside
+     */
     std::vector<std::deque<ele>> get_index_names();
+    /**
+     * @Same as above but const qualified
+     */
     std::vector<std::deque<ele>> get_index_names() const;
     std::vector<std::string> get_index_as_string() const;
     std::vector<std::string> get_index_as_string();

@@ -33,6 +33,7 @@ int main() {
     std::cout << df2 << std::endl;
     DataFrame::Grouper<string> grouper =
         df.groupby<string>(df.cbegin<string>("key1"));
+    //DataFrame::Grouper<string> grouper2 = df.groupby<string>(df2);
     mean t;
     Statistic *p = &t;
     std::cout <<  grouper.summarize(p, {"data1"}) << std::endl;

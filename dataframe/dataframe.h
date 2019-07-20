@@ -72,6 +72,7 @@ class DataFrame {
      * @brief Create dataframe with an index, the column names and vector of
      * different datatype
      */
+    DataFrame(const Index&);
     template <typename T1, typename... T>
     DataFrame(const Index&, const std::vector<std::string>&,
               const std::vector<T1>&, const std::vector<T>&...);
