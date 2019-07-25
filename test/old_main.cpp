@@ -38,7 +38,6 @@ void fill_df(DataFrame& df) {
 //}
 
 int main() {
-    typedef std::numeric_limits<double> nan;
     vector<vector<string>> strings2 = {{"f", "l"}, {"m", "a"}, {"as", "ssd"}};
     vector<double> first1 = {30, -100, 40, 100};
     vector<string> string_col = {"u ", "NA", "new_test", "second"};

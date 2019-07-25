@@ -56,3 +56,5 @@ add_test(NAME my_test
          COMMAND my_test)
 add_test(NAME test_additions
          COMMAND test_additions)
+add_test(NAME test_groupby
+         COMMAND test_groupby)

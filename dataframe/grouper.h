@@ -11,7 +11,6 @@
 template <class... T>
 class DataFrame::Grouper {
    public:
-    // Grouper(DataFrame&);
     /**
      * @brief Constructor for the grouper
      * @param df The dataframe which is grouped

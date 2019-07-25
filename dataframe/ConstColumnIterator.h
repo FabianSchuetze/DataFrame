@@ -9,12 +9,11 @@ class Column;
 template <class T>
 class DataFrame::const_iterator {
    public:
-       // MAKE RANDOM ACCESS ITERATORS!!!
-     typedef std::bidirectional_iterator_tag iterator_category;
-     typedef T value_type;
-     typedef std::ptrdiff_t difference_type;
-     typedef T* pointer;
-     typedef T& reference;
+    typedef std::bidirectional_iterator_tag iterator_category;
+    typedef T value_type;
+    typedef std::ptrdiff_t difference_type;
+    typedef T* pointer;
+    typedef T& reference;
     const_iterator(const DataFrame& a, std::string _name, size_t sz = 0)
         : theDataFrame(a),
           wptr(a.columns[a.find_column_position(_name)]),
@@ -27,9 +26,7 @@ class DataFrame::const_iterator {
     const T& operator*() const;
     const T& operator[](int) const;
     const T* operator->() const { return &this->operator*(); }
-    bool operator==(const const_iterator& b) const {
-        return (name == b.name) && (curr == b.curr);
-    }
+    bool operator==(const const_iterator& b) const;
     bool operator!=(const const_iterator& b) const {
         return !this->operator==(b);
     }
@@ -38,19 +35,23 @@ class DataFrame::const_iterator {
     const_iterator& operator--();
     const_iterator operator--(int);
     std::string return_name() { return name; }
-    void reset() {
-        curr = 0;
-        iteration_order = theDataFrame.index.find_index_position();
-    }
 
    private:
-    std::shared_ptr<Column> check(std::size_t, const std::string&) const;
     const DataFrame& theDataFrame;
     std::weak_ptr<Column> wptr;
+    std::shared_ptr<Column> check(std::size_t, const std::string&) const;
     std::size_t curr;
     std::deque<int> iteration_order;
     std::string name;
 };
+
+template <class T>
+bool DataFrame::const_iterator<T>::operator==(const const_iterator& b) const {
+        bool names = (name == b.name);
+        bool pos = (curr == b.curr);
+        bool values = (this->operator*() == *b);
+        return names && pos && values;
+}
 
 template <class T>
 DataFrame::const_iterator<T> DataFrame::cbegin(const std::string& s) {
@@ -216,7 +217,21 @@ std::vector<int> permutation_idx(DataFrame::const_iterator<T1>& it,
 }
 
 template <typename T1, typename... T2>
+void DataFrame::test_equality(const_iterator<T1> v, const_iterator<T2>...v2) {
+    std::string n = v.return_name();
+    for (const_iterator<T1> other = cbegin<T1>(n); other != cend<T1>(n);) {
+        bool eq = (other++ == v++);;
+        if (!eq) {
+            std::string m("The iterators seem to differ,in:\n");
+            throw std::invalid_argument(m + __PRETTY_FUNCTION__);
+        }
+    }
+    if constexpr (sizeof...(T2) > 0) test_equality<T2...>(v2...);
+}
+
+template <typename T1, typename... T2>
 void DataFrame::sort_by_column(const_iterator<T1> v, const_iterator<T2>... v2) {
+    test_equality<T1,T2...>(v, v2...);
     std::vector<int> idx = permutation_idx<T1, T2...>(v, v2..., size().first);
     std::vector<std::deque<Index::ele>> new_index;
     for (int v : idx) new_index.push_back(index.index_positions[v]);

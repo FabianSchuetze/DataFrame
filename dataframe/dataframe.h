@@ -206,6 +206,8 @@ class DataFrame {
      * Effective C++
      * @param s A column name
      */
+    template <typename T1, typename... T2>
+    void test_equality(const_iterator<T1>, const_iterator<T2>...);
     DataFrameProxy operator[](const std::string& s);
     /**
      * @brief Returns a ProxyClass of the DataFrame which can then be used to
