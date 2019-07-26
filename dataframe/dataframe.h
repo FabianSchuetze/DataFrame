@@ -207,7 +207,7 @@ class DataFrame {
      * @param s A column name
      */
     template <typename T1, typename... T2>
-    void test_equality(const_iterator<T1>, const_iterator<T2>...);
+    void test_equality(const_iterator<T1>&, const_iterator<T2>&...);
     DataFrameProxy operator[](const std::string& s);
     /**
      * @brief Returns a ProxyClass of the DataFrame which can then be used to
@@ -294,6 +294,8 @@ class DataFrame {
     std::map<std::string, int> column_names;
 
     // Functions
+    template <typename T1, typename... T2>
+    void sort_by_column_no_check(const_iterator<T1>, const_iterator<T2>...);
     /**
      * @brief If some indices occur more than once in correspondence, new rows
      * are append to the dataset

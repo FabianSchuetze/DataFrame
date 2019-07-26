@@ -60,7 +60,8 @@ class DataFrame::Grouper {
 
 template <typename T>
 std::vector<T> return_vector(std::string n, DataFrame& df) {
-    return std::vector<T>(df.cbegin<T>(n), df.cend<T>(n));
+    std::vector<T> res(df.cbegin<T>(n), df.cend<T>(n));
+    return res;
 }
 
 template <typename T1, typename... T>
@@ -84,8 +85,9 @@ DataFrame::Grouper<T...>::Grouper(DataFrame& a,
 template <typename... T>
 DataFrame::Grouper<T...> DataFrame::groupby(
     DataFrame::const_iterator<T>... it) {
+    test_equality<T...>(it...);
     DataFrame df_copy = *this;
-    df_copy.sort_by_column<T...>(it...);
+    df_copy.sort_by_column_no_check<T...>(it...);
     Grouper<T...> grouper(df_copy, it...);
     return grouper;
 }
@@ -138,8 +140,7 @@ DataFrame::SharedCol col_summary(Statistic* f,
                                  const std::vector<std::deque<int>>& groupings,
                                  const DataFrame::SharedCol& col) {
     Column new_col = provide_empty_column(f, col);
-    for (const std::deque<int>& g : groupings)
-        f->func(g, col, new_col);
+    for (const std::deque<int>& g : groupings) f->func(g, col, new_col);
     return std::make_shared<Column>(new_col);
 }
 
@@ -184,7 +185,7 @@ DataFrame DataFrame::Grouper<T...>::summarize(
     for (const std::string& name : names) {
         std::string col_type(columns[group_column_names[name]]->type_name());
         if ((valid != "all") & (valid != col_type)) {
-            std::string m("The column " + name + " has invalid types, in:\n"); 
+            std::string m("The column " + name + " has invalid types, in:\n");
             throw std::invalid_argument(m + __PRETTY_FUNCTION__);
         }
     }

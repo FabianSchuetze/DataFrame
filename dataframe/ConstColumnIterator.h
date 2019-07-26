@@ -14,13 +14,13 @@ class DataFrame::const_iterator {
     typedef std::ptrdiff_t difference_type;
     typedef T* pointer;
     typedef T& reference;
-    const_iterator(const DataFrame& a, std::string _name, size_t sz = 0)
+    const_iterator(const DataFrame* a, std::string _name, size_t sz = 0)
         : theDataFrame(a),
-          wptr(a.columns[a.find_column_position(_name)]),
+          wptr(a->columns[a->find_column_position(_name)]),
           curr(sz),
           iteration_order(),
           name(_name) {
-        iteration_order = a.index.find_index_position();
+        iteration_order = a->index.find_index_position();
     }
     std::string to_string();
     const T& operator*() const;
@@ -36,8 +36,8 @@ class DataFrame::const_iterator {
     const_iterator operator--(int);
     std::string return_name() { return name; }
 
+    const DataFrame* theDataFrame;
    private:
-    const DataFrame& theDataFrame;
     std::weak_ptr<Column> wptr;
     std::shared_ptr<Column> check(std::size_t, const std::string&) const;
     std::size_t curr;
@@ -49,14 +49,23 @@ template <class T>
 bool DataFrame::const_iterator<T>::operator==(const const_iterator& b) const {
         bool names = (name == b.name);
         bool pos = (curr == b.curr);
-        bool values = (this->operator*() == *b);
-        return names && pos && values;
+        //if (curr < iteration_order.size() && b.curr < b.iteration_order.size()){
+            //bool values = (this->operator*() == *b);
+            //return names && pos && values;
+        //} 
+        return names && pos;
+
+        //try {
+            //values = (this->operator*() == *b);
+        //} catch (...) {
+            //values = true;
+        //}
 }
 
 template <class T>
 DataFrame::const_iterator<T> DataFrame::cbegin(const std::string& s) {
     try {
-        return const_iterator<T>(*this, s);
+        return const_iterator<T>(this, s);
     } catch (std::out_of_range& e) {
         std::string m = "Column " + s + " not found, in\n:";
         throw std::out_of_range(m + __PRETTY_FUNCTION__);
@@ -66,7 +75,7 @@ DataFrame::const_iterator<T> DataFrame::cbegin(const std::string& s) {
 template <class T>
 DataFrame::const_iterator<T> DataFrame::cend(const std::string& s) {
     try {
-        return const_iterator<T>(*this, s, index.size().first);
+        return const_iterator<T>(this, s, index.size().first);
     } catch (std::out_of_range& e) {
         std::string m = "Column " + s + " not found, in\n:";
         throw std::out_of_range(m + __PRETTY_FUNCTION__);
@@ -217,24 +226,45 @@ std::vector<int> permutation_idx(DataFrame::const_iterator<T1>& it,
 }
 
 template <typename T1, typename... T2>
-void DataFrame::test_equality(const_iterator<T1> v, const_iterator<T2>...v2) {
-    std::string n = v.return_name();
-    for (const_iterator<T1> other = cbegin<T1>(n); other != cend<T1>(n);) {
-        bool eq = (other++ == v++);;
-        if (!eq) {
-            std::string m("The iterators seem to differ,in:\n");
-            throw std::invalid_argument(m + __PRETTY_FUNCTION__);
-        }
+void DataFrame::test_equality(const_iterator<T1>& v, const_iterator<T2>&...v2) {
+    bool eq = this == v.theDataFrame;
+    //std::cout << "equality of the addresses: " << eq << std::endl;
+    if (!eq) {
+        std::string m("The iterators seem to differ,in:\n");
+        throw std::invalid_argument(m + __PRETTY_FUNCTION__);
     }
+    //std::cout << "the df address is " << 
+    //std::string n = v.return_name();
+    //for (const_iterator<T1> other = cbegin<T1>(n); other != cend<T1>(n);) {
+        //bool eq = (other++ == v++);;
+        //if (!eq) {
+            //std::string m("The iterators seem to differ,in:\n");
+            //throw std::invalid_argument(m + __PRETTY_FUNCTION__);
+        //}
+    //}
     if constexpr (sizeof...(T2) > 0) test_equality<T2...>(v2...);
 }
 
 template <typename T1, typename... T2>
-void DataFrame::sort_by_column(const_iterator<T1> v, const_iterator<T2>... v2) {
-    test_equality<T1,T2...>(v, v2...);
+void DataFrame::sort_by_column_no_check(const_iterator<T1> v,
+        const_iterator<T2>...v2) {
     std::vector<int> idx = permutation_idx<T1, T2...>(v, v2..., size().first);
     std::vector<std::deque<Index::ele>> new_index;
     for (int v : idx) new_index.push_back(index.index_positions[v]);
     index.index_positions = new_index;
+}
+template <typename T1, typename... T2>
+void DataFrame::sort_by_column(const_iterator<T1> v, const_iterator<T2>... v2) {
+    test_equality<T1,T2...>(v, v2...);
+    sort_by_column_no_check<T1, T2...>(v, v2...);
+    //std::cout << "now inside second\n";
+    //std::cout << "the df address is: " << this << std::endl;
+    //const_iterator<T1>* it = &v;
+    //std::cout << "the iterator points to: " << it->theDataFrame << std::endl;
+    ////print(v2...);
+    //std::vector<int> idx = permutation_idx<T1, T2...>(v, v2..., size().first);
+    //std::vector<std::deque<Index::ele>> new_index;
+    //for (int v : idx) new_index.push_back(index.index_positions[v]);
+    //index.index_positions = new_index;
 }
 #endif

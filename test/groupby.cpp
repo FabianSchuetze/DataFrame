@@ -53,3 +53,18 @@ TEST_CASE("DataFrame mean", "[mean]") {
     REQUIRE(df_res2.loc({"mean"}, "data2") == 13.);
     REQUIRE(df_res2.size().first == 1);
 }
+
+TEST_CASE("DataFrame different_col", "[different_col]") {
+    vector<string> key1({"a", "a", "b", "b", "a"});
+    vector<string> key1_fake({"a", "b", "b", "a"});
+    vector<string> key2({"one", "two", "one", "two", "one"});
+    vector<double> data1({1, 1, 3, 4, 5});
+    vector<double> data2({11, 12, 13, 14, 15});
+    DataFrame df({"key1", "data1", "data2"}, key1, data1, data2);
+    DataFrame df2({"col"}, key1);
+    DataFrame df3({"key1"}, key1_fake);
+    REQUIRE_THROWS_AS(df.groupby(df2.cbegin<string>("key1")),
+                      std::out_of_range);
+    REQUIRE_THROWS_AS(df.groupby(df3.cbegin<string>("key1")),
+                      std::invalid_argument);
+}
