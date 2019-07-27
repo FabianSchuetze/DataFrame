@@ -29,12 +29,12 @@ class DataFrame {
     class DataFrameProxy;
     typedef std::shared_ptr<Column> SharedCol;
 
-    template <class... T>
-    friend class Grouper;
-    template <class T>
-    friend class const_iterator;
-    template <class T>
-    friend class iterator;
+    //template <class... T>
+    //friend class Grouper;
+    //template <class T>
+    //friend class const_iterator;
+    //template <class T>
+    //friend class iterator;
     friend DataFrame deep_copy(const DataFrame& lhs);
     friend std::ostream& operator<<(std::ostream&, const DataFrame&);
     friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
@@ -73,10 +73,13 @@ class DataFrame {
      */
     explicit DataFrame(std::ifstream&);
     /**
+     * @brief constructor of the dataframe with only an index
+     */
+    DataFrame(const Index&);
+    /**
      * @brief Create dataframe with an index, the column names and vector of
      * different datatype
      */
-    DataFrame(const Index&);
     template <typename T1, typename... T>
     DataFrame(const Index&, const std::vector<std::string>&,
               const std::vector<T1>&, const std::vector<T>&...);
@@ -192,17 +195,19 @@ class DataFrame {
      */
     template <typename T1, typename... T2>
     void test_belonging(iterator<T1>&, iterator<T2>&...);
+    /**
+     * @brief Drops rows which contains na values
+     *
+     * Strings are assumed to be of NA type if their values if `NA`.
+     */
     void dropna();
     /**
      * @brief Drops rows based on the index of the dataframe
      *
      * Given the vector of indices of the dataframe, the rows of the dataframe
-     * are dropped
+     * are dropped. If the arguments are not in the index, the dataframe is the
+     * same as before the function is called.
      */
-    // MAJOR THINGS:
-    // 1. I NEED TO TEST THIS AGAIN
-    // 2. I NEED TO ADD A FEW CHECKS IN THE BEGINNING TO AVOID HAVING TO LOOK
-    // FOR ARGUMENTS THAT ARE NOT IN THE DATAFRAME!!!
     void drop_row(std::vector<std::deque<Index::ele>>);
     /**
      * @brief drops a row from the dataframe
@@ -211,8 +216,11 @@ class DataFrame {
     /**
      * @brief drops a column from the dataframe
      */
-    // MAKE THIS MORE GENERAL TO INCLUDE A INITIALIZER LIST!!!
     void drop_column(const std::string&);
+    /**
+     * @brief drops a column from the dataframe
+     */
+    void drop_column(const std::vector<std::string>&);
     /**
      * @brief Sort the dataframe by its index
      */
@@ -257,11 +265,21 @@ class DataFrame {
      * @brief Returns a pair with the row (first) and column (second) numbers
      */
     std::pair<size_t, size_t> size() const;
-    int use_count(const std::string&);  // Can i const qualify it?
-    // std::vector<std::string> get_index_names();
-    // std::vector<std::string> get_index_names() const;
+    /**
+     * @bried Returns the number of dataframes referencing to the column with
+     * name s.
+     *
+     * The use_count is employed for the copy-on-write functionality of teh
+     * dataframe. If more than one dataframe references the column and the
+     * column is about to be altered (or a iterator (not const_iterator) is
+     * requested) the column is copied.
+     */
+    int use_count(const std::string& s);  // Can i const qualify it?
+    /**
+     * @brief Fills the na values of column s with values of type t
+     */
     template <typename T>
-    void fill_na(std::string, T);
+    void fill_na(std::string s , T t );
     /**
      * @brief returns the names of all columns
      */
@@ -413,7 +431,7 @@ class DataFrame {
      * @brief Initilizes the Columns with the datatypes mentiond in the second
      * line of the csv file
      */
-    void initialize_column(std::ifstream&, const std::vector<std::string>&);
+    std::string initialize_column(std::ifstream&, const std::vector<std::string>&);
     /**
      * @bried fills the previously intilaized columns and creates the index
      */
@@ -423,7 +441,8 @@ class DataFrame {
      * @brief helper function.
      */
     void initialize_column(const std::string&, const std::string&);
-    void insert_data(std::ifstream&, const std::vector<std::string>&);
+    void insert_data(std::ifstream&, const std::vector<std::string>&,
+                     const std::string&);
 };
 
 /**

@@ -29,9 +29,7 @@ void equal_width(size_t num_names, size_t num_cols, const char* fun) {
     }
 }
 
-DataFrame::DataFrame(const Index& idx) {
-    index = idx;
-}
+DataFrame::DataFrame(const Index& idx) { index = idx; }
 
 bool maybe_add(const string&, std::map<string, int>&);
 
@@ -48,7 +46,7 @@ vector<string> get_names(t& cont) {
     return res;
 }
 
-vector<string> DataFrame::get_column_names() { 
+vector<string> DataFrame::get_column_names() {
     return static_cast<const DataFrame&>(*this).get_column_names();
 }
 
@@ -81,8 +79,7 @@ vector<string> DataFrame::get_column_names() {
 template vector<string> DataFrame::get_column_names<double>();
 template vector<string> DataFrame::get_column_names<string>();
 
-DataFrame::DataFrame()
-    : columns(), column_names() {Index();}
+DataFrame::DataFrame() : columns(), column_names() { Index(); }
 
 std::shared_ptr<Column> DataFrame::get_unique(const std::string& s) {
     return static_cast<const DataFrame&>(*this).get_unique(s);  // Item 3
@@ -149,7 +146,7 @@ DataFrame::DataFrame(const DataFrame::DataFrameProxy& df)
 }
 
 std::pair<size_t, size_t> DataFrame::size() const {
-    return make_pair(index.size().first, columns.size());
+    return make_pair(index.size().first, column_names.size());
 }
 
 int DataFrame::use_count(const string& name) {
@@ -158,8 +155,7 @@ int DataFrame::use_count(const string& name) {
 }
 
 void DataFrame::copy_row(int pos) {
-    for (auto const x : column_names)
-        columns[x.second]->copy_row(pos);
+    for (auto const x : column_names) columns[x.second]->copy_row(pos);
 }
 
 void DataFrame::duplicate_rows(int pos) {
@@ -172,7 +168,6 @@ void DataFrame::duplicate_rows(deque<pair<int, int>>& indices) {
     for (auto& pair : indices) {
         if (s.count(pair.first)) {
             duplicate_rows(pair.first);
-            //pair.first = index.index_positions.size() - 1;
         } else
             s.insert(pair.first);
     }
@@ -255,22 +250,21 @@ void DataFrame::dropna() {
     index.index_positions.erase(std::remove_if(b, e, fun), e);
 }
 
-
 void DataFrame::drop_column(const string& s) {
-    // WHAT HAPPENS IF THERE IS ONLY ONE SHARED POINTER OF IT? DOES THE THINK
-    // DROP OUT OF THE VECTOR?
     columns[find_column_position(s)].~shared_ptr();  // reduce use_count()
     column_names.erase(s);                           // delete reference to it;
 }
 
+void DataFrame::drop_column(const std::vector<std::string>& cols) {
+    for (const std::string s : cols) drop_column(s);
+}
+
 void DataFrame::sort_by_index() {
-    auto b = index.index_positions.begin();
-    auto e = index.index_positions.end();
-    std::sort(b, e, [](auto& a, auto& b) { return a < b; });
+    std::stable_sort(index.index_positions.begin(),
+                     index.index_positions.end());
 }
 
 bool DataFrame::is_contigious() {
-    // HERE THE FUNCTION WOULD STILL RETURN THE SAME INTERFACE
     deque<int> existing_order = index.find_index_position();
     for (size_t i = 1; i < existing_order.size(); ++i)
         if ((existing_order[i] - existing_order[i - 1]) != 1) return false;
@@ -289,14 +283,6 @@ void DataFrame::assert_same_column_length(const char* pass) {
         }
     }
 }
-
-//DataFrame::DataFrame(std::ifstream& file)
-    //: columns(), column_names() {
-    //vector<string> colNames = create_column_names(file);
-    //initialize_column(file, colNames);
-    //insert_data(file, colNames);
-    //assert_same_column_length(__PRETTY_FUNCTION__);
-//}
 
 void DataFrame::append_missing_rows(const DataFrame& rhs) {
     deque<pair<int, int>> pairs = rhs.index.index_correspondence(this->index);
@@ -336,7 +322,7 @@ DataFrame::DataFrameProxy DataFrame::loc(const std::deque<Index::ele>& idx,
     return DataFrameProxy(*this, idx, s);
 }
 DataFrame::DataFrameProxy DataFrame::loc(
-        const std::vector<std::deque<Index::ele>>& idx,
-        const std::vector<std::string>& vec) {
+    const std::vector<std::deque<Index::ele>>& idx,
+    const std::vector<std::string>& vec) {
     return DataFrameProxy(*this, idx, vec);
 }

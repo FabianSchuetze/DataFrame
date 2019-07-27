@@ -7,7 +7,7 @@ Examples
 --------
 There are some examples what how the code can be used
 
-o
+
 Addition
 --------
 Addition relates the different column and indices of both DataFrames
@@ -94,6 +94,21 @@ DataFrame::iterator<string> it(df.begin<string>("key1"));
 DataFrame::iterator<string> e(df.end<string>("key1"));
 vector<string>res(it, e);
 std::reverse_copy(it, e, it);
+```
+
+CSV Reader
+---------
+A DataFrame can be constructed from a csv file. Is is assumed that the 
+first two lines of the csv file describe the schema of the table: The first 
+line contains the column names and the second line the datatypes.
+```c++
+ifstream infile("csv_example1.csv");
+DataFrame df1(infile);
+ ---------------------------------------
+ |            | first_col | second_col |
+ ---------------------------------------
+ | 2019/02/02 | 10.000000 | india      |
+ ---------------------------------------
 ```
 
 

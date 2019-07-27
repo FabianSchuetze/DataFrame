@@ -1,6 +1,7 @@
 #include <sstream>
 #include "dataframe.h"
 using std::istringstream;
+using std::ifstream;
 using std::make_shared;
 using std::string;
 using std::vector;
@@ -30,27 +31,33 @@ void DataFrame::initialize_column(const string& type, const string& name) {
     else if (type == "bool")
         initialize_column<bool>(name);
     else {
-        std::string m("Wrong column type: " + type + " for: " + name +" in:\n");
+        std::string m("Wrong column type: " + type + " for: " + name +
+                      " in:\n");
         throw std::invalid_argument(m + __PRETTY_FUNCTION__);
     }
 }
-void DataFrame::initialize_column(std::ifstream& file,
-                                  const vector<string>& cols) {
-    columns.resize(cols.size());
+
+string DataFrame::initialize_column(ifstream& file, const vector<string>& c) {
+    columns.resize(c.size());
     istringstream names = get_stringstream(file);
     string name;
     std::getline(names, name, ',');  // pass the index column
+    std::string index_type = name;
     size_t i = 0;
-    while (std::getline(names, name, ','))
-        initialize_column(name, cols[i++]);
+    while (std::getline(names, name, ',')) initialize_column(name, c[i++]);
+    return index_type;
 }
 
-void DataFrame::insert_data(std::ifstream& file, const vector<string>& cols) {
+void DataFrame::insert_data(std::ifstream& file, const vector<string>& cols,
+                            const std::string& index_type) {
     string line, name;
     while (std::getline(file, line)) {
         istringstream names(line);
         std::getline(names, name, ',');
-        index.append_index(name);
+        if (index_type == "int")
+            index.append_index(stod(name));
+        else
+            index.append_index(name);
         for (const string& col : cols) {
             std::getline(names, name, ',');
             columns[find_column_position(col)]->convert_and_push_back(name);
@@ -82,7 +89,7 @@ vector<string> DataFrame::create_column_names(std::ifstream& file) {
 
 DataFrame::DataFrame(std::ifstream& file) : columns(), column_names() {
     vector<string> colNames = create_column_names(file);
-    initialize_column(file, colNames);
-    insert_data(file, colNames);
+    string index_type = initialize_column(file, colNames);
+    insert_data(file, colNames, index_type);
     assert_same_column_length(__PRETTY_FUNCTION__);
 }

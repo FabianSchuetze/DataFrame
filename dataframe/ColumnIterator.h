@@ -130,12 +130,17 @@ DataFrame::iterator<T> DataFrame::iterator<T>::operator--(int) {
     --*this;
     return ret;
 }
-// CAN IS USE REPLACE!?!
+
 template <typename T>
 void DataFrame::fill_na(std::string s, T t) {
-    iterator<T> it = begin<T>(s);
-    iterator<T> e = end<T>(s);
-    std::transform(it, e, it, [&t](auto& d) { return std::isnan(d) ? t : d; });
+    try {
+        iterator<T> it = begin<T>(s);
+        iterator<T> e = end<T>(s);
+        std::transform(it, e, it, [&t](auto& d) { return std::isnan(d) ? t : d; });
+    } catch (const std::out_of_range&) {
+        std::string m("Could not find column " + s + "in \n:");
+        throw std::out_of_range(s + __PRETTY_FUNCTION__);
+    }
 }
 
 template <typename T1, typename... T2>
