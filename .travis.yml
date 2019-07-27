@@ -15,4 +15,4 @@ script:
     - cd build
     - cmake ..
     - cmake --build . -- -j2
-    - ctest
+    - ctest -V
