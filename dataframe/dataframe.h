@@ -500,14 +500,6 @@ void DataFrame::append_column(const std::vector<std::string>& names, int pos,
 }
 
 void equal_width(size_t num_names, size_t, const char*);
-//void equal_width(size_t num_names, size_t num_cols, const char* fun) {
-    //if (!(num_names == num_cols)) {
-        //std::string s("Number of columns: " + std::to_string(num_cols) +
-                      //" but " + std::to_string(num_names) +
-                      //" column names. In:\n");
-        //throw std::invalid_argument(s + fun);
-    //}
-//}
 
 template <typename T1, typename... T>
 void equal_length(size_t len_idx, const char* fun, const std::vector<T1>& v1,

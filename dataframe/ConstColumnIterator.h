@@ -83,7 +83,10 @@ std::shared_ptr<Column> DataFrame::const_iterator<T>::check(
     size_t i, const std::string& msg) const {
     auto ret = wptr.lock();
     if (!ret) throw std::runtime_error("Unbound ConstColumnIterator");
-    if (i >= ret->size()) throw std::out_of_range(msg);
+    if (i >= ret->size()) {
+        std::string m = msg + std::string("\nin:\n") + __PRETTY_FUNCTION__;
+        throw std::out_of_range(m);
+    }
     return ret;
 }
 
