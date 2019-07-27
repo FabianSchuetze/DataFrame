@@ -290,13 +290,13 @@ void DataFrame::assert_same_column_length(const char* pass) {
     }
 }
 
-DataFrame::DataFrame(std::ifstream& file)
-    : columns(), column_names() {
-    vector<string> colNames = create_column_names(file);
-    initialize_column(file, colNames);
-    insert_data(file, colNames);
-    assert_same_column_length(__PRETTY_FUNCTION__);
-}
+//DataFrame::DataFrame(std::ifstream& file)
+    //: columns(), column_names() {
+    //vector<string> colNames = create_column_names(file);
+    //initialize_column(file, colNames);
+    //insert_data(file, colNames);
+    //assert_same_column_length(__PRETTY_FUNCTION__);
+//}
 
 void DataFrame::append_missing_rows(const DataFrame& rhs) {
     deque<pair<int, int>> pairs = rhs.index.index_correspondence(this->index);

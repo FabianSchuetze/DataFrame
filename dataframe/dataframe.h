@@ -63,10 +63,14 @@ class DataFrame {
      */
     DataFrame(const DataFrameProxy&);  // allow implicit conversion;
     /**
-     * @brief Create a new dataframe by reading from an file-stream based on a
-     * schema.
+     * @brief Create a new dataframe by reading from an file-stream from
+     * harddisk.
+     *
+     * At the moment, the datatypes of the column cannot be inferred. Instead
+     * the datatypes are given as the second line of the csv file. An
+     * additional restriction is that the first column is assumed to be the
+     * index column.
      */
-    // DO THAT!!!!
     explicit DataFrame(std::ifstream&);
     /**
      * @brief Create dataframe with an index, the column names and vector of
@@ -402,15 +406,23 @@ class DataFrame {
      */
     std::vector<std::string> create_column_names(std::ifstream&);
     /**
+     * @brief Helper function to create the column names
+     */
+    void create_column_names(const std::string&, const char*);
+    /**
      * @brief Initilizes the Columns with the datatypes mentiond in the second
      * line of the csv file
      */
     void initialize_column(std::ifstream&, const std::vector<std::string>&);
     /**
-     * @fils the previously intilaized columns and creates the index
+     * @bried fills the previously intilaized columns and creates the index
      */
     template <typename T>
     void initialize_column(const std::string&);
+    /**
+     * @brief helper function.
+     */
+    void initialize_column(const std::string&, const std::string&);
     void insert_data(std::ifstream&, const std::vector<std::string>&);
 };
 

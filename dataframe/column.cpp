@@ -78,7 +78,12 @@ void Column::convert_and_push_back(const std::string& s) {
         return;
     }
     if (std::get_if<vector<double>>(&col))
-        push_back(std::stod(s));
+        try {
+            push_back(std::stod(s));
+        } catch (const std::invalid_argument& e) {
+            std::string m("Attempt to convert: " + s + " into double, in:\n");
+            throw std::invalid_argument(m + __PRETTY_FUNCTION__);
+        }
     if (std::get_if<vector<string>>(&col))
         push_back(s);
     if (std::get_if<vector<bool>>(&col)) {
