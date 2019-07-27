@@ -51,7 +51,7 @@ TEST_CASE( "DataFrame index_different", "[index_different]" ) {
 }
 
 TEST_CASE( "DataFrame overlapping", "[overlapping]" ) {
-    std::vector<std::string> first = {"aa", "bb", "cc", "dd"};
+    std::vector<std::string> first = {"aa", "bb"};
     std::vector<int> idx1 = {1, 1};
     std::vector<int> idx2 = {1, 1};
     std::vector<int> idx3 = {1, 2};

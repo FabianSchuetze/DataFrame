@@ -20,6 +20,15 @@ using std::shared_ptr;
 using std::string;
 using std::vector;
 
+void equal_width(size_t num_names, size_t num_cols, const char* fun) {
+    if (!(num_names == num_cols)) {
+        std::string s("Number of columns: " + std::to_string(num_cols) +
+                      " but " + std::to_string(num_names) +
+                      " column names. In:\n");
+        throw std::invalid_argument(s + fun);
+    }
+}
+
 DataFrame::DataFrame(const Index& idx) {
     index = idx;
 }

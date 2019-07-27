@@ -85,7 +85,7 @@ DataFrame::Grouper<T...>::Grouper(DataFrame& a,
 template <typename... T>
 DataFrame::Grouper<T...> DataFrame::groupby(
     DataFrame::const_iterator<T>... it) {
-    test_equality<T...>(it...);
+    test_belonging<T...>(it...);
     DataFrame df_copy = *this;
     df_copy.sort_by_column_no_check<T...>(it...);
     Grouper<T...> grouper(df_copy, it...);

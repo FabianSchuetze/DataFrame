@@ -170,6 +170,24 @@ class DataFrame {
      * In case the column is of type double or int, nan are unambigious. For
      * columns of string type, na are pressumed to be 'NA'.
      */
+    /**
+     * @brief Checks if the const_iterator was create from the instantiation of
+     * the dataframe
+     *
+     * The sorting and grouping function acccess a ConstColumIterator as an 
+     * argument. In theory, this iterator could be originated form a different
+     * dataframe. To prevent passing such arguments, the function checks
+     * whether the iterator is reference to the same argument on which the sort
+     * and grouping function is called
+     */
+    template <typename T1, typename... T2>
+    void test_belonging(const_iterator<T1>&, const_iterator<T2>&...);
+    /**
+     * @brief Checks if the iterator was create from the instantiation of
+     * the dataframe
+     */
+    template <typename T1, typename... T2>
+    void test_belonging(iterator<T1>&, iterator<T2>&...);
     void dropna();
     /**
      * @brief Drops rows based on the index of the dataframe
@@ -206,8 +224,6 @@ class DataFrame {
      * Effective C++
      * @param s A column name
      */
-    template <typename T1, typename... T2>
-    void test_equality(const_iterator<T1>&, const_iterator<T2>&...);
     DataFrameProxy operator[](const std::string& s);
     /**
      * @brief Returns a ProxyClass of the DataFrame which can then be used to
@@ -420,8 +436,8 @@ template <typename T>
 DataFrame operator>(const DataFrame&, const T&);
 DataFrame deep_copy(const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
-//std::deque<std::pair<int, int>> correspondence_position(const DataFrame&,
-                                                        //const DataFrame&);
+// std::deque<std::pair<int, int>> correspondence_position(const DataFrame&,
+// const DataFrame&);
 /**
  * @brief creates nan rows in the lhs if rhs cols are not present in the lhs
  *
@@ -452,17 +468,41 @@ void DataFrame::append_column(const std::vector<std::string>& names, int pos,
     append_column<T...>(names, pos + 1, v2...);
 }
 
+void equal_width(size_t num_names, size_t, const char*);
+//void equal_width(size_t num_names, size_t num_cols, const char* fun) {
+    //if (!(num_names == num_cols)) {
+        //std::string s("Number of columns: " + std::to_string(num_cols) +
+                      //" but " + std::to_string(num_names) +
+                      //" column names. In:\n");
+        //throw std::invalid_argument(s + fun);
+    //}
+//}
+
+template <typename T1, typename... T>
+void equal_length(size_t len_idx, const char* fun, const std::vector<T1>& v1,
+                 const std::vector<T>&...v) {
+    if (!(len_idx == v1.size())) {
+        std::string s("The index lenght is: " + std::to_string(len_idx) +
+                      " but the input vector has length " +
+                      std::to_string(v1.size()) + "in:\n");
+        throw std::invalid_argument(s + fun);
+    }
+    if constexpr (sizeof...(T) > 0) equal_length<T...>(len_idx, fun, v...);
+}
+
 template <typename T1, typename... T>
 DataFrame::DataFrame(const Index& idx, const std::vector<std::string>& names,
                      const std::vector<T1>& v1, const std::vector<T>&... v) {
-    int nNames = names.size();
-    int nCols = sizeof...(T) + 1;
-    if (nCols != nNames) {
-        std::string s("Number of columns: " + std::to_string(nCols) + " but " +
-                      std::to_string(nNames) + " column names. In:\n");
-        throw std::invalid_argument(s + __PRETTY_FUNCTION__);
-    }
+    equal_width(names.size(), sizeof...(T) + 1, __PRETTY_FUNCTION__);
+    // int nNames = names.size();
+    // int nCols = sizeof...(T) + 1;
+    // if (nCols != nNames) {
+    // std::string s("Number of columns: " + std::to_string(nCols) + " but " +
+    // std::to_string(nNames) + " column names. In:\n");
+    // throw std::invalid_argument(s + __PRETTY_FUNCTION__);
+    //}
     index = idx;
+    equal_length(index.size().first, __PRETTY_FUNCTION__,  v1,v...);
     append_column(names[0], std::make_shared<Column>(v1));
     if constexpr (sizeof...(T) > 0) append_column<T...>(names, 1, v...);
 }
@@ -470,9 +510,11 @@ DataFrame::DataFrame(const Index& idx, const std::vector<std::string>& names,
 template <typename T1, typename... T>
 DataFrame::DataFrame(const std::vector<std::string>& names,
                      const std::vector<T1>& v1, const std::vector<T>&... cols) {
+    equal_width(names.size(), sizeof...(T) + 1, __PRETTY_FUNCTION__);
     std::vector<int> idx(v1.size());
     std::iota(idx.begin(), idx.end(), 0);
     index = Index(idx);
+    //equal_length(index.size().first, v1, cols..., __PRETTY_FUNCTION__);
     append_column(names[0], std::make_shared<Column>(v1));
     if constexpr (sizeof...(T) > 0) append_column<T...>(names, 1, cols...);
 }
@@ -483,10 +525,10 @@ DataFrame::DataFrame(const std::vector<std::string>& names,
  */
 template <typename T>
 DataFrame operator>(const DataFrame& lhs, const T& t) {
-        DataFrame copy = deep_copy(lhs);
-        for (const auto& x : copy.column_names)
-            copy.columns[x.second]->is_greater_than(t);
-        return copy;
+    DataFrame copy = deep_copy(lhs);
+    for (const auto& x : copy.column_names)
+        copy.columns[x.second]->is_greater_than(t);
+    return copy;
 }
 /**
  * @brief Compares a dataframe with a elemary values emelemt-wise and returns a
