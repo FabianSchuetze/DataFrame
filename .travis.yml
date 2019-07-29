@@ -16,3 +16,4 @@ script:
     - cmake ..
     - cmake --build . -- -j2
     - ctest -V
+    -  bash <(curl -s https://codecov.io/bash)

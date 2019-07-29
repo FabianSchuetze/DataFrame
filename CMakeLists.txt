@@ -7,7 +7,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Produce compile_commands.json
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_compile_options(-Wall -Wextra -Wpedantic)
 
 set(${LIBRARY_TARGET_NAME}_SRC
     dataframe/dataframe.cpp
@@ -33,6 +32,8 @@ set(${LIBRARY_TARGET_NAME}_HDR
 if (UNIX)
   add_library(${LIBRARY_TARGET_NAME} SHARED ${${LIBRARY_TARGET_NAME}_SRC})
 endif(UNIX)
+#add_compile_options(-Wall -Wextra -Wpedantic --coverage)
+add_compile_options(--coverage -O0)
 
 add_executable(main main.cpp)
 add_executable(my_test test/test.cpp)
@@ -55,7 +56,19 @@ target_link_libraries(test_additions Dataframe)
 target_link_libraries(test_iterator Dataframe)
 target_link_libraries(test_constructor Dataframe)
 target_link_libraries(test_csv Dataframe)
-target_link_libraries(test_convenience Dataframe)
+target_link_libraries(test_convenience Dataframe --coverage)
+
+#target_link_libraries(test_convenience --coverage)
+target_link_libraries(mae_example --coverage)
+target_link_libraries(old_main --coverage)
+target_link_libraries(main --coverage)
+target_link_libraries(my_test --coverage)
+target_link_libraries(index_test --coverage)
+target_link_libraries(test_groupby --coverage)
+target_link_libraries(test_additions --coverage)
+target_link_libraries(test_iterator --coverage)
+target_link_libraries(test_constructor --coverage)
+target_link_libraries(test_csv --coverage)
 
 file(COPY amits_example.csv DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY csv_example1.csv DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
