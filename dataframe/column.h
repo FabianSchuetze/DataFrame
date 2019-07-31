@@ -5,6 +5,7 @@
 #include <string>
 #include <variant>
 #include <vector>
+#include <cxxabi.h>
 
 class DataFrame;
 class Column {
@@ -16,9 +17,9 @@ class Column {
     friend std::string::size_type width(const Column&,
                                         std::vector<std::string>&);
     template <typename T>
-    friend DataFrame operator<(const DataFrame&, const T&);
+    friend DataFrame operator<(const DataFrame&, T);
     template <typename T>
-    friend DataFrame operator>(const DataFrame&, const T&);
+    friend DataFrame operator>(const DataFrame&, T);
 
     Column() : col(){};
     // Column(const Column&, int); I THINK THIS CONSTRUCTOR IS NOT NEEDED?!?
@@ -84,10 +85,13 @@ class Column {
     void add_to_double(const Column&, const std::deque<std::pair<int, int>>&);
     void add_to_string(const Column&, const std::deque<std::pair<int, int>>&);
     // CAN THEY BE TEMPLATES?
-    void is_smaller_than(const double&);
-    void is_smaller_than(const std::string&);
-    void is_greater_than(const double&);
-    void is_greater_than(const std::string&);
+    template <typename T>
+    void is_smaller_than(T, const std::string&);
+    template <typename T>
+    void is_greater_than(T, const std::string&);
+    //void is_smaller_than(const std::string&);
+    //void is_greater_than(const double&);
+    //void is_greater_than(const std::string&);
     typedef std::vector<double> dvec;
     typedef std::vector<std::string> svec;
     typedef std::vector<bool> bvec;
@@ -114,5 +118,43 @@ void Column::push_back(const T t) {
         std::string s = "cannot push type into column, in\n: ";
         throw std::invalid_argument(s + __PRETTY_FUNCTION__);
     }
+}
+
+template <typename T>
+void invalid_template_argument(const std::string& s) {
+    //invalid_template_argument<T>(s);
+    std::string name(abi::__cxa_demangle(typeid(T).name(), 0, 0, 0));
+    std::string m("Column " + s + " different type then " + name + "in:\n");
+    throw std::invalid_argument(m + __PRETTY_FUNCTION__);
+}
+
+template <typename T>
+void Column::is_smaller_than(T t, const std::string& s) {
+    std::vector<bool> r(size());
+    if (std::vector<T>* d = std::get_if<std::vector<T>>(&col))
+         std::transform(d->begin(), d->end(), r.begin(), [&](T&x){return x<t;});
+    else 
+    //else {
+        invalid_template_argument<T>(s);
+        //std::string name(abi::__cxa_demangle(typeid(s).name(), 0, 0, 0));
+        //std::string m("Column " + s + " different type then " + name + "in:\n");
+        //throw std::invalid_argument(m + __PRETTY_FUNCTION__);
+    //}
+    col = r;
+}
+
+template <typename T>
+void Column::is_greater_than(T t, const std::string& s) {
+    std::vector<bool> r(size());
+    if (std::vector<T>* d = std::get_if<std::vector<T>>(&col))
+         std::transform(d->begin(), d->end(), r.begin(), [&](T&x){return x>t;});
+    //else
+    else {
+        invalid_template_argument<T>(s);
+        //std::string name(abi::__cxa_demangle(typeid(s).name(), 0, 0, 0));
+        //std::string m("Column " + s + " different type then " + name + "in:\n");
+        //throw std::invalid_argument(m + __PRETTY_FUNCTION__);
+    }
+    col = r;
 }
 #endif

@@ -267,38 +267,38 @@ Column operator+(const Column& c, const string& d) {
     }
 }
 
-void Column::is_smaller_than(const double&t) {
-    std::vector<bool> r(size());
-    if (dvec* d = std::get_if<dvec>(&col))
-         transform(d->begin(), d->end(), r.begin(), [&](auto&x){return x<t;});
-    else 
-        throw std::invalid_argument("Column type different from double");
-    col = r;
-}
+//void Column::is_smaller_than(const double&t) {
+    //std::vector<bool> r(size());
+    //if (dvec* d = std::get_if<dvec>(&col))
+         //transform(d->begin(), d->end(), r.begin(), [&](auto&x){return x<t;});
+    //else 
+        //throw std::invalid_argument("Column type different from double");
+    //col = r;
+//}
 
-void Column::is_smaller_than(const string&t) {
-    std::vector<bool> r(size());
-    if (svec* d = std::get_if<svec>(&col))
-         transform(d->begin(), d->end(), r.begin(), [&](auto&x) {return x<t;});
-    else 
-        throw std::invalid_argument("Column type different from string");
-    col = r;
-}
+//void Column::is_smaller_than(const string&t) {
+    //std::vector<bool> r(size());
+    //if (svec* d = std::get_if<svec>(&col))
+         //transform(d->begin(), d->end(), r.begin(), [&](auto&x) {return x<t;});
+    //else 
+        //throw std::invalid_argument("Column type different from string");
+    //col = r;
+//}
 
-void Column::is_greater_than(const double&t) {
-    std::vector<bool> r(size());
-    if (dvec* d = std::get_if<dvec>(&col))
-         transform(d->begin(), d->end(), r.begin(), [&](auto&x){return x>t;});
-    else 
-        throw std::invalid_argument("Column type different from double");
-    col = r;
-}
+//void Column::is_greater_than(const double&t) {
+    //std::vector<bool> r(size());
+    //if (dvec* d = std::get_if<dvec>(&col))
+         //transform(d->begin(), d->end(), r.begin(), [&](auto&x){return x>t;});
+    //else 
+        //throw std::invalid_argument("Column type different from double");
+    //col = r;
+//}
 
-void Column::is_greater_than(const string&t) {
-    std::vector<bool> r(size());
-    if (svec* d = std::get_if<svec>(&col))
-         transform(d->begin(), d->end(), r.begin(), [&](auto&x) {return x>t;});
-    else 
-        throw std::invalid_argument("Column type different from string");
-    col = r;
-}
+//void Column::is_greater_than(const string&t) {
+    //std::vector<bool> r(size());
+    //if (svec* d = std::get_if<svec>(&col))
+         //transform(d->begin(), d->end(), r.begin(), [&](auto&x) {return x>t;});
+    //else 
+        //throw std::invalid_argument("Column type different from string");
+    //col = r;
+//}

@@ -28,172 +28,167 @@ class DataFrame {
     class iterator;
     class DataFrameProxy;
     typedef std::shared_ptr<Column> SharedCol;
+friend class Column;
 
-    //template <class... T>
-    //friend class Grouper;
-    //template <class T>
-    //friend class const_iterator;
-    //template <class T>
-    //friend class iterator;
-    friend DataFrame deep_copy(const DataFrame& lhs);
-    friend std::ostream& operator<<(std::ostream&, const DataFrame&);
-    friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
-    friend DataFrame operator+(const DataFrameProxy&, const DataFrameProxy&);
-    friend DataFrame operator+(const DataFrame&, const DataFrameProxy&);
-    template <typename T>
-    friend DataFrame operator<(const DataFrame& lhs, const T& t);
-    template <typename T>
-    friend DataFrame operator>(const DataFrame& lhs, const T& t);
-    template <typename T>
-    friend DataFrame operator+(const DataFrame& lhs, const T& t) {
-        return deep_copy(lhs) += t;
-    }
+friend DataFrame deep_copy(const DataFrame& lhs);
+friend std::ostream& operator<<(std::ostream&, const DataFrame&);
+friend DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs);
+friend DataFrame operator+(const DataFrameProxy&, const DataFrameProxy&);
+friend DataFrame operator+(const DataFrame&, const DataFrameProxy&);
+template <typename T>
+friend DataFrame operator<(const DataFrame& lhs, T t);
+template <typename T>
+friend DataFrame operator>(const DataFrame& lhs, T t);
+template <typename T>
+friend DataFrame operator+(const DataFrame& lhs, const T& t) {
+    return deep_copy(lhs) += t;
+}
 
-    // Functions
-    /**
-     * @brief Default Constructor
-     */
-    DataFrame();
-    /**
-     * @brief converts a ProxyClass into the parent DataFrame
-     *
-     * When selecting a subset of columns of a DataFrame based on the subscript
-     * operator, a ProxyClass is created. This ProxyClass faciliates either
-     * adding new columns to the dataframe or reading columns from the subset.
-     */
-    DataFrame(const DataFrameProxy&);  // allow implicit conversion;
-    /**
-     * @brief Create a new dataframe by reading from an file-stream from
-     * harddisk.
-     *
-     * At the moment, the datatypes of the column cannot be inferred. Instead
-     * the datatypes are given as the second line of the csv file. An
-     * additional restriction is that the first column is assumed to be the
-     * index column.
-     */
-    explicit DataFrame(std::ifstream&);
-    /**
-     * @brief constructor of the dataframe with only an index
-     */
-    DataFrame(const Index&);
-    /**
-     * @brief Create dataframe with an index, the column names and vector of
-     * different datatype
-     */
-    template <typename T1, typename... T>
-    DataFrame(const Index&, const std::vector<std::string>&,
-              const std::vector<T1>&, const std::vector<T>&...);
-    /**
-     * @brief Create dataframe without index, the column names and vector of
-     * different datatype.
-     *
-     * As no index is passed, a default index will be created. The default
-     * index are integers from 0 to the number of lines passed.
-     */
-    template <typename T1, typename... T>
-    DataFrame(const std::vector<std::string>&, const std::vector<T1>&,
-              const std::vector<T>&...);
-    /**
-     * @brief Copy assignment operator
-     *
-     * The copy assignment operator makes a copy of the dataframe. The index
-     * and column names are a deep-copy. The data is shared between the two
-     * dataframes. When attempting to modify a column in a dataframe,
-     * copy-on-write is used. This technique avoids having to rely on defensive
-     * copying.
-     */
-    DataFrame& operator=(const DataFrame&) = default;
+// Functions
+/**
+ * @brief Default Constructor
+ */
+DataFrame();
+/**
+ * @brief converts a ProxyClass into the parent DataFrame
+ *
+ * When selecting a subset of columns of a DataFrame based on the subscript
+ * operator, a ProxyClass is created. This ProxyClass faciliates either
+ * adding new columns to the dataframe or reading columns from the subset.
+ */
+DataFrame(const DataFrameProxy&);  // allow implicit conversion;
+/**
+ * @brief Create a new dataframe by reading from an file-stream from
+ * harddisk.
+ *
+ * At the moment, the datatypes of the column cannot be inferred. Instead
+ * the datatypes are given as the second line of the csv file. An
+ * additional restriction is that the first column is assumed to be the
+ * index column.
+ */
+explicit DataFrame(std::ifstream&);
+/**
+ * @brief constructor of the dataframe with only an index
+ */
+DataFrame(const Index&);
+/**
+ * @brief Create dataframe with an index, the column names and vector of
+ * different datatype
+ */
+template <typename T1, typename... T>
+DataFrame(const Index&, const std::vector<std::string>&,
+          const std::vector<T1>&, const std::vector<T>&...);
+/**
+ * @brief Create dataframe without index, the column names and vector of
+ * different datatype.
+ *
+ * As no index is passed, a default index will be created. The default
+ * index are integers from 0 to the number of lines passed.
+ */
+template <typename T1, typename... T>
+DataFrame(const std::vector<std::string>&, const std::vector<T1>&,
+          const std::vector<T>&...);
+/**
+ * @brief Copy assignment operator
+ *
+ * The copy assignment operator makes a copy of the dataframe. The index
+ * and column names are a deep-copy. The data is shared between the two
+ * dataframes. When attempting to modify a column in a dataframe,
+ * copy-on-write is used. This technique avoids having to rely on defensive
+ * copying.
+ */
+DataFrame& operator=(const DataFrame&) = default;
 
-    /**
-     * @brief Returns a shared pointer to a new version of an Column named s
-     *
-     * The newed unique column has a use_count() of 1. The function is, for
-     * example used to deep_copy a dataframe.
-     */
-    SharedCol get_unique(const std::string&);
-    /**
-     * @brief for constant members
-     */
-    SharedCol get_unique(const std::string&) const;
-    /**
-     * @brief Returns the new column for the subset of indices marked by the
-     * deque<int>.
-     */
-    SharedCol get_unique(const std::string&, const std::deque<int>&) const;
-    /**
-     * @brief The overloaded compound-assignment operator
-     *
-     * If a colum or row or the rhs is not present in the lhs, a new column or
-     * row is created in the lhs dataframe containing nas.
-     */
-    /**
-     *
-     */
-    DataFrame summarize(Statistic* f);
-    DataFrame& operator+=(const DataFrame& rhs);
-    /**
-     * @brief Componound assignment operator assing object of type double, int
-     * or string to the dataframe
-     */
-    // WHAT HAPPENS WITH COLUMNS THAT ARE NOT OF THIS TYPE?
-    template <typename T>
-    DataFrame& operator+=(const T&);
-    /**
-     * @brief A bidirectional-iterator over the columns
-     *
-     * Asking for the iterator (instead of the constant iterator) can generate
-     * a new vector with the original column elements when more than one
-     * dataframe reference the column (A copy-on-write is assumed.)
-     */
-    template <class T>
-    iterator<T> begin(const std::string&);
-    /**
-     * @brief A constant bidirectional-iterator over the columns
-     * achored to the beginning of the column
-     *
-     * THe template arguments needs to equal the datatype of the column
-     */
-    template <class T>
-    const_iterator<T> cbegin(const std::string&);
-    /**
-     * @brief Reference the last element in the column
-     */
-    template <class T>
-    iterator<T> end(const std::string&);
-    /**
-     * @brief A constant iterator over the columns anchored to the end of the
-     * column
-     *
-     * THe template arguments needs to equal the datatype of the column
-     */
-    template <class T>
-    const_iterator<T> cend(const std::string&);
-    /**
-     * @brief Returns a copy of the particular element requested
-     */
-    /**
-     * @brief drops rows which contain na from the dataframe
-     *
-     * In case the column is of type double or int, nan are unambigious. For
-     * columns of string type, na are pressumed to be 'NA'.
-     */
-    /**
-     * @brief Checks if the const_iterator was create from the instantiation of
-     * the dataframe
-     *
-     * The sorting and grouping function acccess a ConstColumIterator as an 
-     * argument. In theory, this iterator could be originated form a different
-     * dataframe. To prevent passing such arguments, the function checks
-     * whether the iterator is reference to the same argument on which the sort
-     * and grouping function is called
-     */
-    template <typename T1, typename... T2>
-    void test_belonging(const_iterator<T1>&, const_iterator<T2>&...);
-    /**
-     * @brief Checks if the iterator was create from the instantiation of
-     * the dataframe
-     */
-    template <typename T1, typename... T2>
+/**
+ * @brief Returns a shared pointer to a new version of an Column named s
+ *
+ * The newed unique column has a use_count() of 1. The function is, for
+ * example used to deep_copy a dataframe.
+ */
+SharedCol get_unique(const std::string&);
+/**
+ * @brief for constant members
+ */
+SharedCol get_unique(const std::string&) const;
+/**
+ * @brief Returns the new column for the subset of indices marked by the
+ * deque<int>.
+ */
+SharedCol get_unique(const std::string&, const std::deque<int>&) const;
+/**
+ * @brief The overloaded compound-assignment operator
+ *
+ * If a colum or row or the rhs is not present in the lhs, a new column or
+ * row is created in the lhs dataframe containing nas.
+ */
+/**
+ *
+ */
+DataFrame summarize(Statistic* f);
+DataFrame& operator+=(const DataFrame& rhs);
+/**
+ * @brief Componound assignment operator assing object of type double, int
+ * or string to the dataframe
+ */
+// WHAT HAPPENS WITH COLUMNS THAT ARE NOT OF THIS TYPE?
+template <typename T>
+DataFrame& operator+=(const T&);
+/**
+ * @brief A bidirectional-iterator over the columns
+ *
+ * Asking for the iterator (instead of the constant iterator) can generate
+ * a new vector with the original column elements when more than one
+ * dataframe reference the column (A copy-on-write is assumed.)
+ */
+template <class T>
+iterator<T> begin(const std::string&);
+/**
+ * @brief A constant bidirectional-iterator over the columns
+ * achored to the beginning of the column
+ *
+ * THe template arguments needs to equal the datatype of the column
+ */
+template <class T>
+const_iterator<T> cbegin(const std::string&);
+/**
+ * @brief Reference the last element in the column
+ */
+template <class T>
+iterator<T> end(const std::string&);
+/**
+ * @brief A constant iterator over the columns anchored to the end of the
+ * column
+ *
+ * THe template arguments needs to equal the datatype of the column
+ */
+template <class T>
+const_iterator<T> cend(const std::string&);
+/**
+ * @brief Returns a copy of the particular element requested
+ */
+/**
+ * @brief drops rows which contain na from the dataframe
+ *
+ * In case the column is of type double or int, nan are unambigious. For
+ * columns of string type, na are pressumed to be 'NA'.
+ */
+/**
+ * @brief Checks if the const_iterator was create from the instantiation of
+ * the dataframe
+ *
+ * The sorting and grouping function acccess a ConstColumIterator as an
+ * argument. In theory, this iterator could be originated form a different
+ * dataframe. To prevent passing such arguments, the function checks
+ * whether the iterator is reference to the same argument on which the sort
+ * and grouping function is called
+ */
+template <typename T1, typename... T2>
+void test_belonging(const_iterator<T1>&, const_iterator<T2>&...);
+/**
+ * @brief Checks if the iterator was create from the instantiation of
+ * the dataframe
+ */
+template <typename T1, typename... T2>
     void test_belonging(iterator<T1>&, iterator<T2>&...);
     /**
      * @brief Drops rows which contains na values
@@ -279,7 +274,7 @@ class DataFrame {
      * @brief Fills the na values of column s with values of type t
      */
     template <typename T>
-    void fill_na(std::string s , T t );
+    void fill_na(std::string s, T t);
     /**
      * @brief returns the names of all columns
      */
@@ -431,7 +426,8 @@ class DataFrame {
      * @brief Initilizes the Columns with the datatypes mentiond in the second
      * line of the csv file
      */
-    std::string initialize_column(std::ifstream&, const std::vector<std::string>&);
+    std::string initialize_column(std::ifstream&,
+                                  const std::vector<std::string>&);
     /**
      * @bried fills the previously intilaized columns and creates the index
      */
@@ -461,10 +457,10 @@ DataFrame operator+(const DataFrame&, const DataFrame::DataFrameProxy&);
  * Create new instances of all the member columns. The functions is, for
  * example, used in the overloaed + operator.
  */
-template <typename T>
-DataFrame operator<(const DataFrame&, const T&);
-template <typename T>
-DataFrame operator>(const DataFrame&, const T&);
+// template <typename T>
+// DataFrame operator<(const DataFrame&, const T&);
+// template <typename T>
+// DataFrame operator>(const DataFrame&, const T&);
 DataFrame deep_copy(const DataFrame&);
 std::ostream& operator<<(std::ostream&, const DataFrame&);
 // std::deque<std::pair<int, int>> correspondence_position(const DataFrame&,
@@ -503,7 +499,7 @@ void equal_width(size_t num_names, size_t, const char*);
 
 template <typename T1, typename... T>
 void equal_length(size_t len_idx, const char* fun, const std::vector<T1>& v1,
-                 const std::vector<T>&...v) {
+                  const std::vector<T>&... v) {
     if (!(len_idx == v1.size())) {
         std::string s("The index lenght is: " + std::to_string(len_idx) +
                       " but the input vector has length " +
@@ -525,7 +521,7 @@ DataFrame::DataFrame(const Index& idx, const std::vector<std::string>& names,
     // throw std::invalid_argument(s + __PRETTY_FUNCTION__);
     //}
     index = idx;
-    equal_length(index.size().first, __PRETTY_FUNCTION__,  v1,v...);
+    equal_length(index.size().first, __PRETTY_FUNCTION__, v1, v...);
     append_column(names[0], std::make_shared<Column>(v1));
     if constexpr (sizeof...(T) > 0) append_column<T...>(names, 1, v...);
 }
@@ -537,7 +533,7 @@ DataFrame::DataFrame(const std::vector<std::string>& names,
     std::vector<int> idx(v1.size());
     std::iota(idx.begin(), idx.end(), 0);
     index = Index(idx);
-    //equal_length(index.size().first, v1, cols..., __PRETTY_FUNCTION__);
+    // equal_length(index.size().first, v1, cols..., __PRETTY_FUNCTION__);
     append_column(names[0], std::make_shared<Column>(v1));
     if constexpr (sizeof...(T) > 0) append_column<T...>(names, 1, cols...);
 }
@@ -546,22 +542,44 @@ DataFrame::DataFrame(const std::vector<std::string>& names,
  * @brief Compares a dataframe with a elemary values emelemt-wise and returns a
  * new dataframe with boolean values
  */
-template <typename T>
-DataFrame operator>(const DataFrame& lhs, const T& t) {
-    DataFrame copy = deep_copy(lhs);
-    for (const auto& x : copy.column_names)
-        copy.columns[x.second]->is_greater_than(t);
-    return copy;
-}
+//template <typename T>
+//DataFrame operator>(const DataFrame& lhs, T t) {
+    //DataFrame copy = deep_copy(lhs);
+    //for (const auto& x : copy.column_names)
+        //copy.columns[x.second]->is_greater_than(t);
+    //return copy;
+//}
 /**
  * @brief Compares a dataframe with a elemary values emelemt-wise and returns a
  * new dataframe with boolean values
  */
 template <typename T>
-DataFrame operator<(const DataFrame& lhs, const T& t) {
-    DataFrame copy = deep_copy(lhs);
-    for (const auto& x : copy.column_names)
-        copy.columns[x.second]->is_smaller_than(t);
-    return copy;
+DataFrame operator<(const DataFrame& lhs, T t) {
+    if constexpr ((std::is_same<T, double>::value |
+                   std::is_same<T, std::string>::value)) {
+        DataFrame copy = deep_copy(lhs);
+        for (const auto& x : copy.column_names)
+            copy.columns[x.second]->is_smaller_than(t, x.first);
+        return copy;
+    }
+    std::string m("The function accepts only double and strings, in:\n");
+    throw std::invalid_argument(m + __PRETTY_FUNCTION__);
+}
+
+/**
+ * @brief Compares a dataframe with a elemary values emelemt-wise and returns a
+ * new dataframe with boolean values
+ */
+template <typename T>
+DataFrame operator>(const DataFrame& lhs, T t) {
+    if constexpr ((std::is_same<T, double>::value |
+                   std::is_same<T, std::string>::value)) {
+        DataFrame copy = deep_copy(lhs);
+        for (const auto& x : copy.column_names)
+            copy.columns[x.second]->is_greater_than(t, x.first);
+        return copy;
+    }
+    std::string m("The function accepts only double and strings, in:\n");
+    throw std::invalid_argument(m + __PRETTY_FUNCTION__);
 }
 #endif
