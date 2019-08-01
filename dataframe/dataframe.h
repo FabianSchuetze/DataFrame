@@ -447,10 +447,10 @@ template <typename T1, typename... T2>
  * @throws std::invalid_argument if not all columns of the dataframe are of
  * type T
  */
-template <typename T>
-DataFrame operator+(const DataFrame&, const T&);
-DataFrame operator+(const DataFrame&, const DataFrame&);
-DataFrame operator+(const DataFrame&, const DataFrame::DataFrameProxy&);
+//template <typename T>
+//DataFrame operator+(const DataFrame&, const T&);
+//DataFrame operator+(const DataFrame&, const DataFrame&);
+//DataFrame operator+(const DataFrame&, const DataFrame::DataFrameProxy&);
 /**
  * @brief deep copy of a DataFrame
  *
@@ -513,13 +513,6 @@ template <typename T1, typename... T>
 DataFrame::DataFrame(const Index& idx, const std::vector<std::string>& names,
                      const std::vector<T1>& v1, const std::vector<T>&... v) {
     equal_width(names.size(), sizeof...(T) + 1, __PRETTY_FUNCTION__);
-    // int nNames = names.size();
-    // int nCols = sizeof...(T) + 1;
-    // if (nCols != nNames) {
-    // std::string s("Number of columns: " + std::to_string(nCols) + " but " +
-    // std::to_string(nNames) + " column names. In:\n");
-    // throw std::invalid_argument(s + __PRETTY_FUNCTION__);
-    //}
     index = idx;
     equal_length(index.size().first, __PRETTY_FUNCTION__, v1, v...);
     append_column(names[0], std::make_shared<Column>(v1));
@@ -533,22 +526,10 @@ DataFrame::DataFrame(const std::vector<std::string>& names,
     std::vector<int> idx(v1.size());
     std::iota(idx.begin(), idx.end(), 0);
     index = Index(idx);
-    // equal_length(index.size().first, v1, cols..., __PRETTY_FUNCTION__);
     append_column(names[0], std::make_shared<Column>(v1));
     if constexpr (sizeof...(T) > 0) append_column<T...>(names, 1, cols...);
 }
 
-/**
- * @brief Compares a dataframe with a elemary values emelemt-wise and returns a
- * new dataframe with boolean values
- */
-//template <typename T>
-//DataFrame operator>(const DataFrame& lhs, T t) {
-    //DataFrame copy = deep_copy(lhs);
-    //for (const auto& x : copy.column_names)
-        //copy.columns[x.second]->is_greater_than(t);
-    //return copy;
-//}
 /**
  * @brief Compares a dataframe with a elemary values emelemt-wise and returns a
  * new dataframe with boolean values
@@ -581,5 +562,14 @@ DataFrame operator>(const DataFrame& lhs, T t) {
     }
     std::string m("The function accepts only double and strings, in:\n");
     throw std::invalid_argument(m + __PRETTY_FUNCTION__);
+}
+
+template <typename T>
+DataFrame& DataFrame::operator+=(const T& t) {
+    for (auto& x : column_names) {
+        Column new_col = *columns[x.second] + t;
+        columns[x.second] = std::make_shared<Column>(new_col);
+    }
+    return *this;
 }
 #endif

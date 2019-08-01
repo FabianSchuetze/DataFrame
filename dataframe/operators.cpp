@@ -138,6 +138,7 @@ template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
 template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<bool>& other_col);
 
+// why is this not calling the +operator of columns???
 DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
     deque<pair<int, int>> indices = index.index_correspondence(rhs.index);
     duplicate_rows(indices);
@@ -181,15 +182,15 @@ DataFrame operator+(const DataFrame& lhs,
     return lhs + DataFrame(rhs);
 }
 
-template <typename T>
-DataFrame& DataFrame::operator+=(const T& t) {
-    for (auto& x : column_names) {
-        Column new_col = *columns[x.second] + t;
-        columns[x.second] = std::make_shared<Column>(new_col);
-    }
-    return *this;
-}
-template DataFrame& DataFrame::operator+=(const double&);
-template DataFrame& DataFrame::operator+=(const int&);
-template DataFrame& DataFrame::operator+=(const string&);
-template DataFrame& DataFrame::operator+=(const bool&);
+//template <typename T>
+//DataFrame& DataFrame::operator+=(const T& t) {
+    //for (auto& x : column_names) {
+        //Column new_col = *columns[x.second] + t;
+        //columns[x.second] = std::make_shared<Column>(new_col);
+    //}
+    //return *this;
+//}
+//template DataFrame& DataFrame::operator+=(const double&);
+//template DataFrame& DataFrame::operator+=(const int&);
+//template DataFrame& DataFrame::operator+=(const string&);
+//template DataFrame& DataFrame::operator+=(const bool&);

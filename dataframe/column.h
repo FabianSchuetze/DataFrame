@@ -10,8 +10,9 @@
 class DataFrame;
 class Column {
    public:
-    friend Column operator+(const Column&, double);
-    friend Column operator+(const Column&, const std::string&);
+    template <typename T>
+    friend Column operator+(const Column&, const T&);
+    //friend Column operator+(const Column&, const std::string&);
     friend class DataFrame;
     friend void append_missing_cols(DataFrame&, const DataFrame&);
     friend std::string::size_type width(const Column&,
@@ -39,10 +40,10 @@ class Column {
      * Pushes a value of type T into the column
      */
     void convert_and_push_back(const std::string&);
-    template <class T>
     /**
      * @An element of type T is appended to the end of the column
      */
+    template <class T>
     void push_back(const T);
     /**
      * @brief Returns the length of the column
@@ -55,13 +56,6 @@ class Column {
     std::string type_name();
     template <class T>
     T& get_value(int i);
-    // if (std::holds_alternative<std::vector<T>>(col))
-    // return std::get<std::vector<T>>(col)[i];
-    // else {
-    // std::string s = "incompatible template type in\n: ";
-    // throw std::invalid_argument(s + __PRETTY_FUNCTION__);
-    //}
-    //}
     template <typename T>
     void push_back_nan();
     void push_back_nan();
@@ -84,21 +78,14 @@ class Column {
     bool is_null(size_t);
     void add_to_double(const Column&, const std::deque<std::pair<int, int>>&);
     void add_to_string(const Column&, const std::deque<std::pair<int, int>>&);
-    // CAN THEY BE TEMPLATES?
     template <typename T>
     void is_smaller_than(T, const std::string&);
     template <typename T>
     void is_greater_than(T, const std::string&);
-    //void is_smaller_than(const std::string&);
-    //void is_greater_than(const double&);
-    //void is_greater_than(const std::string&);
-    typedef std::vector<double> dvec;
-    typedef std::vector<std::string> svec;
-    typedef std::vector<bool> bvec;
 };
 
-Column operator+(const Column&, double d);
-Column operator+(const Column&, const std::string& s);
+//Column operator+(const Column&, double d);
+//Column operator+(const Column&, const std::string& s);
 
 template <class T>
 T& Column::get_value(int i) {
@@ -121,11 +108,19 @@ void Column::push_back(const T t) {
 }
 
 template <typename T>
-void invalid_template_argument(const std::string& s) {
-    //invalid_template_argument<T>(s);
+void invalid_template_argument(const std::string& s, const char* fun) {
     std::string name(abi::__cxa_demangle(typeid(T).name(), 0, 0, 0));
     std::string m("Column " + s + " different type then " + name + "in:\n");
-    throw std::invalid_argument(m + __PRETTY_FUNCTION__);
+    std::string m2(m + __PRETTY_FUNCTION__ + "\ncalled from:\n:");
+    throw std::invalid_argument(m2 + fun);
+}
+
+template <typename T>
+void invalid_template_argument(const char* fun) {
+    std::string name(abi::__cxa_demangle(typeid(T).name(), 0, 0, 0));
+    std::string m("Column type different type then " + name + "in:\n");
+    std::string m2(m + __PRETTY_FUNCTION__ + "\ncalled from:\n:");
+    throw std::invalid_argument(m2 +fun);
 }
 
 template <typename T>
@@ -134,12 +129,7 @@ void Column::is_smaller_than(T t, const std::string& s) {
     if (std::vector<T>* d = std::get_if<std::vector<T>>(&col))
          std::transform(d->begin(), d->end(), r.begin(), [&](T&x){return x<t;});
     else 
-    //else {
-        invalid_template_argument<T>(s);
-        //std::string name(abi::__cxa_demangle(typeid(s).name(), 0, 0, 0));
-        //std::string m("Column " + s + " different type then " + name + "in:\n");
-        //throw std::invalid_argument(m + __PRETTY_FUNCTION__);
-    //}
+        invalid_template_argument<T>(s, __PRETTY_FUNCTION__);
     col = r;
 }
 
@@ -148,13 +138,28 @@ void Column::is_greater_than(T t, const std::string& s) {
     std::vector<bool> r(size());
     if (std::vector<T>* d = std::get_if<std::vector<T>>(&col))
          std::transform(d->begin(), d->end(), r.begin(), [&](T&x){return x>t;});
-    //else
     else {
-        invalid_template_argument<T>(s);
-        //std::string name(abi::__cxa_demangle(typeid(s).name(), 0, 0, 0));
-        //std::string m("Column " + s + " different type then " + name + "in:\n");
-        //throw std::invalid_argument(m + __PRETTY_FUNCTION__);
+        invalid_template_argument<T>(s, __PRETTY_FUNCTION__);
     }
     col = r;
+}
+
+template <typename T>
+std::vector<T> transform_column(const std::vector<T>* v, const T& t) {
+    std::vector<T> res = std::vector<T>(v->size(), t);
+    transform(v->begin(), v->end(), res.begin(), res.begin(), std::plus<T>());
+    return res;
+}
+
+template <typename T>
+Column operator+(const Column& c, const T& t) {
+    if constexpr ((std::is_same<T, double>::value | 
+                    std::is_same<T, std::string>::value)) {
+        if (const std::vector<T>* vec = std::get_if<std::vector<T>>(&c.col))
+            return Column(transform_column(vec, t));
+        else invalid_template_argument<T>(__PRETTY_FUNCTION__);
+    }
+    else
+        return invalid_template_argument<T>(__PRETTY_FUNCTION__);
 }
 #endif

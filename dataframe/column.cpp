@@ -94,11 +94,6 @@ void Column::convert_and_push_back(const std::string& s) {
     }
 }
 
-//template <class T>
-//void Column::push_back(const T t) {
-    //std::get<vector<T>>(col).push_back(t);
-//}
-
 size_t Column::size() { return static_cast<const Column&>(*this).size(); }
 
 size_t Column::size() const {
@@ -111,7 +106,6 @@ size_t Column::size() const {
     else
         return 0;
 }
-
 
 void Column::copy_row(int pos) {
     if (const vector<double>* val = std::get_if<vector<double>>(&col))
@@ -240,65 +234,3 @@ Column& Column::plus(const Column& rhs, const deque<pair<int, int>>& indices) {
         throw std::runtime_error("Cannot find the right addition");
     return *this;
 }
-
-template <typename T>
-vector<T> transform_column(const vector<T>* v, const T& t) {
-    vector<T> res = vector<T>(v->size(), t);
-    transform(v->begin(), v->end(), res.begin(), res.begin(), std::plus<T>());
-    return res;
-}
-
-Column operator+(const Column& c, double d) {
-    if (const vector<double>* vec = std::get_if<vector<double>>(&c.col))
-        return Column(transform_column(vec, d));
-    else {
-        string msg = ": Cant add double " + std::to_string(d) +
-                     ": incompatible column types";
-        throw std::invalid_argument(msg);
-    }
-}
-
-Column operator+(const Column& c, const string& d) {
-    if (const vector<string>* vec = std::get_if<vector<string>>(&c.col))
-        return Column(transform_column(vec, d));
-    else {
-        string msg = "Cant add string " + d + ": incompatible column types";
-        throw std::invalid_argument(msg);
-    }
-}
-
-//void Column::is_smaller_than(const double&t) {
-    //std::vector<bool> r(size());
-    //if (dvec* d = std::get_if<dvec>(&col))
-         //transform(d->begin(), d->end(), r.begin(), [&](auto&x){return x<t;});
-    //else 
-        //throw std::invalid_argument("Column type different from double");
-    //col = r;
-//}
-
-//void Column::is_smaller_than(const string&t) {
-    //std::vector<bool> r(size());
-    //if (svec* d = std::get_if<svec>(&col))
-         //transform(d->begin(), d->end(), r.begin(), [&](auto&x) {return x<t;});
-    //else 
-        //throw std::invalid_argument("Column type different from string");
-    //col = r;
-//}
-
-//void Column::is_greater_than(const double&t) {
-    //std::vector<bool> r(size());
-    //if (dvec* d = std::get_if<dvec>(&col))
-         //transform(d->begin(), d->end(), r.begin(), [&](auto&x){return x>t;});
-    //else 
-        //throw std::invalid_argument("Column type different from double");
-    //col = r;
-//}
-
-//void Column::is_greater_than(const string&t) {
-    //std::vector<bool> r(size());
-    //if (svec* d = std::get_if<svec>(&col))
-         //transform(d->begin(), d->end(), r.begin(), [&](auto&x) {return x>t;});
-    //else 
-        //throw std::invalid_argument("Column type different from string");
-    //col = r;
-//}
