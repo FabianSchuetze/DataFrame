@@ -2,6 +2,7 @@
 #include "dataframe.h"
 #include "dataframeproxy.h"
 
+using std::deque;
 using std::make_pair;
 using std::make_shared;
 using std::pair;
@@ -9,7 +10,6 @@ using std::shared_ptr;
 using std::string;
 using std::transform;
 using std::vector;
-using std::deque;
 
 DataFrame::DataFrameProxy DataFrame::operator[](const vector<string>& names) {
     return DataFrameProxy(*this, names);
@@ -51,7 +51,7 @@ void DataFrame::DataFrameProxy::check_col_len(size_t check, string m) {
 
 void DataFrame::DataFrameProxy::insert_column(const string& name,
                                               shared_ptr<Column>& inp) {
-    bool add = maybe_add(name, theDataFrame.column_names); 
+    bool add = maybe_add(name, theDataFrame.column_names);
     int lhsIdx = theDataFrame.find_column_position(name);
     add ? add_column(inp) : replace_column(lhsIdx, inp);
 }
@@ -63,7 +63,6 @@ void DataFrame::DataFrameProxy::insert_column(const string& name,
     insert_column(name, col);
 }
 
-
 void DataFrame::DataFrameProxy::insert_column(const vector<string>& rhsNames,
                                               const DataFrame& rhsDf) {
     for (size_t i = 0; i < rhsNames.size(); ++i) {
@@ -73,26 +72,13 @@ void DataFrame::DataFrameProxy::insert_column(const vector<string>& rhsNames,
     }
 }
 
-
-// CAN'T I PUT ALL THESE COLUMNS INTO DATAFRAME PROXY?
-
-//DataFrame& DataFrame::operator=(const DataFrame& rhs) {
-    //if (this != &rhs) {
-        //columns = rhs.columns;
-        //index.index_names = rhs.index.index_names;
-        //index.index_positions = rhs.index.index_positions;
-        //column_names = rhs.column_names;
-    //}
-    //return *this;
-//}
-
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const DataFrameProxy& rhs) {
     if (this != &rhs) {
         check_col_width(rhs.colNames.size(), string{"r & lhs col num differ"});
-        try{
+        try {
             insert_column(rhs.colNames, rhs.theDataFrame);
-        } catch(...) {
+        } catch (...) {
             throw std::runtime_error("Assignment operator from DfProxy failed");
         }
     }
@@ -100,12 +86,12 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
 }
 
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
-        const DataFrame& rhs) {
+    const DataFrame& rhs) {
     check_col_width(rhs.size().second, string{"rhs and lhs col num differ"});
     vector<string> rhs_names = rhs.get_column_names();
-    try{
+    try {
         insert_column(rhs.get_column_names(), rhs);
-    } catch(...) {
+    } catch (...) {
         throw std::runtime_error("Assignment operator from Df failed");
     }
     return *this;
@@ -114,7 +100,8 @@ DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
 // NEEDS TO BE CHANGED BIG TIME!!!
 DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<vector<double>>& others) {
-    check_col_width(others.size(), string{"passed number of vectors != columns"});
+    check_col_width(others.size(),
+                    string{"passed number of vectors != columns"});
     for (size_t i = 0; i < others.size(); ++i)
         check_col_len(others[i].size(), string{"len of vector num != colum"});
     for (size_t i = 0; i < colNames.size(); ++i)
@@ -153,13 +140,13 @@ DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
     return *this;
 }
 
-void compare_both_indices(const Index& a, const Index &b, const char* caller) {
+void compare_both_indices(const Index& a, const Index& b, const char* caller) {
     std::pair<size_t, size_t> s_a = a.size();
     std::pair<size_t, size_t> s_b = b.size();
     if ((s_a.first != 0) & (s_b.first != 0) & (s_a.second != s_b.second)) {
-            std::string m("Indices have different depth, in:\n");
-            throw std::invalid_argument(m + caller);
-        }
+        std::string m("Indices have different depth, in:\n");
+        throw std::invalid_argument(m + caller);
+    }
 }
 
 DataFrame operator+(const DataFrame& lhs, const DataFrame& rhs) {
@@ -181,16 +168,3 @@ DataFrame operator+(const DataFrame& lhs,
                     const DataFrame::DataFrameProxy& rhs) {
     return lhs + DataFrame(rhs);
 }
-
-//template <typename T>
-//DataFrame& DataFrame::operator+=(const T& t) {
-    //for (auto& x : column_names) {
-        //Column new_col = *columns[x.second] + t;
-        //columns[x.second] = std::make_shared<Column>(new_col);
-    //}
-    //return *this;
-//}
-//template DataFrame& DataFrame::operator+=(const double&);
-//template DataFrame& DataFrame::operator+=(const int&);
-//template DataFrame& DataFrame::operator+=(const string&);
-//template DataFrame& DataFrame::operator+=(const bool&);

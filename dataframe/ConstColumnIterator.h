@@ -28,7 +28,7 @@ class DataFrame::const_iterator {
           name(_name) {
         iteration_order = a->index.find_index_position();
     }
-    std::string to_string();
+    //std::string to_string();
     const T& operator*() const;
     const T& operator[](int) const;
     const T* operator->() const { return &this->operator*(); }
@@ -106,13 +106,13 @@ const T& DataFrame::const_iterator<T>::operator[](int i) const {
     return (*p).template get_value<T>(pos);
 }
 
-template <class T>
-std::string DataFrame::const_iterator<T>::to_string() {
-    std::string m("dereferencing past end, in:\n");
-    auto p = check(curr, m + __PRETTY_FUNCTION__);
-    int pos = iteration_order[curr];
-    return (*p).to_string(pos);
-}
+//template <class T>
+//std::string DataFrame::const_iterator<T>::to_string() {
+    //std::string m("dereferencing past end, in:\n");
+    //auto p = check(curr, m + __PRETTY_FUNCTION__);
+    //int pos = iteration_order[curr];
+    //return (*p).to_string(pos);
+//}
 
 template <class T>
 DataFrame::const_iterator<T>& DataFrame::const_iterator<T>::operator++() {

@@ -43,15 +43,10 @@ TEST_CASE( "DataFrame individual", "[individual]" ) {
     std::vector<std::string> col_names = {"first_col"};
     std::vector<std::string> col_names2 = {"second_col"};
     DataFrame df1(Index(idx), col_names, first);
-    //DataFrame df2(Index(idx), col_names2, second);
     DataFrame df3 = df1 + 2.;
-    //DataFrame df4 = df1 + std::string("fabi");
-    //std::cout << df1 << std::endl;
-    //std::cout << df3 << std::endl;
     REQUIRE( df3.size().second == 1);
     REQUIRE(df3.loc({"1"}, "first_col") == 12.);
     REQUIRE_THROWS_AS(df1 + std::string("fabi"), std::invalid_argument);
-    ////REQUIRE( std::isnan(df3.loc({"5"}, "second_col")));
 }
 
 TEST_CASE( "DataFrame index_different", "[index_different]" ) {

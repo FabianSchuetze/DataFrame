@@ -37,6 +37,12 @@ TEST_CASE("DataFrame iterator", "[iterator]") {
     }
     REQUIRE_THROWS_AS(std::cout<< *vanish, std::runtime_error);
     REQUIRE_THROWS_AS(std::cout<< it[10], std::out_of_range);
+    REQUIRE((it[1]) == std::string("huhu"));
+    REQUIRE(*(++it) == std::string("huhu"));
+    REQUIRE(*(--it) == std::string("huhu"));
+    REQUIRE(*(it++) == std::string("huhu"));
+    REQUIRE(*(it--) == std::string("huhu"));
+    REQUIRE_THROWS_AS(df.end<string>("key15"), std::out_of_range);
 }
 
 TEST_CASE("DataFrame const_iterator", "[const_iterator]") {
@@ -57,6 +63,11 @@ TEST_CASE("DataFrame const_iterator", "[const_iterator]") {
         vanish = df2.cbegin<double>("data1");
     }
     REQUIRE_THROWS_AS(std::cout<< *vanish, std::runtime_error);
+    REQUIRE((it[1]) == std::string("a"));
+    REQUIRE(*(++it) == std::string("a"));
+    REQUIRE(*(--it) == std::string("a"));
+    REQUIRE(*(it++) == std::string("a"));
+    REQUIRE(*(it--) == std::string("a"));
     //std::cout << it[10] << std::endl;
     //REQUIRE_THROWS_AS(std::cout<< it[10], std::out_of_range);
     // TEST PASSED ON LOCAL MACHINE BUT NOT ON TRAVIS?

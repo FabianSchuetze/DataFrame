@@ -13,8 +13,8 @@ class DataFrame::iterator {
     typedef std::ptrdiff_t difference_type;
     typedef T* pointer;
     typedef T& reference;
-    template <typename T1, typename... T2>
-    friend void DataFrame::test_belonging(iterator<T1>& v, iterator<T2>&... v2);
+    //template <typename T1, typename... T2>
+    //friend void DataFrame::test_belonging(iterator<T1>& v, iterator<T2>&... v2);
     iterator() = default;
     iterator& operator=(const iterator& a) = default;
     iterator(DataFrame* a, std::string _name, size_t sz = 0)
@@ -142,15 +142,4 @@ void DataFrame::fill_na(std::string s, T t) {
         throw std::out_of_range(s + __PRETTY_FUNCTION__);
     }
 }
-
-template <typename T1, typename... T2>
-void DataFrame::test_belonging(iterator<T1>& v, iterator<T2>&... v2) {
-    bool eq = this == v.theDataFrame;
-    if (!eq) {
-        std::string m("The iterator points to a different dataframe, in:\n");
-        throw std::invalid_argument(m + __PRETTY_FUNCTION__);
-    }
-    if constexpr (sizeof...(T2) > 0) test_belonging<T2...>(v2...);
-}
-
 #endif

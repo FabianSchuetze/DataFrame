@@ -68,8 +68,6 @@ class Column {
      * is used for printing a dataframe
      */
     std::string to_string(int) const;
-    //template <typename T>
-    //void copy_vector(const std::vector<T>*, const std::deque<int>&);
     void convert_bool_to_double();
     Column convert_bool_to_double(const Column&);
     void copy_row(int);
