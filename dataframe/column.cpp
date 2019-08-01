@@ -1,9 +1,10 @@
 #include "column.h"
 #include <cmath>
-#include <iostream>
-#include <sstream>
-#include <memory>
 #include <ios>
+#include <iostream>
+#include <memory>
+#include <sstream>
+using std::deque;
 using std::get_if;
 using std::holds_alternative;
 using std::is_same;
@@ -11,7 +12,6 @@ using std::pair;
 using std::string;
 using std::transform;
 using std::vector;
-using std::deque;
 
 template <typename T>
 void Column::copy_vector(const vector<T>* val, const deque<int>& subsets) {
@@ -74,18 +74,16 @@ bool potential_na(const std::string& s) {
 }
 void Column::convert_and_push_back(const std::string& s) {
     if (potential_na(s)) {
-        push_back_nan(); 
+        push_back_nan();
         return;
     }
-    if (std::get_if<vector<double>>(&col))
-        try {
+    if (std::get_if<vector<double>>(&col)) try {
             push_back(std::stod(s));
         } catch (const std::invalid_argument& e) {
             std::string m("Attempt to convert: " + s + " into double, in:\n");
             throw std::invalid_argument(m + __PRETTY_FUNCTION__);
         }
-    if (std::get_if<vector<string>>(&col))
-        push_back(s);
+    if (std::get_if<vector<string>>(&col)) push_back(s);
     if (std::get_if<vector<bool>>(&col)) {
         std::istringstream is(s);
         bool b;
@@ -142,8 +140,7 @@ bool vector_element_is_null(const T& t) {
 template <typename T>
 bool is_valid_pair(const vector<T>& lhs, const vector<T>& rhs,
                    const pair<int, int>& pair) {
-    if (pair.second < 0)
-        return false;
+    if (pair.second < 0) return false;
     try {
         bool lhs_is_not_nan = !vector_element_is_null(lhs.at(pair.first));
         bool rhs_is_not_nan = !vector_element_is_null(rhs.at(pair.second));
@@ -175,13 +172,14 @@ bool Column::is_null(size_t pos) {
     else
         throw std::runtime_error("Cannot find value");
 }
+
 void Column::is_null(vector<int>& tmp) {
     if (vector<double>* v = std::get_if<vector<double>>(&col))
         std::transform(v->begin(), v->end(), tmp.begin(), tmp.begin(),
-                [](double &a, int &b) {return std::isnan(a) + b;});
+                       [](double& a, int& b) { return std::isnan(a) + b; });
     else if (const vector<string>* v = std::get_if<vector<string>>(&col))
         std::transform(v->begin(), v->end(), tmp.begin(), tmp.begin(),
-                [](const string& a, int& b) {return (a=="NA") + b;});
+                       [](const string& a, int& b) { return (a == "NA") + b; });
     else if (std::get_if<vector<bool>>(&col))
         ;
     else
