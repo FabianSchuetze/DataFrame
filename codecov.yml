@@ -1,2 +1,2 @@
 ignore:
-    - "test/catch.hpp"
+    - "test"
