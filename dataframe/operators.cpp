@@ -125,7 +125,6 @@ template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
 template DataFrame::DataFrameProxy& DataFrame::DataFrameProxy::operator=(
     const vector<bool>& other_col);
 
-// why is this not calling the +operator of columns???
 DataFrame& DataFrame::operator+=(const DataFrame& rhs) {
     deque<pair<int, int>> indices = index.index_correspondence(rhs.index);
     duplicate_rows(indices);

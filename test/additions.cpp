@@ -83,3 +83,26 @@ TEST_CASE( "DataFrame overlapping", "[overlapping]" ) {
     REQUIRE_THROWS_AS( df2 + df6, std::invalid_argument);
 }
 
+TEST_CASE( "DataFrame duplicate", "[duplicate]" ) {
+    std::vector<std::string> first = {"aa", "bb"};
+    std::vector<int> rhs({1, 1});
+    std::vector<int> lhs({1,2});
+    std::vector<std::string> name({"column_a"});
+    DataFrame df1(Index(lhs), name, first);
+    DataFrame df2(Index(rhs), name, first);
+    DataFrame df3 = df1 + df2;
+    std::cout << df3 << std::endl;
+    REQUIRE( df3.size().first == 3);
+}
+
+TEST_CASE( "DataFrame bool", "[bool]" ) {
+    std::vector<double> col = {10, 20};
+    std::vector<bool> col_bool = {true, false};
+    std::vector<int> idx({1, 2});
+    std::vector<std::string> name({"column_a"});
+    DataFrame df1(Index(idx), name, col);
+    DataFrame df2(Index(idx), name, col_bool);
+    DataFrame df3 = df1 + df2;
+    REQUIRE( df3.loc({1}, "column_a") == 11);
+    REQUIRE( df3.loc({2}, "column_a") == 20);
+}

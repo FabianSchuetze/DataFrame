@@ -205,19 +205,11 @@ void DataFrame::make_unique(const std::string& s) {
     columns.at(find_column_position(s)) = get_unique(s);
 }
 
-void DataFrame::make_unique(const std::vector<string>& vec) {
-    for (const string& s : vec) make_unique(s);
-}
-
 void DataFrame::make_unique_if(const std::string& s) {
     if (this->use_count(s) > 1) {
         std::cout << "copy-on-write\n";
         make_unique(s);
     }
-}
-
-void DataFrame::make_unique_if(const vector<string>& c) {
-    for (const string& s : c) make_unique_if(s);
 }
 
 void DataFrame::drop_row(std::deque<Index::ele> e) {
@@ -269,10 +261,6 @@ bool DataFrame::is_contigious() {
     for (size_t i = 1; i < existing_order.size(); ++i)
         if ((existing_order[i] - existing_order[i - 1]) != 1) return false;
     return true;
-}
-void DataFrame::convert_bool_to_double(const std::string& s) {
-    int pos = find_column_position(s);
-    columns[pos]->convert_bool_to_double();
 }
 
 void DataFrame::assert_same_column_length(const char* pass) {

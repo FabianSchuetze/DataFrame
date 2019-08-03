@@ -32,8 +32,8 @@ set(${LIBRARY_TARGET_NAME}_HDR
 if (UNIX)
   add_library(${LIBRARY_TARGET_NAME} SHARED ${${LIBRARY_TARGET_NAME}_SRC})
 endif(UNIX)
-#add_compile_options(-Wall -Wextra -Wpedantic --coverage)
-add_compile_options(--coverage -O0)
+SET(CMAKE_CXX_FLAGS "-g -O0 --coverage -fprofile-arcs -ftest-coverage")
+target_compile_options(${LIBRARY_TARGET_NAME} PUBLIC "--coverage" )
 
 add_executable(main main.cpp)
 add_executable(my_test test/test.cpp)

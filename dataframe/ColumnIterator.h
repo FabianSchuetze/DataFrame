@@ -13,8 +13,6 @@ class DataFrame::iterator {
     typedef std::ptrdiff_t difference_type;
     typedef T* pointer;
     typedef T& reference;
-    //template <typename T1, typename... T2>
-    //friend void DataFrame::test_belonging(iterator<T1>& v, iterator<T2>&... v2);
     iterator() = default;
     iterator& operator=(const iterator& a) = default;
     iterator(DataFrame* a, std::string _name, size_t sz = 0)
