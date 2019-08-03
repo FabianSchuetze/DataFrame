@@ -56,7 +56,7 @@ class Index {
     /**
      * Appends the input to the end of the index
      */
-    void append_row(const std::deque<ele>&);
+    //void append_row(const std::deque<ele>&);
     /**
      * @brief Puts the input vector at the end of the existing index
      */
@@ -65,7 +65,7 @@ class Index {
     /**
      * @brief Drops the all index values at position pos inplace
      */
-    void drop_index(size_t);
+    //void drop_index(size_t);
     /**
      * @brief Returns the corresponding index position given the input element
      * @throws nothrow, but if no value is found empty index is returned

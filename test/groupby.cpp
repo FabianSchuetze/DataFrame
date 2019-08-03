@@ -54,6 +54,26 @@ TEST_CASE("DataFrame mean", "[mean]") {
     REQUIRE(df_res2.size().first == 1);
 }
 
+TEST_CASE("DataFrame count", "[count]") {
+    vector<string> key1({"a", "a", "b", "b", "a"});
+    vector<string> key2({"one", "two", "one", "two", "one"});
+    vector<double> data1({1, 1, 3, 4, 5});
+    vector<double> data2({11, 12, 13, 14, 15});
+    DataFrame df({"key1", "key2", "data1", "data2"}, key1, key2, data1, data2);
+    count t;
+    Statistic *p = &t;
+    DataFrame::Grouper<string, double> grouper = df.groupby(
+        df.cbegin<string>("key1"), df.cbegin<double>("data1"));
+    DataFrame df_res1 = grouper.summarize(p, {"data2"});
+    DataFrame df_res2 = df.summarize(p);
+    std::cout << df_res1 << std::endl;
+    std::cout << df_res2 << std::endl;
+    REQUIRE(df_res1.size().first == 4);
+    REQUIRE(df_res1.loc({"a", 1.}, "data2") == 2.0);
+    REQUIRE(df_res2.loc({"count"}, "data2") == 5.);
+    REQUIRE(df_res2.size().first == 1);
+}
+
 TEST_CASE("DataFrame different_col", "[different_col]") {
     vector<string> key1({"a", "a", "b", "b", "a"});
     vector<string> key1_fake({"a", "b", "b", "a"});

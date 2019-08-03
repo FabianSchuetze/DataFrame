@@ -8,19 +8,19 @@ using std::vector;
 Index::Index(const std::vector<deque<ele>>& inp) {
     append_index(inp);
 }
-void Index::append_row(const deque<ele>& row) {
-    index_names[row].push_back(index_positions.size());
-    index_positions.push_back(row);
-}
-void Index::drop_index(size_t pos) {
-    std::map<deque<ele>, deque<int>> new_index_names;
-    int i = 0;
-    for (auto& tmp : index_positions) {
-        remove_value(pos, tmp);
-        new_index_names[tmp].push_back(i++);
-    }
-    index_names = new_index_names;
-}
+//void Index::append_row(const deque<ele>& row) {
+    //index_names[row].push_back(index_positions.size());
+    //index_positions.push_back(row);
+//}
+//void Index::drop_index(size_t pos) {
+    //std::map<deque<ele>, deque<int>> new_index_names;
+    //int i = 0;
+    //for (auto& tmp : index_positions) {
+        //remove_value(pos, tmp);
+        //new_index_names[tmp].push_back(i++);
+    //}
+    //index_names = new_index_names;
+//}
 
 deque<int> Index::find_index_position(const deque<ele>& inp) const {
     try {

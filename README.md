@@ -7,6 +7,29 @@ Examples
 --------
 There are some examples what how the code can be used
 
+Copy-on-Write
+--------
+A strong motivation to write this form of dataframes, was Wes McKinney's 
+blog post about (his new project)
+ [Apache Arrow and the "10 Things I Hate About pandas" ](https://wesmckinney.com/blog/apache-arrow-pandas-internals/)
+ In it, he says that keeping track of pandas memory is difficult as memory can either belong to pandas or underlying 
+ numpy arrays and that Apache Arrow should referece difference column when possible but when
+ a column with mutiple references is modified, it should be copied first. I tried to
+ implement such copy-on-write ideom as well. 
+```c++
+vector<string> col = {"a", "b"};
+vector<int> idx({1, 2});
+vector<string> name({"column_a"});
+DataFrame df1(Index(idx), name, col);
+cout << df1.use_count("column_a") << endl; \\returns 1
+DataFrame df2 = df1;
+cout << df1.use_count("column_a") << endl; \\returns 2
+DataFrame::iterator<string> it = df1.begin<string>("column_a");
+DataFrame::iterator<string>  e = df1.end<string>("column_a");
+transform(it, e, it, [](auto& d) {return  d + "_modify";});
+cout << df1.use_count("column_a") << endl; \\returns 1 again
+
+```
 
 Addition
 --------
@@ -26,6 +49,26 @@ std::cout << sum << std::endl;
  | 1 | 8.000000 |
  | 3 | nan      |
  ----------------
+```
+
+Assignments
+-----------
+One of the things I like most about pandas is the ease with which one
+can assign new columns. Thanks to [Scott Meyers](https://www.aristeia.com/) 
+``More Effective C++` I could use the ProxyClass ideom to assign new columns
+too:
+
+```c++
+vector<double> first({30, 40});
+vector<string> names = {"first_col"};
+DataFrame df1 = DataFrame(names, first1);
+vector<string> replace({"a", "b"});
+df1["first_col"] = replace; \\replace the column
+vector<vector<double>> expand_by_two({{-100, -200}, {400, 600}});
+df1[vector<string>({"third_col", "fourth_col"})] = expand_by_two; \\expands the df
+vector<bool> other({true, false});
+DataFrame df2 = DataFrame(names, other);
+df1["first_col"] = df2; \\ use a different df to replace cols
 ```
 
 SummaryStatistics
@@ -111,7 +154,10 @@ DataFrame df1(infile);
  ---------------------------------------
 ```
 
-
+NA Values
+---------
+One can work with na values. NA values can be dropped or created when adding
+dataframes with different indices
 
 
 
