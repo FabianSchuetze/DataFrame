@@ -1,8 +1,8 @@
-#include "dataframe/dataframe.h"
-#include "dataframe/dataframeproxy.h"
-#include "dataframe/ColumnIterator.h"
-#include "dataframe/ConstColumnIterator.h"
-#include "dataframe/grouper.h"
+#include "../dataframe/dataframe.h"
+#include "../dataframe/dataframeproxy.h"
+#include "../dataframe/ColumnIterator.h"
+#include "../dataframe/ConstColumnIterator.h"
+#include "../dataframe/grouper.h"
 #include <vector>
 #include <string>
 #include <iostream>

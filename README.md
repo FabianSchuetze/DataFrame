@@ -2,6 +2,7 @@
 
 [![codecov](https://codecov.io/gh/FabianSchuetze/DataFrame/branch/master/graph/badge.svg?token=Pr0wisZZGU)](https://codecov.io/gh/FabianSchuetze/DataFrame)
 
+[![Build Status](https://travis-ci.com/FabianSchuetze/DataFrame.svg?token=TFtgu8GKEKx7cZJZSt2F&branch=master)](https://travis-ci.com/FabianSchuetze/DataFrame)
 
 A pandas like dataframe in c++
 
